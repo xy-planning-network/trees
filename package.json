@@ -1,6 +1,6 @@
 {
   "name": "@xy-planning-network/trees",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "",
   "license": "MIT",
   "repository": "github:xy-planning-network/trees",
@@ -22,7 +22,10 @@
     "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es",
     "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@headlessui/vue": "^1.1.0",
+    "@heroicons/vue": "^1.0.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
