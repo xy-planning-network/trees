@@ -1,7 +1,10 @@
-import { DefineComponent, Plugin } from 'vue';
+/* eslint-disable */
+import { DefineComponent, Plugin } from "vue";
 
-
-declare const Trees: Exclude<Plugin['install'], undefined>;
+declare const Trees: Exclude<Plugin["install"], undefined>;
 export default Trees;
 
-export const TreesSample: DefineComponent<{}, {}, any>;
+export const Checkbox: DefineComponent<{}, {}, any>;
+export const Input: DefineComponent<{}, {}, any>;
+export const Select: DefineComponent<{}, {}, any>;
+export const Textarea: DefineComponent<{}, {}, any>;
