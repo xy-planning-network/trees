@@ -1,6 +1,6 @@
 {
   "name": "@xy-planning-network/trees",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "",
   "license": "MIT",
   "repository": "github:xy-planning-network/trees",
@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.1.0",
-    "@heroicons/vue": "^1.0.1"
+    "@heroicons/vue": "^1.0.1",
+    "flatpickr": "^4.6.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

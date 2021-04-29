@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Vue } from "vue-property-decorator";
 import {
   CalendarIcon,
   ChartBarIcon,
@@ -23,16 +23,6 @@ import {
   UsersIcon,
 } from "@heroicons/vue/outline";
 
-@Options({
-  components: {
-    CalendarIcon,
-    ChartBarIcon,
-    FolderIcon,
-    HomeIcon,
-    InboxIcon,
-    UsersIcon,
-  },
-})
 export default class Serve extends Vue {
   navigation = [
     { name: "Dashboard", url: "#current", icon: HomeIcon },
