@@ -4,7 +4,9 @@ import Serve from "./Serve.vue";
 // library as a whole, comment/remove this import and it's corresponding "app.use" call
 import Trees from "@/entry.esm";
 import "tailwindcss/tailwind.css";
+import mitt from "mitt";
 
+window.VueBus = mitt();
 const app = createApp(Serve);
 app.use(Trees);
 

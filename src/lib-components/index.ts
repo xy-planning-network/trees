@@ -1,6 +1,7 @@
 // Layout components
 export { default as DateFilter } from "./DateFilter.vue";
 export { default as Layout } from "./Layout.vue";
+export { default as Spinner } from "./Spinner.vue";
 
 // Form components
 export { default as Checkbox } from "./forms/Checkbox.vue";

@@ -9,6 +9,8 @@
       <template v-slot:header>Dashboard</template>
       <p>im some content</p>
     </Layout>
+
+    <Spinner />
   </div>
 </template>
 

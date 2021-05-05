@@ -10,4 +10,5 @@ export const DateRangePicker: DefineComponent<{}, {}, any>;
 export const Input: DefineComponent<{}, {}, any>;
 export const Layout: DefineComponent<{}, {}, any>;
 export const Select: DefineComponent<{}, {}, any>;
+export const Spinner: DefineComponent<{}, {}, any>;
 export const Textarea: DefineComponent<{}, {}, any>;
