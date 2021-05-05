@@ -113,8 +113,14 @@
               />
             </div>
             <div class="ml-3">
-              <div class="text-base font-medium text-gray-800">Tom TODO</div>
-              <div class="text-sm font-medium text-gray-500">tom@TODO.com</div>
+              <div
+                class="text-base font-medium text-gray-800"
+                v-text="currentUser.name"
+              ></div>
+              <div
+                class="text-sm font-medium text-gray-500"
+                v-text="currentUser.email"
+              ></div>
             </div>
             <button
               class="ml-auto bg-white flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -136,31 +142,25 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <div class="py-10">
-      <header>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 class="text-3xl font-bold leading-tight text-gray-900">
-            Dashboard
-          </h1>
+    <main>
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <!-- Replace with your content -->
+        <div class="px-4 py-8 sm:px-0">
+          <slot></slot>
         </div>
-      </header>
-      <main>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <!-- Replace with your content -->
-          <div class="px-4 py-8 sm:px-0">
-            <div class="border-4 border-dashed border-gray-200 rounded-lg h-96">
-              <slot></slot>
-            </div>
-          </div>
-          <!-- /End replace -->
-        </div>
-      </main>
-    </div>
+        <!-- /End replace -->
+      </div>
+    </main>
   </div>
+
+  <Flash />
+  <Spinner />
 </template>
 
 <script lang="ts">
 import { Options, Prop, Vue } from "vue-property-decorator";
+import Flash from "../overlays/Flash.vue";
+import Spinner from "../overlays/Spinner.vue";
 import {
   Disclosure,
   DisclosureButton,
@@ -176,6 +176,8 @@ import UserTypes from "../../types/users";
 
 @Options({
   components: {
+    Flash,
+    Spinner,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,

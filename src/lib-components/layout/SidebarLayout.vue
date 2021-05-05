@@ -197,10 +197,15 @@
       </main>
     </div>
   </div>
+
+  <Flash />
+  <Spinner />
 </template>
 
 <script lang="ts">
 import { Options, Prop, Vue } from "vue-property-decorator";
+import Flash from "../overlays/Flash.vue";
+import Spinner from "../overlays/Spinner.vue";
 import {
   Dialog,
   DialogOverlay,
@@ -217,6 +222,8 @@ import NavTypes from "../../types/nav";
 
 @Options({
   components: {
+    Flash,
+    Spinner,
     Dialog,
     DialogOverlay,
     Menu,
