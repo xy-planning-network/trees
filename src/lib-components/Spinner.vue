@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 left-0 flex items-center justify-center w-full h-full cursor-not-allowed z-100 bg-gray-50 bg-opacity-50"
+    class="fixed top-0 left-0 flex items-center justify-center w-full h-full cursor-not-allowed z-50 bg-gray-50 bg-opacity-50"
     v-if="loading"
   >
     <div>

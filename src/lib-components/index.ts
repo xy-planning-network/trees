@@ -1,5 +1,6 @@
 // Layout components
 export { default as DateFilter } from "./DateFilter.vue";
+export { default as Flash } from "./Flash.vue";
 export { default as Layout } from "./Layout.vue";
 export { default as Spinner } from "./Spinner.vue";
 
