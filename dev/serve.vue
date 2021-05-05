@@ -1,16 +1,37 @@
 <template>
   <div id="app">
-    <Layout
+    <SidebarLayout
       activeURL="#current"
       iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
       :navigation="navigation"
       :user-navigation="userNavigation"
+      v-if="toggle"
     >
       <template v-slot:header>Dashboard</template>
-      <p>im some content</p>
-    </Layout>
+      <button
+        type="button"
+        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        @click="toggle = !toggle"
+      >
+        Button text
+      </button>
+    </SidebarLayout>
 
-    <Spinner />
+    <StackedLayout
+      activeURL="#current"
+      iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+      :navigation="navigation"
+      :user-navigation="userNavigation"
+      v-else
+    >
+      <button
+        type="button"
+        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        @click="toggle = !toggle"
+      >
+        Button text
+      </button>
+    </StackedLayout>
   </div>
 </template>
 
@@ -18,10 +39,8 @@
 import { Vue } from "vue-property-decorator";
 import {
   CalendarIcon,
-  ChartBarIcon,
   FolderIcon,
   HomeIcon,
-  InboxIcon,
   UsersIcon,
 } from "@heroicons/vue/outline";
 
@@ -31,13 +50,12 @@ export default class Serve extends Vue {
     { name: "Team", url: "#", icon: UsersIcon },
     { name: "Projects", url: "#", icon: FolderIcon },
     { name: "Calendar", url: "#", icon: CalendarIcon },
-    { name: "Documents", url: "#", icon: InboxIcon },
-    { name: "Reports", url: "#", icon: ChartBarIcon },
   ];
   userNavigation = [
     { name: "Your Profile", url: "#" },
     { name: "Settings", url: "#" },
     { name: "Sign out", url: "#" },
   ];
+  toggle = true;
 }
 </script>

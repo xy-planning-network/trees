@@ -32,8 +32,8 @@
 
 <script lang="ts">
 import { Options, Prop, Vue, Watch } from "vue-property-decorator";
-import BaseAPI from "../api/base";
-import DateFilter from "./DateFilter.vue";
+import BaseAPI from "../../api/base";
+import DateFilter from "../layout/DateFilter.vue";
 import Paginator from "./Paginator.vue";
 
 @Options({ components: { DateFilter, Paginator } })

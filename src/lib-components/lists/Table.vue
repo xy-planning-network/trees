@@ -133,8 +133,8 @@
 <script lang="ts">
 import { Options, Prop, Watch, Vue } from "vue-property-decorator";
 import Paginator from "./Paginator.vue";
-import BaseAPI from "../api/base";
-import TableTypes from "../types/table";
+import BaseAPI from "../../api/base";
+import TableTypes from "../../types/table";
 
 @Options({ components: { Paginator } })
 export default class Table extends Vue {

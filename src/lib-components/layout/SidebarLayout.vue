@@ -213,7 +213,7 @@ import {
 } from "@headlessui/vue";
 import { MenuAlt2Icon, UserCircleIcon, XIcon } from "@heroicons/vue/outline";
 import { CogIcon } from "@heroicons/vue/solid";
-import NavTypes from "../types/nav";
+import NavTypes from "../../types/nav";
 
 @Options({
   components: {
@@ -231,7 +231,7 @@ import NavTypes from "../types/nav";
     XIcon,
   },
 })
-export default class Layout extends Vue {
+export default class SidebarLayout extends Vue {
   @Prop({ type: String, required: false }) activeURL?: string;
   @Prop({ type: String, required: true }) iconURL!: string;
   @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[];

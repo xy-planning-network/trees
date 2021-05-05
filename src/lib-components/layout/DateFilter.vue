@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Emit, Options, Prop, Vue } from "vue-property-decorator";
-import DateRangePicker from "./forms/DateRangePicker.vue";
+import DateRangePicker from "../forms/DateRangePicker.vue";
 
 @Options({ components: { DateRangePicker } })
 export default class DateFilter extends Vue {
