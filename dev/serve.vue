@@ -19,6 +19,7 @@
 
     <StackedLayout
       activeURL="#current"
+      :current-user="user"
       iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
       :navigation="navigation"
       :user-navigation="userNavigation"
@@ -51,6 +52,7 @@ export default class Serve extends Vue {
     { name: "Projects", url: "#", icon: FolderIcon },
     { name: "Calendar", url: "#", icon: CalendarIcon },
   ];
+  user = { name: "Jimogthy Bobbitz", email: "jimothy@bobbitz.biz" };
   userNavigation = [
     { name: "Your Profile", url: "#" },
     { name: "Settings", url: "#" },

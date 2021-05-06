@@ -72,9 +72,11 @@ export default class Flash extends Vue {
       this.renderGenericError(email);
     });
 
-    for (const flash of window.Flashes) {
-      const values: string[] = flash.message.split(": ");
-      this.renderFlash({ type: values[0], message: values[1] });
+    if (window.Flashes) {
+      for (const flash of window.Flashes) {
+        const values: string[] = flash.message.split(": ");
+        this.renderFlash({ type: values[0], message: values[1] });
+      }
     }
   }
 

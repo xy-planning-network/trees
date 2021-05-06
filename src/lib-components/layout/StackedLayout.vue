@@ -24,13 +24,6 @@
             </div>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center">
-            <button
-              class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
-
             <!-- Profile dropdown -->
             <Menu as="div" class="ml-3 relative">
               <div>
@@ -38,11 +31,7 @@
                   class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <span class="sr-only">Open user menu</span>
-                  <img
-                    class="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
+                  <UserCircleIcon class="text-gray-500 h-8 w-8 rounded-full" />
                 </MenuButton>
               </div>
               <transition
@@ -142,6 +131,8 @@
       </DisclosurePanel>
     </Disclosure>
 
+    <slot name="header"></slot>
+
     <main>
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Replace with your content -->
@@ -170,7 +161,12 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
+import {
+  BellIcon,
+  MenuIcon,
+  UserCircleIcon,
+  XIcon,
+} from "@heroicons/vue/outline";
 import NavTypes from "../../types/nav";
 import UserTypes from "../../types/users";
 
@@ -187,6 +183,7 @@ import UserTypes from "../../types/users";
     MenuItems,
     BellIcon,
     MenuIcon,
+    UserCircleIcon,
     XIcon,
   },
 })
