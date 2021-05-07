@@ -17,4 +17,5 @@ export const Select: DefineComponent<{}, {}, any>;
 export const Spinner: DefineComponent<{}, {}, any>;
 export const StackedLayout: DefineComponent<{}, {}, any>;
 export const Table: DefineComponent<{}, {}, any>;
+export const Tabs: DefineComponent<{}, {}, any>;
 export const Textarea: DefineComponent<{}, {}, any>;

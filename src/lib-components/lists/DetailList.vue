@@ -34,7 +34,7 @@
 import { Options, Prop, Vue, Watch } from "vue-property-decorator";
 import BaseAPI from "../../api/base";
 import DateFilter from "../layout/DateFilter.vue";
-import Paginator from "./Paginator.vue";
+import Paginator from "../navigation/Paginator.vue";
 
 @Options({ components: { DateFilter, Paginator } })
 export default class DetailList extends Vue {

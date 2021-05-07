@@ -7,9 +7,10 @@ export { default as Flash } from "./overlays/Flash.vue";
 export { default as Modal } from "./overlays/Modal.vue";
 export { default as SidebarLayout } from "./layout/SidebarLayout.vue";
 export { default as StackedLayout } from "./layout/StackedLayout.vue";
-export { default as Paginator } from "./lists/Paginator.vue";
+export { default as Paginator } from "./navigation/Paginator.vue";
 export { default as Spinner } from "./overlays/Spinner.vue";
 export { default as Table } from "./lists/Table.vue";
+export { default as Tabs } from "./navigation/Tabs.vue";
 
 // Form components
 export { default as Checkbox } from "./forms/Checkbox.vue";

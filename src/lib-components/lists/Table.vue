@@ -132,7 +132,7 @@
 
 <script lang="ts">
 import { Options, Prop, Watch, Vue } from "vue-property-decorator";
-import Paginator from "./Paginator.vue";
+import Paginator from "../navigation/Paginator.vue";
 import BaseAPI from "../../api/base";
 import TableTypes from "../../types/table";
 
