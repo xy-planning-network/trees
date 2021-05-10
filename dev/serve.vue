@@ -51,5 +51,6 @@ export default class Serve extends Vue {
     { name: "Sign out", url: "#" },
   ];
   toggle = true;
+  open = true;
 }
 </script>
