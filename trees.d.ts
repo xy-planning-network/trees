@@ -4,6 +4,7 @@ import { DefineComponent, Plugin } from "vue";
 declare const Trees: Exclude<Plugin["install"], undefined>;
 export default Trees;
 
+export const Button: DefineComponent<{}, {}, any>;
 export const Checkbox: DefineComponent<{}, {}, any>;
 export const DateFilter: DefineComponent<{}, {}, any>;
 export const DateRangePicker: DefineComponent<{}, {}, any>;

@@ -1,6 +1,7 @@
 // TODO: rearrange so that these are default installed by app.use(Trees);
 
 // Layout components
+export { default as Button } from "./elements/Button.vue";
 export { default as DateFilter } from "./layout/DateFilter.vue";
 export { default as DetailList } from "./lists/DetailList.vue";
 export { default as Flash } from "./overlays/Flash.vue";

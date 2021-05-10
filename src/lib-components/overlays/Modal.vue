@@ -40,9 +40,9 @@
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full"
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full"
           >
-            <div class="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
+            <div class="block absolute top-0 right-0 pt-4 pr-4">
               <button
                 type="button"
                 class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -53,7 +53,7 @@
               </button>
             </div>
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <div class="mt-3 sm:mt-0 sm:text-left">
                 <DialogTitle
                   as="h3"
                   class="text-center text-lg leading-6 font-medium text-gray-900"
