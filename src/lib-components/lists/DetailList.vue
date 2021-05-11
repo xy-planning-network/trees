@@ -24,7 +24,7 @@
 
     <Paginator
       v-model="pagination"
-      @input="loadAndRender(false)"
+      @update:modelValue="loadAndRender(false)"
       v-if="hasContent"
     />
   </div>

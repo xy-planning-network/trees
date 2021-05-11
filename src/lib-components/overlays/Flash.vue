@@ -26,7 +26,7 @@
               <div class="w-0 flex-1 flex justify-between">
                 <p
                   class="w-0 flex-1 text-sm leading-5 font-medium text-gray-900"
-                  v-text="flash.message"
+                  v-html="flash.message"
                 ></p>
               </div>
               <div class="ml-4 flex-shrink-0 flex">

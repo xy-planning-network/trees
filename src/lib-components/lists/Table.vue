@@ -105,6 +105,7 @@
                 :props-data="item"
                 :current-user="tableData.currentUser"
                 :attribute="col.key"
+                :items="col.items"
               ></component>
               <div v-else v-text="cellValue(item, col)"></div>
             </td>
@@ -124,7 +125,7 @@
 
     <Paginator
       v-model="pagination"
-      @input="loadAndRender(false)"
+      @update:modelValue="loadAndRender(false)"
       v-if="hasContent"
     />
   </div>
