@@ -9,6 +9,7 @@ declare namespace Table {
     key?: string;
     presenter?(row: any, instance: VueInstance): any;
     component?: DefineComponent<unknown, unknown, any>;
+    items?: Array<MenuItem>;
     sort?: string;
   }
 
@@ -21,6 +22,12 @@ declare namespace Table {
     reloadTrigger?: number;
     search?: boolean;
     url: string;
+  }
+
+  export interface MenuItem {
+    label: string;
+    event: string;
+    show?(propsData: any, currentUser: UserTypes.User): boolean;
   }
 }
 
