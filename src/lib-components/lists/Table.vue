@@ -18,7 +18,7 @@
             />
           </svg>
         </div>
-        <Input
+        <input
           class="pl-10"
           type="search"
           v-model.trim="query"

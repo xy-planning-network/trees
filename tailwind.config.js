@@ -14,6 +14,7 @@ module.exports = {
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
+    require('tailwindcss-font-inter')()
   ],
   theme: {
     extend: {

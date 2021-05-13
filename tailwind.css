@@ -2,7 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Headers */
+  h1 {
+    @apply text-2xl font-medium text-gray-900 leading-7;
+  }
+
+  h2 {
+    @apply text-xl font-medium text-gray-900 leading-6;
+  }
+
+  h3 {
+    @apply text-lg font-medium text-gray-900 leading-6;
+  }
+
+  h4 {
+    @apply text-base font-medium text-gray-900 leading-6;
+  }
+
+  h5 {
+    @apply text-sm font-medium text-gray-900 leading-5;
+  }
+
+  /* Forms */
+  [type=text], [type=password], [type=number], [type=search], textarea {
+    @apply mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md;
+  }
+
+  /* Paragraphs */
+  p {
+    @apply text-sm text-gray-500 leading-5;
+  }
+}
+
 @layer components {
+  /* Badge classes */
+  .xy-badge {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800;
+  }
+
+  .xy-badge-blue {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800;
+  }
+
+  .xy-badge-yellow {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800;
+  }
+
+  /* Button classes */
   .xy-btn {
     @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
@@ -23,16 +70,19 @@
     @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-medium rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .xy-badge {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800;
+  /* Forms */
+  .xy-input-error {
+    @apply focus:ring-red-500 focus:border-red-500 text-red-900 placeholder-red-300 border-red-300;
   }
 
-  .xy-badge-blue {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800;
+  /* Header classes */
+  .xy-h1-extra-flair {
+    @apply text-3xl font-extrabold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
   }
 
-  .xy-badge-yellow {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800;
+  /* Link classes */
+  .xy-link {
+    @apply font-medium underline text-blue-700 hover:text-blue-600;
   }
 }
 
