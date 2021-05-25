@@ -38,12 +38,12 @@ import {
   BellIcon,
   CursorClickIcon,
   DocumentTextIcon,
+  LocationMarkerIcon,
   TableIcon,
   UserGroupIcon,
-  ViewBoardsIcon,
 } from "@heroicons/vue/outline";
 
-export default class Serve extends Vue {
+export default class Features extends Vue {
   @Prop({ type: String, required: true }) modelValue!: string;
 
   @Emit("update:modelValue")
@@ -53,7 +53,7 @@ export default class Serve extends Vue {
 
   features = [
     { name: "Forms", icon: DocumentTextIcon },
-    { name: "Layout & Navigation", icon: ViewBoardsIcon },
+    { name: "Navigation", icon: LocationMarkerIcon },
     { name: "Lists", icon: TableIcon },
     { name: "Clicking Around", icon: CursorClickIcon },
     { name: "Screen Takeovers", icon: BellIcon },

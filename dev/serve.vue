@@ -1,31 +1,5 @@
 <template>
   <div id="app">
-    <!-- <link rel="stylesheet" href="https://rsms.me/inter/inter.css" /> -->
-    <!-- <SidebarLayout
-      activeURL="#current"
-      iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-      :navigation="navigation"
-      :user-navigation="userNavigation"
-      v-if="toggle"
-    >
-      <template v-slot:header>Dashboard</template>
-      <button type="button" class="xy-btn" @click="toggle = !toggle">
-        Button text
-      </button>
-    </SidebarLayout>
-
-    <StackedLayout
-      activeURL="#current"
-      :current-user="user"
-      iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-      :navigation="navigation"
-      :user-navigation="userNavigation"
-      v-else
-    >
-      <button type="button" class="xy-btn" @click="toggle = !toggle">
-        Button text
-      </button>
-    </StackedLayout> -->
     <div
       class="relative bg-white py-16 sm:py-24 lg:py-32"
       v-if="showing('Home')"
@@ -47,44 +21,85 @@
           Everything you need to build your app. Get excited!
         </p>
 
-        <Features v-model="currentPage" />
+        <Features @update:modelValue="goTo" />
         <Quotes />
       </div>
     </div>
+    <component
+      :is="currentNav"
+      :activeURL="currentPageURL"
+      :current-user="user"
+      iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+      :navigation="navigation"
+      :user-navigation="userNavigation"
+      v-else
+    >
+      <Forms v-if="showing('Forms')" />
+      <Navigation v-if="showing('Navigation')" :user="user" />
+      <Lists v-if="showing('Lists')" />
+      <button
+        type="button"
+        class="xy-btn"
+        @click="
+          currentNav =
+            currentNav === 'StackedLayout' ? 'SidebarLayout' : 'StackedLayout'
+        "
+      >
+        Swap Dat Nav
+      </button>
+    </component>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-property-decorator";
 import {
-  CalendarIcon,
-  FolderIcon,
+  DocumentTextIcon,
   HomeIcon,
-  UsersIcon,
+  LocationMarkerIcon,
+  TableIcon,
 } from "@heroicons/vue/outline";
-import Features from "./parts/Features.vue";
-import Quotes from "./parts/Quotes.vue";
+import Features from "./content/Features.vue";
+import Forms from "./content/Forms.vue";
+import Lists from "./content/Lists.vue";
+import Navigation from "./content/Navigation.vue";
+import Quotes from "./content/Quotes.vue";
 
-@Options({ components: { Features, Quotes } })
+@Options({ components: { Features, Forms, Lists, Navigation, Quotes } })
 export default class Serve extends Vue {
   currentPage = "Home";
+  currentNav = "StackedLayout";
   navigation = [
-    { name: "Dashboard", url: "#current", icon: HomeIcon },
-    { name: "Team", url: "#", icon: UsersIcon },
-    { name: "Projects", url: "#", icon: FolderIcon },
-    { name: "Calendar", url: "#", icon: CalendarIcon },
+    { name: "Home", url: "/?page=Home", icon: HomeIcon },
+    { name: "Forms", url: "/?page=Forms", icon: DocumentTextIcon },
+    { name: "Navigation", url: "/?page=Navigation", icon: LocationMarkerIcon },
+    { name: "Lists", url: "/?page=Lists", icon: TableIcon },
   ];
-  user = { name: "Jimogthy Bobbitz", email: "jimothy@bobbitz.biz" };
-  userNavigation = [
-    { name: "Your Profile", url: "#" },
-    { name: "Settings", url: "#" },
-    { name: "Sign out", url: "#" },
-  ];
+  user = { name: "Jimothy Bobbitz", email: "jimothy@bobbitz.biz" };
+  userNavigation = [{ name: "Toggle the Nav", url: "/no" }];
   toggle = true;
   open = true;
 
+  mounted() {
+    const page = new URLSearchParams(window.location.search).get("page");
+    if (page) this.currentPage = page;
+    const currentNav = new URLSearchParams(window.location.search).get(
+      "currentNav"
+    );
+    if (currentNav) this.currentNav = currentNav;
+  }
+
+  goTo(page: string): void {
+    const url = "/?page=" + page;
+    window.history.pushState({}, "", url);
+    this.currentPage = page;
+  }
   showing(page: string): boolean {
     return page === this.currentPage;
+  }
+
+  get currentPageURL(): string {
+    return "/?page=" + this.currentPage;
   }
 }
 </script>
