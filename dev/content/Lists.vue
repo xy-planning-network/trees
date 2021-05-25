@@ -4,7 +4,9 @@
       <ComponentLayout title="Detail List">
         <template v-slot:description>
           This relies primarily on slots to determine the content and actions
-          that can be taken on an item.
+          that can be taken on an item. It primarily handles pagination,
+          fetching new data, sorting, and filtering. The UI needs to be built
+          out in the slot.
         </template>
 
         <div>
@@ -12,106 +14,132 @@
             <ClickToCopy :value="detailListCopy" />
           </label>
           <div class="mt-1">
-            <!-- <ActionsDropdown
-              :current-user="user"
-              :items="menuItems"
-              props-data="something"
-            /> -->
             <DetailList
-              title="List of Things"
-              url="https://jsonplaceholder.typicode.com/todos"
+              title="Things"
+              url="https://my-json-server.typicode.com/xy-planning-network/trees/things"
             >
-              stuff here
+              <template v-slot:default="props">
+                <div class="block cursor-pointer hover:bg-gray-50">
+                  <div class="px-4 py-4 sm:px-6">
+                    <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-indigo-600 truncate">
+                        {{ props.item.title }}
+                      </p>
+                      <div class="ml-2 flex-shrink-0 flex">
+                        <p
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                          v-text="props.item.title"
+                        ></p>
+                      </div>
+                    </div>
+                    <div class="mt-2 sm:flex sm:justify-between">
+                      <div class="sm:flex">
+                        <p class="flex items-center text-sm text-gray-500">
+                          <UsersIcon
+                            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          {{ props.item.type }}
+                        </p>
+                        <p
+                          class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"
+                        >
+                          <LocationMarkerIcon
+                            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          Remote
+                        </p>
+                      </div>
+                      <div
+                        class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
+                      >
+                        <CalendarIcon
+                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        <p>
+                          Started on
+                          {{ " " }}
+                          <time :datetime="props.item.created_at">{{
+                            new Date(
+                              props.item.created_at * 1000
+                            ).toLocaleString()
+                          }}</time>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </DetailList>
             <PropsTable :props="detailListProps" />
           </div>
         </div>
       </ComponentLayout>
 
-      <!-- <ComponentLayout class="mt-8" title="Paginator">
+      <ComponentLayout class="mt-8" title="Table">
         <template v-slot:description>
-          This is used to create page numbers based on our server side paging
-          implementation underneath a list of data.
+          This bakes a table into simple column definitions. This can be
+          combined with the ActionsDropdown for lots of nifty functionality.
         </template>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="paginatorCopy" />
+            <ClickToCopy :value="tableCopy" />
           </label>
           <div class="mt-1">
-            <Paginator v-model="pagination" />
-            <PropsTable :props="paginatorProps" />
+            <Table :table-data="tableData" />
+            <PropsTable :props="tableProps" />
           </div>
         </div>
-      </ComponentLayout> -->
-
-      <!-- <ComponentLayout class="mt-8" title="Tabs">
-        <template v-slot:description>
-          These are used to display different groups of content. It turns into a
-          select on mobile.
-        </template>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="tabsCopy" />
-          </label>
-          <div class="mt-1">
-            <Tabs :tabs="tabs" v-model="currentTab" />
-            <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
-              <span v-if="currentTab === 'tab1'" class="xy-badge-yellow">
-                Tab 1 Content
-              </span>
-              <span v-else class="xy-badge-blue"> Tab 2 Content </span>
-            </div>
-            <PropsTable :props="tabsProps" />
-          </div>
-        </div>
-      </ComponentLayout> -->
+      </ComponentLayout>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator";
+import {
+  CalendarIcon,
+  LocationMarkerIcon,
+  UsersIcon,
+} from "@heroicons/vue/solid";
 import UserTypes from "../../src/types/users";
 
+@Options({ components: { CalendarIcon, LocationMarkerIcon, UsersIcon } })
 export default class Lists extends Vue {
   @Prop({ type: Object, required: true }) user!: UserTypes.User;
 
-  detailListCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`;
+  detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`;
   detailListProps = [
-    { name: "currentUser", required: true, type: "UserTypes.User" },
-    { name: "items", required: true, type: "Array<TableTypes.MenuItem>" },
-    { name: "propsData", required: true, type: "any" },
+    { name: "refreshTrigger", required: false, type: "number" },
+    { name: "reloadTrigger", required: false, type: "number" },
+    { name: "title", required: true, type: "string" },
+    { name: "url", required: true, type: "string" },
   ];
-  // currentTab = "tab1";
-  // menuItems = [
-  //   { label: "This is an action", event: "Navigation.EmitThisEvent1" },
-  //   { label: "Do this?", event: "Navigation.EmitThisEvent2" },
-  //   { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
-  // ];
-  // pagination = { page: 1, perPage: 10, totalItems: 100, totalPages: 10 };
-  // paginatorCopy = `<Paginator v-model="pagination" />`;
-  // paginatorProps = [
-  //   {
-  //     name: "modelValue",
-  //     required: true,
-  //     type:
-  //       "{ page: number; perPage: number; totalItems: number; totalPages: number; }",
-  //   },
-  // ];
-  // tabs = [
-  //   { label: "Tab 1", value: "tab1" },
-  //   { label: "Tab 2", value: "tab2" },
-  // ];
-  // tabsCopy = `<Tabs :tabs="tabs" v-model="currentTab" />`;
-  // tabsProps = [
-  //   {
-  //     name: "tabs",
-  //     required: true,
-  //     type: "Array<{ label: string; value: string; }>",
-  //   },
-  //   { name: "modelValue", required: true, type: "string" },
-  // ];
+  tableData = {
+    currentUser: this.user,
+    columns: [
+      {
+        display: "Title",
+        key: "title",
+      },
+      {
+        display: "Type",
+        key: "type",
+      },
+      {
+        display: "Started On",
+        presenter: (row: { created_at: number }): string => {
+          return new Date(row.created_at * 1000).toLocaleString();
+        },
+      },
+    ],
+    refreshTrigger: 0,
+    url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+  };
+  tableCopy = `<Table :table-data="tableData" />`;
+  tableProps = [{ name: "tableData", required: true, type: "TableTypes.Data" }];
 }
 </script>

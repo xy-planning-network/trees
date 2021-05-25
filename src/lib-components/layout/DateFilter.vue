@@ -1,6 +1,6 @@
 <template>
   <div
-    class="md:flex md:items-center md:justify-between bg-white mx-auto py-4 shadow-sm border-t border-gray-100"
+    class="md:flex md:items-center md:justify-between bg-white mx-auto py-4 border-t border-gray-100"
   >
     <div class="flex-1 min-w-0">
       <h1 class="text-lg leading-6 font-semibold text-gray-900">

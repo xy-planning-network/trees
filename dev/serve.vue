@@ -1,30 +1,6 @@
 <template>
   <div id="app">
-    <div
-      class="relative bg-white py-16 sm:py-24 lg:py-32"
-      v-if="showing('Home')"
-    >
-      <div
-        class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl"
-      >
-        <h2
-          class="text-base font-semibold tracking-wider text-blue-600 uppercase"
-        >
-          Build faster with consistency
-        </h2>
-        <p
-          class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl"
-        >
-          XY Technology UI Kit
-        </p>
-        <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-          Everything you need to build your app. Get excited!
-        </p>
-
-        <Features @update:modelValue="goTo" />
-        <Quotes />
-      </div>
-    </div>
+    <Home v-if="showing('Home')" @update="goTo" />
     <component
       :is="currentNav"
       :activeURL="currentPageURL"
@@ -36,7 +12,10 @@
     >
       <Forms v-if="showing('Forms')" />
       <Navigation v-if="showing('Navigation')" :user="user" />
-      <Lists v-if="showing('Lists')" />
+      <Lists v-if="showing('Lists')" :user="user" />
+      <Overlays v-if="showing('Overlays')" />
+      <Elements v-if="showing('Elements')" />
+      <Team v-if="showing('Team')" />
       <button
         type="button"
         class="xy-btn"
@@ -54,18 +33,33 @@
 <script lang="ts">
 import { Options, Vue } from "vue-property-decorator";
 import {
+  CollectionIcon,
+  ColorSwatchIcon,
   DocumentTextIcon,
   HomeIcon,
   LocationMarkerIcon,
   TableIcon,
+  UserGroupIcon,
 } from "@heroicons/vue/outline";
-import Features from "./content/Features.vue";
+import Elements from "./content/Elements.vue";
 import Forms from "./content/Forms.vue";
+import Home from "./content/Home.vue";
 import Lists from "./content/Lists.vue";
 import Navigation from "./content/Navigation.vue";
-import Quotes from "./content/Quotes.vue";
+import Overlays from "./content/Overlays.vue";
+import Team from "./content/Team.vue";
 
-@Options({ components: { Features, Forms, Lists, Navigation, Quotes } })
+@Options({
+  components: {
+    Elements,
+    Forms,
+    Home,
+    Lists,
+    Navigation,
+    Overlays,
+    Team,
+  },
+})
 export default class Serve extends Vue {
   currentPage = "Home";
   currentNav = "StackedLayout";
@@ -74,6 +68,9 @@ export default class Serve extends Vue {
     { name: "Forms", url: "/?page=Forms", icon: DocumentTextIcon },
     { name: "Navigation", url: "/?page=Navigation", icon: LocationMarkerIcon },
     { name: "Lists", url: "/?page=Lists", icon: TableIcon },
+    { name: "Overlays", url: "/?page=Overlays", icon: CollectionIcon },
+    { name: "Elements", url: "/?page=Elements", icon: ColorSwatchIcon },
+    { name: "Team", url: "/?page=Team", icon: UserGroupIcon },
   ];
   user = { name: "Jimothy Bobbitz", email: "jimothy@bobbitz.biz" };
   userNavigation = [{ name: "Toggle the Nav", url: "/no" }];

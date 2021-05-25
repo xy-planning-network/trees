@@ -15,3 +15,6 @@ Object.entries(components).forEach(([componentName, component]) => {
 });
 
 export default plugin;
+
+// Exports API configuration using axios
+export * from "./api/base";

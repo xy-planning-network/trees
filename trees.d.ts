@@ -1,5 +1,7 @@
 /* eslint-disable */
 import { DefineComponent, Plugin } from "vue";
+import { AxiosPromise, AxiosRequestConfig } from "axios";
+import API from "./src/types/api";
 
 declare const Trees: Exclude<Plugin["install"], undefined>;
 export default Trees;
@@ -18,3 +20,11 @@ export const Spinner: DefineComponent<{}, {}, any>;
 export const StackedLayout: DefineComponent<{}, {}, any>;
 export const Table: DefineComponent<{}, {}, any>;
 export const Tabs: DefineComponent<{}, {}, any>;
+
+export const BaseAPI: {
+  makeRequest(config: AxiosRequestConfig, opts: API.RequestOptions): AxiosPromise;
+  get(path: string, opts: API.RequestOptions, params?: Record<string, unknown> | undefined): AxiosPromise;
+  delete(path: string, opts: API.RequestOptions): AxiosPromise;
+  post(path: string, data: Record<string, unknown>, opts: API.RequestOptions): AxiosPromise;
+  put(path: string, data: Record<string, unknown>, opts: API.RequestOptions): AxiosPromise;
+};
