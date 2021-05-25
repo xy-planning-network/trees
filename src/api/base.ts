@@ -68,4 +68,4 @@ const BaseAPI = {
   },
 };
 
-export { BaseAPI };
+export default BaseAPI;
