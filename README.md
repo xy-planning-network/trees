@@ -24,9 +24,10 @@ Trees is our attempt at unifying the frontend code we've written to power a smal
 - [ ] Add emitted events to component detail view
 - [ ] Make library types links in component detail view
 - [ ] Add table component example that uses ActionsDropdown and handles emitted event
+- [ ] Bump to new version of vue-cli and bump postcss -> 8
 
 ## What needs to be fixed?
-- [ ] Ensure flatpickr is picked up on build
+- [x] Ensure flatpickr is picked up on build
 - [ ] Select install for globally available components
 - [ ] Make sure components have names in devtools
 - [ ] Look into forcing tables to dropdown when actions open up in hidden area
