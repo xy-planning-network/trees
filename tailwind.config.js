@@ -2,7 +2,10 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  purge: [],
+  purge: [
+    "./dev/**/*.vue",
+    "./src/lib-components/**/*.vue",
+  ],
   variants: {
     opacity: ["disabled"],
     cursor: ["disabled"],
