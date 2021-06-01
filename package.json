@@ -10,6 +10,7 @@
   "unpkg": "dist/trees.min.js",
   "types": "trees.d.ts",
   "files": [
+    "dev/*",
     "dist/*",
     "trees.d.ts",
     "src/**/*.vue"
