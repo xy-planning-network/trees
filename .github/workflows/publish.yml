@@ -29,7 +29,6 @@ jobs:
 
       - name: Install client dependencies
         run: |
-          ls -R
           npm install
           npm run build:deploy
 
