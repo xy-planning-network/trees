@@ -65,13 +65,17 @@ export default class Serve extends Vue {
   currentPage = "Home";
   currentNav = "StackedLayout";
   navigation = [
-    { name: "Home", url: "/?page=Home", icon: HomeIcon },
-    { name: "Forms", url: "/?page=Forms", icon: DocumentTextIcon },
-    { name: "Navigation", url: "/?page=Navigation", icon: LocationMarkerIcon },
-    { name: "Lists", url: "/?page=Lists", icon: TableIcon },
-    { name: "Overlays", url: "/?page=Overlays", icon: CollectionIcon },
-    { name: "Elements", url: "/?page=Elements", icon: ColorSwatchIcon },
-    { name: "Team", url: "/?page=Team", icon: UserGroupIcon },
+    { name: "Home", url: "/trees/?page=Home", icon: HomeIcon },
+    { name: "Forms", url: "/trees/?page=Forms", icon: DocumentTextIcon },
+    {
+      name: "Navigation",
+      url: "/trees/?page=Navigation",
+      icon: LocationMarkerIcon,
+    },
+    { name: "Lists", url: "/trees/?page=Lists", icon: TableIcon },
+    { name: "Overlays", url: "/trees/?page=Overlays", icon: CollectionIcon },
+    { name: "Elements", url: "/trees/?page=Elements", icon: ColorSwatchIcon },
+    { name: "Team", url: "/trees/?page=Team", icon: UserGroupIcon },
   ];
   user = { name: "Jimothy Bobbitz", email: "jimothy@bobbitz.biz" };
   userNavigation = [{ name: "Toggle the Nav", url: "/no" }];
@@ -88,7 +92,7 @@ export default class Serve extends Vue {
   }
 
   goTo(page: string): void {
-    const url = "/?page=" + page;
+    const url = "/trees/?page=" + page;
     window.history.pushState({}, "", url);
     this.currentPage = page;
   }
@@ -97,7 +101,7 @@ export default class Serve extends Vue {
   }
 
   get currentPageURL(): string {
-    return "/?page=" + this.currentPage;
+    return "/trees/?page=" + this.currentPage;
   }
 }
 </script>
