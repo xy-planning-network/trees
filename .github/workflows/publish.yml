@@ -38,7 +38,9 @@ jobs:
           npm publish --access public
 
       - name: Build for GitHubg Pages
-        run: npm run build:deploy
+        run: | 
+          npm install
+          npm run build:deploy
 
       - name: Publish to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.3
