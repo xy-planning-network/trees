@@ -59,6 +59,7 @@ import Team from "./content/Team.vue";
     Overlays,
     Team,
   },
+  name: "Serve",
 })
 export default class Serve extends Vue {
   currentPage = "Home";

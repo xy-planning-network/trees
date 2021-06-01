@@ -36,7 +36,7 @@ import BaseAPI from "../../api/base";
 import DateFilter from "../layout/DateFilter.vue";
 import Paginator from "../navigation/Paginator.vue";
 
-@Options({ components: { DateFilter, Paginator } })
+@Options({ components: { DateFilter, Paginator }, name: "DetailList" })
 export default class DetailList extends Vue {
   @Prop({ type: Number, required: false }) refreshTrigger?: number;
   @Prop({ type: Number, required: false }) reloadTrigger?: number;

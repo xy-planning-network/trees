@@ -46,8 +46,9 @@ import UserTypes from "../../types/users";
 
 @Options({
   components: { DotsVerticalIcon, Menu, MenuButton, MenuItem, MenuItems },
+  name: "ActionsDropdown",
 })
-export default class NewActionsDropdown extends Vue {
+export default class ActionsDropdown extends Vue {
   @Prop({ type: Object, required: true }) currentUser!: UserTypes.User;
   @Prop({ type: Array, required: true }) items!: Array<TableTypes.MenuItem>;
   @Prop({ type: Object, required: true }) propsData!: any;

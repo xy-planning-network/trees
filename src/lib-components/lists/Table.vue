@@ -137,7 +137,7 @@ import Paginator from "../navigation/Paginator.vue";
 import BaseAPI from "../../api/base";
 import TableTypes from "../../types/table";
 
-@Options({ components: { Paginator } })
+@Options({ components: { Paginator }, name: "Table" })
 export default class Table extends Vue {
   @Prop({ type: Object, required: true }) tableData!: TableTypes.Data;
 

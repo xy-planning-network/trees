@@ -99,8 +99,9 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator";
 
+@Options({ name: "Spinner" })
 export default class Spinner extends Vue {
   idx = 0;
   loading = false;

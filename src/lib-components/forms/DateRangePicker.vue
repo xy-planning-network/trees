@@ -7,10 +7,11 @@
 </template>
 
 <script lang="ts">
-import { Emit, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+@Options({ name: "DateRangePicker" })
 export default class DateRangePicker extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
     minDate: number;

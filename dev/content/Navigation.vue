@@ -69,9 +69,10 @@
 </template>
 
 <script lang="ts">
-import { Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator";
 import UserTypes from "../../src/types/users";
 
+@Options({ name: "Navigation" })
 export default class Navigation extends Vue {
   @Prop({ type: Object, required: true }) user!: UserTypes.User;
 

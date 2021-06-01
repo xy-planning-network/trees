@@ -37,8 +37,8 @@
 import { Options, Prop, Vue } from "vue-property-decorator";
 import { ClipboardCopyIcon } from "@heroicons/vue/outline";
 
-@Options({ components: { ClipboardCopyIcon } })
-export default class ComponentLayout extends Vue {
+@Options({ components: { ClipboardCopyIcon }, name: "PropsTable" })
+export default class PropsTable extends Vue {
   @Prop({ type: Array, required: true }) props!: {
     name: string;
     required: boolean;

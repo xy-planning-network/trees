@@ -88,9 +88,10 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator";
 
-export default class Elements extends Vue {
+@Options({ name: "Team" })
+export default class Team extends Vue {
   people = [
     {
       name: "David Ketch",

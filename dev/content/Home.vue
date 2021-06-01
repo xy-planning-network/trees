@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { Emit, Vue } from "vue-property-decorator";
+import { Emit, Options, Vue } from "vue-property-decorator";
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -156,7 +156,8 @@ import {
   UserGroupIcon,
 } from "@heroicons/vue/outline";
 
-export default class Quotes extends Vue {
+@Options({ name: "Home" })
+export default class Home extends Vue {
   @Emit("update")
   update(value: string): string {
     return value;

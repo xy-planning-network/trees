@@ -237,6 +237,7 @@ import NavTypes from "../../types/nav";
     UserCircleIcon,
     XIcon,
   },
+  name: "SidebarLayout",
 })
 export default class SidebarLayout extends Vue {
   @Prop({ type: String, required: false }) activeURL?: string;

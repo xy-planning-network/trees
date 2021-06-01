@@ -98,8 +98,9 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator";
 
+@Options({ name: "Forms" })
 export default class Forms extends Vue {
   checked = false;
   checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`;

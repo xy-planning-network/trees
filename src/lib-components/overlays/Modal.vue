@@ -114,6 +114,7 @@ import { ExclamationIcon, XIcon } from "@heroicons/vue/outline";
     ExclamationIcon,
     XIcon,
   },
+  name: "Modal",
 })
 export default class Modal extends Vue {
   @Prop({ type: Boolean, required: false }) destructive?: boolean;

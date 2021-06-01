@@ -52,8 +52,9 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator";
 
+@Options({ name: "Flash" })
 export default class Flash extends Vue {
   flashes: Array<{ type: string; message: string }> = [];
   flashTypeBorderClass = {

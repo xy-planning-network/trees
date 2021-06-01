@@ -76,8 +76,9 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator";
 
+@Options({ name: "Overlays" })
 export default class Overlays extends Vue {
   flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`;
   modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`;

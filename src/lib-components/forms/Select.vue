@@ -22,8 +22,9 @@
 </template>
 
 <script lang="ts">
-import { Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator";
 
+@Options({ name: "Select" })
 export default class Select extends Vue {
   @Prop({ type: String, required: false }) design?: string;
   @Prop({ type: Array, required: true }) options!: Array<{

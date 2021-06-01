@@ -29,7 +29,7 @@
 import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 import DateRangePicker from "../forms/DateRangePicker.vue";
 
-@Options({ components: { DateRangePicker } })
+@Options({ components: { DateRangePicker }, name: "DateFilter" })
 export default class DateFilter extends Vue {
   @Prop({ type: Object, required: true }) dateRange!: {
     minDate: number;

@@ -32,8 +32,9 @@
 </template>
 
 <script lang="ts">
-import { Emit, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 
+@Options({ name: "Tabs" })
 export default class Tabs extends Vue {
   @Prop({ type: Array, required: true }) tabs!: Array<{
     label: string;

@@ -176,6 +176,7 @@ import UserTypes from "../../types/users";
     UserCircleIcon,
     XIcon,
   },
+  name: "StackedLayout",
 })
 export default class StackedLayout extends Vue {
   @Prop({ type: String, required: false }) activeURL?: string;

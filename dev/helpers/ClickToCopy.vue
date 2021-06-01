@@ -25,7 +25,7 @@
 import { Options, Prop, Vue } from "vue-property-decorator";
 import { ClipboardCopyIcon } from "@heroicons/vue/outline";
 
-@Options({ components: { ClipboardCopyIcon } })
+@Options({ components: { ClipboardCopyIcon }, name: "ClickToCopy" })
 export default class ClickToCopy extends Vue {
   @Prop({ type: String, required: true }) value!: string;
 

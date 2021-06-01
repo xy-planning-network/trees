@@ -107,7 +107,10 @@ import {
 } from "@heroicons/vue/solid";
 import UserTypes from "../../src/types/users";
 
-@Options({ components: { CalendarIcon, LocationMarkerIcon, UsersIcon } })
+@Options({
+  components: { CalendarIcon, LocationMarkerIcon, UsersIcon },
+  name: "Lists",
+})
 export default class Lists extends Vue {
   @Prop({ type: Object, required: true }) user!: UserTypes.User;
 

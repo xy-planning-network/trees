@@ -63,8 +63,9 @@
 </template>
 
 <script lang="ts">
-import { Emit, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 
+@Options({ name: "Paginator" })
 export default class Paginator extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
     page: number;
