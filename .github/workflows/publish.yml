@@ -30,17 +30,17 @@ jobs:
       - name: Install client dependencies
         run: |
           npm install
-          npm run build
-
-      - name: Publish to npm
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}
-          npm publish --access public
-
-      - name: Build for GitHubg Pages
-        run: | 
-          npm install
           npm run build:deploy
+
+      # - name: Publish to npm
+      #   run: |
+      #     npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}
+      #     npm publish --access public
+
+      # - name: Build for GitHub Pages
+      #   run: | 
+      #     npm install
+      #     npm run build:deploy
 
       - name: Publish to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.3
