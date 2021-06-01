@@ -17,10 +17,10 @@ jobs:
           node-version: '14.17.0'
 
       - name: Check out source code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Cache NPM dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: client/node_modules
           key: npm-cache-${{ hashFiles('**/package-lock.json') }}
