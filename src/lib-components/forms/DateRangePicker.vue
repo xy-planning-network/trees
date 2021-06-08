@@ -36,9 +36,9 @@ export default class DateRangePicker extends Vue {
       onClose: (selectedDates) => {
         if (selectedDates.length === 2) {
           this.updateModelValue({
-            minDate: selectedDates[0].getTime() / 1000,
+            minDate: selectedDates[0].setUTCHours(0, 0, 0, 0) / 1000,
             maxDate: Math.floor(
-              selectedDates[1].setHours(23, 59, 59, 999) / 1000
+              selectedDates[1].setUTCHours(23, 59, 59, 999) / 1000
             ),
           });
         } else if (selectedDates.length === 0) {
