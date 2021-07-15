@@ -31,8 +31,9 @@ export default class Select extends Vue {
     label: string;
     value: string;
   }>;
-  @Prop({ type: String, required: false }) placeholder?: string;
-  @Prop({ type: String, required: true }) modelValue!: string;
+  @Prop({ type: String, required: false, default: "Select an option" })
+  placeholder?: string;
+  @Prop({ type: String, required: true }) modelValue!: string | undefined;
 
   get classes(): string {
     const design = this.design ? this.design : "undefined";

@@ -1,29 +1,39 @@
 <template>
   <div>
-    <div class="w-full max-w-lg mb-4 lg:max-w-xs" v-if="tableData.search">
-      <label for="search" class="sr-only">Search</label>
-      <div class="relative">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
-          <svg
-            class="w-5 h-5 text-gray-400"
-            fill="currentColor"
-            viewBox="0 0 20 20"
+    <div
+      class="flex flex-col mb-4 space-y-4 lg:space-y-0 lg:flex-row lg:justify-between"
+    >
+      <div class="w-full max-w-lg lg:max-w-xs" v-if="tableData.search">
+        <label for="search" class="sr-only">Search</label>
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
           >
-            <path
-              fill-rule="evenodd"
-              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              clip-rule="evenodd"
-            />
-          </svg>
+            <svg
+              class="w-5 h-5 text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            class="pl-10"
+            type="search"
+            v-model.trim="query"
+            placeholder="Search"
+            @change="reloadTable()"
+          />
         </div>
-        <input
-          class="pl-10"
-          type="search"
-          v-model.trim="query"
-          placeholder="Search"
-          @change="reloadTable()"
+      </div>
+      <div class="w-full max-w-lg lg:max-w-xs" v-if="tableData.dateSearch">
+        <DateRangePicker
+          v-model="dateRange"
+          @update:modelValue="dateRangeChanged"
         />
       </div>
     </div>
@@ -111,7 +121,7 @@
             </td>
           </tr>
 
-          <tr v-if="items.length == 0">
+          <tr v-if="!hasContent">
             <td
               :colspan="tableData.columns.length"
               class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap border-b border-gray-200 leading-5"
@@ -133,17 +143,24 @@
 
 <script lang="ts">
 import { Options, Prop, Watch, Vue } from "vue-property-decorator";
+import { AxiosResponse } from "axios";
+import DateRangePicker from "../forms/DateRangePicker.vue";
 import Paginator from "../navigation/Paginator.vue";
 import BaseAPI from "../../api/base";
 import TableTypes from "../../types/table";
 
-@Options({ components: { Paginator }, name: "Table" })
+@Options({ components: { DateRangePicker, Paginator }, name: "Table" })
 export default class Table extends Vue {
   @Prop({ type: Object, required: true }) tableData!: TableTypes.Data;
+  @Prop({ type: Boolean, required: false, default: false }) clickable!: boolean;
+  @Prop({ type: Boolean, required: false, default: true }) loader!: boolean;
 
   currentSort = "";
   currentSortDirection = "";
-  hasContent = true;
+  dateRange: { minDate: number; maxDate: number } = {
+    minDate: 0,
+    maxDate: 0,
+  };
   items: any[] = [];
   pagination = {
     page: 1,
@@ -156,7 +173,7 @@ export default class Table extends Vue {
   @Watch("tableData.refreshTrigger")
   onRefreshTrigger(): void {
     // This lets parent components trigger a refresh of the current page depending on external actions.
-    this.loadAndRender(false);
+    this.loadAndRender();
   }
 
   @Watch("tableData.reloadTrigger")
@@ -173,12 +190,13 @@ export default class Table extends Vue {
         : "desc";
     }
 
-    this.loadAndRender(true);
+    this.loadAndRender();
   }
 
   cellValue(item: Record<string, any>, col: TableTypes.Column): string {
     if (col.key) {
-      return item[col.key];
+      // NOTE(dlk): supports dot notation for nested keys
+      return col.key.split(".").reduce((o, i) => o[i], item as any);
     }
 
     if (col.presenter) {
@@ -186,6 +204,11 @@ export default class Table extends Vue {
     }
 
     return "";
+  }
+  dateRangeChanged(dateRange: { minDate: number; maxDate: number }): void {
+    this.pagination.page = 1;
+    this.dateRange = dateRange;
+    this.loadAndRender();
   }
   handleSort(selectedSort: string): void {
     if (this.currentSort == selectedSort) {
@@ -196,24 +219,21 @@ export default class Table extends Vue {
       this.currentSortDirection = "desc";
     }
 
-    this.loadAndRender(false);
+    this.loadAndRender();
   }
-  loadAndRender(checkForContent: boolean): void {
+  loadAndRender(): void {
     const params = {
+      minDate: this.dateRange.minDate,
+      maxDate: this.dateRange.maxDate,
       page: this.pagination.page,
       perPage: this.pagination.perPage,
       sort: this.currentSort,
       sortDir: this.currentSortDirection,
       q: this.query,
     };
-    const wait = window.setTimeout(() => {
-      window.VueBus.emit("Spinner-show");
-    }, 200);
 
-    BaseAPI.get(this.tableData.url, {}, params).then(
-      (success: any) => {
-        window.clearTimeout(wait);
-        window.VueBus.emit("Spinner-hide");
+    BaseAPI.get(this.tableData.url, { skipLoader: !this.loader }, params).then(
+      (success: AxiosResponse) => {
         this.pagination = {
           page: success.data.page,
           perPage: success.data.perPage,
@@ -221,21 +241,22 @@ export default class Table extends Vue {
           totalPages: success.data.totalPages,
         };
         this.items = success.data.items;
-        if (checkForContent) this.hasContent = this.items.length != 0;
       },
       () => {
-        window.clearTimeout(wait);
-        window.VueBus.emit("Spinner-hide");
         window.VueBus.emit(
           "Flash-show-generic-error",
-          "archive@xyplanningnetwork.com"
+          "membership@xyplanningnetwork.com"
         );
       }
     );
   }
   reloadTable(): void {
     this.pagination.page = 1;
-    this.loadAndRender(false);
+    this.loadAndRender();
+  }
+
+  get hasContent(): boolean {
+    return this.items.length ? true : false;
   }
 }
 </script>

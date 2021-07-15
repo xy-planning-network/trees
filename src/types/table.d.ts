@@ -16,6 +16,7 @@ declare namespace Table {
   export interface Data {
     currentUser: UserTypes.User;
     columns: Array<Column>;
+    dateSearch?: boolean;
     defaultSort?: string;
     defaultSortDirection?: string;
     refreshTrigger: number;

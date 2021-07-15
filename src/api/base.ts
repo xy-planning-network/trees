@@ -22,13 +22,13 @@ const BaseAPI = {
 
     return new Promise((resolve, reject) => {
       const wait = window.setTimeout(() => {
-        if (opts.useLoader) window.VueBus.emit("Spinner-show");
+        if (!opts.skipLoader) window.VueBus.emit("Spinner-show");
       }, 200);
 
       apiAxiosInstance(config).then(
         (success: AxiosResponse) => {
           window.clearTimeout(wait);
-          if (opts.useLoader) window.VueBus.emit("Spinner-hide");
+          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide");
           resolve(success.data);
         },
         (error: AxiosError) => {
@@ -36,7 +36,7 @@ const BaseAPI = {
           // have nice UI that their session is expired with redirect to login
           // page
           window.clearTimeout(wait);
-          if (opts.useLoader) window.VueBus.emit("Spinner-hide");
+          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide");
           reject(error.response);
         }
       );
