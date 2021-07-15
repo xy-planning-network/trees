@@ -102,7 +102,12 @@
         </thead>
 
         <tbody class="bg-white">
-          <tr v-for="(item, rowIdx) in items" :key="item.id ? item.id : rowIdx">
+          <tr
+            v-for="(item, rowIdx) in items"
+            :key="item.id ? item.id : rowIdx"
+            @click="$emit('handleClick', item)"
+            :class="{ 'cursor-pointer': clickable }"
+          >
             <td
               class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap border-b border-gray-200 leading-5"
               v-for="(col, colIdx) in tableData.columns"
