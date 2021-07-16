@@ -2,6 +2,8 @@
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
       class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      :class="{ 'text-gray-300 cursor-not-allowed': !hasActionItems }"
+      :disabled="!hasActionItems"
     >
       <span class="sr-only">Open options</span>
       <DotsVerticalIcon class="w-5 h-5" aria-hidden="true" />
@@ -53,12 +55,21 @@ export default class ActionsDropdown extends Vue {
   @Prop({ type: Array, required: true }) items!: Array<TableTypes.MenuItem>;
   @Prop({ type: Object, required: true }) propsData!: any;
 
+  hasActionItems = false;
+
   emitEvent(event: string): void {
     window.VueBus.emit(event, this.propsData);
   }
   show(item: TableTypes.MenuItem): boolean {
-    if (!item.show) return true;
-    return item.show(this.propsData, this.currentUser);
+    if (!item.show) {
+      this.hasActionItems = true;
+      return true;
+    }
+
+    const showActionItem = item.show(this.propsData, this.currentUser);
+    if (showActionItem) this.hasActionItems = true;
+
+    return showActionItem;
   }
 }
 </script>
