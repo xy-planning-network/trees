@@ -1,8 +1,7 @@
 <template>
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
-      class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      :class="{ 'text-gray-300 cursor-not-allowed': !hasActionItems }"
+      class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
       :disabled="!hasActionItems"
     >
       <span class="sr-only">Open options</span>
@@ -57,19 +56,27 @@ export default class ActionsDropdown extends Vue {
 
   hasActionItems = false;
 
+  mounted(): void {
+    for (let item of this.items) {
+      if (!item.show) {
+        this.hasActionItems = true;
+        return;
+      }
+
+      const showActionItem = item.show(this.propsData, this.currentUser);
+      if (showActionItem) {
+        this.hasActionItems = true;
+        return;
+      }
+    }
+  }
+
   emitEvent(event: string): void {
     window.VueBus.emit(event, this.propsData);
   }
   show(item: TableTypes.MenuItem): boolean {
-    if (!item.show) {
-      this.hasActionItems = true;
-      return true;
-    }
-
-    const showActionItem = item.show(this.propsData, this.currentUser);
-    if (showActionItem) this.hasActionItems = true;
-
-    return showActionItem;
+    if (!item.show) return true;
+    return item.show(this.propsData, this.currentUser);
   }
 }
 </script>
