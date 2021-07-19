@@ -29,7 +29,7 @@ export default class MultiCheckboxes extends Vue {
   }>;
   @Prop({ type: Array, required: true }) modelValue!: string[];
 
-  model = this.modelValue;
+  model: string[] = [];
 
   @Watch("model")
   onModelChanged(val: string[]): void {
