@@ -14,6 +14,7 @@ export const DetailList: DefineComponent<{}, {}, any>;
 export const Flash: DefineComponent<{}, {}, any>;
 export const Modal: DefineComponent<{}, {}, any>;
 export const Paginator: DefineComponent<{}, {}, any>;
+export const Radio: DefineComponent<{}, {}, any>;
 export const SidebarLayout: DefineComponent<{}, {}, any>;
 export const Select: DefineComponent<{}, {}, any>;
 export const Spinner: DefineComponent<{}, {}, any>;

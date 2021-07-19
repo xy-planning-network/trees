@@ -16,4 +16,7 @@ export { default as Tabs } from "./navigation/Tabs.vue";
 // Form components
 export { default as Checkbox } from "./forms/Checkbox.vue";
 export { default as DateRangePicker } from "./forms/DateRangePicker.vue";
+export { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue";
+export { default as Radio } from "./forms/Radio.vue";
 export { default as Select } from "./forms/Select.vue";
+export { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue";
