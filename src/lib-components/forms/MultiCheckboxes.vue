@@ -7,7 +7,7 @@
             type="checkbox"
             class="focus:ring-blue-500 h-4 w-4 text-xy-blue border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
             :value="option.value"
-            v-model="internalModel"
+            v-model="model"
           />
         </div>
         <div class="ml-3 text-sm leading-5">
@@ -29,11 +29,15 @@ export default class MultiCheckboxes extends Vue {
   }>;
   @Prop({ type: Array, required: true }) modelValue!: string[];
 
-  internalModel = this.modelValue;
+  model = this.modelValue;
 
-  @Watch("internalModel")
-  onInternalModelChanged(val: string[]): void {
+  @Watch("model")
+  onModelChanged(val: string[]): void {
     this.$emit("update:modelValue", val);
+  }
+
+  mounted() {
+    this.model = this.modelValue;
   }
 }
 </script>
