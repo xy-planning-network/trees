@@ -89,7 +89,7 @@ import {
   name: "ContentModal",
 })
 export default class ContentModal extends Vue {
-  @Prop({ type: Boolean, required: true }) content!: string;
+  @Prop({ type: String, required: true }) content!: string;
   @Prop({ type: Boolean, required: true }) modelValue!: boolean;
   @Prop({ type: String, required: false }) title?: string;
 

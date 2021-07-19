@@ -10,6 +10,7 @@ export { default as DownloadCell } from "./lists/DownloadCell.vue";
 export { default as Flash } from "./overlays/Flash.vue";
 export { default as Modal } from "./overlays/Modal.vue";
 export { default as SidebarLayout } from "./layout/SidebarLayout.vue";
+export { default as Slideover } from "./overlays/Slideover.vue";
 export { default as StackedLayout } from "./layout/StackedLayout.vue";
 export { default as Paginator } from "./navigation/Paginator.vue";
 export { default as Spinner } from "./overlays/Spinner.vue";

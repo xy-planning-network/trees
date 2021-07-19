@@ -21,6 +21,7 @@ export const Paginator: DefineComponent<{}, {}, any>;
 export const Radio: DefineComponent<{}, {}, any>;
 export const SidebarLayout: DefineComponent<{}, {}, any>;
 export const Select: DefineComponent<{}, {}, any>;
+export const Slideover: DefineComponent<{}, {}, any>;
 export const Spinner: DefineComponent<{}, {}, any>;
 export const StackedLayout: DefineComponent<{}, {}, any>;
 export const Table: DefineComponent<{}, {}, any>;
