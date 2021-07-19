@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sm:hidden" :class="{ pillDesign: 'mb-4' }">
+    <div class="sm:hidden" :class="{ 'mb-4': pillDesign }">
       <label for="tabs" class="sr-only">Select a tab</label>
       <Select
         name="tabs"
@@ -10,7 +10,7 @@
       />
     </div>
     <div class="hidden sm:block">
-      <div :class="{ notPillDesign: 'border-b border-gray-200' }">
+      <div :class="{ 'border-b border-gray-200': notPillDesign }">
         <nav class="flex" :class="[pillDesign ? 'ml-8' : '-mb-px']">
           <a
             href="#"
