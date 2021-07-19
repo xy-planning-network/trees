@@ -156,7 +156,7 @@ import TableTypes from "../../types/table";
 
 @Options({ components: { DateRangePicker, Paginator }, name: "Table" })
 export default class Table extends Vue {
-  @Prop({ type: Object, required: true }) tableData!: TableTypes.Data;
+  @Prop({ type: Object, required: true }) tableData!: TableTypes.Dynamic;
   @Prop({ type: Boolean, required: false, default: false }) clickable!: boolean;
   @Prop({ type: Boolean, required: false, default: true }) loader!: boolean;
 

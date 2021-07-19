@@ -13,7 +13,7 @@ declare namespace Table {
     sort?: string;
   }
 
-  export interface Data {
+  export interface Dynamic {
     currentUser: UserTypes.User;
     columns: Array<Column>;
     dateSearch?: boolean;
@@ -29,6 +29,12 @@ declare namespace Table {
     label: string;
     event: string;
     show?(propsData: any, currentUser: UserTypes.User): boolean;
+  }
+
+  export interface Static {
+    currentUser: UserTypes.User;
+    columns: Array<Column>;
+    items: Record<string, unknown>[];
   }
 }
 
