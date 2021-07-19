@@ -3,6 +3,7 @@
 // Layout components
 export { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue";
 export { default as Cards } from "./lists/Cards.vue";
+export { default as ContentModal } from "./overlays/ContentModal.vue";
 export { default as DateFilter } from "./layout/DateFilter.vue";
 export { default as DetailList } from "./lists/DetailList.vue";
 export { default as DownloadCell } from "./lists/DownloadCell.vue";

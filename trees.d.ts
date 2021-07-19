@@ -9,6 +9,7 @@ export default Trees;
 export const ActionsDropdown: DefineComponent<{}, {}, any>;
 export const Cards: DefineComponent<{}, {}, any>;
 export const Checkbox: DefineComponent<{}, {}, any>;
+export const ContentModal: DefineComponent<{}, {}, any>;
 export const DateFilter: DefineComponent<{}, {}, any>;
 export const DateRangePicker: DefineComponent<{}, {}, any>;
 export const DetailList: DefineComponent<{}, {}, any>;
