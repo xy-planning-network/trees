@@ -7,11 +7,14 @@ declare const Trees: Exclude<Plugin["install"], undefined>;
 export default Trees;
 
 export const ActionsDropdown: DefineComponent<{}, {}, any>;
+export const Cards: DefineComponent<{}, {}, any>;
 export const Checkbox: DefineComponent<{}, {}, any>;
 export const DateFilter: DefineComponent<{}, {}, any>;
 export const DateRangePicker: DefineComponent<{}, {}, any>;
 export const DetailList: DefineComponent<{}, {}, any>;
+export const DownloadCell: DefineComponent<{}, {}, any>;
 export const Flash: DefineComponent<{}, {}, any>;
+export const MultiCheckboxes: DefineComponent<{}, {}, any>;
 export const Modal: DefineComponent<{}, {}, any>;
 export const Paginator: DefineComponent<{}, {}, any>;
 export const Radio: DefineComponent<{}, {}, any>;
@@ -21,6 +24,7 @@ export const Spinner: DefineComponent<{}, {}, any>;
 export const StackedLayout: DefineComponent<{}, {}, any>;
 export const Table: DefineComponent<{}, {}, any>;
 export const Tabs: DefineComponent<{}, {}, any>;
+export const YesOrNoRadio: DefineComponent<{}, {}, any>;
 
 export const BaseAPI: {
   makeRequest(config: AxiosRequestConfig, opts: API.RequestOptions): AxiosPromise;
