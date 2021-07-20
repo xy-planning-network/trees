@@ -80,15 +80,15 @@
     @apply text-3xl font-extrabold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
   }
 
-  .xy-h1-adjusting {
+  .xy-h1-responsive {
     @apply text-xl font-medium lg:text-2xl;
   }
 
-  .xy-h2-adjusting {
+  .xy-h2-responsive {
     @apply text-base font-medium lg:text-xl;
   }
 
-  .xy-h3-adjusting {
+  .xy-h3-responsive {
     @apply text-base font-medium lg:text-lg
   }
 

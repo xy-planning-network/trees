@@ -73,6 +73,42 @@
         </div>
       </ComponentLayout>
 
+      <ComponentLayout class="mt-8" title="Multi Checkboxes">
+        <template v-slot:description>
+          This can be used to select an array of values.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="multiCheckboxCopy" />
+          </label>
+          <div class="mt-1">
+            <MultiCheckboxes
+              :options="options"
+              v-model="multiCheckboxSelection"
+            />
+            <PropsTable :props="multiCheckboxProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Radio">
+        <template v-slot:description>
+          Similar to checkboxes, these are wrapped in a vue component given
+          their nested structure so that we are consistent across all projects.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="radioCopy" />
+          </label>
+          <div class="mt-1">
+            <Radio :options="options" v-model="radioSelection" />
+            <PropsTable :props="radioProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout class="mt-8" title="Select">
         <template v-slot:description>
           Similar to checkboxes, these are wrapped in a vue component given
@@ -90,6 +126,23 @@
               v-model="selected"
             />
             <PropsTable :props="selectProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Yes or No Radio">
+        <template v-slot:description>
+          This is a "yes" or "no" UI form input that maps to a boolean. You
+          could even use it in a truth or dare app. Whoa.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="yesOrNoRadioCopy" />
+          </label>
+          <div class="mt-1">
+            <YesOrNoRadio v-model="yesOrNoRadioSelection" />
+            <PropsTable :props="yesOrNoRadioProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -123,6 +176,28 @@ export default class Forms extends Vue {
   ];
   inputCopy = `<input type="text" placeholder="It's good to be alive" />`;
   inputErrorCopy = `<input type="text" placeholder="Broken" class="xy-input-error" />`;
+  multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`;
+  multiCheckboxProps = [
+    {
+      name: "options",
+      required: true,
+      type: "Array<{ label: string; value: string }>",
+    },
+    { name: "modelValue", required: true, type: "string" },
+  ];
+  multiCheckboxSelection = [];
+  radioCopy = `<Radio :options="options" v-model="selected" />`;
+  radioProps = [
+    { name: "disabled", required: false, type: "boolean" },
+    {
+      name: "options",
+      required: true,
+      type: "Array<{ label: string; value: string }>",
+    },
+    { name: "required", required: false, type: "boolean" },
+    { name: "modelValue", required: true, type: "string" },
+  ];
+  radioSelection = "";
   selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`;
   selectProps = [
     { name: "design", required: false, type: "string" },
@@ -141,5 +216,12 @@ export default class Forms extends Vue {
     { label: "This is the LAST option", value: "val4" },
   ];
   selected = "";
+  yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
+  yesOrNoRadioSelection = false;
+  yesOrNoRadioProps = [
+    { name: "disabled", required: false, type: "boolean" },
+    { name: "required", required: false, type: "boolean" },
+    { name: "modelValue", required: false, type: "boolean" },
+  ];
 }
 </script>

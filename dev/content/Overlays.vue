@@ -1,7 +1,45 @@
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Flash">
+      <ComponentLayout title="Content Modal">
+        <template v-slot:description>
+          This bad boy is used to show the user some content.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="contentModalCopy" />
+          </label>
+          <div class="mt-1">
+            <button
+              type="button"
+              class="xy-btn"
+              @click="contentModalOpen = true"
+            >
+              Show Me
+            </button>
+            <ContentModal
+              v-model="contentModalOpen"
+              content="You did really good. Look at this badge."
+              title="Good Job!"
+            >
+              <template v-slot:icon>
+                <div
+                  class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+                >
+                  <CheckIcon
+                    class="h-6 w-6 text-green-600"
+                    aria-hidden="true"
+                  />
+                </div>
+              </template>
+            </ContentModal>
+            <PropsTable :props="contentModalProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Flash">
         <template v-slot:description>
           We look for an array of flashes on <code>window.Flashes</code> and we
           can emit events on the bus that render flashes.
@@ -77,9 +115,17 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-property-decorator";
+import { CheckIcon } from "@heroicons/vue/outline";
 
-@Options({ name: "Overlays" })
+@Options({ name: "Overlays", components: { CheckIcon } })
 export default class Overlays extends Vue {
+  contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`;
+  contentModalOpen = false;
+  contentModalProps = [
+    { name: "content", required: true, type: "string" },
+    { name: "modelValue", required: true, type: "boolean" },
+    { name: "title", required: false, type: "string" },
+  ];
   flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`;
   modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`;
   modalProps = [

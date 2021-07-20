@@ -1,7 +1,24 @@
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Detail List">
+      <ComponentLayout title="Cards">
+        <template v-slot:description>
+          This is for data that we want to show up on cards, hence the clever
+          name.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="cardsCopy" />
+          </label>
+          <div class="mt-1">
+            <Cards :cards="cards" />
+            <PropsTable :props="cardsProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Detail List">
         <template v-slot:description>
           This relies primarily on slots to determine the content and actions
           that can be taken on an item. It primarily handles pagination,
@@ -78,6 +95,23 @@
         </div>
       </ComponentLayout>
 
+      <ComponentLayout class="mt-8" title="Static Table">
+        <template v-slot:description>
+          This is for tables where we already have the data and do not need to
+          make an external call.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="staticTableCopy" />
+          </label>
+          <div class="mt-1">
+            <StaticTable :table-data="staticTableData" />
+            <PropsTable :props="staticTableProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout class="mt-8" title="Table">
         <template v-slot:description>
           This bakes a table into simple column definitions. This can be
@@ -91,6 +125,22 @@
           <div class="mt-1">
             <Table :table-data="tableData" />
             <PropsTable :props="tableProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Table Cells">
+        <template v-slot:description>
+          These can be passed to the column's component field for rendering UI
+          in the table cell.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="downloadCellCopy" />
+          </label>
+          <div class="mt-1">
+            <DownloadCell attribute="goHere" :props-data="downloadMe" />
           </div>
         </div>
       </ComponentLayout>
@@ -114,12 +164,49 @@ import UserTypes from "../../src/types/users";
 export default class Lists extends Vue {
   @Prop({ type: Object, required: true }) user!: UserTypes.User;
 
+  cards = [
+    { primary: "Get Some", secondary: "You are gonna do well." },
+    { primary: "Try It", secondary: "I'm proud of how far you've come." },
+    { primary: "Nice Info", secondary: "Never stop trying." },
+  ];
+  cardsCopy = `<Cards cards="cards" />`;
+  cardsProps = [
+    {
+      name: "cards",
+      required: true,
+      type: "{ primary: string; secondary: string }",
+    },
+  ];
   detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`;
   detailListProps = [
     { name: "refreshTrigger", required: false, type: "number" },
     { name: "reloadTrigger", required: false, type: "number" },
     { name: "title", required: true, type: "string" },
     { name: "url", required: true, type: "string" },
+  ];
+  downloadCellCopy = `import { DownloadCell } from "@xy-planning-network/trees";`;
+  downloadMe = {
+    goHere: "/download-something-but-im-broken-and-now-im-crying-web-is-hard",
+  };
+  staticTableCopy = `<StaticTable :table-data="tableData" />`;
+  staticTableData = {
+    currentUser: this.user,
+    columns: [
+      { display: "This", key: "this" },
+      { display: "Does", key: "does" },
+      { display: "Not", key: "not" },
+      { display: "Change", key: "change" },
+    ],
+    items: [
+      { this: "Jimothy", does: "says", not: "what", change: "?" },
+      { this: "Timothy", does: "says", not: "how", change: "?" },
+      { this: "Frimothy", does: "says", not: "never", change: "!" },
+      { this: "Limothy", does: "says", not: "can we", change: "?" },
+      { this: "Yimpothy", does: "says", not: "do it", change: "!" },
+    ],
+  };
+  staticTableProps = [
+    { name: "tableData", required: true, type: "TableTypes.Static" },
   ];
   tableData = {
     currentUser: this.user,
@@ -143,6 +230,10 @@ export default class Lists extends Vue {
     url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
   };
   tableCopy = `<Table :table-data="tableData" />`;
-  tableProps = [{ name: "tableData", required: true, type: "TableTypes.Data" }];
+  tableProps = [
+    { name: "clickable", required: false, type: "boolean" },
+    { name: "loader", required: false, type: "boolean" },
+    { name: "tableData", required: true, type: "TableTypes.Dynamic" },
+  ];
 }
 </script>

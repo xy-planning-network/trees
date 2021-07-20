@@ -117,6 +117,15 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy value="<h1 class='xy-h1-responsive'>Header1</h1>" />
+          </label>
+          <div class="mt-1">
+            <h1 class="xy-h1-responsive">Responsive Header1</h1>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy value="<h2>Header2</h2>" />
           </label>
           <div class="mt-1">
@@ -126,10 +135,28 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy value="<2 class='xy-2-responsive'>Header1</2>" />
+          </label>
+          <div class="mt-1">
+            <h2 class="xy-h2-responsive">Responsive Header2</h2>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy value="<h3>Header3</h3>" />
           </label>
           <div class="mt-1">
             <h3>Header3</h3>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy value="<h3 class='xy-h3-responsive'>Header1</h3>" />
+          </label>
+          <div class="mt-1">
+            <h3 class="xy-h3-responsive">Responsive Header3</h3>
           </div>
         </div>
 
