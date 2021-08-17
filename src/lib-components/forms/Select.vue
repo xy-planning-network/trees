@@ -4,7 +4,7 @@
     :value="modelValue"
     @change="$emit('update:modelValue', $event.target.value)"
   >
-    <option value="" disabled v-if="placeholder" v-text="placeholder"></option>
+    <option value="" disabled selected v-if="placeholder" :placeholder="placeholder">{{ placeholder }}</option>
     <option
       v-for="option in options"
       :value="option.value"

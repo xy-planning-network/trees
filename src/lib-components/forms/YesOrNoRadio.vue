@@ -5,6 +5,7 @@
       :class="{ 'cursor-not-allowed': disabled }"
     >
       <input
+        :name="name"
         type="radio"
         class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
         :disabled="disabled"
@@ -22,13 +23,13 @@
       :class="{ 'cursor-not-allowed': disabled }"
     >
       <input
+        :name="name"
         type="radio"
         class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
         :disabled="disabled"
         :value="false"
         :checked="modelValue === false"
         @change="$emit('update:modelValue', $event.target.value === 'true')"
-        :required="required"
       />
       <span class="block ml-2 text-sm font-medium text-gray-700 leading-5"
         >No</span
@@ -45,5 +46,6 @@ export default class YesOrNoRadio extends Vue {
   @Prop({ type: Boolean, required: false }) disabled?: boolean;
   @Prop({ type: Boolean, required: false }) required?: boolean;
   @Prop({ type: Boolean, required: false }) modelValue?: boolean;
+  @Prop({ type: String, required: false, default:"yesNoRadio" }) name?: string;
 }
 </script>
