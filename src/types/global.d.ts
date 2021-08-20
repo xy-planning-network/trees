@@ -4,7 +4,7 @@ export {};
 
 declare global {
   interface Window {
-    Flashes: Array<{ message: string }>;
+    Flashes: Array<{ type?: string; message: string }>;
     VueBus: Emitter;
   }
 }

@@ -75,8 +75,12 @@ export default class Flash extends Vue {
 
     if (window.Flashes) {
       for (const flash of window.Flashes) {
-        const values: string[] = flash.message.split(": ");
-        this.renderFlash({ type: values[0], message: values[1] });
+        if (typeof flash.type === "undefined") {
+          const values: string[] = flash.message.split(": ");
+          this.renderFlash({ type: values[0], message: values[1] });
+          return;
+        }
+        this.renderFlash({ type: flash.type, message: flash.message });
       }
     }
   }
