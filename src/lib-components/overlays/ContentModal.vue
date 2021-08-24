@@ -47,9 +47,8 @@
               <div class="mt-3 text-center sm:mt-5">
                 <DialogTitle as="h3" v-text="title"></DialogTitle>
                 <div class="mt-2">
-                  <p v-html="content"></p>
+                  <slot></slot>
                 </div>
-                <slot></slot>
               </div>
             </div>
             <div class="mt-5 sm:mt-6">
@@ -89,7 +88,6 @@ import {
   name: "ContentModal",
 })
 export default class ContentModal extends Vue {
-  @Prop({ type: String, required: true }) content!: string;
   @Prop({ type: Boolean, required: true }) modelValue!: boolean;
   @Prop({ type: String, required: false }) title?: string;
 

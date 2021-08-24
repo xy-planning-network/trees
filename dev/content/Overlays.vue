@@ -3,7 +3,8 @@
     <div class="max-w-3xl mx-auto">
       <ComponentLayout title="Content Modal">
         <template v-slot:description>
-          This bad boy is used to show the user some content.
+          This bad boy is used to show the user some content. The default slot
+          is for the primary content.
         </template>
 
         <div>
@@ -18,11 +19,7 @@
             >
               Show Me
             </button>
-            <ContentModal
-              v-model="contentModalOpen"
-              content="You did really good. Look at this badge."
-              title="Good Job!"
-            >
+            <ContentModal v-model="contentModalOpen" title="Good Job!">
               <template v-slot:icon>
                 <div
                   class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
@@ -33,6 +30,7 @@
                   />
                 </div>
               </template>
+              <p>You did really good. Look at this badge.</p>
             </ContentModal>
             <PropsTable :props="contentModalProps" />
           </div>
@@ -122,7 +120,6 @@ export default class Overlays extends Vue {
   contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`;
   contentModalOpen = false;
   contentModalProps = [
-    { name: "content", required: true, type: "string" },
     { name: "modelValue", required: true, type: "boolean" },
     { name: "title", required: false, type: "string" },
   ];
