@@ -1,7 +1,47 @@
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Checkbox">
+      <ComponentLayout title="Base Input">
+        <template v-slot:description>
+          Covers many of the most common <code>&lt;input&gt;</code> fields with
+          a <code>type="${type}"</code> attribute. Checkout the list of common
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types"
+            class="xy-link"
+            target="_blank"
+            >input variations</a
+          >. Errors can be styled with <code>.xy-input-error</code>.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="inputCopy" />
+          </label>
+          <div class="mt-1">
+            <BaseInput
+              help="No wrong answers"
+              type="text"
+              label="What's your life moto?"
+              placeholder="It's good to be alive"
+            ></BaseInput>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="inputErrorCopy" />
+          </label>
+          <div class="mt-1">
+            <BaseInput
+              type="text"
+              label="Broken"
+              class="xy-input-error"
+            ></BaseInput>
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Checkbox">
         <template v-slot:description>
           Checkboxes are a wrapped component given that they have a complex
           structure.

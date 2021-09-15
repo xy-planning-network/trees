@@ -15,6 +15,8 @@ export const DateRangePicker: DefineComponent<{}, {}, any>;
 export const DetailList: DefineComponent<{}, {}, any>;
 export const DownloadCell: DefineComponent<{}, {}, any>;
 export const Flash: DefineComponent<{}, {}, any>;
+export const InputLabel: DefineComponent<{}, {}, any>;
+export const InputText: DefineComponent<{}, {}, any>;
 export const MultiCheckboxes: DefineComponent<{}, {}, any>;
 export const Modal: DefineComponent<{}, {}, any>;
 export const Paginator: DefineComponent<{}, {}, any>;

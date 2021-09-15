@@ -46,6 +46,6 @@ export default class YesOrNoRadio extends Vue {
   @Prop({ type: Boolean, required: false }) disabled?: boolean;
   @Prop({ type: Boolean, required: false }) required?: boolean;
   @Prop({ type: Boolean, required: false }) modelValue?: boolean;
-  @Prop({ type: String, required: false, default:"yesNoRadio" }) name?: string;
+  @Prop({ type: String, required: false, default: "yesNoRadio" }) name?: string;
 }
 </script>
