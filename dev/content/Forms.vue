@@ -54,7 +54,9 @@
               :type="inputTypeSelected"
               :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
               :placeholder="`A placeholder for a ${inputTypeSelected}`"
+              v-model="customInputTypeVal"
             ></BaseInput>
+            <div class="mt-4"><b>Value:</b> {{ customInputTypeVal }}</div>
           </div>
         </div>
       </ComponentLayout>
@@ -309,5 +311,6 @@ export default class Forms extends Vue {
   });
 
   inputTypeSelected = "text";
+  customInputTypeVal = "";
 }
 </script>
