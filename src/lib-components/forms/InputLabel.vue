@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="type"
+    :is="tag"
     v-if="label"
     v-bind="{
       ...$attrs,
@@ -15,6 +15,6 @@ import { Options, Prop, Vue } from "vue-property-decorator";
 @Options({ name: "InputLabel" })
 export default class InputText extends Vue {
   @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false, default: "label" }) type?: string;
+  @Prop({ type: String, required: false, default: "label" }) tag?: string;
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <fieldset>
-    <InputLabel class="block" :label="legend" type="legend"></InputLabel>
+    <InputLabel class="block" :label="legend" tag="legend"></InputLabel>
     <label
       class="inline-flex items-center"
       :class="{ 'cursor-not-allowed': $attrs.disabled }"

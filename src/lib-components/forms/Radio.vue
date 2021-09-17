@@ -1,6 +1,6 @@
 <template>
   <fieldset class="mt-1 space-y-2">
-    <InputLabel class="block" :label="legend" type="legend"></InputLabel>
+    <InputLabel class="block" :label="legend" tag="legend"></InputLabel>
     <div v-for="(option, index) in options" :key="option.value">
       <label
         class="inline-flex items-center"
