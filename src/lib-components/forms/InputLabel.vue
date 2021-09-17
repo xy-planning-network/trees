@@ -13,7 +13,7 @@
 import { Options, Prop, Vue } from "vue-property-decorator";
 
 @Options({ name: "InputLabel" })
-export default class InputText extends Vue {
+export default class InputLabel extends Vue {
   @Prop({ type: String, required: false }) label?: string;
   @Prop({ type: String, required: false, default: "label" }) tag?: string;
 }

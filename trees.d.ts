@@ -7,6 +7,7 @@ declare const Trees: Exclude<Plugin["install"], undefined>;
 export default Trees;
 
 export const ActionsDropdown: DefineComponent<{}, {}, any>;
+export const BaseInput: DefineComponent<{}, {}, any>;
 export const Cards: DefineComponent<{}, {}, any>;
 export const Checkbox: DefineComponent<{}, {}, any>;
 export const ContentModal: DefineComponent<{}, {}, any>;
@@ -15,8 +16,8 @@ export const DateRangePicker: DefineComponent<{}, {}, any>;
 export const DetailList: DefineComponent<{}, {}, any>;
 export const DownloadCell: DefineComponent<{}, {}, any>;
 export const Flash: DefineComponent<{}, {}, any>;
+export const InputHelp: DefineComponent<{}, {}, any>;
 export const InputLabel: DefineComponent<{}, {}, any>;
-export const InputText: DefineComponent<{}, {}, any>;
 export const MultiCheckboxes: DefineComponent<{}, {}, any>;
 export const Modal: DefineComponent<{}, {}, any>;
 export const Paginator: DefineComponent<{}, {}, any>;

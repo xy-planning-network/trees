@@ -37,7 +37,7 @@ import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
 
 @Options({ name: "BaseInput" })
-export default class InputText extends Vue {
+export default class BaseInput extends Vue {
   @Prop({ type: String, required: true }) type?: string;
   @Prop({ type: String, required: false }) label?: string;
   @Prop({ type: String, required: false }) help?: string;
