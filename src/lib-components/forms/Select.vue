@@ -1,8 +1,17 @@
 <template>
+  <InputLabel :id="`${uuid}-label`" :for="uuid" :label="label"></InputLabel>
   <select
+    :aria-labelledby="label ? `${uuid}-label` : undefined"
+    :aria-describedby="help ? `${uuid}-help` : undefined"
     :class="classes"
+    :id="uuid"
     :value="modelValue"
-    @change="$emit('update:modelValue', $event.target.value)"
+    v-bind="{
+      ...$attrs,
+      onChange: ($event) => {
+        $emit('update:modelValue', $event.target.value);
+      },
+    }"
   >
     <option
       value=""
@@ -20,14 +29,18 @@
       :key="option.value"
     ></option>
   </select>
+  <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>
 
 <script lang="ts">
+import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
 
 @Options({ name: "Select" })
 export default class Select extends Vue {
   @Prop({ type: String, required: false }) design?: string;
+  @Prop({ type: String, required: false }) label?: string;
+  @Prop({ type: String, required: false }) help?: string;
   @Prop({ type: Array, required: true }) options!: Array<{
     label: string;
     value: string;
@@ -35,6 +48,8 @@ export default class Select extends Vue {
   @Prop({ type: String, required: false, default: "Select an option" })
   placeholder?: string;
   @Prop({ type: String, required: true }) modelValue!: string | undefined;
+
+  uuid = Uniques.CreateIdAttribute();
 
   get classes(): string {
     const design = this.design ? this.design : "undefined";

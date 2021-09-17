@@ -19,7 +19,7 @@
           </label>
           <div class="mt-1">
             <BaseInput
-              help="No wrong answers"
+              help="No wrong answers here."
               type="text"
               label="What's your life moto?"
               placeholder="It's good to be alive"
@@ -36,6 +36,24 @@
               type="text"
               label="Broken"
               class="xy-input-error"
+            ></BaseInput>
+          </div>
+        </div>
+
+        <div>
+          <div class="border-t pt-4 mt-4">
+            <Select
+              :options="inputTypes"
+              label="Try out some common input types"
+              placeholder="Select an input type"
+              v-model="inputTypeSelected"
+              class="mb-8"
+            />
+            <BaseInput
+              :help="`Some help text for a ${inputTypeSelected}`"
+              :type="inputTypeSelected"
+              :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
+              :placeholder="`A placeholder for a ${inputTypeSelected}`"
             ></BaseInput>
           </div>
         </div>
@@ -162,6 +180,8 @@
           <div class="mt-1">
             <Select
               :options="options"
+              label="A really important decision"
+              help="Are you up for this?"
               placeholder="Select an option that you fancy"
               v-model="selected"
             />
@@ -263,5 +283,31 @@ export default class Forms extends Vue {
     { name: "required", required: false, type: "boolean" },
     { name: "modelValue", required: false, type: "boolean" },
   ];
+
+  inputTypes = [
+    "color",
+    "date",
+    "datetime-local",
+    "email",
+    "file",
+    "hidden",
+    "month",
+    "number",
+    "password",
+    "range",
+    "search",
+    "tel",
+    "text",
+    "time",
+    "url",
+    "week",
+  ].map((type: string) => {
+    return {
+      label: type,
+      value: type,
+    };
+  });
+
+  inputTypeSelected = "text";
 }
 </script>

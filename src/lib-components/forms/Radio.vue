@@ -1,19 +1,24 @@
 <template>
   <fieldset class="mt-1 space-y-2">
-    <div v-for="option in options" :key="option.value">
+    <InputLabel class="block" :label="legend" type="legend"></InputLabel>
+    <div v-for="(option, index) in options" :key="option.value">
       <label
         class="inline-flex items-center"
-        :class="{ 'cursor-not-allowed': disabled }"
+        :class="{ 'cursor-not-allowed': $attrs.disabled }"
+        :for="`${uuid}-${index}`"
       >
         <input
-          type="radio"
-          class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
-          :disabled="disabled"
-          :name="option.label"
-          :value="option.value"
           :checked="modelValue === option.value"
-          @change="$emit('update:modelValue', $event.target.value)"
-          :required="required"
+          class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+          :id="`${uuid}-${index}`"
+          type="radio"
+          :value="option.value"
+          v-bind="{
+            ...$attrs,
+            onChange: ($event) => {
+              $emit('update:modelValue', $event.target.value);
+            },
+          }"
         />
         <span class="block ml-2 text-sm font-medium text-gray-700 leading-5">
           {{ option.label }}
@@ -24,16 +29,18 @@
 </template>
 
 <script lang="ts">
+import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
 
 @Options({ name: "Radio" })
 export default class Radio extends Vue {
-  @Prop({ type: Boolean, required: false }) disabled?: boolean;
   @Prop({ type: Array, required: true }) options!: Array<{
     label: string;
     value: string;
   }>;
-  @Prop({ type: Boolean, required: false }) required?: boolean;
+  @Prop({ type: String, required: false }) legend?: string;
   @Prop({ type: String, required: false }) modelValue?: string;
+
+  uuid = Uniques.CreateIdAttribute();
 }
 </script>

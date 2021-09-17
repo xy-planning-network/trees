@@ -1,8 +1,10 @@
 <template>
   <div
-    class="my-2 text-sm leading-snug font-normal text-gray-500"
-    v-bind="$attrs"
     v-if="text"
+    v-bind="{
+      ...$attrs,
+      class: 'my-2 text-sm leading-snug font-normal text-gray-500',
+    }"
   >
     {{ text }}
   </div>
