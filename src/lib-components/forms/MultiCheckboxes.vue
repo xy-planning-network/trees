@@ -28,8 +28,9 @@
 <script lang="ts">
 import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue, Watch } from "vue-property-decorator";
+import InputLabel from "./InputLabel.vue";
 
-@Options({ name: "MultiCheckboxes" })
+@Options({ name: "MultiCheckboxes", components: { InputLabel } })
 export default class MultiCheckboxes extends Vue {
   @Prop({ type: Array, required: true }) options!: Array<{
     label: string;

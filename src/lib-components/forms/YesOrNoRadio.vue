@@ -51,8 +51,9 @@
 <script lang="ts">
 import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
+import InputLabel from "./InputLabel.vue";
 
-@Options({ name: "YesOrNoRadio" })
+@Options({ name: "YesOrNoRadio", components: { InputLabel } })
 export default class YesOrNoRadio extends Vue {
   @Prop({ type: Boolean, required: false }) modelValue?: boolean;
   @Prop({ type: String, required: false }) legend?: string;

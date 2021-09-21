@@ -14,8 +14,10 @@ import Uniques from "@/helpers/Uniques";
 import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import InputLabel from "./InputLabel.vue";
+import InputHelp from "./InputHelp.vue";
 
-@Options({ name: "DateRangePicker" })
+@Options({ name: "DateRangePicker", components: { InputLabel, InputHelp } })
 export default class DateRangePicker extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
     minDate: number;

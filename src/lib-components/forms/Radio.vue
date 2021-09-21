@@ -31,8 +31,9 @@
 <script lang="ts">
 import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
+import InputLabel from "./InputLabel.vue";
 
-@Options({ name: "Radio" })
+@Options({ name: "Radio", components: { InputLabel } })
 export default class Radio extends Vue {
   @Prop({ type: Array, required: true }) options!: Array<{
     label: string;

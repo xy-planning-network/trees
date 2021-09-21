@@ -35,8 +35,10 @@
 <script lang="ts">
 import Uniques from "@/helpers/Uniques";
 import { Options, Prop, Vue } from "vue-property-decorator";
+import InputLabel from "./InputLabel.vue";
+import InputHelp from "./InputHelp.vue";
 
-@Options({ name: "BaseInput" })
+@Options({ name: "BaseInput", components: { InputLabel, InputHelp } })
 export default class BaseInput extends Vue {
   @Prop({ type: String, required: true }) type?: string;
   @Prop({ type: String, required: false }) label?: string;
