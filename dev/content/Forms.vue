@@ -1,7 +1,25 @@
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Base Input">
+      <ComponentLayout title="Input HTML Attributes" :show-badge="false">
+        <template v-slot:description>
+          <div class="mt-4">
+            Generally, all of these inputs will support common html attributes
+            such as <code>disabled</code> and <code>required</code> or input
+            specific attributes like <code>rows</code> for textareas. You can
+            even use the <code>class</code> attribute as needed to apply
+            additional classes.
+          </div>
+
+          <div class="mt-4">
+            Out of the box they will support a dynamically generated id
+            attribute which is used for accessibility concerns with labels and
+            help text.
+          </div>
+        </template>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Base Input">
         <template v-slot:description>
           Covers many of the most common <code>&lt;input&gt;</code> fields with
           a <code>type="${type}"</code> attribute. Checkout the list of common
@@ -57,6 +75,23 @@
               v-model="customInputTypeVal"
             ></BaseInput>
             <div class="mt-4"><b>Value:</b> {{ customInputTypeVal }}</div>
+            <PropsTable :props="baseInputProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Textarea">
+        <template v-slot:description>
+          A common and consistent textarea input.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="textareaCopy" />
+          </label>
+          <div class="mt-1">
+            <TextArea v-model="textarea" />
+            <PropsTable :props="textareaProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -98,37 +133,6 @@
           <div class="mt-1">
             <DateRangePicker v-model="dateRange" />
             <PropsTable :props="dateRangePickerProps" />
-          </div>
-        </div>
-      </ComponentLayout>
-
-      <ComponentLayout class="mt-8" :css-component="true" title="Input">
-        <template v-slot:description>
-          These aren't using any extra magic other than css. They are styled
-          based off <code>type="text"</code> or one of the
-          <a
-            href="https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types"
-            class="xy-link"
-            target="_blank"
-            >input variations</a
-          >. Errors can be styled with <code>.xy-input-error</code>.
-        </template>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputCopy" />
-          </label>
-          <div class="mt-1">
-            <input type="text" placeholder="It's good to be alive" />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputErrorCopy" />
-          </label>
-          <div class="mt-1">
-            <input type="text" placeholder="Broken" class="xy-input-error" />
           </div>
         </div>
       </ComponentLayout>
@@ -180,13 +184,7 @@
             <ClickToCopy :value="selectCopy" />
           </label>
           <div class="mt-1">
-            <Select
-              :options="options"
-              label="A really important decision"
-              help="Are you up for this?"
-              placeholder="Select an option that you fancy"
-              v-model="selected"
-            />
+            <Select :options="options" v-model="selected" />
             <PropsTable :props="selectProps" />
           </div>
         </div>
@@ -208,6 +206,40 @@
           </div>
         </div>
       </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Input Lable">
+        <template v-slot:description>
+          For whenever you just need a consistent label for a custom layout. Use
+          the tag property for a custom html element like legend.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="inputLabelCopy" />
+          </label>
+          <div class="mt-1">
+            <InputLabel label="I'm labeling somthing..." />
+            <PropsTable :props="inputLabelProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Input Help">
+        <template v-slot:description>
+          For whenever you just need a consistent help text component. Use the
+          tag property for a custom html element like legend.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="inputHelpCopy" />
+          </label>
+          <div class="mt-1">
+            <InputHelp text="I'm just here to hint" />
+            <PropsTable :props="inputHelpProps" />
+          </div>
+        </div>
+      </ComponentLayout>
     </div>
   </div>
 </template>
@@ -217,13 +249,15 @@ import { Options, Vue } from "vue-property-decorator";
 
 @Options({ name: "Forms" })
 export default class Forms extends Vue {
+  commonProps = [
+    { name: "label", required: false, type: "string" },
+    { name: "help", required: false, type: "string" },
+  ];
   checked = false;
   checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`;
   checkboxProps = [
-    { name: "disabled", required: false, type: "boolean" },
     { name: "emphasis", required: false, type: "boolean" },
     { name: "label", required: false, type: "string" },
-    { name: "required", required: false, type: "boolean" },
     { name: "modelValue", required: true, type: "boolean" },
   ];
   dateRange = { maxRange: 0, minRange: 0 };
@@ -235,9 +269,10 @@ export default class Forms extends Vue {
       type: "{ minDate: number; maxDate: number; }",
     },
     { name: "startDate", required: false, type: "number" },
+    ...this.commonProps,
   ];
-  inputCopy = `<input type="text" placeholder="It's good to be alive" />`;
-  inputErrorCopy = `<input type="text" placeholder="Broken" class="xy-input-error" />`;
+  inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`;
+  inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`;
   multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`;
   multiCheckboxProps = [
     {
@@ -246,18 +281,18 @@ export default class Forms extends Vue {
       type: "Array<{ label: string; value: string }>",
     },
     { name: "modelValue", required: true, type: "string" },
+    { name: "legend", required: false, type: "string" },
   ];
   multiCheckboxSelection = [];
   radioCopy = `<Radio :options="options" v-model="selected" />`;
   radioProps = [
-    { name: "disabled", required: false, type: "boolean" },
     {
       name: "options",
       required: true,
       type: "Array<{ label: string; value: string }>",
     },
-    { name: "required", required: false, type: "boolean" },
     { name: "modelValue", required: true, type: "string" },
+    { name: "legend", required: false, type: "boolean" },
   ];
   radioSelection = "";
   selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`;
@@ -270,6 +305,7 @@ export default class Forms extends Vue {
     },
     { name: "placeholder", required: false, type: "string" },
     { name: "modelValue", required: true, type: "string" },
+    ...this.commonProps,
   ];
   options = [
     { label: "You could select this", value: "val1" },
@@ -281,9 +317,22 @@ export default class Forms extends Vue {
   yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
   yesOrNoRadioSelection = false;
   yesOrNoRadioProps = [
-    { name: "disabled", required: false, type: "boolean" },
-    { name: "required", required: false, type: "boolean" },
+    { name: "legend", required: false, type: "string" },
+    { name: "name", required: false, type: "string" },
     { name: "modelValue", required: false, type: "boolean" },
+  ];
+
+  textarea = "";
+  textareaProps = [
+    { name: "modelValue", required: false, type: "string" },
+    ...this.commonProps,
+  ];
+  textareaCopy = `<TextArea v-model="textarea" />`;
+
+  baseInputProps = [
+    { name: "type", required: true, type: "string" },
+    { name: "modelValue", required: false, type: "string | number" },
+    ...this.commonProps,
   ];
 
   inputTypes = [
@@ -312,5 +361,17 @@ export default class Forms extends Vue {
 
   inputTypeSelected = "text";
   customInputTypeVal = "";
+
+  inputLabelCopy = `<InputLable lable="I'm labeling something..." />`;
+  inputLabelProps = [
+    { name: "label", required: false, type: "string" },
+    { name: "tag", required: false, type: "string" },
+  ];
+
+  inputHelpCopy = `<InputHelp text="I'm just here to hint." />`;
+  inputHelpProps = [
+    { name: "text", required: false, type: "string" },
+    { name: "tag", required: false, type: "string" },
+  ];
 }
 </script>

@@ -21,7 +21,6 @@
     ]"
     :id="uuid"
     :placeholder="label"
-    :type="type"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
     v-bind="$attrs"
@@ -37,7 +36,6 @@ import InputHelp from "./InputHelp.vue";
 
 @Options({ name: "TextArea", components: { InputLabel, InputHelp } })
 export default class TextArea extends Vue {
-  @Prop({ type: String, required: true }) type?: string;
   @Prop({ type: String, required: false }) label?: string;
   @Prop({ type: String, required: false }) help?: string;
   @Prop({ type: [String, Number], required: false }) modelValue?: string;
