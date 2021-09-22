@@ -42,6 +42,6 @@ export default class TextArea extends Vue {
   @Prop({ type: String, required: false }) help?: string;
   @Prop({ type: [String, Number], required: false }) modelValue?: string;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 }
 </script>

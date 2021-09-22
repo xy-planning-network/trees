@@ -59,7 +59,7 @@ export default class YesOrNoRadio extends Vue {
   @Prop({ type: String, required: false }) legend?: string;
   @Prop({ type: String, required: false, default: "" }) name?: string;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 
   get hasNameAttr(): boolean {
     return typeof this.name === "string" && this.name !== "";

@@ -37,6 +37,6 @@ export default class Checkbox extends Vue {
   @Prop({ type: String, required: false }) label?: string;
   @Prop({ type: Boolean, required: true }) modelValue!: boolean;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 }
 </script>

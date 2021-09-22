@@ -1,12 +1,11 @@
 <template>
-  <InputLabel
-    class="block"
-    :id="`${uuid}-label`"
-    :for="uuid"
+  <BaseInput
+    type="text"
+    placeholder="mm-dd-yyyy range"
+    :id="uuid"
     :label="label"
-  ></InputLabel>
-  <BaseInput type="text" placeholder="mm-dd-yyyy range" :id="uuid"></BaseInput>
-  <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
+    :help="help"
+  ></BaseInput>
 </template>
 
 <script lang="ts">
@@ -15,12 +14,10 @@ import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import BaseInput from "./BaseInput.vue";
-import InputLabel from "./InputLabel.vue";
-import InputHelp from "./InputHelp.vue";
 
 @Options({
   name: "DateRangePicker",
-  components: { BaseInput, InputLabel, InputHelp },
+  components: { BaseInput },
 })
 export default class DateRangePicker extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
@@ -31,7 +28,7 @@ export default class DateRangePicker extends Vue {
   @Prop({ type: String, required: false }) label?: string;
   @Prop({ type: String, required: false }) help?: string;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 
   @Emit("update:modelValue")
   updateModelValue(value: {

@@ -42,6 +42,6 @@ export default class Radio extends Vue {
   @Prop({ type: String, required: false }) legend?: string;
   @Prop({ type: String, required: false }) modelValue?: string;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 }
 </script>

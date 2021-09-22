@@ -51,7 +51,7 @@ export default class Select extends Vue {
   placeholder?: string;
   @Prop({ type: String, required: true }) modelValue!: string | undefined;
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 
   get classes(): string {
     const design = this.design ? this.design : "undefined";

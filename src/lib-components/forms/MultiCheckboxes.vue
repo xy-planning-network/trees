@@ -41,7 +41,7 @@ export default class MultiCheckboxes extends Vue {
 
   model: string[] = [];
 
-  uuid = Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 
   @Watch("model")
   onModelChanged(val: string[]): void {
