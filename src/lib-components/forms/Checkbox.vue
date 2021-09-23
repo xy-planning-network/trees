@@ -19,8 +19,7 @@
       <label
         :id="`${uuid}-label`"
         :for="uuid"
-        class="text-gray-500"
-        :class="{ 'font-medium': emphasis }"
+        :class="{ 'font-semibold': emphasis }"
         v-text="label"
       ></label>
     </div>
