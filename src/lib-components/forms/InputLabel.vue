@@ -4,7 +4,7 @@
     v-if="label"
     v-bind="{
       ...$attrs,
-      class: 'my-2 text-sm font-semibold leading-snug text-gray-900',
+      class: 'block my-2 text-sm font-semibold leading-snug text-gray-900',
     }"
     >{{ label }}</component
   >
