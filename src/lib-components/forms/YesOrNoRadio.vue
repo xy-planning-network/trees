@@ -41,9 +41,7 @@
           },
         }"
       />
-      <span class="block ml-2 text-sm font-medium text-gray-700 leading-5"
-        >No</span
-      >
+      <span class="block ml-2 text-sm font-medium leading-5">No</span>
     </label>
   </fieldset>
 </template>

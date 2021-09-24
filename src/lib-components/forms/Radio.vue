@@ -20,7 +20,7 @@
             },
           }"
         />
-        <span class="block ml-2 text-sm font-medium text-gray-700 leading-5">
+        <span class="block ml-2 text-sm font-medium leading-5">
           {{ option.label }}
         </span>
       </label>
