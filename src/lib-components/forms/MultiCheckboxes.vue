@@ -14,11 +14,7 @@
           />
         </div>
         <div class="ml-3 text-sm leading-5">
-          <label
-            class="text-gray-500"
-            :for="`${uuid}-${index}`"
-            v-text="option.label"
-          ></label>
+          <label :for="`${uuid}-${index}`" v-text="option.label"></label>
         </div>
       </div>
     </div>

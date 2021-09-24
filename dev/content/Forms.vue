@@ -35,14 +35,12 @@
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="inputCopy" />
           </label>
-          <Checkbox v-model="testRequired" label="Test Required" />
           <div class="mt-1">
             <BaseInput
               help="No wrong answers here."
               type="text"
               label="What's your life moto?"
               placeholder="It's good to be alive"
-              :required="testRequired"
             ></BaseInput>
           </div>
         </div>
@@ -375,7 +373,5 @@ export default class Forms extends Vue {
     { name: "text", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
   ];
-
-  testRequired = false;
 }
 </script>
