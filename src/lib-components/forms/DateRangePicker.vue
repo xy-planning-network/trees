@@ -1,23 +1,34 @@
 <template>
-  <input
+  <BaseInput
     type="text"
-    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
     placeholder="mm-dd-yyyy range"
-  />
+    :id="uuid"
+    :label="label"
+    :help="help"
+  ></BaseInput>
 </template>
 
 <script lang="ts">
+import Uniques from "@/helpers/Uniques";
 import { Emit, Options, Prop, Vue } from "vue-property-decorator";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import BaseInput from "./BaseInput.vue";
 
-@Options({ name: "DateRangePicker" })
+@Options({
+  name: "DateRangePicker",
+  components: { BaseInput },
+})
 export default class DateRangePicker extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
     minDate: number;
     maxDate: number;
   };
   @Prop({ type: Number, required: false }) startDate?: number;
+  @Prop({ type: String, required: false }) label?: string;
+  @Prop({ type: String, required: false }) help?: string;
+
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 
   @Emit("update:modelValue")
   updateModelValue(value: {
@@ -28,7 +39,7 @@ export default class DateRangePicker extends Vue {
   }
 
   mounted() {
-    flatpickr(this.$el, {
+    flatpickr(`#${this.uuid}`, {
       dateFormat: "m-d-Y",
       mode: "range",
       maxDate: new Date(), // So far, we cannot have options past today for ranges

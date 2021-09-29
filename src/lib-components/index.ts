@@ -20,9 +20,13 @@ export { default as Table } from "./lists/Table.vue";
 export { default as Tabs } from "./navigation/Tabs.vue";
 
 // Form components
+export { default as BaseInput } from "./forms/BaseInput.vue";
 export { default as Checkbox } from "./forms/Checkbox.vue";
 export { default as DateRangePicker } from "./forms/DateRangePicker.vue";
+export { default as InputHelp } from "./forms/InputHelp.vue";
+export { default as InputLabel } from "./forms/InputLabel.vue";
 export { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue";
 export { default as Radio } from "./forms/Radio.vue";
 export { default as Select } from "./forms/Select.vue";
+export { default as TextArea } from "./forms/TextArea.vue";
 export { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue";

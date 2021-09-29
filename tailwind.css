@@ -24,7 +24,7 @@
     @apply text-sm font-medium text-gray-900 leading-5;
   }
 
-  /* Forms */
+  /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
   [type=text], [type=email], [type=password], [type=number], [type=search], [type=tel], textarea {
     @apply mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md;
   }
@@ -70,11 +70,6 @@
     @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-medium rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Forms */
-  .xy-input-error {
-    @apply focus:ring-red-500 focus:border-red-500 text-red-900 placeholder-red-300 border-red-300;
-  }
-
   /* Header classes */
   .xy-h1-extra-flair {
     @apply text-3xl font-extrabold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
@@ -105,5 +100,10 @@
   
   .max-h-screen-1\/2 {
     max-height: 50vh;
+  }
+
+  /* Forms */
+  .xy-input-error {
+    @apply focus:ring-red-500 focus:border-red-500 text-red-900 placeholder-red-300 border-red-300;
   }
 }

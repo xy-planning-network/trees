@@ -15,7 +15,7 @@
             <slot name="description"></slot>
           </p>
         </div>
-        <div class="ml-4 mt-4 flex-shrink-0">
+        <div v-if="showBadge" class="ml-4 mt-4 flex-shrink-0">
           <span v-if="cssComponent" class="xy-badge-yellow">
             CSS Class Component
           </span>
@@ -35,6 +35,7 @@ import { ClipboardCopyIcon } from "@heroicons/vue/outline";
 
 @Options({ components: { ClipboardCopyIcon }, name: "ComponentLayout" })
 export default class ComponentLayout extends Vue {
+  @Prop({ type: Boolean, required: false, default: true }) showBadge?: boolean;
   @Prop({ type: Boolean, required: false }) cssComponent?: boolean;
   @Prop({ type: String, required: true }) title!: string;
 
