@@ -207,7 +207,7 @@
         </div>
       </ComponentLayout>
 
-      <ComponentLayout class="mt-8" title="Input Lable">
+      <ComponentLayout class="mt-8" title="Input Label">
         <template v-slot:description>
           For whenever you just need a consistent label for a custom layout. Use
           the tag property for a custom html element like legend.
@@ -362,7 +362,7 @@ export default class Forms extends Vue {
   inputTypeSelected = "text";
   customInputTypeVal = "";
 
-  inputLabelCopy = `<InputLable lable="I'm labeling something..." />`;
+  inputLabelCopy = `<InputLabel label="I'm labeling something..." />`;
   inputLabelProps = [
     { name: "label", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
