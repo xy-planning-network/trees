@@ -7,12 +7,15 @@
   "main": "dist/trees.ssr.js",
   "browser": "dist/trees.esm.js",
   "module": "dist/trees.esm.js",
+  "style": "src/style.css",
   "unpkg": "dist/trees.min.js",
   "types": "trees.d.ts",
   "files": [
+    "config/*",
     "dist/*",
     "trees.d.ts",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/**/*.css"
   ],
   "sideEffects": [
     "*.css",

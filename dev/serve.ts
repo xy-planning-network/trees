@@ -6,7 +6,7 @@ import Trees from "@/entry.esm";
 import ClickToCopy from "./helpers/ClickToCopy.vue";
 import ComponentLayout from "./helpers/ComponentLayout.vue";
 import PropsTable from "./helpers/PropsTable.vue";
-import "../tailwind.css";
+import "../src/style.css";
 import mitt from "mitt";
 
 window.VueBus = mitt();
