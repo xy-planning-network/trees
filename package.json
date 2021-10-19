@@ -7,7 +7,7 @@
   "main": "dist/trees.ssr.js",
   "browser": "dist/trees.esm.js",
   "module": "dist/trees.esm.js",
-  "style": "src/style.css",
+  "style": "src/index.css",
   "unpkg": "dist/trees.min.js",
   "types": "trees.d.ts",
   "files": [

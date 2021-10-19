@@ -17,8 +17,9 @@ module.exports = {
   plugins: [
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
-    require("@tailwindcss/typography"),
-    require("tailwindcss-font-inter")(), // TODO: do we need this if we move to Open Sans (should we move to open sans?)
+    require("@tailwindcss/typography")({
+      modifiers: ["sm", "lg", "xl"],
+    }),
   ],
   theme: {
     container: {

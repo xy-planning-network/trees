@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  /* general body copy */
+  body {
+    @apply text-base text-gray-900;
+  }
+
   /* Headers */
   h1 {
     @apply text-2xl font-medium text-gray-900 leading-7;
@@ -25,13 +30,19 @@
   }
 
   /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
-  [type=text], [type=email], [type=password], [type=number], [type=search], [type=tel], textarea {
+  [type="text"],
+  [type="email"],
+  [type="password"],
+  [type="number"],
+  [type="search"],
+  [type="tel"],
+  textarea {
     @apply mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md;
   }
 
-  /* Paragraphs */
+  /* Paragraphs -- TODO: think about removing this in favor of .prose */
   p {
-    @apply text-sm text-gray-500 leading-5;
+    @apply text-sm text-gray-900;
   }
 }
 
@@ -84,7 +95,7 @@
   }
 
   .xy-h3-responsive {
-    @apply text-base font-medium lg:text-lg
+    @apply text-base font-medium lg:text-lg;
   }
 
   /* Link classes */
@@ -97,7 +108,7 @@
   .max-h-screen-1\/4 {
     max-height: 25vh;
   }
-  
+
   .max-h-screen-1\/2 {
     max-height: 50vh;
   }
