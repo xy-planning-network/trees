@@ -13,7 +13,7 @@
       >
         XY Technology UI Kit
       </p>
-      <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">
+      <p class="mt-5 max-w-prose mx-auto text-xl text-gray-700">
         Everything you need to build your app. Get excited!
       </p>
 
@@ -21,7 +21,7 @@
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div v-for="feature in features" :key="feature.name" class="pt-6">
             <div
-              class="flow-root bg-gray-50 rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
+              class="flow-root bg-coolGray-50 rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
               @click="update(feature.name)"
             >
               <div class="-mt-6">
@@ -41,7 +41,7 @@
                   v-text="feature.name"
                 ></h3>
                 <p
-                  class="mt-5 text-base text-gray-500"
+                  class="mt-5 text-base text-gray-700"
                   v-text="feature.description"
                 ></p>
               </div>
