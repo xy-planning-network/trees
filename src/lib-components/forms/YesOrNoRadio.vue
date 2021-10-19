@@ -8,7 +8,7 @@
     >
       <input
         type="radio"
-        class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+        class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue"
         :id="`${hasNameAttr ? name : uuid}-true`"
         :name="hasNameAttr ? name : uuid"
         :value="true"
@@ -29,7 +29,7 @@
     >
       <input
         type="radio"
-        class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+        class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue"
         :id="`${hasNameAttr ? name : uuid}-false`"
         :name="hasNameAttr ? name : uuid"
         :value="false"
