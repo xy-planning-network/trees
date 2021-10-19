@@ -9,24 +9,34 @@
   }
 
   /* Headers */
-  h1 {
-    @apply text-2xl font-medium text-gray-900 leading-7;
+  h1,
+  .h1 {
+    @apply text-3xl font-semibold text-gray-900;
   }
 
-  h2 {
-    @apply text-xl font-medium text-gray-900 leading-6;
+  h2,
+  .h2 {
+    @apply text-2xl font-semibold text-gray-900;
   }
 
-  h3 {
-    @apply text-lg font-medium text-gray-900 leading-6;
+  h3,
+  .h3 {
+    @apply text-lg font-semibold text-gray-900;
   }
 
-  h4 {
-    @apply text-base font-medium text-gray-900 leading-6;
+  h4,
+  .h4 {
+    @apply text-base font-semibold text-gray-900;
   }
 
-  h5 {
-    @apply text-sm font-medium text-gray-900 leading-5;
+  h5,
+  .h5 {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  h6,
+  .h6 {
+    @apply text-xxs font-semibold text-gray-900;
   }
 
   /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
@@ -47,7 +57,7 @@
 }
 
 @layer components {
-  /* Badge classes */
+  /* Badge classes - TODO: handle anchor tag class cases and generic wrapper cases */
   .xy-badge {
     @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800;
   }
@@ -82,25 +92,50 @@
   }
 
   /* Header classes */
+  .h1 {
+    @apply text-3xl font-semibold text-gray-900;
+  }
+
+  .h2 {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  .h3 {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .h4 {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  .h5 {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .h6 {
+    @apply text-xxs font-semibold text-gray-900;
+  }
+
   .xy-h1-extra-flair {
-    @apply text-3xl font-extrabold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
+    @apply text-3xl font-bold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
   }
 
   .xy-h1-responsive {
-    @apply text-xl font-medium lg:text-2xl;
+    @apply text-2xl font-semibold lg:text-3xl;
   }
 
   .xy-h2-responsive {
-    @apply text-base font-medium lg:text-xl;
+    @apply text-lg font-semibold lg:text-2xl;
   }
 
   .xy-h3-responsive {
-    @apply text-base font-medium lg:text-lg;
+    @apply text-base font-semibold lg:text-lg;
   }
 
   /* Link classes */
   .xy-link {
-    @apply font-medium underline text-xy-blue hover:text-blue-600;
+    /* TODO: determine a visited state and implement in .prose */
+    @apply font-semibold underline text-blue-500 hover:text-blue-600;
   }
 }
 
