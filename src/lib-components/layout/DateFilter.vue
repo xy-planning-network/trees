@@ -10,7 +10,7 @@
     <div class="mt-4 flex md:mt-0 md:ml-4">
       <select
         @change="sortDirChanged($event.target.value)"
-        class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        class="block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       >
         <option value="DESC">Newest-Oldest</option>
         <option value="ASC">Oldest-Newest</option>
@@ -31,6 +31,7 @@ import DateRangePicker from "../forms/DateRangePicker.vue";
 
 @Options({ components: { DateRangePicker }, name: "DateFilter" })
 export default class DateFilter extends Vue {
+  // TODO: sort select should use built in select component
   @Prop({ type: Object, required: true }) dateRange!: {
     minDate: number;
     maxDate: number;
