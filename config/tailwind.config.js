@@ -1,5 +1,6 @@
 /* eslint-disable */
 const path = require("path");
+const colors = require("tailwindcss/colors");
 const treesTheme = require("./theme");
 
 module.exports = {
@@ -24,7 +25,12 @@ module.exports = {
     },
     extend: {
       animation: treesTheme.animation,
-      colors: treesTheme.colors,
+      colors: {
+        transparent: "transparent",
+        current: "currentColor",
+        ...colors,
+        ...treesTheme.colors,
+      },
       fontFamily: treesTheme.fontFamily,
       fontSize: treesTheme.fontSize,
       fontWeight: treesTheme.fontWeight,
