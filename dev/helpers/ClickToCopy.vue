@@ -1,6 +1,6 @@
 <template>
   <ClipboardCopyIcon
-    class="w-5 h-5 inline cursor-pointer text-gray-300 hover:text-gray-400 active:text-gray-300"
+    class="w-5 h-5 inline cursor-pointer text-gray-600 hover:text-gray-900 active:text-gray-600"
     @click="copy"
   />
   <input
@@ -17,7 +17,7 @@
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
   >
-    <span v-show="copied" class="text-xs text-gray-300 inline"> Copied! </span>
+    <span v-show="copied" class="text-xs text-gray-600 inline"> Copied! </span>
   </transition>
 </template>
 
