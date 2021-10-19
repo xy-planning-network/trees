@@ -16,7 +16,7 @@
             'shadow-sm',
             'focus:ring-blue-500',
             'focus:border-blue-500',
-            'border-gray-300',
+            'border-gray-600',
             'rounded-md',
             'w-full',
           ]

@@ -20,9 +20,7 @@
           },
         }"
       />
-      <span class="block ml-2 text-sm font-medium text-gray-900 leading-5"
-        >Yes</span
-      >
+      <span class="block ml-2 text-sm font-semibold text-gray-900">Yes</span>
     </label>
     <label
       class="inline-flex items-center ml-6"
@@ -43,9 +41,7 @@
           },
         }"
       />
-      <span class="block ml-2 text-sm font-medium text-gray-900 leading-5"
-        >No</span
-      >
+      <span class="block ml-2 text-sm font-semibold text-gray-900">No</span>
     </label>
   </fieldset>
 </template>
