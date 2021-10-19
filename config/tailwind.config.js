@@ -30,6 +30,7 @@ module.exports = {
       colors: treesTheme.colors,
       fontFamily: treesTheme.fontFamily,
       fontSize: treesTheme.fontSize,
+      fontWeight: treesTheme.fontWeight,
       spacing: treesTheme.spacing,
       typography: (theme) => {
         // TODO: expand on the typography, especially for headings
