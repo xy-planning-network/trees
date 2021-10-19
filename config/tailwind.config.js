@@ -3,10 +3,7 @@ const path = require("path");
 const treesTheme = require("./theme");
 
 module.exports = {
-  purge: [
-    path.resolve(__dirname, "../dev/**/*.vue"),
-    path.resolve(__dirname, "./src/lib-components/**/*.vue"),
-  ],
+  purge: [path.resolve(__dirname, "../src/lib-components/**/*.vue")],
   variants: {
     opacity: ["disabled"],
     cursor: ["disabled"],
