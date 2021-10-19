@@ -154,6 +154,6 @@
 
   /* Forms */
   .xy-input-error {
-    @apply focus:ring-red-500 focus:border-red-500 text-red-900 placeholder-red-300 border-red-300;
+    @apply focus:ring-red-700 focus:border-red-700 text-red-900 placeholder-red-700 placeholder-opacity-75 border-red-700;
   }
 }
