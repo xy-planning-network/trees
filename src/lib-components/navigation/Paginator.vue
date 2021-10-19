@@ -7,8 +7,8 @@
         @click.prevent="changePage(modelValue.page - 1)"
         :class="
           modelValue.page == 1
-            ? 'text-gray-300 cursor-not-allowed pointer-events-none'
-            : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            ? 'text-gray-500 cursor-not-allowed pointer-events-none'
+            : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
       >
         <svg class="mr-3 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -32,7 +32,7 @@
         :class="
           modelValue.page === i
             ? 'border-blue-500 text-blue-600 focus:outline-none focus:text-blue-800 focus:border-blue-700'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
+            : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
         "
         @click.prevent="changePage(i)"
       ></a>
@@ -45,8 +45,8 @@
         @click.prevent="changePage(modelValue.page + 1)"
         :class="
           modelValue.page >= modelValue.totalPages
-            ? 'text-gray-300 cursor-not-allowed pointer-events-none'
-            : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            ? 'text-gray-500 cursor-not-allowed pointer-events-none'
+            : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
       >
         Next

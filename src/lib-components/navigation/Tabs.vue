@@ -49,7 +49,7 @@ export default class Tabs extends Vue {
 
     if (this.pillDesign) {
       c =
-        "px-12 py-2 font-medium text-md leading-5 rounded-t-md focus:outline-none ";
+        "px-12 py-2 font-semibold text-md leading-5 rounded-t-md focus:outline-none ";
 
       if (this.modelValue === currentTab) {
         c =
@@ -58,14 +58,14 @@ export default class Tabs extends Vue {
       } else {
         c =
           c +
-          "text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:bg-gray-100 border border-gray-200";
+          "text-gray-700 hover:text-gray-900 focus:text-gray-900 focus:bg-gray-100 border border-gray-200";
       }
 
       return c;
     }
 
     c =
-      "px-1 py-4 text-sm font-medium border-b-2 whitespace-nowrap leading-5 focus:outline-none ";
+      "px-1 py-4 text-sm font-semibold border-b-2 whitespace-nowrap leading-5 focus:outline-none ";
     if (this.modelValue === currentTab) {
       c =
         c +
@@ -73,7 +73,7 @@ export default class Tabs extends Vue {
     } else {
       c =
         c +
-        "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300";
+        "border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:text-gray-900 focus:border-gray-300";
     }
 
     if (pastFirstTab) c = c + " ml-8";
