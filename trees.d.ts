@@ -29,6 +29,7 @@ export const Spinner: DefineComponent<{}, {}, any>;
 export const StackedLayout: DefineComponent<{}, {}, any>;
 export const StaticTable: DefineComponent<{}, {}, any>;
 export const Steps: DefineComponent<{}, {}, any>;
+export const Switch: DefineComponent<{}, {}, any>;
 export const Table: DefineComponent<{}, {}, any>;
 export const Tabs: DefineComponent<{}, {}, any>;
 export const YesOrNoRadio: DefineComponent<{}, {}, any>;

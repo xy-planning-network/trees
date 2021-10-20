@@ -16,6 +16,7 @@ export { default as Paginator } from "./navigation/Paginator.vue";
 export { default as Spinner } from "./overlays/Spinner.vue";
 export { default as StaticTable } from "./lists/StaticTable.vue";
 export { default as Steps } from "./navigation/Steps.vue";
+export { default as Switch } from "./forms/Switch.vue";
 export { default as Table } from "./lists/Table.vue";
 export { default as Tabs } from "./navigation/Tabs.vue";
 
