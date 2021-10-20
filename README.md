@@ -57,7 +57,22 @@ npm i @xy-planning-network/trees mitt
 
 ### Enable as a Vue plugin
 
-This example installs all components of Trees, which may not be necessary for all projects.
+This example installs all components of Trees, which may not be necessary for all projects. Assumes you have a vue 3 project with tailwind created.
+
+**Establish global types for VueBus and Flashes in global.d.ts**
+
+```ts
+// global.d.ts
+
+import { Emitter } from "mitt";
+
+declare global {
+  interface Window {
+    Flashes: Array<{ message: string }>;
+    VueBus: Emitter;
+  }
+}
+```
 
 **Initialize trees components in main.ts**
 
@@ -100,17 +115,16 @@ app.mount("#vue-app");
 }
 ```
 
-**Establish global types for VueBus and Flashes in global.d.ts**
+**Merge with the trees tailwind.cofig.js**
 
-```ts
-// global.d.ts
+Note you may need a deep merge utility depending on the depth of properties you plan to override.
 
-import { Emitter } from "mitt";
-
-declare global {
-  interface Window {
-    Flashes: Array<{ message: string }>;
-    VueBus: Emitter;
-  }
-}
+```js
+/* eslint-disable */
+const treesConfig = require("@xy-planning-network/trees/config/tailwind.config");
+module.exports = {
+  ...treesConfig,
+  mode: "jit", // Optional
+  purge: [...treesConfig.purge, ...["./src/**/*.vue"]],
+};
 ```
