@@ -68,6 +68,15 @@ module.exports = {
   "brand-green": {
     DEFAULT: "#51A749",
   },
+  "not-navy": {
+    DEFAULT: "#26547C",
+  },
+  "dewy-dawn": {
+    DEFAULT: "#D1FAFF",
+  },
+  "lime-vacay": {
+    DEFAULT: "#DEEFB7",
+  },
   success: {
     DEFAULT: "#51A749",
   },
