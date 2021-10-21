@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  /* general body copy */
+  body {
+    @apply text-base text-gray-900;
+  }
+
+  /* Headers */
+  h1,
+  .h1 {
+    @apply text-3xl font-semibold text-gray-900;
+  }
+
+  h2,
+  .h2 {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  h3,
+  .h3 {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  h4,
+  .h4 {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  h5,
+  .h5 {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  h6,
+  .h6 {
+    @apply text-xxs font-semibold text-gray-900;
+  }
+
+  /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
+  [type="text"],
+  [type="email"],
+  [type="password"],
+  [type="number"],
+  [type="search"],
+  [type="tel"],
+  textarea {
+    @apply mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-600 rounded-md;
+  }
+
+  /* Paragraphs -- TODO: think about removing this in favor of .prose */
+  p {
+    @apply text-sm text-gray-900;
+  }
+}
+
+@layer components {
+  /* Badge classes - TODO: handle anchor tag class cases and generic wrapper cases */
+  .xy-badge {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800;
+  }
+
+  .xy-badge-blue {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800;
+  }
+
+  .xy-badge-yellow {
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800;
+  }
+
+  /* Button classes */
+  .xy-btn {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-secondary {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-green {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-xy-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-red {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-xs md:text-sm font-semibold rounded-md shadow-md text-red-700 bg-red-100 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-white {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-semibold rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Header classes */
+  .h1 {
+    @apply text-3xl font-semibold text-gray-900;
+  }
+
+  .h2 {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  .h3 {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .h4 {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  .h5 {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .h6 {
+    @apply text-xxs font-semibold text-gray-900;
+  }
+
+  .xy-h1-extra-flair {
+    @apply text-3xl font-bold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
+  }
+
+  .xy-h1-responsive {
+    @apply text-2xl font-semibold lg:text-3xl;
+  }
+
+  .xy-h2-responsive {
+    @apply text-lg font-semibold lg:text-2xl;
+  }
+
+  .xy-h3-responsive {
+    @apply text-base font-semibold lg:text-lg;
+  }
+
+  /* Link classes */
+  .xy-link {
+    /* TODO: determine a visited state and implement in .prose */
+    @apply font-semibold underline text-blue-500 hover:text-blue-600;
+  }
+}
+
+@layer utilities {
+  .max-h-screen-1\/4 {
+    max-height: 25vh;
+  }
+
+  .max-h-screen-1\/2 {
+    max-height: 50vh;
+  }
+
+  /* Forms */
+  .xy-input-error {
+    @apply focus:ring-red-700 focus:border-red-700 text-red-900 placeholder-red-700 placeholder-opacity-75 border-red-700;
+  }
+}

@@ -79,9 +79,7 @@
               @submit="open = false"
             >
               <div class="mt-6">
-                <p class="text-sm leading-5 text-gray-500">
-                  If you move forward, things are gonna get gone!
-                </p>
+                <p>If you move forward, things are gonna get gone!</p>
               </div>
             </Modal>
             <PropsTable :props="modalProps" />

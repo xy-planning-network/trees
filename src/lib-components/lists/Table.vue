@@ -45,7 +45,7 @@
         <thead>
           <tr>
             <th
-              class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50 leading-4"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase border-b border-gray-200 bg-gray-50 leading-4"
               v-for="(col, idx) in tableData.columns"
               :key="idx"
             >
@@ -109,7 +109,7 @@
             :class="{ 'cursor-pointer': clickable }"
           >
             <td
-              class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap border-b border-gray-200 leading-5"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
               v-for="(col, colIdx) in tableData.columns"
               :key="rowIdx + '-' + colIdx"
               :class="col.class"
@@ -129,7 +129,7 @@
           <tr v-if="!hasContent">
             <td
               :colspan="tableData.columns.length"
-              class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap border-b border-gray-200 leading-5"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
             >
               No items were found!
             </td>

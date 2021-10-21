@@ -11,7 +11,7 @@
             class="text-lg leading-6 font-medium text-gray-900"
             v-text="title"
           ></h3>
-          <p class="mt-1 text-sm text-gray-500">
+          <p class="mt-1 text-sm text-gray-700">
             <slot name="description"></slot>
           </p>
         </div>

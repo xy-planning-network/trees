@@ -6,17 +6,17 @@
       <thead>
         <tr class="border-t border-gray-200">
           <th
-            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider"
           >
             Prop
           </th>
           <th
-            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider"
           >
             Required
           </th>
           <th
-            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="p-2 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider"
           >
             Type
           </th>
@@ -24,9 +24,9 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-100">
         <tr v-for="prop in props" :key="prop.name">
-          <td class="p-2 text-sm text-gray-500" v-text="prop.name"></td>
-          <td class="p-2 text-sm text-gray-500" v-text="prop.required"></td>
-          <td class="p-2 text-sm text-gray-500" v-text="prop.type"></td>
+          <td class="p-2 text-sm text-gray-700" v-text="prop.name"></td>
+          <td class="p-2 text-sm text-gray-700" v-text="prop.required"></td>
+          <td class="p-2 text-sm text-gray-700" v-text="prop.type"></td>
         </tr>
       </tbody>
     </table>

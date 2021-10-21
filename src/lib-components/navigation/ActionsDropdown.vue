@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
-      class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-700 rounded-full hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
       :disabled="!hasActionItems"
     >
       <span class="sr-only">Open options</span>
@@ -25,7 +25,7 @@
                 type="submit"
                 :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'block w-full text-left px-4 py-2 text-sm',
+                  'block w-full text-left px-4 py-2 text-sm font-semibold',
                 ]"
                 v-text="item.label"
                 @click="emitEvent(item.event)"

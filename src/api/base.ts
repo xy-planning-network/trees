@@ -8,7 +8,7 @@ import API from "../types/api";
 
 const apiAxiosInstance = axios.create({
   baseURL:
-    (import.meta?.env &&
+    (import.meta.env &&
       typeof import.meta.env.VITE_APP_BASE_API_URL === "string" &&
       import.meta.env.VITE_APP_BASE_API_URL) ||
     (typeof process.env.VUE_APP_BASE_API_URL === "string" &&

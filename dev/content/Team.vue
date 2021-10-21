@@ -5,7 +5,7 @@
         <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
           About Us
         </h2>
-        <p class="text-xl text-gray-500">
+        <p class="text-xl text-gray-700">
           We get shit done. Tasked with building tech, we seek quality
           experiences. We recognize the said state of affairs in tech, and we
           operate with the goal of creating tools that get out of the way for
@@ -32,16 +32,16 @@
                 <div class="space-y-4">
                   <div class="text-lg leading-6 font-medium space-y-1">
                     <h3>{{ person.name }}</h3>
-                    <p class="text-indigo-600">{{ person.role }}</p>
+                    <p class="text-blue-500">{{ person.role }}</p>
                   </div>
                   <div class="text-lg">
-                    <p class="text-gray-500">{{ person.bio }}</p>
+                    <p class="text-gray-900">{{ person.bio }}</p>
                   </div>
                   <ul class="flex space-x-5">
                     <li v-if="person.twitterUrl">
                       <a
                         :href="person.twitterUrl"
-                        class="text-gray-400 hover:text-gray-500"
+                        class="text-gray-700 hover:text-gray-900"
                       >
                         <span class="sr-only">Twitter</span>
                         <svg
@@ -59,7 +59,7 @@
                     <li v-if="person.linkedinUrl">
                       <a
                         :href="person.linkedinUrl"
-                        class="text-gray-400 hover:text-gray-500"
+                        class="text-gray-700 hover:text-gray-900"
                       >
                         <span class="sr-only">LinkedIn</span>
                         <svg

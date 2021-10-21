@@ -62,7 +62,7 @@
                   :class="[
                     isActive(item.url)
                       ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
                     'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                   ]"
                   :target="item.openInTab ? '_blank' : '_self'"
@@ -71,8 +71,8 @@
                     :is="item.icon"
                     :class="[
                       isActive(item.url)
-                        ? 'text-gray-500'
-                        : 'text-gray-400 group-hover:text-gray-500',
+                        ? 'text-gray-600'
+                        : 'text-gray-500 group-hover:text-gray-600',
                       'mr-4 h-6 w-6',
                     ]"
                     aria-hidden="true"
@@ -108,7 +108,7 @@
                 :class="[
                   isActive(item.url)
                     ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',
                   'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                 ]"
                 :target="item.openInTab ? '_blank' : '_self'"
@@ -117,8 +117,8 @@
                   :is="item.icon"
                   :class="[
                     isActive(item.url)
-                      ? 'text-gray-500'
-                      : 'text-gray-400 group-hover:text-gray-500',
+                      ? 'text-gray-600'
+                      : 'text-gray-500 group-hover:text-gray-600',
                     'mr-3 h-6 w-6',
                   ]"
                   aria-hidden="true"
@@ -176,7 +176,7 @@
                       :href="item.url"
                       :class="[
                         active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-gray-700',
+                        'block px-4 py-2 text-sm text-gray-700 font-semibold',
                       ]"
                       >{{ item.name }}</a
                     >

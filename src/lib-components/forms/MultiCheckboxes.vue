@@ -6,14 +6,14 @@
         <div class="flex items-center h-5">
           <input
             type="checkbox"
-            class="focus:ring-blue-500 h-4 w-4 text-xy-blue border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            class="focus:ring-blue-500 h-4 w-4 text-xy-blue border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
             :id="`${uuid}-${index}`"
             :value="option.value"
             v-model="model"
             v-bind="$attrs"
           />
         </div>
-        <div class="ml-3 text-sm leading-5">
+        <div class="ml-3 text-sm font-semibold leading-snug text-gray-900">
           <label :for="`${uuid}-${index}`" v-text="option.label"></label>
         </div>
       </div>

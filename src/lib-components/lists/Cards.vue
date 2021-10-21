@@ -15,7 +15,7 @@
             v-text="card.primary"
           ></dd>
           <dt
-            class="text-sm leading-5 font-medium text-gray-500 truncate"
+            class="text-sm leading-5 font-medium text-gray-700 truncate"
             v-text="card.secondary"
           ></dt>
         </dl>

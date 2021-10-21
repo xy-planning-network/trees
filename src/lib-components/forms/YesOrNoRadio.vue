@@ -8,7 +8,7 @@
     >
       <input
         type="radio"
-        class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+        class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue"
         :id="`${hasNameAttr ? name : uuid}-true`"
         :name="hasNameAttr ? name : uuid"
         :value="true"
@@ -20,9 +20,7 @@
           },
         }"
       />
-      <span class="block ml-2 text-sm font-medium text-gray-900 leading-5"
-        >Yes</span
-      >
+      <span class="block ml-2 text-sm font-semibold text-gray-900">Yes</span>
     </label>
     <label
       class="inline-flex items-center ml-6"
@@ -31,7 +29,7 @@
     >
       <input
         type="radio"
-        class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+        class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue"
         :id="`${hasNameAttr ? name : uuid}-false`"
         :name="hasNameAttr ? name : uuid"
         :value="false"
@@ -43,7 +41,7 @@
           },
         }"
       />
-      <span class="block ml-2 text-sm font-medium text-gray-900 leading-5">No</span>
+      <span class="block ml-2 text-sm font-semibold text-gray-900">No</span>
     </label>
   </fieldset>
 </template>

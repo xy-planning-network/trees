@@ -9,7 +9,7 @@
       >
         <input
           :checked="modelValue === option.value"
-          class="w-4 h-4 border-gray-300 focus:ring-blue-500 text-xy-blue"
+          class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue"
           :id="`${uuid}-${index}`"
           :name="uuid"
           type="radio"
@@ -21,7 +21,7 @@
             },
           }"
         />
-        <span class="block ml-2 text-sm font-medium leading-5">
+        <span class="block ml-2 text-sm font-semibold text-gray-900">
           {{ option.label }}
         </span>
       </label>

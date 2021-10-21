@@ -4,7 +4,7 @@
     v-if="text"
     v-bind="{
       ...$attrs,
-      class: 'my-2 text-sm leading-snug font-normal text-gray-500',
+      class: 'mt-2 text-sm leading-snug font-semibold text-gray-700',
     }"
   >
     {{ text }}
