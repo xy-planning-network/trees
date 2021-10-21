@@ -71,7 +71,6 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-vue": "^6.0.0",
     "tailwindcss": "^2.2.0",
-    "tailwindcss-font-inter": "^2.0.5",
     "typescript": "~4.1.5",
     "vue": "^3.0.5",
     "vue-class-component": "^8.0.0-0",
