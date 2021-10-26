@@ -6,14 +6,10 @@ import axios, {
 } from "axios";
 import API from "../types/api";
 
+const env = import.meta.env || {};
 const apiAxiosInstance = axios.create({
   baseURL:
-    (import.meta.env &&
-      typeof import.meta.env.VITE_APP_BASE_API_URL === "string" &&
-      import.meta.env.VITE_APP_BASE_API_URL) ||
-    (typeof process.env.VUE_APP_BASE_API_URL === "string" &&
-      process.env.VUE_APP_BASE_API_URL) ||
-    "/api/v1",
+    env.VITE_APP_BASE_API_URL || process.env.VUE_APP_BASE_API_URL || "/api/v1",
   responseType: "json",
   withCredentials: true,
 });
