@@ -105,6 +105,48 @@
           </div>
         </div>
       </ComponentLayout>
+      <ComponentLayout class="mt-8" title="Slideover">
+        <template v-slot:description>
+          A sidebar like content container that "slides over" your main content
+          on a trigger. It has a default slot for the primary content of the
+          sidebar. Use the @close event to fire of any actions you might need to
+          hook into when the slideover closes.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="slideoverCopy" />
+          </label>
+          <div class="mt-1">
+            <button type="button" class="xy-btn" @click="slideoverOpen = true">
+              Show Me
+            </button>
+            <Slideover
+              v-model="slideoverOpen"
+              header="Slideover Header"
+              description="A very helpful slideover description"
+            >
+              <div class="prose">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Quisque id nibh consequat, semper odio et, porta ex. Sed
+                  dapibus eu massa vel ultrices. Mauris mattis nisi sem, vel
+                  dictum odio pretium ullamcorper. Fusce suscipit nulla in felis
+                  cursus consectetur.
+                </p>
+                <p>
+                  Vestibulum ante ipsum primis in faucibus orci luctus et
+                  ultrices posuere cubilia curae; Morbi massa dui, commodo non
+                  sem vel, laoreet dictum est. Integer fermentum pretium erat
+                  vitae ultrices. Aenean eu maximus mi, in congue ipsum. Vivamus
+                  dignissim iaculis dolor, a sollicitudin metus tincidunt ac.
+                </p>
+              </div>
+            </Slideover>
+            <PropsTable :props="slideoverProps"></PropsTable>
+          </div>
+        </div>
+      </ComponentLayout>
     </div>
   </div>
 </template>
@@ -132,6 +174,14 @@ export default class Overlays extends Vue {
   ];
   open = false;
   spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`;
+  slideoverOpen = false;
+  slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`;
+  slideoverProps = [
+    { name: "v-model", required: true, type: "boolean" },
+    { name: "header", required: false, type: "string" },
+    { name: "description", required: false, type: "description" },
+    { name: "@close", required: false, type: "function(modelValue)" },
+  ];
 
   flash(): void {
     window.VueBus.emit("Flash-show-generic-error", "support@trees.com");

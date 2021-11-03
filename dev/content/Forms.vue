@@ -207,6 +207,24 @@
         </div>
       </ComponentLayout>
 
+      <ComponentLayout class="mt-8" title="Toggle">
+        <template v-slot:description>
+          Just a another toggle for boolean switches. A great UI alternative to
+          checkboxes and boolean value radio button pairs. Currently does not
+          support a label property. Bring your own label.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="toggleCopy" />
+          </label>
+          <div class="mt-1">
+            <Toggle v-model="toggleValue"></Toggle>
+            <PropsTable :props="toggleProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout class="mt-8" title="Input Label">
         <template v-slot:description>
           For whenever you just need a consistent label for a custom layout. Use
@@ -218,7 +236,7 @@
             <ClickToCopy :value="inputLabelCopy" />
           </label>
           <div class="mt-1">
-            <InputLabel label="I'm labeling somthing..." />
+            <InputLabel label="I'm labeling something..." />
             <PropsTable :props="inputLabelProps" />
           </div>
         </div>
@@ -373,5 +391,8 @@ export default class Forms extends Vue {
     { name: "text", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
   ];
+  toggleValue = false;
+  toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`;
+  toggleProps = [{ name: "modelValue", required: true, type: "string" }];
 }
 </script>
