@@ -83,9 +83,10 @@ export default class Slideover extends Vue {
   @Prop({ type: String, required: true }) description!: string;
   @Prop({ type: Boolean, required: true }) modelValue!: boolean;
 
-  @Emit()
-  close(): void {
-    return;
+  @Emit("close")
+  @Emit("update:modelValue")
+  close(): boolean {
+    return false;
   }
 }
 </script>
