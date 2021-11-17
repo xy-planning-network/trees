@@ -45,11 +45,14 @@ export default class Select extends Vue {
   @Prop({ type: String, required: false }) help?: string;
   @Prop({ type: Array, required: true }) options!: Array<{
     label: string;
-    value: string;
+    value: string | number;
   }>;
   @Prop({ type: String, required: false, default: "Select an option" })
   placeholder?: string;
-  @Prop({ type: String, required: true }) modelValue!: string | undefined;
+  @Prop({ type: [String, Number], required: true }) modelValue!:
+    | string
+    | number
+    | undefined;
 
   uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
 

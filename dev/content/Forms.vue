@@ -177,6 +177,18 @@
         <template v-slot:description>
           Similar to checkboxes, these are wrapped in a vue component given
           their nested structure so that we are consistent across all projects.
+          <br /><br />Note that the
+          <a
+            class="xy-link"
+            href="https://v3.vuejs.org/guide/forms.html#value-bindings"
+            >Value Bindings</a
+          >
+          section of the Vue docs states that binding values for selects are
+          usually static strings. Use the <b>v-model.number </b>
+          <a class="xy-link" href="https://v3.vuejs.org/guide/forms.html#number"
+            >modifier</a
+          >
+          if you need the binding to be typecast as a number.
         </template>
 
         <div>
@@ -207,6 +219,24 @@
         </div>
       </ComponentLayout>
 
+      <ComponentLayout class="mt-8" title="Toggle">
+        <template v-slot:description>
+          Just a another toggle for boolean switches. A great UI alternative to
+          checkboxes and boolean value radio button pairs. Currently does not
+          support a label property. Bring your own label.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="toggleCopy" />
+          </label>
+          <div class="mt-1">
+            <Toggle v-model="toggleValue"></Toggle>
+            <PropsTable :props="toggleProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout class="mt-8" title="Input Label">
         <template v-slot:description>
           For whenever you just need a consistent label for a custom layout. Use
@@ -218,7 +248,7 @@
             <ClickToCopy :value="inputLabelCopy" />
           </label>
           <div class="mt-1">
-            <InputLabel label="I'm labeling somthing..." />
+            <InputLabel label="I'm labeling something..." />
             <PropsTable :props="inputLabelProps" />
           </div>
         </div>
@@ -301,7 +331,7 @@ export default class Forms extends Vue {
     {
       name: "options",
       required: true,
-      type: "Array<{ label: string; value: string }>",
+      type: "Array<{ label: string; value: string | number }>",
     },
     { name: "placeholder", required: false, type: "string" },
     { name: "modelValue", required: true, type: "string" },
@@ -310,10 +340,12 @@ export default class Forms extends Vue {
   options = [
     { label: "You could select this", value: "val1" },
     { label: "This is an option", value: "val2" },
-    { label: "Feeling good about this one?", value: "val3" },
-    { label: "This is the LAST option", value: "val4" },
+    { label: "Feeling good about this one?", value: 3 },
+    { label: "This is the LAST option", value: 4 },
   ];
-  selected = "";
+
+  selected: string | number = "";
+
   yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
   yesOrNoRadioSelection = false;
   yesOrNoRadioProps = [
@@ -373,5 +405,8 @@ export default class Forms extends Vue {
     { name: "text", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
   ];
+  toggleValue = false;
+  toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`;
+  toggleProps = [{ name: "modelValue", required: true, type: "string" }];
 }
 </script>
