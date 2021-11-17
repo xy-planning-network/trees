@@ -177,6 +177,18 @@
         <template v-slot:description>
           Similar to checkboxes, these are wrapped in a vue component given
           their nested structure so that we are consistent across all projects.
+          <br /><br />Note that the
+          <a
+            class="xy-link"
+            href="https://v3.vuejs.org/guide/forms.html#value-bindings"
+            >Value Bindings</a
+          >
+          section of the Vue docs states that binding values for selects are
+          usually static strings. Use the <b>v-model.number </b>
+          <a class="xy-link" href="https://v3.vuejs.org/guide/forms.html#number"
+            >modifier</a
+          >
+          if you need the binding to be typecast as a number.
         </template>
 
         <div>
@@ -319,7 +331,7 @@ export default class Forms extends Vue {
     {
       name: "options",
       required: true,
-      type: "Array<{ label: string; value: string }>",
+      type: "Array<{ label: string; value: string | number }>",
     },
     { name: "placeholder", required: false, type: "string" },
     { name: "modelValue", required: true, type: "string" },
@@ -328,10 +340,12 @@ export default class Forms extends Vue {
   options = [
     { label: "You could select this", value: "val1" },
     { label: "This is an option", value: "val2" },
-    { label: "Feeling good about this one?", value: "val3" },
-    { label: "This is the LAST option", value: "val4" },
+    { label: "Feeling good about this one?", value: 3 },
+    { label: "This is the LAST option", value: 4 },
   ];
-  selected = "";
+
+  selected: string | number = "";
+
   yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
   yesOrNoRadioSelection = false;
   yesOrNoRadioProps = [
