@@ -1,4 +1,4 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
-  sans: ["Open Sans", ...defaultTheme.fontFamily.sans],
+  sans: ["Inter var", ...defaultTheme.fontFamily.sans],
 };

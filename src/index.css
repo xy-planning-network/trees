@@ -9,38 +9,32 @@
 
   /* general body copy */
   body {
-    @apply text-base text-gray-900;
+    @apply text-base leading-normal text-gray-900;
   }
 
   /* Headers */
-  h1,
-  .h1 {
-    @apply text-3xl font-semibold text-gray-900;
+  h1 {
+    @apply text-3xl leading-9 font-semibold;
   }
 
-  h2,
-  .h2 {
-    @apply text-2xl font-semibold text-gray-900;
+  h2 {
+    @apply text-2xl leading-7 font-semibold;
   }
 
-  h3,
-  .h3 {
-    @apply text-lg font-semibold text-gray-900;
+  h3 {
+    @apply text-lg leading-6 font-semibold;
   }
 
-  h4,
-  .h4 {
-    @apply text-base font-semibold text-gray-900;
+  h4 {
+    @apply text-base leading-5 font-semibold;
   }
 
-  h5,
-  .h5 {
-    @apply text-sm font-semibold text-gray-900;
+  h5 {
+    @apply text-sm leading-5 font-semibold;
   }
 
-  h6,
-  .h6 {
-    @apply text-xxs font-semibold text-gray-900;
+  h6 {
+    @apply text-xs leading-4 font-semibold;
   }
 
   /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
@@ -52,11 +46,6 @@
   [type="tel"],
   textarea {
     @apply mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-600 rounded-md;
-  }
-
-  /* Paragraphs -- TODO: think about removing this in favor of .prose */
-  p {
-    @apply text-sm text-gray-900;
   }
 }
 
@@ -97,49 +86,48 @@
 
   /* Header classes */
   .h1 {
-    @apply text-3xl font-semibold text-gray-900;
+    @apply text-3xl leading-9 font-semibold;
   }
 
   .h2 {
-    @apply text-2xl font-semibold text-gray-900;
+    @apply text-2xl leading-7 font-semibold;
   }
 
   .h3 {
-    @apply text-lg font-semibold text-gray-900;
+    @apply text-lg leading-6 font-semibold;
   }
 
   .h4 {
-    @apply text-base font-semibold text-gray-900;
+    @apply text-base leading-5 font-semibold;
   }
 
   .h5 {
-    @apply text-sm font-semibold text-gray-900;
+    @apply text-sm leading-5 font-semibold;
   }
 
   .h6 {
-    @apply text-xxs font-semibold text-gray-900;
+    @apply text-xs leading-4 font-semibold;
   }
 
   .xy-h1-extra-flair {
-    @apply text-3xl font-bold text-gray-900 leading-9 tracking-tight sm:text-4xl sm:leading-10;
+    @apply text-3xl font-bold leading-9 tracking-tight sm:text-4xl sm:leading-10;
   }
 
   .xy-h1-responsive {
-    @apply text-2xl font-semibold lg:text-3xl;
+    @apply text-2xl leading-7 font-semibold lg:text-3xl lg:leading-9;
   }
 
   .xy-h2-responsive {
-    @apply text-lg font-semibold lg:text-2xl;
+    @apply text-lg leading-6 font-semibold lg:text-2xl lg:leading-7;
   }
 
   .xy-h3-responsive {
-    @apply text-base font-semibold lg:text-lg;
+    @apply text-base leading-5 font-semibold lg:text-lg lg:leading-6;
   }
 
   /* Link classes */
   .xy-link {
-    /* TODO: determine a visited state and implement in .prose */
-    @apply font-semibold underline text-blue-500 hover:text-blue-600;
+    @apply font-semibold underline text-xy-blue hover:text-blue-700;
   }
 }
 

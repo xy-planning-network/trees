@@ -111,7 +111,11 @@
             <ClickToCopy value="<h1>Header1</h1>" />
           </label>
           <div class="mt-1">
-            <h1>Header1</h1>
+            <h1 class="mb-4">Header1</h1>
+            <h1>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h1>
           </div>
         </div>
 
@@ -120,7 +124,11 @@
             <ClickToCopy value="<h1 class='xy-h1-responsive'>Header1</h1>" />
           </label>
           <div class="mt-1">
-            <h1 class="xy-h1-responsive">Responsive Header1</h1>
+            <h1 class="xy-h1-responsive mb-4">Responsive Header1</h1>
+            <h1 class="xy-h1-responsive">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h1>
           </div>
         </div>
 
@@ -129,7 +137,11 @@
             <ClickToCopy value="<h2>Header2</h2>" />
           </label>
           <div class="mt-1">
-            <h2>Header2</h2>
+            <h2 class="mb-4">Header2</h2>
+            <h2>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h2>
           </div>
         </div>
 
@@ -138,7 +150,11 @@
             <ClickToCopy value="<2 class='xy-2-responsive'>Header1</2>" />
           </label>
           <div class="mt-1">
-            <h2 class="xy-h2-responsive">Responsive Header2</h2>
+            <h2 class="xy-h2-responsive mb-4">Responsive Header2</h2>
+            <h2 class="xy-h2-responsive">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h2>
           </div>
         </div>
 
@@ -147,7 +163,11 @@
             <ClickToCopy value="<h3>Header3</h3>" />
           </label>
           <div class="mt-1">
-            <h3>Header3</h3>
+            <h3 class="mb-4">Header3</h3>
+            <h3>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h3>
           </div>
         </div>
 
@@ -156,7 +176,11 @@
             <ClickToCopy value="<h3 class='xy-h3-responsive'>Header1</h3>" />
           </label>
           <div class="mt-1">
-            <h3 class="xy-h3-responsive">Responsive Header3</h3>
+            <h3 class="xy-h3-responsive mb-4">Responsive Header3</h3>
+            <h3 class="xy-h3-responsive">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h3>
           </div>
         </div>
 
@@ -165,7 +189,11 @@
             <ClickToCopy value="<h4>Header4</h4>" />
           </label>
           <div class="mt-1">
-            <h4>Header4</h4>
+            <h4 class="mb-4">Header4</h4>
+            <h4>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h4>
           </div>
         </div>
 
@@ -174,7 +202,11 @@
             <ClickToCopy value="<h5>Header5</h5>" />
           </label>
           <div class="mt-1">
-            <h5>Header5</h5>
+            <h5 class="mb-4">Header5</h5>
+            <h5>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h5>
           </div>
         </div>
 
@@ -183,7 +215,11 @@
             <ClickToCopy :value="extraFlairCopy" />
           </label>
           <div class="mt-1">
-            <h1 class="xy-h1-extra-flair">Header1 Bold</h1>
+            <h1 class="xy-h1-extra-flair mb-4">Header1 Bold</h1>
+            <h1 class="xy-h1-extra-flair">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
+              porta feugiat accumsan.
+            </h1>
           </div>
         </div>
 
@@ -192,7 +228,16 @@
             <ClickToCopy value="<p>I'm a delicous paragraph</p>" />
           </label>
           <div class="mt-1">
-            <p>I'm a delicous paragraph</p>
+            <p>
+              I'm a delicous paragraph. Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit. In non viverra neque. Ut eleifend in massa
+              faucibus hendrerit. Vivamus suscipit pulvinar pharetra. In
+              convallis vel nunc ac semper. Proin mollis ac dui a vehicula.
+              Aenean odio libero, varius id justo sed, aliquam scelerisque ante.
+              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+              posuere cubilia curae; Aliquam erat volutpat. Vestibulum ac purus
+              ut dolor efficitur pharetra.
+            </p>
           </div>
         </div>
       </ComponentLayout>

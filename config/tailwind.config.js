@@ -15,6 +15,7 @@ module.exports = {
   plugins: [
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
+    require("@tailwindcss/line-clamp"),
     require("@tailwindcss/typography")({
       modifiers: ["sm", "lg", "xl"],
     }),
@@ -32,28 +33,24 @@ module.exports = {
         ...treesTheme.colors,
       },
       fontFamily: treesTheme.fontFamily,
-      fontSize: treesTheme.fontSize,
-      spacing: treesTheme.spacing,
       typography: (theme) => {
-        // TODO: expand on the typography, especially for headings
         return {
           DEFAULT: {
             css: {
               color: theme("colors.gray.900"),
               a: {
-                color: theme("colors.xblue.500"),
+                color: theme("colors.xy-blue"),
                 "&:hover": {
-                  color: theme("colors.blue.600"),
+                  color: theme("colors.blue.700"),
                 },
               },
               "h2, h3, h4": {
-                color: theme("colors.gray.900"), // TODO: confirm the heading colors
+                color: theme("colors.gray.900"),
               },
             },
           },
         };
       },
     },
-    fontWeight: treesTheme.fontWeight,
   },
 };
