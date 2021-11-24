@@ -53,10 +53,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-property-decorator";
+import FlashTypes from "../../type/flashes";
 
 @Options({ name: "Flash" })
 export default class Flash extends Vue {
-  flashes: Array<{ type: string; message: string }> = [];
+  flashes: Array<FlashTypes.Flash> = [];
   flashTypeBorderClass = {
     warning: "border-orange-500",
     error: "border-red-500",
@@ -75,17 +76,12 @@ export default class Flash extends Vue {
 
     if (window.Flashes) {
       for (const flash of window.Flashes) {
-        if (typeof flash.type === "undefined") {
-          const values: string[] = flash.message.split(": ");
-          this.renderFlash({ type: values[0], message: values[1] });
-          return;
-        }
         this.renderFlash({ type: flash.type, message: flash.message });
       }
     }
   }
 
-  remove(flash: { type: string; message: string }): void {
+  remove(flash: FlashTypes.Flash): void {
     let index = 0;
     for (const f of this.flashes) {
       if (flash.message === f.message) {
@@ -95,13 +91,13 @@ export default class Flash extends Vue {
       index++;
     }
   }
-  renderFlash(flash: { type: string; message: string }): void {
+  renderFlash(flash: FlashTypes.Flash): void {
     this.flashes.push(flash);
     // Super simple flash implementation. This could get "smarter" by adding an
     // id to the flash object, and then searching for the specific flash in the
     // array and splicing, instead of simply doing a pop().
     setTimeout(
-      (flashes: Array<{ type: string; message: string }>) => {
+      (flashes: Array<FlashTypes.Flash>) => {
         flashes.pop();
       },
       10000,
