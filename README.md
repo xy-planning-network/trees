@@ -83,7 +83,7 @@ import Mitt from "mitt";
 import Trees from "@xy-planning-network/trees";
 import HelloWorld from "@/components/HelloWorld.vue";
 
-// import the project's main stylesheet
+// import your project's main stylesheet
 import "@/main.css";
 
 // initialize the app
@@ -115,16 +115,11 @@ app.mount("#vue-app");
 }
 ```
 
-**Include Open Sans in html template**
+**Include Inter Var in html template**
 
 ```html
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
 </head>
 ```
 
