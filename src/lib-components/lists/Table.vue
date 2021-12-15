@@ -147,84 +147,84 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Watch, Vue } from "vue-property-decorator";
-import { AxiosResponse } from "axios";
-import DateRangePicker from "../forms/DateRangePicker.vue";
-import Paginator from "../navigation/Paginator.vue";
-import BaseAPI from "../../api/base";
-import TableTypes from "../../types/table";
+import { Options, Prop, Watch, Vue } from "vue-property-decorator"
+import { AxiosResponse } from "axios"
+import DateRangePicker from "../forms/DateRangePicker.vue"
+import Paginator from "../navigation/Paginator.vue"
+import BaseAPI from "../../api/base"
+import TableTypes from "../../types/table"
 
 @Options({ components: { DateRangePicker, Paginator }, name: "Table" })
 export default class Table extends Vue {
-  @Prop({ type: Boolean, required: false, default: false }) clickable!: boolean;
-  @Prop({ type: Boolean, required: false, default: true }) loader!: boolean;
-  @Prop({ type: Object, required: true }) tableData!: TableTypes.Dynamic;
+  @Prop({ type: Boolean, required: false, default: false }) clickable!: boolean
+  @Prop({ type: Boolean, required: false, default: true }) loader!: boolean
+  @Prop({ type: Object, required: true }) tableData!: TableTypes.Dynamic
 
-  currentSort = "";
-  currentSortDirection = "";
+  currentSort = ""
+  currentSortDirection = ""
   dateRange: { minDate: number; maxDate: number } = {
     minDate: 0,
     maxDate: 0,
-  };
-  items: any[] = [];
+  }
+  items: any[] = []
   pagination = {
     page: 1,
     perPage: 10,
     totalItems: 0,
     totalPages: 0,
-  };
-  query = "";
+  }
+  query = ""
 
   @Watch("tableData.refreshTrigger")
   onRefreshTrigger(): void {
     // This lets parent components trigger a refresh of the current page depending on external actions.
-    this.loadAndRender();
+    this.loadAndRender()
   }
 
   @Watch("tableData.reloadTrigger")
   onReloadTrigger(): void {
     // This lets parent components trigger a reload of page 1 depending on external actions.
-    this.reloadTable();
+    this.reloadTable()
   }
 
   created() {
     if (this.tableData.defaultSort) {
-      this.currentSort = this.tableData.defaultSort;
+      this.currentSort = this.tableData.defaultSort
       this.currentSortDirection = this.tableData.defaultSortDirection
         ? this.tableData.defaultSortDirection
-        : "desc";
+        : "desc"
     }
 
-    this.loadAndRender();
+    this.loadAndRender()
   }
 
   cellValue(item: Record<string, any>, col: TableTypes.Column): string {
     if (col.key) {
       // NOTE(dlk): supports dot notation for nested keys
-      return col.key.split(".").reduce((o, i) => o[i], item as any);
+      return col.key.split(".").reduce((o, i) => o[i], item as any)
     }
 
     if (col.presenter) {
-      return col.presenter(item, this);
+      return col.presenter(item, this)
     }
 
-    return "";
+    return ""
   }
   dateRangeChanged(dateRange: { minDate: number; maxDate: number }): void {
-    this.pagination.page = 1;
-    this.dateRange = dateRange;
-    this.loadAndRender();
+    this.pagination.page = 1
+    this.dateRange = dateRange
+    this.loadAndRender()
   }
   handleSort(selectedSort: string): void {
     if (this.currentSort == selectedSort) {
       this.currentSortDirection =
-        this.currentSortDirection === "desc" ? "asc" : "desc";
+        this.currentSortDirection === "desc" ? "asc" : "desc"
     } else {
-      this.currentSort = selectedSort;
-      this.currentSortDirection = "desc";
+      this.currentSort = selectedSort
+      this.currentSortDirection = "desc"
     }
 
-    this.loadAndRender();
+    this.loadAndRender()
   }
   loadAndRender(): void {
     const params = {
@@ -235,7 +235,7 @@ export default class Table extends Vue {
       sort: this.currentSort,
       sortDir: this.currentSortDirection,
       q: this.query,
-    };
+    }
 
     BaseAPI.get(this.tableData.url, { skipLoader: !this.loader }, params).then(
       (success: AxiosResponse) => {
@@ -244,24 +244,24 @@ export default class Table extends Vue {
           perPage: success.data.perPage,
           totalItems: success.data.totalItems,
           totalPages: success.data.totalPages,
-        };
-        this.items = success.data.items;
+        }
+        this.items = success.data.items
       },
       () => {
         window.VueBus.emit(
           "Flash-show-generic-error",
           "membership@xyplanningnetwork.com"
-        );
+        )
       }
-    );
+    )
   }
   reloadTable(): void {
-    this.pagination.page = 1;
-    this.loadAndRender();
+    this.pagination.page = 1
+    this.loadAndRender()
   }
 
   get hasContent(): boolean {
-    return this.items.length ? true : false;
+    return this.items.length ? true : false
   }
 }
 </script>

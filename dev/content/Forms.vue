@@ -275,23 +275,23 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 
 @Options({ name: "Forms" })
 export default class Forms extends Vue {
   commonProps = [
     { name: "label", required: false, type: "string" },
     { name: "help", required: false, type: "string" },
-  ];
-  checked = false;
-  checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`;
+  ]
+  checked = false
+  checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`
   checkboxProps = [
     { name: "emphasis", required: false, type: "boolean" },
     { name: "label", required: false, type: "string" },
     { name: "modelValue", required: true, type: "boolean" },
-  ];
-  dateRange = { maxRange: 0, minRange: 0 };
-  dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`;
+  ]
+  dateRange = { maxRange: 0, minRange: 0 }
+  dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
   dateRangePickerProps = [
     {
       name: "modelValue",
@@ -300,10 +300,10 @@ export default class Forms extends Vue {
     },
     { name: "startDate", required: false, type: "number" },
     ...this.commonProps,
-  ];
-  inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`;
-  inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`;
-  multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`;
+  ]
+  inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`
+  inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`
+  multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`
   multiCheckboxProps = [
     {
       name: "options",
@@ -312,9 +312,9 @@ export default class Forms extends Vue {
     },
     { name: "modelValue", required: true, type: "string" },
     { name: "legend", required: false, type: "string" },
-  ];
-  multiCheckboxSelection = [];
-  radioCopy = `<Radio :options="options" v-model="selected" />`;
+  ]
+  multiCheckboxSelection = []
+  radioCopy = `<Radio :options="options" v-model="selected" />`
   radioProps = [
     {
       name: "options",
@@ -323,9 +323,9 @@ export default class Forms extends Vue {
     },
     { name: "modelValue", required: true, type: "string" },
     { name: "legend", required: false, type: "boolean" },
-  ];
-  radioSelection = "";
-  selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`;
+  ]
+  radioSelection = ""
+  selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
   selectProps = [
     { name: "design", required: false, type: "string" },
     {
@@ -336,36 +336,36 @@ export default class Forms extends Vue {
     { name: "placeholder", required: false, type: "string" },
     { name: "modelValue", required: true, type: "string" },
     ...this.commonProps,
-  ];
+  ]
   options = [
     { label: "You could select this", value: "val1" },
     { label: "This is an option", value: "val2" },
     { label: "Feeling good about this one?", value: 3 },
     { label: "This is the LAST option", value: 4 },
-  ];
+  ]
 
-  selected: string | number = "";
+  selected: string | number = ""
 
-  yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
-  yesOrNoRadioSelection = false;
+  yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
+  yesOrNoRadioSelection = false
   yesOrNoRadioProps = [
     { name: "legend", required: false, type: "string" },
     { name: "name", required: false, type: "string" },
     { name: "modelValue", required: false, type: "boolean" },
-  ];
+  ]
 
-  textarea = "";
+  textarea = ""
   textareaProps = [
     { name: "modelValue", required: false, type: "string" },
     ...this.commonProps,
-  ];
-  textareaCopy = `<TextArea v-model="textarea" />`;
+  ]
+  textareaCopy = `<TextArea v-model="textarea" />`
 
   baseInputProps = [
     { name: "type", required: true, type: "string" },
     { name: "modelValue", required: false, type: "string | number" },
     ...this.commonProps,
-  ];
+  ]
 
   inputTypes = [
     "color",
@@ -388,25 +388,25 @@ export default class Forms extends Vue {
     return {
       label: type,
       value: type,
-    };
-  });
+    }
+  })
 
-  inputTypeSelected = "text";
-  customInputTypeVal = "";
+  inputTypeSelected = "text"
+  customInputTypeVal = ""
 
-  inputLabelCopy = `<InputLabel label="I'm labeling something..." />`;
+  inputLabelCopy = `<InputLabel label="I'm labeling something..." />`
   inputLabelProps = [
     { name: "label", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
-  ];
+  ]
 
-  inputHelpCopy = `<InputHelp text="I'm just here to hint." />`;
+  inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
   inputHelpProps = [
     { name: "text", required: false, type: "string" },
     { name: "tag", required: false, type: "string" },
-  ];
-  toggleValue = false;
-  toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`;
-  toggleProps = [{ name: "modelValue", required: true, type: "string" }];
+  ]
+  toggleValue = false
+  toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
+  toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 }
 </script>

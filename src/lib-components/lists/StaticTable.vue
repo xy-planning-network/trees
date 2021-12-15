@@ -54,23 +54,23 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import TableTypes from "../../types/table";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import TableTypes from "../../types/table"
 
 @Options({ name: "StaticTable" })
 export default class StaticTable extends Vue {
-  @Prop({ type: Object, required: true }) tableData!: TableTypes.Static;
+  @Prop({ type: Object, required: true }) tableData!: TableTypes.Static
 
   cellValue(item: Record<string, any>, col: TableTypes.Column): string {
     if (col.key) {
-      return item[col.key];
+      return item[col.key]
     }
 
     if (col.presenter) {
-      return col.presenter(item, this);
+      return col.presenter(item, this)
     }
 
-    return "";
+    return ""
   }
 }
 </script>

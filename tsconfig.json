@@ -1,37 +1,41 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "strict": true,
-        "declaration": true,
-        "declarationDir": "dist",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "importHelpers": true,
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "baseUrl": ".",
-        "types": [
-            "node",
-            "vue"
-        ],
-        "paths": {
-            "@/*": [
-                "src/*"
-            ]
-        },
-        "lib": [
-            "esnext",
-            "dom",
-            "dom.iterable",
-            "scripthost"
-        ]
+  "compilerOptions": {
+    "target": "esnext",
+    // "declaration": true,
+    // "emitDeclarationOnly": true, // TODO: enable once we determine exact usage for types bundling
+    "experimentalDecorators": true, // TODO: once setup sugar conversion is completed
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
     },
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+    "types": [
+      "node",
+      "vue"
+    ],
+    // "outDir": "./dist/types", // TODO: enable once we determine exact usage for types bundling
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "dev/**/*.ts",
+    "dev/**/*.d.ts",
+    "dev/**/*.tsx",
+    "dev/**/*.vue"
+  ]
 }

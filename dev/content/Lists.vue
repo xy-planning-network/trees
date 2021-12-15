@@ -149,46 +149,46 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator"
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
-} from "@heroicons/vue/solid";
-import UserTypes from "../../src/types/users";
+} from "@heroicons/vue/solid"
+import UserTypes from "../../src/types/users"
 
 @Options({
   components: { CalendarIcon, LocationMarkerIcon, UsersIcon },
   name: "Lists",
 })
 export default class Lists extends Vue {
-  @Prop({ type: Object, required: true }) user!: UserTypes.User;
+  @Prop({ type: Object, required: true }) user!: UserTypes.User
 
   cards = [
     { primary: "Get Some", secondary: "You are gonna do well." },
     { primary: "Try It", secondary: "I'm proud of how far you've come." },
     { primary: "Nice Info", secondary: "Never stop trying." },
-  ];
-  cardsCopy = `<Cards cards="cards" />`;
+  ]
+  cardsCopy = `<Cards cards="cards" />`
   cardsProps = [
     {
       name: "cards",
       required: true,
       type: "{ primary: string; secondary: string }",
     },
-  ];
-  detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`;
+  ]
+  detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`
   detailListProps = [
     { name: "refreshTrigger", required: false, type: "number" },
     { name: "reloadTrigger", required: false, type: "number" },
     { name: "title", required: true, type: "string" },
     { name: "url", required: true, type: "string" },
-  ];
-  downloadCellCopy = `import { DownloadCell } from "@xy-planning-network/trees";`;
+  ]
+  downloadCellCopy = `import { DownloadCell } from "@xy-planning-network/trees";`
   downloadMe = {
     goHere: "/download-something-but-im-broken-and-now-im-crying-web-is-hard",
-  };
-  staticTableCopy = `<StaticTable :table-data="tableData" />`;
+  }
+  staticTableCopy = `<StaticTable :table-data="tableData" />`
   staticTableData = {
     currentUser: this.user,
     columns: [
@@ -204,10 +204,10 @@ export default class Lists extends Vue {
       { this: "Limothy", does: "says", not: "can we", change: "?" },
       { this: "Yimpothy", does: "says", not: "do it", change: "!" },
     ],
-  };
+  }
   staticTableProps = [
     { name: "tableData", required: true, type: "TableTypes.Static" },
-  ];
+  ]
   tableData = {
     currentUser: this.user,
     columns: [
@@ -222,18 +222,18 @@ export default class Lists extends Vue {
       {
         display: "Started On",
         presenter: (row: { created_at: number }): string => {
-          return new Date(row.created_at * 1000).toLocaleString();
+          return new Date(row.created_at * 1000).toLocaleString()
         },
       },
     ],
     refreshTrigger: 0,
     url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
-  };
-  tableCopy = `<Table :table-data="tableData" />`;
+  }
+  tableCopy = `<Table :table-data="tableData" />`
   tableProps = [
     { name: "clickable", required: false, type: "boolean" },
     { name: "loader", required: false, type: "boolean" },
     { name: "tableData", required: true, type: "TableTypes.Dynamic" },
-  ];
+  ]
 }
 </script>

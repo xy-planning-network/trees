@@ -57,15 +57,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Emit, Prop, Vue } from "vue-property-decorator";
+import { Options, Emit, Prop, Vue } from "vue-property-decorator"
 import {
   Dialog,
   DialogOverlay,
   DialogTitle,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
+} from "@headlessui/vue"
+import { XIcon } from "@heroicons/vue/outline"
 
 @Options({
   name: "Slideover",
@@ -79,14 +79,14 @@ import { XIcon } from "@heroicons/vue/outline";
   },
 })
 export default class Slideover extends Vue {
-  @Prop({ type: String, required: true }) header!: string;
-  @Prop({ type: String, required: true }) description!: string;
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
+  @Prop({ type: String, required: true }) header!: string
+  @Prop({ type: String, required: true }) description!: string
+  @Prop({ type: Boolean, required: true }) modelValue!: boolean
 
   @Emit("close")
   @Emit("update:modelValue")
   close(): boolean {
-    return false;
+    return false
   }
 }
 </script>

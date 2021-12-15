@@ -30,26 +30,26 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { ClipboardCopyIcon } from "@heroicons/vue/outline";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 @Options({ components: { ClipboardCopyIcon }, name: "ComponentLayout" })
 export default class ComponentLayout extends Vue {
-  @Prop({ type: Boolean, required: false, default: true }) showBadge?: boolean;
-  @Prop({ type: Boolean, required: false }) cssComponent?: boolean;
-  @Prop({ type: String, required: true }) title!: string;
+  @Prop({ type: Boolean, required: false, default: true }) showBadge?: boolean
+  @Prop({ type: Boolean, required: false }) cssComponent?: boolean
+  @Prop({ type: String, required: true }) title!: string
 
-  copied = false;
+  copied = false
 
   copy(): void {
-    const input = this.$refs.input as HTMLInputElement;
-    input.select();
-    input.setSelectionRange(0, 99999); /* For mobile devices */
-    document.execCommand("copy");
-    this.copied = true;
+    const input = this.$refs.input as HTMLInputElement
+    input.select()
+    input.setSelectionRange(0, 99999) /* For mobile devices */
+    document.execCommand("copy")
+    this.copied = true
     window.setTimeout(() => {
-      this.copied = false;
-    }, 1500);
+      this.copied = false
+    }, 1500)
   }
 }
 </script>

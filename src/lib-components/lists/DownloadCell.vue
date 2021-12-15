@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { DownloadIcon } from "@heroicons/vue/solid";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { DownloadIcon } from "@heroicons/vue/solid"
 
 @Options({ name: "DownloadCell", components: { DownloadIcon } })
 export default class DownloadCell extends Vue {
-  @Prop({ type: Object, required: true }) propsData!: Record<string, unknown>;
-  @Prop({ type: String, required: true }) attribute!: string;
+  @Prop({ type: Object, required: true }) propsData!: Record<string, unknown>
+  @Prop({ type: String, required: true }) attribute!: string
 }
 </script>

@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { Switch } from "@headlessui/vue";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { Switch } from "@headlessui/vue"
 
 @Options({ name: "Toggle", components: { Switch } })
 export default class Toggle extends Vue {
-  @Prop({ type: Boolean, required: false }) modelValue?: boolean;
+  @Prop({ type: Boolean, required: false }) modelValue?: boolean
 }
 </script>

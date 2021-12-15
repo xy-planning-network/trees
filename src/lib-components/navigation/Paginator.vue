@@ -63,76 +63,76 @@
 </template>
 
 <script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "Paginator" })
 export default class Paginator extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
-    page: number;
-    perPage: number;
-    totalItems: number;
-    totalPages: number;
-  };
+    page: number
+    perPage: number
+    totalItems: number
+    totalPages: number
+  }
 
   @Emit("update:modelValue")
   updateModelValue(): {
-    page: number;
-    perPage: number;
-    totalItems: number;
-    totalPages: number;
+    page: number
+    perPage: number
+    totalItems: number
+    totalPages: number
   } {
-    return this.modelValue;
+    return this.modelValue
   }
 
   changePage(page: number): void {
-    this.modelValue.page = page;
-    this.updateModelValue();
+    this.modelValue.page = page
+    this.updateModelValue()
   }
   changePerPage(parent: HTMLElement, perPage: number): void {
-    parent.blur();
-    this.modelValue.page = 1;
-    this.modelValue.perPage = perPage;
-    this.updateModelValue();
+    parent.blur()
+    this.modelValue.page = 1
+    this.modelValue.perPage = perPage
+    this.updateModelValue()
   }
 
   get endingItem(): number {
-    const end = this.modelValue.page * this.modelValue.perPage;
-    return end > this.modelValue.totalItems ? this.modelValue.totalItems : end;
+    const end = this.modelValue.page * this.modelValue.perPage
+    return end > this.modelValue.totalItems ? this.modelValue.totalItems : end
   }
   get pageShortcuts(): number[] {
-    const shortcuts: number[] = [];
+    const shortcuts: number[] = []
 
     // If total pages is less than or equal to 4, just return 1, 2, 3, 4
     if (this.modelValue.totalPages <= 4) {
       for (let i = 0; i < this.modelValue.totalPages; i++) {
-        shortcuts.push(i + 1);
+        shortcuts.push(i + 1)
       }
-      return shortcuts;
+      return shortcuts
     }
 
     // If there are more than 3 pages left, show these
     // e.g. [4, 5, 6, 7] when there are 8 total pages and the current page is 4
-    const pagesLeft: number = this.modelValue.totalPages - this.modelValue.page;
+    const pagesLeft: number = this.modelValue.totalPages - this.modelValue.page
     if (pagesLeft >= 3) {
       for (let i = 0; i < 4; i++) {
-        shortcuts.push(this.modelValue.page + i);
+        shortcuts.push(this.modelValue.page + i)
       }
-      return shortcuts;
+      return shortcuts
     }
 
     // If there are less than 3 pages left, count backwards from the last page
     // e.g. [5, 6, 7, 8] when on page 5, 6, 7, and 8 and there are 8 total pages
     for (let i = 0; i < 4; i++) {
-      shortcuts.unshift(this.modelValue.totalPages - i);
+      shortcuts.unshift(this.modelValue.totalPages - i)
     }
-    return shortcuts;
+    return shortcuts
   }
   get startingItem(): number {
     const start =
       this.modelValue.page * this.modelValue.perPage -
       this.modelValue.perPage +
-      1;
-    return this.modelValue.totalItems === 0 ? 0 : start;
+      1
+    return this.modelValue.totalItems === 0 ? 0 : start
   }
 }
 </script>

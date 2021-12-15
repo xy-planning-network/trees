@@ -39,44 +39,44 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { DotsVerticalIcon } from "@heroicons/vue/solid";
-import TableTypes from "../../types/table";
-import UserTypes from "../../types/users";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
+import { DotsVerticalIcon } from "@heroicons/vue/solid"
+import TableTypes from "../../types/table"
+import UserTypes from "../../types/users"
 
 @Options({
   components: { DotsVerticalIcon, Menu, MenuButton, MenuItem, MenuItems },
   name: "ActionsDropdown",
 })
 export default class ActionsDropdown extends Vue {
-  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User;
-  @Prop({ type: Array, required: true }) items!: Array<TableTypes.MenuItem>;
-  @Prop({ type: Object, required: true }) propsData!: any;
+  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User
+  @Prop({ type: Array, required: true }) items!: Array<TableTypes.MenuItem>
+  @Prop({ type: Object, required: true }) propsData!: any
 
-  hasActionItems = false;
+  hasActionItems = false
 
   mounted(): void {
     for (let item of this.items) {
       if (!item.show) {
-        this.hasActionItems = true;
-        return;
+        this.hasActionItems = true
+        return
       }
 
-      const showActionItem = item.show(this.propsData, this.currentUser);
+      const showActionItem = item.show(this.propsData, this.currentUser)
       if (showActionItem) {
-        this.hasActionItems = true;
-        return;
+        this.hasActionItems = true
+        return
       }
     }
   }
 
   emitEvent(event: string): void {
-    window.VueBus.emit(event, this.propsData);
+    window.VueBus.emit(event, this.propsData)
   }
   show(item: TableTypes.MenuItem): boolean {
-    if (!item.show) return true;
-    return item.show(this.propsData, this.currentUser);
+    if (!item.show) return true
+    return item.show(this.propsData, this.currentUser)
   }
 }
 </script>

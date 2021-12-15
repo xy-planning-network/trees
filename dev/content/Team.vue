@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 
 @Options({ name: "Team" })
 export default class Team extends Vue {
@@ -98,8 +98,7 @@ export default class Team extends Vue {
       role: "Senior Software Engineer",
       imageUrl:
         "https://i1.sndcdn.com/artworks-000349846200-olt9ar-t500x500.jpg",
-      bio:
-        "David brings gifts when he travels but will likely loose his bag and blame the airline industry. Someone needs to talk to him about this.",
+      bio: "David brings gifts when he travels but will likely loose his bag and blame the airline industry. Someone needs to talk to him about this.",
       twitterUrl: "https://twitter.com/davidlarsketch?lang=en",
       linkedinUrl: "https://www.linkedin.com/in/davidlarsketch",
     },
@@ -108,8 +107,7 @@ export default class Team extends Vue {
       role: "Product Designer",
       imageUrl:
         "https://content.malakye.com/media/uploads/images/personalprofiles/thumbs/742194_637214344006622155.png",
-      bio:
-        "Jillian is frank as a frog. She forgets her shoes to the office from time to time, but it's ok.",
+      bio: "Jillian is frank as a frog. She forgets her shoes to the office from time to time, but it's ok.",
       twitterUrl: "",
       linkedinUrl: "https://www.linkedin.com/in/jillian-berry-0b978474",
     },
@@ -118,8 +116,7 @@ export default class Team extends Vue {
       role: "Principal Software Engineer",
       imageUrl:
         "https://pbs.twimg.com/profile_images/3222845749/b00f32440bc787fb26ec5d7286c4afe3_400x400.jpeg",
-      bio:
-        "Joe can really get after it, but watch out if he's riding on a lawn mower.",
+      bio: "Joe can really get after it, but watch out if he's riding on a lawn mower.",
       twitterUrl: "https://twitter.com/ProfSmallPine",
       linkedinUrl: "https://www.linkedin.com/in/profsmallpine",
     },
@@ -128,11 +125,10 @@ export default class Team extends Vue {
       role: "Product Owner",
       imageUrl:
         "https://s3.amazonaws.com/shecodesio-production/students/avatars/000/020/285/medium/Z00CLp0K_400x400.jpg?1610918116",
-      bio:
-        "Taylor comes to the field from the world of underwater engineering. Watch out for when thinks something is cool.",
+      bio: "Taylor comes to the field from the world of underwater engineering. Watch out for when thinks something is cool.",
       twitterUrl: "https://twitter.com/TayDeeeee",
       linkedinUrl: "",
     },
-  ];
+  ]
 }
 </script>

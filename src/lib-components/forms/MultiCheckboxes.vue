@@ -22,30 +22,30 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue, Watch } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
+import Uniques from "@/helpers/Uniques"
+import { Options, Prop, Vue, Watch } from "vue-property-decorator"
+import InputLabel from "./InputLabel.vue"
 
 @Options({ name: "MultiCheckboxes", components: { InputLabel } })
 export default class MultiCheckboxes extends Vue {
   @Prop({ type: Array, required: true }) options!: Array<{
-    label: string;
-    value: string;
-  }>;
-  @Prop({ type: String, required: false }) legend?: string;
-  @Prop({ type: Array, required: true }) modelValue!: string[];
+    label: string
+    value: string
+  }>
+  @Prop({ type: String, required: false }) legend?: string
+  @Prop({ type: Array, required: true }) modelValue!: string[]
 
-  model: string[] = [];
+  model: string[] = []
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 
   @Watch("model")
   onModelChanged(val: string[]): void {
-    this.$emit("update:modelValue", val);
+    this.$emit("update:modelValue", val)
   }
 
   mounted() {
-    this.model = this.modelValue;
+    this.model = this.modelValue
   }
 }
 </script>

@@ -99,51 +99,51 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 
 @Options({ name: "Spinner" })
 export default class Spinner extends Vue {
-  idx = 0;
-  loading = false;
-  maxIdx = 0;
-  messages = [];
-  msg = "";
-  showMsg = false;
+  idx = 0
+  loading = false
+  maxIdx = 0
+  messages = []
+  msg = ""
+  showMsg = false
 
   mounted() {
     window.VueBus.on("Spinner-show", (messages) => {
       if (messages) {
-        this.messages = messages;
-        this.maxIdx = this.messages.length - 1;
-        this.msg = this.messages[this.idx];
-        this.showMsg = true;
+        this.messages = messages
+        this.maxIdx = this.messages.length - 1
+        this.msg = this.messages[this.idx]
+        this.showMsg = true
       }
-      this.loading = true;
-    });
+      this.loading = true
+    })
 
     window.VueBus.on("Spinner-hide", () => {
-      this.idx = 0;
-      this.maxIdx = 0;
-      this.messages = [];
-      this.msg = "";
-      this.loading = false;
-    });
+      this.idx = 0
+      this.maxIdx = 0
+      this.messages = []
+      this.msg = ""
+      this.loading = false
+    })
   }
 
   fadeIn(): void {
-    this.idx++;
+    this.idx++
     if (this.idx > this.maxIdx) {
-      this.idx = 0;
+      this.idx = 0
     }
     if (this.messages) {
-      this.msg = this.messages[this.idx];
+      this.msg = this.messages[this.idx]
     }
-    this.showMsg = true;
+    this.showMsg = true
   }
   fadeOut(): void {
     window.setTimeout(() => {
-      this.showMsg = false;
-    }, 2500);
+      this.showMsg = false
+    }, 2500)
   }
 }
 </script>

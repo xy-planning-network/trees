@@ -152,45 +152,45 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
-import { CheckIcon } from "@heroicons/vue/outline";
+import { Options, Vue } from "vue-property-decorator"
+import { CheckIcon } from "@heroicons/vue/outline"
 
 @Options({ name: "Overlays", components: { CheckIcon } })
 export default class Overlays extends Vue {
-  contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`;
-  contentModalOpen = false;
+  contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
+  contentModalOpen = false
   contentModalProps = [
     { name: "modelValue", required: true, type: "boolean" },
     { name: "title", required: false, type: "string" },
-  ];
-  flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`;
-  modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`;
+  ]
+  flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`
+  modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`
   modalProps = [
     { name: "destructive", required: false, type: "boolean" },
     { name: "disabled", required: false, type: "boolean" },
     { name: "modelValue", required: true, type: "boolean" },
     { name: "submitText", required: false, type: "string" },
     { name: "title", required: true, type: "string" },
-  ];
-  open = false;
-  spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`;
-  slideoverOpen = false;
-  slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`;
+  ]
+  open = false
+  spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`
+  slideoverOpen = false
+  slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`
   slideoverProps = [
     { name: "v-model", required: true, type: "boolean" },
     { name: "header", required: false, type: "string" },
     { name: "description", required: false, type: "description" },
     { name: "@close", required: false, type: "function(modelValue)" },
-  ];
+  ]
 
   flash(): void {
-    window.VueBus.emit("Flash-show-generic-error", "support@trees.com");
+    window.VueBus.emit("Flash-show-generic-error", "support@trees.com")
   }
   spinner(): void {
-    window.VueBus.emit("Spinner-show");
+    window.VueBus.emit("Spinner-show")
     window.setTimeout(() => {
-      window.VueBus.emit("Spinner-hide");
-    }, 3000);
+      window.VueBus.emit("Spinner-hide")
+    }, 3000)
   }
 }
 </script>

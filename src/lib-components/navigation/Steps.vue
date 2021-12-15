@@ -49,24 +49,24 @@
 </template>
 
 <script lang="ts">
-import { Options, Emit, Prop, Vue } from "vue-property-decorator";
+import { Options, Emit, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "Steps" })
 export default class Steps extends Vue {
-  @Prop({ type: Boolean, required: false }) hideActions?: boolean;
-  @Prop({ type: Boolean, required: false }) hidePrevious?: boolean;
-  @Prop({ type: String, required: false }) nextText?: string;
-  @Prop({ type: Number, required: true }) step!: number;
-  @Prop({ type: Number, required: true }) total!: number;
+  @Prop({ type: Boolean, required: false }) hideActions?: boolean
+  @Prop({ type: Boolean, required: false }) hidePrevious?: boolean
+  @Prop({ type: String, required: false }) nextText?: string
+  @Prop({ type: Number, required: true }) step!: number
+  @Prop({ type: Number, required: true }) total!: number
 
   @Emit()
   next(): void {
-    return;
+    return
   }
 
   @Emit()
   previous(): void {
-    return;
+    return
   }
 }
 </script>

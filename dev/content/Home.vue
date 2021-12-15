@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { Emit, Options, Vue } from "vue-property-decorator";
+import { Emit, Options, Vue } from "vue-property-decorator"
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -154,13 +154,13 @@ import {
   LocationMarkerIcon,
   TableIcon,
   UserGroupIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/outline"
 
 @Options({ name: "Home" })
 export default class Home extends Vue {
   @Emit("update")
   update(value: string): string {
-    return value;
+    return value
   }
 
   features = [
@@ -198,6 +198,6 @@ export default class Home extends Vue {
       description:
         "Our team once built something that helped the company, and we've been grateful ever since.",
     },
-  ];
+  ]
 }
 </script>

@@ -139,9 +139,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import Flash from "../overlays/Flash.vue";
-import Spinner from "../overlays/Spinner.vue";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import Flash from "../overlays/Flash.vue"
+import Spinner from "../overlays/Spinner.vue"
 import {
   Disclosure,
   DisclosureButton,
@@ -150,15 +150,15 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-} from "@headlessui/vue";
+} from "@headlessui/vue"
 import {
   BellIcon,
   MenuIcon,
   UserCircleIcon,
   XIcon,
-} from "@heroicons/vue/outline";
-import NavTypes from "../../types/nav";
-import UserTypes from "../../types/users";
+} from "@heroicons/vue/outline"
+import NavTypes from "../../types/nav"
+import UserTypes from "../../types/users"
 
 @Options({
   components: {
@@ -179,16 +179,16 @@ import UserTypes from "../../types/users";
   name: "StackedLayout",
 })
 export default class StackedLayout extends Vue {
-  @Prop({ type: String, required: false }) activeURL?: string;
-  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User;
-  @Prop({ type: String, required: true }) iconURL!: string;
-  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[];
-  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[];
+  @Prop({ type: String, required: false }) activeURL?: string
+  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User
+  @Prop({ type: String, required: true }) iconURL!: string
+  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[]
+  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[]
 
-  sidebarOpen = false;
+  sidebarOpen = false
 
   isActive(url: string): boolean {
-    return this.activeURL === url;
+    return this.activeURL === url
   }
 }
 </script>

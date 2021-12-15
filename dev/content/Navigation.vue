@@ -69,40 +69,39 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import UserTypes from "../../src/types/users";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import UserTypes from "../../src/types/users"
 
 @Options({ name: "Navigation" })
 export default class Navigation extends Vue {
-  @Prop({ type: Object, required: true }) user!: UserTypes.User;
+  @Prop({ type: Object, required: true }) user!: UserTypes.User
 
-  actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`;
+  actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`
   actionsDropdownProps = [
     { name: "currentUser", required: true, type: "UserTypes.User" },
     { name: "items", required: true, type: "Array<TableTypes.MenuItem>" },
     { name: "propsData", required: true, type: "any" },
-  ];
-  currentTab = "tab1";
+  ]
+  currentTab = "tab1"
   menuItems = [
     { label: "This is an action", event: "Navigation.EmitThisEvent1" },
     { label: "Do this?", event: "Navigation.EmitThisEvent2" },
     { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
-  ];
-  pagination = { page: 1, perPage: 10, totalItems: 100, totalPages: 10 };
-  paginatorCopy = `<Paginator v-model="pagination" />`;
+  ]
+  pagination = { page: 1, perPage: 10, totalItems: 100, totalPages: 10 }
+  paginatorCopy = `<Paginator v-model="pagination" />`
   paginatorProps = [
     {
       name: "modelValue",
       required: true,
-      type:
-        "{ page: number; perPage: number; totalItems: number; totalPages: number; }",
+      type: "{ page: number; perPage: number; totalItems: number; totalPages: number; }",
     },
-  ];
+  ]
   tabs = [
     { label: "Tab 1", value: "tab1" },
     { label: "Tab 2", value: "tab2" },
-  ];
-  tabsCopy = `<Tabs :tabs="tabs" v-model="currentTab" />`;
+  ]
+  tabsCopy = `<Tabs :tabs="tabs" v-model="currentTab" />`
   tabsProps = [
     {
       name: "tabs",
@@ -110,6 +109,6 @@ export default class Navigation extends Vue {
       type: "Array<{ label: string; value: string; }>",
     },
     { name: "modelValue", required: true, type: "string" },
-  ];
+  ]
 }
 </script>

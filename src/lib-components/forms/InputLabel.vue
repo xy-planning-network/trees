@@ -10,11 +10,11 @@
   >
 </template>
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "InputLabel" })
 export default class InputLabel extends Vue {
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false, default: "label" }) tag?: string;
+  @Prop({ type: String, required: false }) label?: string
+  @Prop({ type: String, required: false, default: "label" }) tag?: string
 }
 </script>

@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "Cards" })
 export default class Cards extends Vue {
   @Prop({ type: Array, required: true }) cards!: {
-    primary: string;
-    secondary: string;
-  }[];
+    primary: string
+    secondary: string
+  }[]
 }
 </script>

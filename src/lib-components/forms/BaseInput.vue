@@ -33,19 +33,19 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-import InputHelp from "./InputHelp.vue";
+import Uniques from "@/helpers/Uniques"
+import { Options, Prop, Vue } from "vue-property-decorator"
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
 
 @Options({ name: "BaseInput", components: { InputLabel, InputHelp } })
 export default class BaseInput extends Vue {
-  @Prop({ type: String, required: true }) type?: string;
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false }) help?: string;
-  @Prop({ type: [String, Number], required: false }) modelValue?: string;
+  @Prop({ type: String, required: true }) type?: string
+  @Prop({ type: String, required: false }) label?: string
+  @Prop({ type: String, required: false }) help?: string
+  @Prop({ type: [String, Number], required: false }) modelValue?: string
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 
   /**
    * common text based inputs
@@ -63,7 +63,7 @@ export default class BaseInput extends Vue {
     "time",
     "url",
     "week",
-  ];
+  ]
 
   /**
    * determine if this input is a common text based input
@@ -71,7 +71,7 @@ export default class BaseInput extends Vue {
   get isTextType(): boolean {
     return (
       typeof this.type === "string" && this.textInputTypes.includes(this.type)
-    );
+    )
   }
 }
 </script>

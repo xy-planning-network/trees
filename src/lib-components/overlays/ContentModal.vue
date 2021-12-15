@@ -68,14 +68,14 @@
 </template>
 
 <script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator"
 import {
   Dialog,
   DialogOverlay,
   DialogTitle,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
+} from "@headlessui/vue"
 
 @Options({
   components: {
@@ -88,12 +88,12 @@ import {
   name: "ContentModal",
 })
 export default class ContentModal extends Vue {
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
-  @Prop({ type: String, required: false }) title?: string;
+  @Prop({ type: Boolean, required: true }) modelValue!: boolean
+  @Prop({ type: String, required: false }) title?: string
 
   @Emit("update:modelValue")
   updateModelValue(value: boolean): boolean {
-    return value;
+    return value
   }
 }
 </script>

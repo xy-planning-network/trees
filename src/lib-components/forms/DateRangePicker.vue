@@ -9,11 +9,11 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
-import BaseInput from "./BaseInput.vue";
+import Uniques from "@/helpers/Uniques"
+import { Emit, Options, Prop, Vue } from "vue-property-decorator"
+import flatpickr from "flatpickr"
+import "flatpickr/dist/flatpickr.min.css"
+import BaseInput from "./BaseInput.vue"
 
 @Options({
   name: "DateRangePicker",
@@ -21,21 +21,21 @@ import BaseInput from "./BaseInput.vue";
 })
 export default class DateRangePicker extends Vue {
   @Prop({ type: Object, required: true }) modelValue!: {
-    minDate: number;
-    maxDate: number;
-  };
-  @Prop({ type: Number, required: false }) startDate?: number;
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false }) help?: string;
+    minDate: number
+    maxDate: number
+  }
+  @Prop({ type: Number, required: false }) startDate?: number
+  @Prop({ type: String, required: false }) label?: string
+  @Prop({ type: String, required: false }) help?: string
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 
   @Emit("update:modelValue")
-  updateModelValue(value: {
-    minDate: number;
-    maxDate: number;
-  }): { minDate: number; maxDate: number } {
-    return value;
+  updateModelValue(value: { minDate: number; maxDate: number }): {
+    minDate: number
+    maxDate: number
+  } {
+    return value
   }
 
   mounted() {
@@ -51,15 +51,15 @@ export default class DateRangePicker extends Vue {
             maxDate: Math.floor(
               selectedDates[1].setUTCHours(23, 59, 59, 999) / 1000
             ),
-          });
+          })
         } else if (selectedDates.length === 0) {
           this.updateModelValue({
             minDate: 0,
             maxDate: 0,
-          });
+          })
         }
       },
-    });
+    })
   }
 }
 </script>

@@ -203,9 +203,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import Flash from "../overlays/Flash.vue";
-import Spinner from "../overlays/Spinner.vue";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import Flash from "../overlays/Flash.vue"
+import Spinner from "../overlays/Spinner.vue"
 import {
   Dialog,
   DialogOverlay,
@@ -215,10 +215,10 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { MenuAlt2Icon, UserCircleIcon, XIcon } from "@heroicons/vue/outline";
-import { CogIcon } from "@heroicons/vue/solid";
-import NavTypes from "../../types/nav";
+} from "@headlessui/vue"
+import { MenuAlt2Icon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
+import { CogIcon } from "@heroicons/vue/solid"
+import NavTypes from "../../types/nav"
 
 @Options({
   components: {
@@ -240,15 +240,15 @@ import NavTypes from "../../types/nav";
   name: "SidebarLayout",
 })
 export default class SidebarLayout extends Vue {
-  @Prop({ type: String, required: false }) activeURL?: string;
-  @Prop({ type: String, required: true }) iconURL!: string;
-  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[];
-  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[];
+  @Prop({ type: String, required: false }) activeURL?: string
+  @Prop({ type: String, required: true }) iconURL!: string
+  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[]
+  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[]
 
-  sidebarOpen = false;
+  sidebarOpen = false
 
   isActive(url: string): boolean {
-    return this.activeURL === url;
+    return this.activeURL === url
   }
 }
 </script>

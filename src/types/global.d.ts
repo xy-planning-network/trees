@@ -1,10 +1,10 @@
-import { Emitter } from "mitt";
+import { Emitter } from "mitt"
 
-export {};
+export {}
 
 declare global {
   interface Window {
-    Flashes: Array<{ type?: string; message: string }>;
-    VueBus: Emitter;
+    Flashes: Array<{ type?: string; message: string }>
+    VueBus: Emitter
   }
 }

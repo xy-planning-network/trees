@@ -17,7 +17,7 @@
           v-bind="{
             ...$attrs,
             onChange: ($event) => {
-              $emit('update:modelValue', $event.target.value);
+              $emit('update:modelValue', $event.target.value)
             },
           }"
         />
@@ -30,19 +30,19 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
+import Uniques from "@/helpers/Uniques"
+import { Options, Prop, Vue } from "vue-property-decorator"
+import InputLabel from "./InputLabel.vue"
 
 @Options({ name: "Radio", components: { InputLabel } })
 export default class Radio extends Vue {
   @Prop({ type: Array, required: true }) options!: Array<{
-    label: string;
-    value: string;
-  }>;
-  @Prop({ type: String, required: false }) legend?: string;
-  @Prop({ type: String, required: false }) modelValue?: string;
+    label: string
+    value: string
+  }>
+  @Prop({ type: String, required: false }) legend?: string
+  @Prop({ type: String, required: false }) modelValue?: string
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 }
 </script>

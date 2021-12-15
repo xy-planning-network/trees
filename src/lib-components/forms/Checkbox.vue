@@ -10,7 +10,7 @@
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', $event.target.checked);
+            $emit('update:modelValue', $event.target.checked)
           },
         }"
       />
@@ -22,16 +22,16 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
+import Uniques from "@/helpers/Uniques"
+import { Options, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "Checkbox" })
 export default class Checkbox extends Vue {
   // TODO: checkbox should support the help text prop like base input, and label should use the label component or possible support a legend prop
-  @Prop({ type: Boolean, required: false }) emphasis?: boolean;
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
+  @Prop({ type: Boolean, required: false }) emphasis?: boolean
+  @Prop({ type: String, required: false }) label?: string
+  @Prop({ type: Boolean, required: true }) modelValue!: boolean
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 }
 </script>

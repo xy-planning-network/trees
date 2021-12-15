@@ -94,15 +94,15 @@
 </template>
 
 <script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator"
 import {
   Dialog,
   DialogOverlay,
   DialogTitle,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { ExclamationIcon, XIcon } from "@heroicons/vue/outline";
+} from "@headlessui/vue"
+import { ExclamationIcon, XIcon } from "@heroicons/vue/outline"
 
 @Options({
   components: {
@@ -117,20 +117,20 @@ import { ExclamationIcon, XIcon } from "@heroicons/vue/outline";
   name: "Modal",
 })
 export default class Modal extends Vue {
-  @Prop({ type: Boolean, required: false }) destructive?: boolean;
-  @Prop({ type: Boolean, required: false }) disabled?: boolean;
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
-  @Prop({ type: String, required: false }) submitText?: string;
-  @Prop({ type: String, required: false }) title?: string;
+  @Prop({ type: Boolean, required: false }) destructive?: boolean
+  @Prop({ type: Boolean, required: false }) disabled?: boolean
+  @Prop({ type: Boolean, required: true }) modelValue!: boolean
+  @Prop({ type: String, required: false }) submitText?: string
+  @Prop({ type: String, required: false }) title?: string
 
   @Emit()
   submit(): void {
-    return;
+    return
   }
 
   @Emit("update:modelValue")
   updateModelValue(value: boolean): boolean {
-    return value;
+    return value
   }
 }
 </script>

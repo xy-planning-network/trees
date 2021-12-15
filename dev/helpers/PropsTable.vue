@@ -34,15 +34,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { ClipboardCopyIcon } from "@heroicons/vue/outline";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 @Options({ components: { ClipboardCopyIcon }, name: "PropsTable" })
 export default class PropsTable extends Vue {
   @Prop({ type: Array, required: true }) props!: {
-    name: string;
-    required: boolean;
-    type: string;
-  }[];
+    name: string
+    required: boolean
+    type: string
+  }[]
 }
 </script>

@@ -246,10 +246,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 
 @Options({ name: "Elements" })
 export default class Elements extends Vue {
-  extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`;
+  extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
 }
 </script>

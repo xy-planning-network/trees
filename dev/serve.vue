@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -40,14 +40,14 @@ import {
   LocationMarkerIcon,
   TableIcon,
   UserGroupIcon,
-} from "@heroicons/vue/outline";
-import Elements from "./content/Elements.vue";
-import Forms from "./content/Forms.vue";
-import Home from "./content/Home.vue";
-import Lists from "./content/Lists.vue";
-import Navigation from "./content/Navigation.vue";
-import Overlays from "./content/Overlays.vue";
-import Team from "./content/Team.vue";
+} from "@heroicons/vue/outline"
+import Elements from "./content/Elements.vue"
+import Forms from "./content/Forms.vue"
+import Home from "./content/Home.vue"
+import Lists from "./content/Lists.vue"
+import Navigation from "./content/Navigation.vue"
+import Overlays from "./content/Overlays.vue"
+import Team from "./content/Team.vue"
 
 @Options({
   components: {
@@ -62,8 +62,8 @@ import Team from "./content/Team.vue";
   name: "Serve",
 })
 export default class Serve extends Vue {
-  currentPage = "Home";
-  currentNav = "StackedLayout";
+  currentPage = "Home"
+  currentNav = "StackedLayout"
   navigation = [
     { name: "Home", url: "/trees/?page=Home", icon: HomeIcon },
     { name: "Forms", url: "/trees/?page=Forms", icon: DocumentTextIcon },
@@ -76,32 +76,32 @@ export default class Serve extends Vue {
     { name: "Overlays", url: "/trees/?page=Overlays", icon: CollectionIcon },
     { name: "Elements", url: "/trees/?page=Elements", icon: ColorSwatchIcon },
     { name: "Team", url: "/trees/?page=Team", icon: UserGroupIcon },
-  ];
-  user = { name: "Jimothy Bobbitz", email: "jimothy@bobbitz.biz" };
-  userNavigation = [{ name: "Toggle the Nav", url: "/no" }];
-  toggle = true;
-  open = true;
+  ]
+  user = { name: "Jimothy Bobbitz", email: "jimothy@bobbitz.biz" }
+  userNavigation = [{ name: "Toggle the Nav", url: "/no" }]
+  toggle = true
+  open = true
 
   mounted() {
-    const page = new URLSearchParams(window.location.search).get("page");
-    if (page) this.currentPage = page;
+    const page = new URLSearchParams(window.location.search).get("page")
+    if (page) this.currentPage = page
     const currentNav = new URLSearchParams(window.location.search).get(
       "currentNav"
-    );
-    if (currentNav) this.currentNav = currentNav;
+    )
+    if (currentNav) this.currentNav = currentNav
   }
 
   goTo(page: string): void {
-    const url = "/trees/?page=" + page;
-    window.history.pushState({}, "", url);
-    this.currentPage = page;
+    const url = "/trees/?page=" + page
+    window.history.pushState({}, "", url)
+    this.currentPage = page
   }
   showing(page: string): boolean {
-    return page === this.currentPage;
+    return page === this.currentPage
   }
 
   get currentPageURL(): string {
-    return "/trees/?page=" + this.currentPage;
+    return "/trees/?page=" + this.currentPage
   }
 }
 </script>

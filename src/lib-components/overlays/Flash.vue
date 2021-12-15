@@ -52,61 +52,61 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
+import { Options, Vue } from "vue-property-decorator"
 
 @Options({ name: "Flash" })
 export default class Flash extends Vue {
-  flashes: Array<{ type: string; message: string }> = [];
+  flashes: Array<{ type: string; message: string }> = []
   flashTypeBorderClass = {
     warning: "border-orange-500",
     error: "border-red-500",
     info: "border-blue-500",
     success: "border-green-500",
-  };
+  }
 
   mounted(): void {
     window.VueBus.on("Flash-show-message", (flash) => {
-      this.renderFlash(flash);
-    });
+      this.renderFlash(flash)
+    })
 
     window.VueBus.on("Flash-show-generic-error", (email) => {
-      this.renderGenericError(email);
-    });
+      this.renderGenericError(email)
+    })
 
     if (window.Flashes) {
       for (const flash of window.Flashes) {
         if (typeof flash.type === "undefined") {
-          const values: string[] = flash.message.split(": ");
-          this.renderFlash({ type: values[0], message: values[1] });
-          return;
+          const values: string[] = flash.message.split(": ")
+          this.renderFlash({ type: values[0], message: values[1] })
+          return
         }
-        this.renderFlash({ type: flash.type, message: flash.message });
+        this.renderFlash({ type: flash.type, message: flash.message })
       }
     }
   }
 
   remove(flash: { type: string; message: string }): void {
-    let index = 0;
+    let index = 0
     for (const f of this.flashes) {
       if (flash.message === f.message) {
-        this.flashes.splice(index, 1);
-        return;
+        this.flashes.splice(index, 1)
+        return
       }
-      index++;
+      index++
     }
   }
   renderFlash(flash: { type: string; message: string }): void {
-    this.flashes.push(flash);
+    this.flashes.push(flash)
     // Super simple flash implementation. This could get "smarter" by adding an
     // id to the flash object, and then searching for the specific flash in the
     // array and splicing, instead of simply doing a pop().
     setTimeout(
       (flashes: Array<{ type: string; message: string }>) => {
-        flashes.pop();
+        flashes.pop()
       },
       10000,
       this.flashes
-    );
+    )
   }
   renderGenericError(email: string): void {
     this.renderFlash({
@@ -115,7 +115,7 @@ export default class Flash extends Vue {
         "Whoops! Something went wrong, please reach out to " +
         `<a class="underline text-xy-blue" href="mailto:${email}">${email}</a>` +
         " if the issue persists.",
-    });
+    })
   }
 }
 </script>

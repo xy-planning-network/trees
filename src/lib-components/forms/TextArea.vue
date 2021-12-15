@@ -28,17 +28,17 @@
 </template>
 
 <script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-import InputHelp from "./InputHelp.vue";
+import Uniques from "@/helpers/Uniques"
+import { Options, Prop, Vue } from "vue-property-decorator"
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
 
 @Options({ name: "TextArea", components: { InputLabel, InputHelp } })
 export default class TextArea extends Vue {
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false }) help?: string;
-  @Prop({ type: [String, Number], required: false }) modelValue?: string;
+  @Prop({ type: String, required: false }) label?: string
+  @Prop({ type: String, required: false }) help?: string
+  @Prop({ type: [String, Number], required: false }) modelValue?: string
 
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
+  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
 }
 </script>

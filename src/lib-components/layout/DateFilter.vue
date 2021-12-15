@@ -26,30 +26,30 @@
 </template>
 
 <script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
-import DateRangePicker from "../forms/DateRangePicker.vue";
+import { Emit, Options, Prop, Vue } from "vue-property-decorator"
+import DateRangePicker from "../forms/DateRangePicker.vue"
 
 @Options({ components: { DateRangePicker }, name: "DateFilter" })
 export default class DateFilter extends Vue {
   // TODO: sort select should use built in select component
   @Prop({ type: Object, required: true }) dateRange!: {
-    minDate: number;
-    maxDate: number;
-  };
-  @Prop({ type: String, required: true }) sortDir!: string;
-  @Prop({ type: String, required: true }) title!: string;
+    minDate: number
+    maxDate: number
+  }
+  @Prop({ type: String, required: true }) sortDir!: string
+  @Prop({ type: String, required: true }) title!: string
 
   @Emit()
   sortDirChanged(sortDir: string): string {
-    return sortDir;
+    return sortDir
   }
 
   @Emit()
-  dateRangeChanged(dateRange: {
-    minDate: number;
-    maxDate: number;
-  }): { minDate: number; maxDate: number } {
-    return dateRange;
+  dateRangeChanged(dateRange: { minDate: number; maxDate: number }): {
+    minDate: number
+    maxDate: number
+  } {
+    return dateRange
   }
 }
 </script>

@@ -11,11 +11,11 @@
   </component>
 </template>
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
+import { Options, Prop, Vue } from "vue-property-decorator"
 
 @Options({ name: "InputHelp" })
 export default class InputHelp extends Vue {
-  @Prop({ type: String, required: false }) text?: string;
-  @Prop({ type: String, required: false, default: "div" }) tag?: string;
+  @Prop({ type: String, required: false }) text?: string
+  @Prop({ type: String, required: false, default: "div" }) tag?: string
 }
 </script>

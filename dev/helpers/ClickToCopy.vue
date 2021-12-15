@@ -22,24 +22,24 @@
 </template>
 
 <script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { ClipboardCopyIcon } from "@heroicons/vue/outline";
+import { Options, Prop, Vue } from "vue-property-decorator"
+import { ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 @Options({ components: { ClipboardCopyIcon }, name: "ClickToCopy" })
 export default class ClickToCopy extends Vue {
-  @Prop({ type: String, required: true }) value!: string;
+  @Prop({ type: String, required: true }) value!: string
 
-  copied = false;
+  copied = false
 
   copy(): void {
-    const input = this.$refs.input as HTMLInputElement;
-    input.select();
-    input.setSelectionRange(0, 99999); /* For mobile devices */
-    document.execCommand("copy");
-    this.copied = true;
+    const input = this.$refs.input as HTMLInputElement
+    input.select()
+    input.setSelectionRange(0, 99999) /* For mobile devices */
+    document.execCommand("copy")
+    this.copied = true
     window.setTimeout(() => {
-      this.copied = false;
-    }, 1500);
+      this.copied = false
+    }, 1500)
   }
 }
 </script>
