@@ -33,7 +33,7 @@ import { Emit, Options, Prop, Vue } from "vue-property-decorator"
 @Options({ name: "Tabs" })
 export default class Tabs extends Vue {
   @Prop({ type: String, required: true }) modelValue!: string
-  @Prop({ type: Boolean, required: true }) pillDesign?: boolean
+  @Prop({ type: Boolean, required: false }) pillDesign!: boolean
   @Prop({ type: Array, required: true }) tabs!: Array<{
     label: string
     value: string

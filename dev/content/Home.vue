@@ -1,3 +1,58 @@
+<script setup lang="ts">
+import {
+  CollectionIcon,
+  ColorSwatchIcon,
+  DocumentTextIcon,
+  LocationMarkerIcon,
+  TableIcon,
+  UserGroupIcon,
+} from "@heroicons/vue/outline"
+
+const emit = defineEmits<{
+  (e: "update", val: string): void
+}>()
+
+const update = function (value: string) {
+  emit("update", value)
+}
+
+const features = [
+  {
+    name: "Forms",
+    icon: DocumentTextIcon,
+    description:
+      "Forms are the bread and butter of any application. Get with it and check this shit out.",
+  },
+  {
+    name: "Navigation",
+    icon: LocationMarkerIcon,
+    description:
+      "Let's move around. Change some things. You're looking at this and now you're looking at that.",
+  },
+  {
+    name: "Lists",
+    icon: TableIcon,
+    description:
+      "Do you even know what a list looks like? We've got some examples to dandy.",
+  },
+  {
+    name: "Overlays",
+    icon: CollectionIcon,
+    description: "Take it over. Emit to the bus. Get it right. Get it tight.",
+  },
+  {
+    name: "Elements",
+    icon: ColorSwatchIcon,
+    description: "Elements are elemental. Check them out. CSS only.",
+  },
+  {
+    name: "Team",
+    icon: UserGroupIcon,
+    description:
+      "Our team once built something that helped the company, and we've been grateful ever since.",
+  },
+]
+</script>
 <template>
   <div class="relative bg-white py-16 sm:py-24 lg:py-32">
     <div
@@ -144,60 +199,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Emit, Options, Vue } from "vue-property-decorator"
-import {
-  CollectionIcon,
-  ColorSwatchIcon,
-  DocumentTextIcon,
-  LocationMarkerIcon,
-  TableIcon,
-  UserGroupIcon,
-} from "@heroicons/vue/outline"
-
-@Options({ name: "Home" })
-export default class Home extends Vue {
-  @Emit("update")
-  update(value: string): string {
-    return value
-  }
-
-  features = [
-    {
-      name: "Forms",
-      icon: DocumentTextIcon,
-      description:
-        "Forms are the bread and butter of any application. Get with it and check this shit out.",
-    },
-    {
-      name: "Navigation",
-      icon: LocationMarkerIcon,
-      description:
-        "Let's move around. Change some things. You're looking at this and now you're looking at that.",
-    },
-    {
-      name: "Lists",
-      icon: TableIcon,
-      description:
-        "Do you even know what a list looks like? We've got some examples to dandy.",
-    },
-    {
-      name: "Overlays",
-      icon: CollectionIcon,
-      description: "Take it over. Emit to the bus. Get it right. Get it tight.",
-    },
-    {
-      name: "Elements",
-      icon: ColorSwatchIcon,
-      description: "Elements are elemental. Check them out. CSS only.",
-    },
-    {
-      name: "Team",
-      icon: UserGroupIcon,
-      description:
-        "Our team once built something that helped the company, and we've been grateful ever since.",
-    },
-  ]
-}
-</script>

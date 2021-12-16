@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { ref } from "vue"
+
+const badgePrimary = ref<HTMLElement>()
+const badgeInfo = ref<HTMLElement>()
+const badgeAlert = ref<HTMLElement>()
+const btnPrimary = ref<HTMLElement>()
+const btnSecondary = ref<HTMLElement>()
+const btnGreen = ref<HTMLElement>()
+const btnRed = ref<HTMLElement>()
+const btnWhite = ref<HTMLElement>()
+const links = ref<HTMLElement>()
+const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
+</script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
@@ -9,28 +23,28 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="badgePrimary?.outerHTML" />
           </label>
           <div class="mt-1">
-            <span class="xy-badge">Primary</span>
+            <span ref="badgePrimary" class="xy-badge">Primary</span>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="badgeInfo?.outerHTML" />
           </label>
           <div class="mt-1">
-            <span class="xy-badge-blue">Info</span>
+            <span ref="badgeInfo" class="xy-badge-blue">Info</span>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="badgeAlert?.outerHTML" />
           </label>
           <div class="mt-1">
-            <span class="xy-badge-yellow">Alert</span>
+            <span ref="badgeAlert" class="xy-badge-yellow">Alert</span>
           </div>
         </div>
       </ComponentLayout>
@@ -42,46 +56,54 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="btnPrimary?.outerHTML" />
           </label>
           <div class="mt-1">
-            <button type="button" class="xy-btn">Primary</button>
+            <button ref="btnPrimary" type="button" class="xy-btn">
+              Primary
+            </button>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="btnSecondary?.outerHTML" />
           </label>
           <div class="mt-1">
-            <button type="button" class="xy-btn-secondary">Secondary</button>
+            <button ref="btnSecondary" type="button" class="xy-btn-secondary">
+              Secondary
+            </button>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="btnGreen?.outerHTML" />
           </label>
           <div class="mt-1">
-            <button type="button" class="xy-btn-green">Green</button>
+            <button ref="btnGreen" type="button" class="xy-btn-green">
+              Green
+            </button>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="btnRed?.outerHTML" />
           </label>
           <div class="mt-1">
-            <button type="button" class="xy-btn-red">Red</button>
+            <button ref="btnRed" type="button" class="xy-btn-red">Red</button>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="checkboxCopy" />
+            <ClickToCopy :value="btnWhite?.outerHTML" />
           </label>
           <div class="mt-1">
-            <button type="button" class="xy-btn-white">White</button>
+            <button ref="btnWhite" type="button" class="xy-btn-white">
+              White
+            </button>
           </div>
         </div>
       </ComponentLayout>
@@ -93,10 +115,10 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputCopy" />
+            <ClickToCopy :value="links?.outerHTML" />
           </label>
           <div class="mt-1">
-            <a href="#" class="xy-link">Take Me Somewhere</a>
+            <a ref="links" href="#" class="xy-link">Take Me Somewhere</a>
           </div>
         </div>
       </ComponentLayout>
@@ -244,12 +266,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-property-decorator"
-
-@Options({ name: "Elements" })
-export default class Elements extends Vue {
-  extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
-}
-</script>
