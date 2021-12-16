@@ -1,10 +1,8 @@
 import { resolve } from "path"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
-import EnvironmentPlugin from "vite-plugin-environment"
 
-// TODO: preserve process.env in lib build
-// TODO: preserve import.meta.env in lib build
+// TODO: support and preserve import.meta.env in lib build if possible
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,12 +27,11 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    vue(),
-    EnvironmentPlugin({
-      VUE_APP_BASE_API_URL: "/api/v1",
-    }), // TODO: conditionally apply this during serve and docs build
-  ],
+  define: {
+    // TODO: conditionally apply during lib build but not dev/serve
+    "process.env.VUE_APP_BASE_API_URL": "process.env.VUE_APP_BASE_API_URL",
+  },
+  plugins: [vue()],
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
