@@ -10,7 +10,6 @@ import "./main.css"
 import mitt from "mitt"
 
 window.VueBus = mitt()
-window.process.env = {}
 const app = createApp(Serve)
 app.use(Trees)
 app.component("ClickToCopy", ClickToCopy)

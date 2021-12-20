@@ -24,7 +24,8 @@
     },
     "types": [
       "node",
-      "vue"
+      "vue",
+      "vite/client"
     ],
     // "outDir": "./dist/types", // TODO: enable once we determine exact usage for types bundling
   },

@@ -18,12 +18,6 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "@typescript-eslint/explicit-module-boundary-types": [
-      "error",
-      {
-        allowedNames: ["created", "mounted"],
-      },
-    ],
     "@typescript-eslint/no-non-null-assertion": 0,
     "@typescript-eslint/no-explicit-any": 0,
   },
