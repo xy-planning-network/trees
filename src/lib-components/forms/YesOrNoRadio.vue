@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import Uniques from "@/helpers/Uniques"
+import { computed, useAttrs } from "vue"
+import InputLabel from "./InputLabel.vue"
+// TODO: fix - model value binding isn't updating
+
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean
+    legend?: string
+    name?: string
+  }>(),
+  {
+    modelValue: undefined,
+    legend: "",
+    name: "",
+  }
+)
+const attrs = useAttrs()
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const hasNameAttr = computed((): boolean => {
+  return typeof props.name === "string" && props.name !== ""
+})
+</script>
 <template>
   <fieldset>
     <InputLabel class="block" :label="legend" tag="legend"></InputLabel>
@@ -16,7 +40,7 @@
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', $event.target.value === 'true')
+            $emit('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
           },
         }"
       />
@@ -37,7 +61,7 @@
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', $event.target.value === 'true')
+            $emit('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
           },
         }"
       />
@@ -45,22 +69,3 @@
     </label>
   </fieldset>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques"
-import { Options, Prop, Vue } from "vue-property-decorator"
-import InputLabel from "./InputLabel.vue"
-
-@Options({ name: "YesOrNoRadio", components: { InputLabel } })
-export default class YesOrNoRadio extends Vue {
-  @Prop({ type: Boolean, required: false }) modelValue?: boolean
-  @Prop({ type: String, required: false }) legend?: string
-  @Prop({ type: String, required: false, default: "" }) name?: string
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute()
-
-  get hasNameAttr(): boolean {
-    return typeof this.name === "string" && this.name !== ""
-  }
-}
-</script>
