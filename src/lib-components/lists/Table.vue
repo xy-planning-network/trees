@@ -1,3 +1,142 @@
+<script setup lang="ts">
+import { AxiosResponse } from "axios"
+import { computed, getCurrentInstance, ref, watch } from "vue"
+import DateRangePicker from "../forms/DateRangePicker.vue"
+import Paginator from "../navigation/Paginator.vue"
+import BaseAPI from "../../api/base"
+import TableTypes from "../../types/table"
+
+const props = withDefaults(
+  defineProps<{
+    clickable?: boolean
+    loader?: boolean
+    tableData: TableTypes.Dynamic
+  }>(),
+  {
+    clickable: false,
+    loader: true,
+  }
+)
+
+const currentSort = ref(
+  props.tableData.defaultSort ? props.tableData.defaultSort : ""
+)
+const currentSortDirection = ref(
+  props.tableData.defaultSortDirection
+    ? props.tableData.defaultSortDirection
+    : "desc"
+)
+const dateRange = ref({
+  minDate: 0,
+  maxDate: 0,
+})
+const items = ref<any[]>([])
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+  totalItems: 0,
+  totalPages: 0,
+})
+const query = ref("")
+
+// TODO: discuss this pattern.  Current usage can be replaced with modules.
+// https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
+const internalInstance = getCurrentInstance()
+const cellValue = (
+  item: Record<string, any>,
+  col: TableTypes.Column
+): string => {
+  if (col.key) {
+    // NOTE(dlk): supports dot notation for nested keys
+    return col.key.split(".").reduce((o, i) => o[i], item as any)
+  }
+
+  if (col.presenter) {
+    return col.presenter(
+      item,
+      internalInstance?.appContext ? internalInstance.appContext.app : null
+    )
+  }
+
+  return ""
+}
+const dateRangeChanged = (newDateRange: {
+  minDate: number
+  maxDate: number
+}): void => {
+  pagination.value.page = 1
+  dateRange.value = newDateRange
+  loadAndRender()
+}
+const handleSort = (selectedSort: string): void => {
+  if (currentSort.value == selectedSort) {
+    currentSortDirection.value =
+      currentSortDirection.value === "desc" ? "asc" : "desc"
+  } else {
+    currentSort.value = selectedSort
+    currentSortDirection.value = "desc"
+  }
+
+  loadAndRender()
+}
+const loadAndRender = (): void => {
+  const params = {
+    minDate: dateRange.value.minDate,
+    maxDate: dateRange.value.maxDate,
+    page: pagination.value.page,
+    perPage: pagination.value.perPage,
+    sort: currentSort.value,
+    sortDir: currentSortDirection.value,
+    q: query.value,
+  }
+
+  BaseAPI.get(props.tableData.url, { skipLoader: !props.loader }, params).then(
+    (success: AxiosResponse) => {
+      pagination.value = {
+        page: success.data.page,
+        perPage: success.data.perPage,
+        totalItems: success.data.totalItems,
+        totalPages: success.data.totalPages,
+      }
+      items.value = success.data.items
+    },
+    () => {
+      window.VueBus.emit(
+        "Flash-show-generic-error",
+        "membership@xyplanningnetwork.com"
+      )
+    }
+  )
+}
+
+const reloadTable = (): void => {
+  pagination.value.page = 1
+  loadAndRender()
+}
+
+const hasContent = computed((): boolean => {
+  return items.value.length ? true : false
+})
+
+watch(
+  () => props.tableData.refreshTrigger,
+  () => {
+    // This lets parent components trigger a refresh of the current page depending on external actions.
+    loadAndRender()
+  }
+)
+
+watch(
+  () => props.tableData.reloadTrigger,
+  () => {
+    // This lets parent components trigger a reload of page 1 depending on external actions.
+    reloadTable()
+  }
+)
+
+// onCreated
+loadAndRender()
+</script>
 <template>
   <div>
     <div
@@ -52,7 +191,7 @@
               <span v-if="!!col.display.length">{{ col.display }}</span>
               <span
                 class="cursor-pointer"
-                @click.prevent="handleSort(col.sort)"
+                @click.prevent="handleSort(col.sort as string)"
                 v-if="col.sort"
               >
                 <svg
@@ -140,128 +279,8 @@
 
     <Paginator
       v-model="pagination"
-      @update:modelValue="loadAndRender(false)"
+      @update:modelValue="loadAndRender()"
       v-if="hasContent"
     />
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Watch, Vue } from "vue-property-decorator"
-import { AxiosResponse } from "axios"
-import DateRangePicker from "../forms/DateRangePicker.vue"
-import Paginator from "../navigation/Paginator.vue"
-import BaseAPI from "../../api/base"
-import TableTypes from "../../types/table"
-
-@Options({ components: { DateRangePicker, Paginator }, name: "Table" })
-export default class Table extends Vue {
-  @Prop({ type: Boolean, required: false, default: false }) clickable!: boolean
-  @Prop({ type: Boolean, required: false, default: true }) loader!: boolean
-  @Prop({ type: Object, required: true }) tableData!: TableTypes.Dynamic
-
-  currentSort = ""
-  currentSortDirection = ""
-  dateRange: { minDate: number; maxDate: number } = {
-    minDate: 0,
-    maxDate: 0,
-  }
-  items: any[] = []
-  pagination = {
-    page: 1,
-    perPage: 10,
-    totalItems: 0,
-    totalPages: 0,
-  }
-  query = ""
-
-  @Watch("tableData.refreshTrigger")
-  onRefreshTrigger(): void {
-    // This lets parent components trigger a refresh of the current page depending on external actions.
-    this.loadAndRender()
-  }
-
-  @Watch("tableData.reloadTrigger")
-  onReloadTrigger(): void {
-    // This lets parent components trigger a reload of page 1 depending on external actions.
-    this.reloadTable()
-  }
-
-  created() {
-    if (this.tableData.defaultSort) {
-      this.currentSort = this.tableData.defaultSort
-      this.currentSortDirection = this.tableData.defaultSortDirection
-        ? this.tableData.defaultSortDirection
-        : "desc"
-    }
-
-    this.loadAndRender()
-  }
-
-  cellValue(item: Record<string, any>, col: TableTypes.Column): string {
-    if (col.key) {
-      // NOTE(dlk): supports dot notation for nested keys
-      return col.key.split(".").reduce((o, i) => o[i], item as any)
-    }
-
-    if (col.presenter) {
-      return col.presenter(item, this)
-    }
-
-    return ""
-  }
-  dateRangeChanged(dateRange: { minDate: number; maxDate: number }): void {
-    this.pagination.page = 1
-    this.dateRange = dateRange
-    this.loadAndRender()
-  }
-  handleSort(selectedSort: string): void {
-    if (this.currentSort == selectedSort) {
-      this.currentSortDirection =
-        this.currentSortDirection === "desc" ? "asc" : "desc"
-    } else {
-      this.currentSort = selectedSort
-      this.currentSortDirection = "desc"
-    }
-
-    this.loadAndRender()
-  }
-  loadAndRender(): void {
-    const params = {
-      minDate: this.dateRange.minDate,
-      maxDate: this.dateRange.maxDate,
-      page: this.pagination.page,
-      perPage: this.pagination.perPage,
-      sort: this.currentSort,
-      sortDir: this.currentSortDirection,
-      q: this.query,
-    }
-
-    BaseAPI.get(this.tableData.url, { skipLoader: !this.loader }, params).then(
-      (success: AxiosResponse) => {
-        this.pagination = {
-          page: success.data.page,
-          perPage: success.data.perPage,
-          totalItems: success.data.totalItems,
-          totalPages: success.data.totalPages,
-        }
-        this.items = success.data.items
-      },
-      () => {
-        window.VueBus.emit(
-          "Flash-show-generic-error",
-          "membership@xyplanningnetwork.com"
-        )
-      }
-    )
-  }
-  reloadTable(): void {
-    this.pagination.page = 1
-    this.loadAndRender()
-  }
-
-  get hasContent(): boolean {
-    return this.items.length ? true : false
-  }
-}
-</script>

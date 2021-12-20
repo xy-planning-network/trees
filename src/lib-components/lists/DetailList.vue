@@ -1,3 +1,86 @@
+<script setup lang="ts">
+import { ref, watch } from "vue"
+import BaseAPI from "../../api/base"
+import DateFilter from "../layout/DateFilter.vue"
+import Paginator from "../navigation/Paginator.vue"
+
+const props = withDefaults(
+  defineProps<{
+    refreshTrigger?: number
+    reloadTrigger?: number
+    title: string
+    url: string
+  }>(),
+  {
+    refreshTrigger: 0,
+    reloadTrigger: 0,
+  }
+)
+
+const dateRange = ref<{ minDate: number; maxDate: number }>({
+  minDate: 0,
+  maxDate: 0,
+})
+const hasContent = ref(true)
+const items = ref<any[]>([])
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+  totalItems: 0,
+  totalPages: 0,
+})
+const sortDir = ref("DESC")
+
+const loadAndRender = (checkForContent: boolean): void => {
+  const params = {
+    page: pagination.value.page,
+    perPage: pagination.value.perPage,
+    sortDir: sortDir.value,
+  }
+
+  BaseAPI.get(props.url, {}, Object.assign(params, dateRange.value)).then(
+    (success: any) => {
+      pagination.value = {
+        page: success.data.page,
+        perPage: success.data.perPage,
+        totalItems: success.data.totalItems,
+        totalPages: success.data.totalPages,
+      }
+      items.value = success.data.items
+      if (checkForContent) hasContent.value = items.value.length != 0
+    },
+    () => {
+      // TODO: let's make this really generic or configurable
+      window.VueBus.emit(
+        "Flash-show-generic-error",
+        "archive@xyplanningnetwork.com"
+      )
+    }
+  )
+}
+
+watch([sortDir, dateRange], () => {
+  loadAndRender(false)
+})
+
+watch(
+  () => props.refreshTrigger,
+  () => {
+    loadAndRender(false)
+  }
+)
+
+watch(
+  () => props.reloadTrigger,
+  () => {
+    // This lets parent components trigger a refresh of the current page depending on external actions.
+    pagination.value.page = 1
+    loadAndRender(true)
+  }
+)
+
+loadAndRender(true)
+</script>
 <template>
   <div>
     <DateFilter
@@ -29,86 +112,3 @@
     />
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue, Watch } from "vue-property-decorator"
-import BaseAPI from "../../api/base"
-import DateFilter from "../layout/DateFilter.vue"
-import Paginator from "../navigation/Paginator.vue"
-
-@Options({ components: { DateFilter, Paginator }, name: "DetailList" })
-export default class DetailList extends Vue {
-  @Prop({ type: Number, required: false }) refreshTrigger?: number
-  @Prop({ type: Number, required: false }) reloadTrigger?: number
-  @Prop({ type: String, required: true }) title!: string
-  @Prop({ type: String, required: true }) url!: string
-
-  @Watch("sortDir")
-  onSortDir(): void {
-    this.loadAndRender(false)
-  }
-
-  @Watch("dateRange")
-  onDateRange(): void {
-    this.loadAndRender(false)
-  }
-
-  @Watch("refreshTrigger")
-  onRefreshTrigger(): void {
-    // This lets parent components trigger a refresh of the current page depending on external actions.
-    this.loadAndRender(false)
-  }
-
-  @Watch("reloadTrigger")
-  onReloadTrigger(): void {
-    // This lets parent components trigger a refresh of the current page depending on external actions.
-    this.pagination.page = 1
-    this.loadAndRender(true)
-  }
-
-  dateRange: { minDate: number; maxDate: number } = {
-    minDate: 0,
-    maxDate: 0,
-  }
-  hasContent = true
-  items: any[] = []
-  pagination = {
-    page: 1,
-    perPage: 10,
-    totalItems: 0,
-    totalPages: 0,
-  }
-  sortDir = "DESC"
-
-  created() {
-    this.loadAndRender(true)
-  }
-
-  loadAndRender(checkForContent: boolean): void {
-    const params = {
-      page: this.pagination.page,
-      perPage: this.pagination.perPage,
-      sortDir: this.sortDir,
-    }
-
-    BaseAPI.get(this.url, {}, Object.assign(params, this.dateRange)).then(
-      (success: any) => {
-        this.pagination = {
-          page: success.data.page,
-          perPage: success.data.perPage,
-          totalItems: success.data.totalItems,
-          totalPages: success.data.totalPages,
-        }
-        this.items = success.data.items
-        if (checkForContent) this.hasContent = this.items.length != 0
-      },
-      () => {
-        window.VueBus.emit(
-          "Flash-show-generic-error",
-          "archive@xyplanningnetwork.com"
-        )
-      }
-    )
-  }
-}
-</script>

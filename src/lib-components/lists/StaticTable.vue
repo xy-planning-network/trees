@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { getCurrentInstance } from "vue"
+import TableTypes from "../../types/table"
+
+defineProps<{
+  tableData: TableTypes.Static
+}>()
+
+// TODO: discuss this pattern.  Current usage can be replaced with modules.
+// https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
+const internalInstance = getCurrentInstance()
+const cellValue = (
+  item: Record<string, any>,
+  col: TableTypes.Column
+): string => {
+  if (col.key) {
+    return item[col.key]
+  }
+
+  if (col.presenter) {
+    return col.presenter(
+      item,
+      internalInstance?.appContext ? internalInstance.appContext.app : null
+    )
+  }
+
+  return ""
+}
+</script>
 <template>
   <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -19,7 +48,7 @@
             <tbody class="bg-white divide-y divide-gray-200">
               <tr
                 v-for="(item, rowIdx) in tableData.items"
-                :key="item.id ? item.id : rowIdx"
+                :key="item.id ? (item.id as string) : rowIdx"
               >
                 <td
                   class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
@@ -52,25 +81,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator"
-import TableTypes from "../../types/table"
-
-@Options({ name: "StaticTable" })
-export default class StaticTable extends Vue {
-  @Prop({ type: Object, required: true }) tableData!: TableTypes.Static
-
-  cellValue(item: Record<string, any>, col: TableTypes.Column): string {
-    if (col.key) {
-      return item[col.key]
-    }
-
-    if (col.presenter) {
-      return col.presenter(item, this)
-    }
-
-    return ""
-  }
-}
-</script>

@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue"
+
+withDefaults(
+  defineProps<{
+    modelValue: boolean
+    title?: string
+  }>(),
+  {
+    title: "",
+  }
+)
+
+const emit = defineEmits<{
+  (e: "update:modelValue", val: boolean): void
+}>()
+
+const updateModelValue = (value: boolean) => {
+  emit("update:modelValue", value)
+}
+</script>
 <template>
   <TransitionRoot as="template" :show="modelValue">
     <Dialog
@@ -66,34 +93,3 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator"
-import {
-  Dialog,
-  DialogOverlay,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue"
-
-@Options({
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-  },
-  name: "ContentModal",
-})
-export default class ContentModal extends Vue {
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean
-  @Prop({ type: String, required: false }) title?: string
-
-  @Emit("update:modelValue")
-  updateModelValue(value: boolean): boolean {
-    return value
-  }
-}
-</script>

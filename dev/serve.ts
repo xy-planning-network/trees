@@ -15,5 +15,4 @@ app.use(Trees)
 app.component("ClickToCopy", ClickToCopy)
 app.component("ComponentLayout", ComponentLayout)
 app.component("PropsTable", PropsTable)
-
 app.mount("#app")

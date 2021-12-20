@@ -101,7 +101,7 @@ const tabsProps = [
             <ClickToCopy :value="tabsCopy" />
           </label>
           <div class="mt-1">
-            <Tabs v-model="currentTab" :pill-design="false" :tabs="tabs" />
+            <Tabs v-model="currentTab" :pill-design="true" :tabs="tabs" />
             <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
               <span v-if="currentTab === 'tab1'" class="xy-badge-yellow">
                 Tab 1 Content

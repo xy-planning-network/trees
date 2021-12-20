@@ -16,6 +16,7 @@ const props = withDefaults(
     name: "",
   }
 )
+const emits = defineEmits(["update:modelValue"])
 const attrs = useAttrs()
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 const hasNameAttr = computed((): boolean => {
@@ -40,7 +41,7 @@ const hasNameAttr = computed((): boolean => {
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
+            emits('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
           },
         }"
       />
@@ -61,7 +62,7 @@ const hasNameAttr = computed((): boolean => {
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
+            emits('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
           },
         }"
       />
