@@ -5,28 +5,33 @@
   "license": "MIT",
   "repository": "github:xy-planning-network/trees",
   "files": [
-    "config",
-    "dist",
+    "config/*",
+    "dist/*",
     "trees.d.ts",
     "src/**/*.vue",
     "src/**/*.css"
   ],
-  "main": "./dist/trees.umd.js",
-  "module": "./dist/trees.es.js",
-  "style": "./dist/style.css",
-  "unpkg": "./dist/trees.umd.js",
+  "main": "dist/trees.umd.js",
+  "module": "dist/trees.es.js",
+  "style": "src/index.css",
+  "unpkg": "dist/trees.umd.js",
   "exports": {
     ".": {
       "import": "./dist/trees.es.js",
       "require": "./dist/trees.umd.js"
     }
   },
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build:docs": "vue-tsc --noEmit && vite build --config vite.docs.config.ts",
     "lint": "eslint --ext .js,.ts,.vue src",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue src dev && prettier -w -u src dev",
-    "preview": "vite preview"
+    "preview": "vite preview --config vite.docs.config.ts"
   },
   "devDependencies": {
     "@types/node": "^16.11.13",
