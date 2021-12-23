@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { getCurrentInstance } from "vue"
+import { ComponentPublicInstance, getCurrentInstance } from "vue"
 import TableTypes from "../../types/table"
 
 defineProps<{
   tableData: TableTypes.Static
 }>()
 
-// TODO: discuss this pattern.  Current usage can be replaced with modules.
-// https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
-const internalInstance = getCurrentInstance()
 const cellValue = (
   item: Record<string, any>,
   col: TableTypes.Column
@@ -18,9 +15,12 @@ const cellValue = (
   }
 
   if (col.presenter) {
+    // TODO: discuss this pattern.  Current usage can be replaced with modules.
+    // https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
+    const internalInstance = getCurrentInstance()
     return col.presenter(
       item,
-      internalInstance?.appContext ? internalInstance.appContext.app : null
+      internalInstance?.proxy as ComponentPublicInstance
     )
   }
 

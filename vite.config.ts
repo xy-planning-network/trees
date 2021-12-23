@@ -10,7 +10,7 @@ import deepmerge from "deepmerge"
 export default defineConfig(({ command }) => {
   const config = {
     /**
-     * Build specific configuration
+     * Build (npm run build) specific configuration
      */
     build: {
       build: {
@@ -22,6 +22,7 @@ export default defineConfig(({ command }) => {
         rollupOptions: {
           // make sure to externalize deps that shouldn't be bundled
           // into your library
+          // TODO: possibly externalize axios among other libs
           external: ["vue"],
           output: {
             exports: "named",
@@ -34,11 +35,12 @@ export default defineConfig(({ command }) => {
         },
       },
       define: {
+        // ensure that this stays a variable
         "process.env.VUE_APP_BASE_API_URL": "process.env.VUE_APP_BASE_API_URL",
       },
     },
     /**
-     * Serve (dev) specific configuration
+     * Serve (npm run dev) specific configuration
      */
     serve: {
       base: "/trees/",

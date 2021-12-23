@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { AxiosResponse } from "axios"
-import { computed, getCurrentInstance, ref, watch } from "vue"
+import {
+  ComponentPublicInstance,
+  computed,
+  getCurrentInstance,
+  ref,
+  watch,
+} from "vue"
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
@@ -38,10 +44,6 @@ const pagination = ref({
   totalPages: 0,
 })
 const query = ref("")
-
-// TODO: discuss this pattern.  Current usage can be replaced with modules.
-// https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
-const internalInstance = getCurrentInstance()
 const cellValue = (
   item: Record<string, any>,
   col: TableTypes.Column
@@ -52,9 +54,12 @@ const cellValue = (
   }
 
   if (col.presenter) {
+    // TODO: discuss this pattern.  Current usage can be replaced with modules.
+    // https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
+    const internalInstance = getCurrentInstance()
     return col.presenter(
       item,
-      internalInstance?.appContext ? internalInstance.appContext.app : null
+      internalInstance?.proxy as ComponentPublicInstance
     )
   }
 
