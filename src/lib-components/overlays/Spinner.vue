@@ -27,7 +27,6 @@ const fadeOut = (): void => {
 }
 
 onMounted(() => {
-  // TODO: spk test with spinMessages set
   window.VueBus.on("Spinner-show", (spinMessages) => {
     if (spinMessages) {
       messages.value = spinMessages
@@ -140,7 +139,9 @@ onMounted(() => {
           @after-enter="fadeOut"
           @after-leave="fadeIn"
         >
-          <div class="transition-opacity" v-show="showMsg">{{ msg }}</div>
+          <div class="text-center transition-opacity" v-show="showMsg">
+            {{ msg }}
+          </div>
         </transition>
       </div>
     </div>

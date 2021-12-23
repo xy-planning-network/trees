@@ -33,10 +33,14 @@ const flash = function (): void {
   window.VueBus.emit("Flash-show-generic-error", "support@trees.com")
 }
 const spinner = function (): void {
-  window.VueBus.emit("Spinner-show")
+  window.VueBus.emit("Spinner-show", [
+    "Look!",
+    "I can also display messages.",
+    "In case you need them.",
+  ])
   window.setTimeout(() => {
     window.VueBus.emit("Spinner-hide")
-  }, 3000)
+  }, 15000)
 }
 </script>
 

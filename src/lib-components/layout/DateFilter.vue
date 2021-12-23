@@ -13,8 +13,10 @@ const props = defineProps<{
 }>()
 const dateRange = ref<DateRange>(props.dateRange)
 
-// TODO: type these emit responses
-const emits = defineEmits(["sort-dir-changed", "date-range-changed"])
+const emits = defineEmits<{
+  (e: "sort-dir-changed", val: string): void
+  (e: "date-range-changed", val: DateRange): void
+}>()
 
 const sortDirChanged = (sortDir: string) => {
   emits("sort-dir-changed", sortDir)

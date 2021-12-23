@@ -29,19 +29,6 @@ const changePage = (page: number): void => {
   updateModelValue()
 }
 
-// TODO: determine intent with the unused methods and computed props
-const changePerPage = (parent: HTMLElement, perPage: number): void => {
-  parent.blur()
-  pagination.value.page = 1
-  pagination.value.perPage = perPage
-  updateModelValue()
-}
-
-const endingItem = computed((): number => {
-  const end = pagination.value.page * pagination.value.perPage
-  return end > pagination.value.totalItems ? pagination.value.totalItems : end
-})
-
 const pageShortcuts = computed((): number[] => {
   const shortcuts: number[] = []
 
@@ -69,14 +56,6 @@ const pageShortcuts = computed((): number[] => {
     shortcuts.unshift(pagination.value.totalPages - i)
   }
   return shortcuts
-})
-
-const startingItem = computed((): number => {
-  const start =
-    pagination.value.page * pagination.value.perPage -
-    pagination.value.perPage +
-    1
-  return pagination.value.totalItems === 0 ? 0 : start
 })
 </script>
 <template>

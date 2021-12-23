@@ -22,7 +22,6 @@ const emit = defineEmits<{
   (e: "update:modelValue", val: boolean): void
 }>()
 
-// TODO: spk: be certain this is the correct way to support these two events
 const close = () => {
   open.value = false
   emit("close", open.value)

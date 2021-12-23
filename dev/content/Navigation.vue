@@ -18,7 +18,12 @@ const menuItems = [
   { label: "Do this?", event: "Navigation.EmitThisEvent2" },
   { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
 ]
-const pagination = { page: 1, perPage: 10, totalItems: 100, totalPages: 10 }
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+  totalItems: 100,
+  totalPages: 10,
+})
 const paginatorCopy = `<Paginator v-model="pagination" />`
 const paginatorProps = [
   {
@@ -84,6 +89,9 @@ const tabsProps = [
             <ClickToCopy :value="paginatorCopy" />
           </label>
           <div class="mt-1">
+            <p class="text-center font-bold mt-2 mb-8">
+              Current Page: {{ pagination.page }}
+            </p>
             <Paginator v-model="pagination" />
             <PropsTable :props="paginatorProps" />
           </div>
