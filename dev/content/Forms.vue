@@ -69,7 +69,7 @@ const options = [
 const selected = ref<string | number>("")
 
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
-const yesOrNoRadioSelection = undefined
+const yesOrNoRadioSelection = ref(undefined)
 const yesOrNoRadioProps = [
   { name: "legend", required: false, type: "string" },
   { name: "name", required: false, type: "string" },

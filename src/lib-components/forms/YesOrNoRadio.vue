@@ -2,7 +2,6 @@
 import Uniques from "@/helpers/Uniques"
 import { computed, useAttrs } from "vue"
 import InputLabel from "./InputLabel.vue"
-// TODO: fix - model value binding isn't updating
 
 const props = withDefaults(
   defineProps<{
@@ -22,6 +21,9 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 const hasNameAttr = computed((): boolean => {
   return typeof props.name === "string" && props.name !== ""
 })
+const onChange = (e: Event) => {
+  emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
+}
 </script>
 <template>
   <fieldset>
@@ -40,12 +42,10 @@ const hasNameAttr = computed((): boolean => {
         :checked="modelValue === true"
         v-bind="{
           ...$attrs,
-          onChange: ($event) => {
-            emits('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
-          },
+          onChange: onChange,
         }"
       />
-      <span class="block ml-2 text-sm font-semibold text-gray-900">Yes</span>
+      <InputLabel class="ml-2" label="Yes" tag="span"></InputLabel>
     </label>
     <label
       class="inline-flex items-center ml-6"
@@ -61,12 +61,10 @@ const hasNameAttr = computed((): boolean => {
         :checked="modelValue === false"
         v-bind="{
           ...$attrs,
-          onChange: ($event) => {
-            emits('update:modelValue', ($event.target as HTMLInputElement).value === 'true')
-          },
+          onChange: onChange,
         }"
       />
-      <span class="block ml-2 text-sm font-semibold text-gray-900">No</span>
+      <InputLabel class="ml-2" label="No" tag="span"></InputLabel>
     </label>
   </fieldset>
 </template>
