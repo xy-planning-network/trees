@@ -14,6 +14,7 @@ export default defineConfig(({ command }) => {
      */
     build: {
       build: {
+        // TODO: determine if there is a need for an iife bundle
         lib: {
           entry: resolve(__dirname, "src/entry.ts"),
           name: "Trees",
