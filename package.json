@@ -8,19 +8,15 @@
     "config/*",
     "dist/*",
     "trees.d.ts",
+    "src/**/*.d.ts",
     "src/**/*.vue",
     "src/**/*.css"
   ],
-  "main": "dist/trees.umd.js",
+  "main": "dist/trees.es.js",
   "module": "dist/trees.es.js",
   "style": "src/index.css",
   "unpkg": "dist/trees.umd.js",
-  "exports": {
-    ".": {
-      "import": "./dist/trees.es.js",
-      "require": "./dist/trees.umd.js"
-    }
-  },
+  "types": "trees.d.ts",
   "sideEffects": [
     "*.css",
     "*.vue"
