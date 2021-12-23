@@ -3,6 +3,7 @@ node_modules
 /dist
 /trees
 dist-ssr
+xy-planning-network-trees-*.tgz
 
 # local env files
 .env.local
