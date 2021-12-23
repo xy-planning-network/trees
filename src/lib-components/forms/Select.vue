@@ -9,6 +9,7 @@ const props = withDefaults(
     design?: "undefined" | "standard" | "compressed"
     label?: string
     help?: string
+    placeholder?: string
     options: { label: string; value: string | number }[]
     modelValue: string | number | undefined
   }>(),
@@ -16,6 +17,7 @@ const props = withDefaults(
     design: "undefined",
     label: "",
     help: "",
+    placeholder: "Select an option",
   }
 )
 
@@ -51,8 +53,8 @@ const classes = computed((): string => {
       },
     }"
   >
-    <option v-if="$attrs.placeholder" value="" disabled selected>
-      {{ $attrs.placeholder }}
+    <option v-if="placeholder" value="" disabled selected>
+      {{ placeholder }}
     </option>
     <option
       v-for="option in options"
