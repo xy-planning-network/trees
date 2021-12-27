@@ -4,7 +4,10 @@ import axios, {
   AxiosResponse,
   AxiosRequestConfig,
 } from "axios"
-import API from "../types/api"
+
+export interface RequestOptions {
+  skipLoader?: boolean
+}
 
 const apiAxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
@@ -13,10 +16,7 @@ const apiAxiosInstance = axios.create({
 })
 
 const BaseAPI = {
-  makeRequest(
-    config: AxiosRequestConfig,
-    opts: API.RequestOptions
-  ): AxiosPromise {
+  makeRequest(config: AxiosRequestConfig, opts: RequestOptions): AxiosPromise {
     config.data = JSON.stringify(config.data)
     config.headers = { "Content-Type": "application/json" }
 
@@ -44,25 +44,25 @@ const BaseAPI = {
   },
   get(
     path: string,
-    opts: API.RequestOptions,
+    opts: RequestOptions,
     params?: Record<string, unknown>
   ): AxiosPromise {
     return this.makeRequest({ url: path, method: "GET", params }, opts)
   },
-  delete(path: string, opts: API.RequestOptions): AxiosPromise {
+  delete(path: string, opts: RequestOptions): AxiosPromise {
     return this.makeRequest({ url: path, method: "DELETE" }, opts)
   },
   post(
     path: string,
     data: Record<string, unknown>,
-    opts: API.RequestOptions
+    opts: RequestOptions
   ): AxiosPromise {
     return this.makeRequest({ url: path, data, method: "POST" }, opts)
   },
   put(
     path: string,
     data: Record<string, unknown>,
-    opts: API.RequestOptions
+    opts: RequestOptions
   ): AxiosPromise {
     return this.makeRequest({ url: path, data, method: "PUT" }, opts)
   },

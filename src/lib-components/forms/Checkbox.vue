@@ -7,12 +7,10 @@ import { useAttrs } from "vue"
 // TODO: aria-labelledby may be superfluous here since the input is wrapped in a label
 withDefaults(
   defineProps<{
-    emphasis?: boolean | null
     label?: string
     modelValue: boolean
   }>(),
   {
-    emphasis: false,
     label: "",
   }
 )

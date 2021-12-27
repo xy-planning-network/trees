@@ -13,7 +13,7 @@ import {
 } from "@headlessui/vue"
 import { MenuAlt2Icon, XIcon } from "@heroicons/vue/outline"
 import { CogIcon } from "@heroicons/vue/solid"
-import NavTypes from "../../types/nav"
+import * as NavTypes from "../../types/nav"
 import { ref } from "vue"
 
 const props = withDefaults(
@@ -28,7 +28,7 @@ const props = withDefaults(
   }
 )
 
-const sidebarOpen = ref(false)
+const sidebarOpen = ref<boolean>(true)
 
 const isActive = (url: string): boolean => {
   return props.activeURL === url

@@ -11,13 +11,13 @@ import {
   MenuItems,
 } from "@headlessui/vue"
 import { MenuIcon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
-import NavTypes from "../../types/nav"
-import UserTypes from "../../types/users"
+import * as NavTypes from "../../types/nav"
+import User from "../../types/users"
 
 const props = withDefaults(
   defineProps<{
     activeURL?: string
-    currentUser: UserTypes.User
+    currentUser: User
     iconURL: string
     navigation: NavTypes.Item[]
     userNavigation: NavTypes.Item[]

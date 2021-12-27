@@ -10,7 +10,7 @@ import {
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
-import TableTypes from "../../types/table"
+import * as TableTypes from "../../types/table"
 
 const props = withDefaults(
   defineProps<{

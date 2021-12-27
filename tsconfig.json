@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "target": "esnext",
-    // "declaration": true,
-    // "emitDeclarationOnly": true, // TODO: enable once we determine exact usage for types bundling
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
@@ -25,20 +25,19 @@
       "vue",
       "vite/client"
     ],
-    // "outDir": "./dist/types", // TODO: enable once we determine exact usage for types bundling
+    "typeRoots": [
+      "./src/types",
+    ],
+    "outDir": "dist/types"
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
-    "dev/**/*.ts",
-    "dev/**/*.d.ts",
-    "dev/**/*.tsx",
-    "dev/**/*.vue"
+    "src/**/*.vue"
   ],
   "exclude": [
     "dist/**/*",
     "node_modules"
-  ]
+  ],
 }

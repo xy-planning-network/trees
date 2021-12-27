@@ -1,10 +1,12 @@
-<script setup lang="ts">
-import { ref } from "vue"
-import DateRangePicker from "../forms/DateRangePicker.vue"
-interface DateRange {
+<script lang="ts">
+export interface DateRange {
   minDate: number
   maxDate: number
 }
+</script>
+<script setup lang="ts">
+import { ref } from "vue"
+import DateRangePicker from "../forms/DateRangePicker.vue"
 
 const props = defineProps<{
   dateRange: DateRange

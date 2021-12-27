@@ -6,15 +6,15 @@ import { computed, useAttrs } from "vue"
 
 const props = withDefaults(
   defineProps<{
-    design?: "undefined" | "standard" | "compressed"
+    design?: "standard" | "compressed"
     label?: string
     help?: string
     placeholder?: string
     options: { label: string; value: string | number }[]
-    modelValue: string | number | undefined
+    modelValue: string | number // TODO: spk 4.0-rc test usage of undefined initial model value here.
   }>(),
   {
-    design: "undefined",
+    design: "standard",
     label: "",
     help: "",
     placeholder: "Select an option",
@@ -28,8 +28,6 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 const classes = computed((): string => {
   return (
     {
-      undefined:
-        "mt-1 block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
       standard:
         "mt-1 block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
       compressed:

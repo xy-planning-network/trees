@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ComponentPublicInstance, getCurrentInstance } from "vue"
-import TableTypes from "../../types/table"
+import * as TableTypes from "../../types/table"
 
 defineProps<{
   tableData: TableTypes.Static

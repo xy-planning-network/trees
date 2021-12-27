@@ -1,5 +1,7 @@
 import { App, Plugin } from "vue"
 import BaseAPI from "@/api/base"
+import * as TableTypes from "@/types/table"
+import * as NavTypes from "@/types/nav"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -20,4 +22,4 @@ export default install
 // each can be registered via Vue.component()
 export * from "@/lib-components/index"
 
-export { BaseAPI }
+export { BaseAPI, NavTypes, TableTypes }

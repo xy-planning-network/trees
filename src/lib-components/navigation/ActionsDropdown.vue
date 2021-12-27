@@ -2,11 +2,11 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { DotsVerticalIcon } from "@heroicons/vue/solid"
 import { onMounted, ref } from "vue"
-import TableTypes from "../../types/table"
-import UserTypes from "../../types/users"
+import * as TableTypes from "../../types/table"
+import User from "../../types/users"
 
 const props = defineProps<{
-  currentUser: UserTypes.User
+  currentUser: User
   items: TableTypes.MenuItem[]
   propsData: any
 }>()

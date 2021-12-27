@@ -1,12 +1,13 @@
+<script lang="ts">
+export interface Flash {
+  type?: string
+  message: string
+}
+</script>
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 
 // TODO: spk this might benefit from the composition api to avoid race conditions where a flash is requested before the component is mounted.
-
-interface Flash {
-  type?: string
-  message: string
-}
 
 const flashes = ref<Flash[]>([])
 const flashTypeBorderClass = {
