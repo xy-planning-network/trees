@@ -11,7 +11,7 @@ const props = withDefaults(
     help?: string
     placeholder?: string
     options: { label: string; value: string | number }[]
-    modelValue: string | number // TODO: spk 4.0-rc test usage of undefined initial model value here.
+    modelValue: string | number | undefined
   }>(),
   {
     design: "standard",
