@@ -12,7 +12,7 @@ const checkboxProps = [
   { name: "label", required: false, type: "string" },
   { name: "modelValue", required: true, type: "boolean" },
 ]
-const dateRange = ref({ maxRange: 0, minRange: 0 })
+const dateRange = ref({ maxDate: 0, minDate: 0 })
 const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
 const dateRangePickerProps = [
   {
@@ -62,11 +62,11 @@ const selectProps = [
 const options = [
   { label: "You could select this", value: "val1" },
   { label: "This is an option", value: "val2" },
-  { label: "Feeling good about this one?", value: 3 },
-  { label: "This is the LAST option", value: 4 },
+  { label: "Feeling good about this one?", value: "val3" },
+  { label: "This is the LAST option", value: "val4" },
 ]
 
-const selected = ref<string | number>(null)
+const selected = ref<string>(null)
 
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
 const yesOrNoRadioSelection = ref(undefined)
