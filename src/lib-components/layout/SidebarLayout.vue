@@ -28,7 +28,7 @@ const props = withDefaults(
   }
 )
 
-const sidebarOpen = ref<boolean>(true)
+const sidebarOpen = ref<boolean>(false)
 
 const isActive = (url: string): boolean => {
   return props.activeURL === url
