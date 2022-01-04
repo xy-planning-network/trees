@@ -8,6 +8,8 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "lib": [
       "esnext",
       "dom"
@@ -26,16 +28,19 @@
     "typeRoots": [
       "./src/types",
     ],
-    "outDir": "dist/types"
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "dev/**/*.ts",
+    "dev/**/*.d.ts",
+    "dev/**/*.tsx",
+    "dev/**/*.vue"
   ],
   "exclude": [
-    "dist/**/*",
+    "dist",
     "node_modules"
   ],
 }

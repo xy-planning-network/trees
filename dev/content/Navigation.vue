@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import UserTypes from "../../src/types/users"
+import User from "../../src/types/users"
 
 defineProps<{
-  user: UserTypes.User
+  user: User
 }>()
 
 const actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`

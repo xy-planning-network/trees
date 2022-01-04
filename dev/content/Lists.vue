@@ -4,9 +4,9 @@ import {
   LocationMarkerIcon,
   UsersIcon,
 } from "@heroicons/vue/solid"
-import UserTypes from "../../src/types/users"
+import User from "../../src/types/users"
 
-const props = defineProps<{ user: UserTypes.User }>()
+const props = defineProps<{ user: User }>()
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },

@@ -66,7 +66,7 @@ const options = [
   { label: "This is the LAST option", value: "val4" },
 ]
 
-const selected = ref<string>(null)
+const selected = ref("")
 
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
 const yesOrNoRadioSelection = ref(undefined)

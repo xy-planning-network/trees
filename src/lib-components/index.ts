@@ -65,36 +65,42 @@ export {
 
 /**
  * declare global component types for App.use(Trees)
- */
+ * 
+ * apply to project with the following
+import { TreesComponents } from "@xy-planning-network/trees"
+
 declare module "@vue/runtime-core" {
-  interface GlobalComponents {
-    ActionsDropdown: typeof ActionsDropdown
-    Cards: typeof Cards
-    ContentModal: typeof ContentModal
-    DateFilter: typeof DateFilter
-    DetailList: typeof DetailList
-    DownloadCell: typeof DownloadCell
-    Flash: typeof Flash
-    Modal: typeof Modal
-    SidebarLayout: typeof SidebarLayout
-    Slideover: typeof Slideover
-    StackedLayout: typeof StackedLayout
-    Paginator: typeof Paginator
-    Spinner: typeof Spinner
-    StaticTable: typeof StaticTable
-    Steps: typeof Steps
-    Table: typeof Table
-    Tabs: typeof Tabs
-    Toggle: typeof Toggle
-    BaseInput: typeof BaseInput
-    Checkbox: typeof Checkbox
-    DateRangePicker: typeof DateRangePicker
-    InputHelp: typeof InputHelp
-    InputLabel: typeof InputLabel
-    MultiCheckboxes: typeof MultiCheckboxes
-    Radio: typeof Radio
-    Select: typeof Select
-    TextArea: typeof TextArea
-    YesOrNoRadio: typeof YesOrNoRadio
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface GlobalComponents extends TreesComponents {}
+}
+ */
+export interface TreesComponents {
+  ActionsDropdown: typeof ActionsDropdown
+  Cards: typeof Cards
+  ContentModal: typeof ContentModal
+  DateFilter: typeof DateFilter
+  DetailList: typeof DetailList
+  DownloadCell: typeof DownloadCell
+  Flash: typeof Flash
+  Modal: typeof Modal
+  SidebarLayout: typeof SidebarLayout
+  Slideover: typeof Slideover
+  StackedLayout: typeof StackedLayout
+  Paginator: typeof Paginator
+  Spinner: typeof Spinner
+  StaticTable: typeof StaticTable
+  Steps: typeof Steps
+  Table: typeof Table
+  Tabs: typeof Tabs
+  Toggle: typeof Toggle
+  BaseInput: typeof BaseInput
+  Checkbox: typeof Checkbox
+  DateRangePicker: typeof DateRangePicker
+  InputHelp: typeof InputHelp
+  InputLabel: typeof InputLabel
+  MultiCheckboxes: typeof MultiCheckboxes
+  Radio: typeof Radio
+  Select: typeof Select
+  TextArea: typeof TextArea
+  YesOrNoRadio: typeof YesOrNoRadio
 }
