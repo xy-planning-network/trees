@@ -1,10 +1,5 @@
-<script lang="ts">
-export interface DateRange {
-  minDate: number
-  maxDate: number
-}
-</script>
 <script setup lang="ts">
+import { DateRange } from "@/composables/date"
 import { ref } from "vue"
 import DateRangePicker from "../forms/DateRangePicker.vue"
 

@@ -1,5 +1,5 @@
 import { ComponentPublicInstance, DefineComponent } from "vue"
-import User from "./users"
+import User from "@/composables/user"
 
 export interface Column {
   display: string

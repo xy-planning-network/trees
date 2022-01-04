@@ -1,6 +1,6 @@
 {
   "name": "@xy-planning-network/trees",
-  "version": "0.4.0-rc-7",
+  "version": "0.4.0-rc-8",
   "description": "",
   "license": "MIT",
   "repository": "github:xy-planning-network/trees",
@@ -16,17 +16,17 @@
   "unpkg": "dist/trees.umd.js",
   "types": "types/entry.d.ts",
   "sideEffects": [
-    "*.css",
-    "*.vue"
+    "*.css"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc -p src && npm run copy:types && tsc-alias -p src/tsconfig.json",
+    "build": "vite build && vue-tsc -p src --emitDeclarationOnly && npm run copy:types && tsc-alias -p src/tsconfig.json",
     "build:docs": "vue-tsc -p dev --noEmit && vite build --config vite.docs.config.ts",
-    "copy:types": "copyfiles -f ./src/types/**/*.d.ts ./types",
+    "copy:types": "copyfiles -f ./src/*.d.ts ./types",
     "lint": "eslint --ext .js,.ts,.vue src",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue src dev && prettier -w -u src dev",
-    "preview": "vite preview --config vite.docs.config.ts"
+    "preview": "vite preview --config vite.docs.config.ts",
+    "typecheck": "vue-tsc -p src --noEmit"
   },
   "devDependencies": {
     "@types/node": "^16.11.13",

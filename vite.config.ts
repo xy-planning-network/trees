@@ -1,5 +1,5 @@
 import { resolve } from "path"
-import { defineConfig } from "vite"
+import { defineConfig, UserConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import Environment from "vite-plugin-environment"
 import deepmerge from "deepmerge"
@@ -39,7 +39,7 @@ export default defineConfig(({ command }) => {
         // ensure that this stays a variable
         "process.env.VUE_APP_BASE_API_URL": "process.env.VUE_APP_BASE_API_URL",
       },
-    },
+    } as UserConfig,
     /**
      * Serve (npm run dev) specific configuration
      */
@@ -50,7 +50,7 @@ export default defineConfig(({ command }) => {
           VUE_APP_BASE_API_URL: "",
         }),
       ],
-    },
+    } as UserConfig,
   }
 
   return deepmerge(

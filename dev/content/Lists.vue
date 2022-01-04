@@ -4,7 +4,7 @@ import {
   LocationMarkerIcon,
   UsersIcon,
 } from "@heroicons/vue/solid"
-import User from "../../src/types/users"
+import User from "@/composables/user"
 
 const props = defineProps<{ user: User }>()
 

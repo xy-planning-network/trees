@@ -25,9 +25,6 @@
       "vue",
       "vite/client"
     ],
-    "typeRoots": [
-      "./src/types",
-    ],
   },
   "include": [
     "src/**/*.ts",
@@ -41,6 +38,7 @@
   ],
   "exclude": [
     "dist",
+    "types",
     "node_modules"
   ],
 }

@@ -1,13 +1,5 @@
-<script lang="ts">
-// TODO: explore this further as a pattern for exporting commonly used types
-export interface Pagination {
-  page: number
-  perPage: number
-  totalItems: number
-  totalPages: number
-}
-</script>
 <script setup lang="ts">
+import { Pagination } from "@/composables/nav"
 import { computed, ref } from "vue"
 
 const props = defineProps<{

@@ -11,8 +11,8 @@ import {
   MenuItems,
 } from "@headlessui/vue"
 import { MenuIcon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
-import * as NavTypes from "../../types/nav"
-import User from "../../types/users"
+import * as NavTypes from "@/composables/nav"
+import User from "@/composables/user"
 
 const props = withDefaults(
   defineProps<{

@@ -1,10 +1,5 @@
-<script lang="ts">
-export interface Flash {
-  type?: string
-  message: string
-}
-</script>
 <script setup lang="ts">
+import { Flash } from "@/composables/overlay"
 import { onMounted, ref } from "vue"
 
 // TODO: spk this might benefit from the composition api to avoid race conditions where a flash is requested before the component is mounted.

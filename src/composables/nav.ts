@@ -6,3 +6,10 @@ export interface Item {
   openInTab?: boolean
   url: string
 }
+
+export interface Pagination {
+  page: number
+  perPage: number
+  totalItems: number
+  totalPages: number
+}

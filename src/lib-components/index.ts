@@ -65,14 +65,6 @@ export {
 
 /**
  * declare global component types for App.use(Trees)
- * 
- * apply to project with the following
-import { TreesComponents } from "@xy-planning-network/trees"
-
-declare module "@vue/runtime-core" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface GlobalComponents extends TreesComponents {}
-}
  */
 export interface TreesComponents {
   ActionsDropdown: typeof ActionsDropdown

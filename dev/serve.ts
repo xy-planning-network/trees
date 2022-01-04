@@ -1,3 +1,7 @@
+// include the type interfaces for Window and GlobalComponents
+/// <reference types="../src/global" />
+/// <reference types="../src/components" />
+
 import { createApp } from "vue"
 import Serve from "./serve.vue"
 // To register individual components where they are used (serve.vue) instead of using the

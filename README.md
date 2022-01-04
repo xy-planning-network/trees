@@ -59,44 +59,34 @@ npm i @xy-planning-network/trees mitt
 
 This example installs all components of Trees, which may not be necessary for all projects. Assumes you have a vue 3 project with tailwind created.
 
-**Establish global types for VueBus and Flashes in global.d.ts**
-
-```ts
-// global.d.ts
-
-import { Emitter } from "mitt";
-
-declare global {
-  interface Window {
-    Flashes: Array<{ message: string }>;
-    VueBus: Emitter;
-  }
-}
-```
-
 **Initialize trees components in main.ts**
 
 ```ts
 // main.ts
-import Vue, { createApp } from "vue";
-import Mitt from "mitt";
-import Trees from "@xy-planning-network/trees";
-import HelloWorld from "@/components/HelloWorld.vue";
+
+// include the type interfaces for Window and GlobalComponents
+/// <reference types="@xy-planning-network/trees/types/global" />
+/// <reference types="@xy-planning-network/trees/types/components" />
+
+import Vue, { createApp } from "vue"
+import Mitt from "mitt"
+import Trees from "@xy-planning-network/trees"
+import HelloWorld from "@/components/HelloWorld.vue"
 
 // import your project's main stylesheet
-import "@/main.css";
+import "@/main.css"
 
 // initialize the app
-const app = createApp(HelloWorld);
+const app = createApp(HelloWorld)
 
 // initialize mitt on VueBus
-window.VueBus = mitt();
+window.VueBus = mitt()
 
 // use all of Trees as a vue plugin
-app.use(Trees);
+app.use(Trees)
 
 // mount the application
-app.mount("#vue-app");
+app.mount("#vue-app")
 ```
 
 **Initialize styles in main.css**
@@ -129,10 +119,10 @@ Note you may need a deep merge utility depending on the depth of properties you 
 
 ```js
 /* eslint-disable */
-const treesConfig = require("@xy-planning-network/trees/config/tailwind.config");
+const treesConfig = require("@xy-planning-network/trees/config/tailwind.config")
 module.exports = {
   ...treesConfig,
   mode: "jit", // Optional
   purge: [...treesConfig.purge, ...["./src/**/*.vue"]],
-};
+}
 ```
