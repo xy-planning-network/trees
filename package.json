@@ -7,13 +7,14 @@
   "files": [
     "config/*",
     "dist/*",
-    "src/**/*.css"
+    "src/**/*.css",
+    "types/*"
   ],
   "main": "dist/trees.es.js",
   "module": "dist/trees.es.js",
   "style": "src/index.css",
   "unpkg": "dist/trees.umd.js",
-  "types": "dist/entry.d.ts",
+  "types": "types/entry.d.ts",
   "sideEffects": [
     "*.css",
     "*.vue"
@@ -22,7 +23,7 @@
     "dev": "vite",
     "build": "vite build && vue-tsc -p src && npm run copy:types && tsc-alias -p src/tsconfig.json",
     "build:docs": "vue-tsc -p dev --noEmit && vite build --config vite.docs.config.ts",
-    "copy:types": "copyfiles -f ./src/types/**/*.d.ts ./dist/types",
+    "copy:types": "copyfiles -f ./src/types/**/*.d.ts ./types",
     "lint": "eslint --ext .js,.ts,.vue src",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue src dev && prettier -w -u src dev",
     "preview": "vite preview --config vite.docs.config.ts"
