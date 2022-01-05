@@ -1,4 +1,4 @@
-import { ComponentPublicInstance, DefineComponent } from "vue"
+import { Component, ComponentPublicInstance } from "vue"
 import User from "@/composables/user"
 
 export interface Column {
@@ -6,7 +6,7 @@ export interface Column {
   class?: string
   key?: string
   presenter?(row: any, instance: ComponentPublicInstance): any
-  component?: DefineComponent<unknown, unknown, any>
+  component?: Component
   items?: Array<MenuItem>
   sort?: string
 }
