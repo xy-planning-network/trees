@@ -37,57 +37,37 @@ Trees is our attempt at unifying the frontend code we've written to power a smal
 - [ ] Make sure components have names in devtools
 - [ ] Look into forcing tables to dropdown when actions open up in hidden area
 - [ ] Fix select placeholder only showing up in dropdown
-- [ ] DateFilter input heights is not consistent. Make select match datepicker.
+- [x] DateFilter input heights is not consistent. Make select match datepicker.
 
 ## Roadmap
 
-- [ ] move to vite for building the dev site, library, and possible storybook
+- [x] move to vite for building the dev site, library, and possible storybook
+- [x] refactor componentes away from class decorators to setup sugar
 - [ ] consider implementing storybook using vite as the bundler
-- [ ] refactor componentes away from class decorators to setup sugar
 
-## Usage
+## Install
 
-### Installation
-
-Install trees and mitt
+Install trees and mitt into an existing Vue project - assumes npm version >= 7
 
 ```sh
 npm i @xy-planning-network/trees mitt
 ```
 
-### Enable as a Vue plugin
+Additional peer dependecies will be installed by NPM. If you are using NPM < 7 you may need to explicitly install peer dependencies.
 
-This example installs all components of Trees, which may not be necessary for all projects. Assumes you have a vue 3 project with tailwind created.
+## Setup
 
-**Initialize trees components in main.ts**
+### Fonts
 
-```ts
-// main.ts
+**Include Inter Var in html template**
 
-// include the type interfaces for Window and GlobalComponents
-/// <reference types="@xy-planning-network/trees/types/global" />
-/// <reference types="@xy-planning-network/trees/types/components" />
-
-import Vue, { createApp } from "vue"
-import Mitt from "mitt"
-import Trees from "@xy-planning-network/trees"
-import HelloWorld from "@/components/HelloWorld.vue"
-
-// import your project's main stylesheet
-import "@/main.css"
-
-// initialize the app
-const app = createApp(HelloWorld)
-
-// initialize mitt on VueBus
-window.VueBus = mitt()
-
-// use all of Trees as a vue plugin
-app.use(Trees)
-
-// mount the application
-app.mount("#vue-app")
+```html
+<head>
+  <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
+</head>
 ```
+
+### Styles
 
 **Initialize styles in main.css**
 
@@ -105,14 +85,6 @@ app.mount("#vue-app")
 }
 ```
 
-**Include Inter Var in html template**
-
-```html
-<head>
-  <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
-</head>
-```
-
 **Merge with the trees tailwind.cofig.js**
 
 Note you may need a deep merge utility depending on the depth of properties you plan to override.
@@ -125,4 +97,225 @@ module.exports = {
   mode: "jit", // Optional
   purge: [...treesConfig.purge, ...["./src/**/*.vue"]],
 }
+```
+
+### JavaScript - Only What You Need
+
+This is the best option when tree shaking and final bundle size is important to you.
+
+**Initialize trees dependencies in your application root**
+
+```ts
+// main.ts
+
+// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
+/// <reference types="@xy-planning-network/trees/types/global" />
+
+import Vue, { createApp } from "vue"
+import Mitt from "mitt"
+import App from "./App.vue"
+
+// import your project's main stylesheet
+import "@/main.css"
+
+// initialize mitt on VueBus for Flashes
+window.VueBus = Mitt()
+
+// initialize the app
+const app = createApp(App)
+app.mount("#vue-app")
+```
+
+**Use Trees components as needed in your components**
+
+```ts
+<script setup lang="ts">
+  import { ref } from "vue"
+  import { BaseInput} from "@xy-planning-network/trees"
+
+  const myInputVal = ref("")
+</script>
+<template>
+  <form>
+    <BaseInput
+      v-model="myInputVal"
+      type="text"
+      label="What's on your mind"
+      help="Don't over think it!"
+    />
+  </form>
+</template>
+```
+
+### JavaScript - Give Me The Kitchen Sink
+
+This example installs all components of Trees globally so you don't need to import them in your components. Useful for hitting the ground running with as little friction as possible. Bundles size will suffer as tree shaking optimizations will be limited.
+
+**Install all Trees components as a Vue plugin in your project root**
+
+```ts
+// main.ts
+
+// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
+/// <reference types="@xy-planning-network/trees/types/global" />
+// include the type interfaces for Trees components installed globally on the Vue instance
+/// <reference types="@xy-planning-network/trees/types/components" />
+
+import Vue, { createApp } from "vue"
+import Mitt from "mitt"
+import Trees from "@xy-planning-network/trees"
+import App from "./App.vue"
+
+// import your project's main stylesheet
+import "@/main.css"
+
+// initialize mitt on VueBus for flashes support
+window.VueBus = Mitt()
+
+// initialize the app
+const app = createApp(App)
+
+// use all of Trees as a vue plugin
+app.use(Trees)
+
+// mount the application
+app.mount("#vue-app")
+```
+
+**Use Trees components as globally in your components**
+
+```ts
+<script setup lang="ts">
+  import { ref } from "vue"
+  const myInputVal = ref("")
+</script>
+<template>
+  <form>
+    <!-- BaseInput is globally available -->
+    <BaseInput
+      v-model="myInputVal"
+      type="text"
+      label="What's on your mind"
+      help="Don't over think it!"
+    />
+  </form>
+</template>
+```
+
+### JavaScript - Cherry Pick Components As A Plugin
+
+This example selectively installs the Form components of Trees globally so you don't need to import them in your components. All other Trees components need to be explicitly imported.
+
+**Create a project based plugin for just the Trees form components**
+
+```ts
+// plugins/trees.ts
+// plugins/trees.ts
+import { App } from "vue"
+import {
+  BaseInput,
+  Checkbox,
+  DateRangePicker,
+  InputHelp,
+  InputLabel,
+  MultiCheckboxes,
+  Radio,
+  Select,
+  TextArea,
+  YesOrNoRadio,
+} from "@xy-planning-network/trees"
+
+/**
+ * declare the global component types
+ * should provide code completiong support in your editor - milage may vary
+ * provides proper type checking on the components declared props
+ */
+declare module "@vue/runtime-core" {
+  interface GlobalComponents {
+    BaseInput: typeof BaseInput
+    Checkbox: typeof Checkbox
+    DateRangePicker: typeof DateRangePicker
+    InputHelp: typeof InputHelp
+    InputLabel: typeof InputLabel
+    MultiCheckboxes: typeof MultiCheckboxes
+    Radio: typeof Radio
+    Select: typeof Select
+    TextArea: typeof TextArea
+    YesOrNoRadio: typeof YesOrNoRadio
+  }
+}
+
+/**
+ * export a plugin object with an install method
+ */
+export default {
+  install(app: App) {
+    app.component("BaseInput", BaseInput)
+    app.component("Checkbox", Checkbox)
+    app.component("DateRangePicker", DateRangePicker)
+    app.component("InputHelp", InputHelp)
+    app.component("InputLabel", InputLabel)
+    app.component("MultiCheckboxes", MultiCheckboxes)
+    app.component("Radio", Radio)
+    app.component("Select", Select)
+    app.component("TextArea", TextArea)
+    app.component("YesOrNoRadio", YesOrNoRadio)
+  },
+}
+```
+
+```ts
+// main.ts
+
+// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
+/// <reference types="@xy-planning-network/trees/types/global" />
+
+import Vue, { createApp } from "vue"
+import Mitt from "mitt"
+import App from "./App.vue"
+import TreesFormComponents from "./plugins/trees"
+
+// import your project's main stylesheet
+import "@/main.css"
+
+// initialize mitt on VueBus for flashes support
+window.VueBus = Mitt()
+
+// initialize the app
+const app = createApp(App)
+
+// use cherry picked Form components of Trees globally
+app.use(TreesFormComponents)
+
+// mount the application
+app.mount("#vue-app")
+```
+
+**Use Trees components as globally in your components**
+
+```ts
+<script setup lang="ts">
+  import { ref } from "vue"
+  import { Cards } from "@xy-planning-network/trees"
+  const myInputVal = ref("")
+  const cardsList = [
+    { primary: "Get Some", secondary: "You are gonna do well." },
+    { primary: "Try It", secondary: "I'm proud of how far you've come." },
+    { primary: "Nice Info", secondary: "Never stop trying." },
+  ]
+
+</script>
+<template>
+  <!--Cards needed to be imported -->
+  <Cards :cards="cardsList" />
+  <form>
+    <!-- BaseInput is globally available -->
+    <BaseInput
+      v-model="myInputVal"
+      type="text"
+      label="What's on your mind"
+      help="Don't over think it!"
+    />
+  </form>
+</template>
 ```

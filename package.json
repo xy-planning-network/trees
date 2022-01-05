@@ -8,6 +8,7 @@
     "config/*",
     "dist/*",
     "src/**/*.css",
+    "src/**/*.vue",
     "types/*"
   ],
   "main": "dist/trees.es.js",
@@ -16,7 +17,8 @@
   "unpkg": "dist/trees.umd.js",
   "types": "types/entry.d.ts",
   "sideEffects": [
-    "*.css"
+    "*.css",
+    "*.vue"
   ],
   "scripts": {
     "dev": "vite",
