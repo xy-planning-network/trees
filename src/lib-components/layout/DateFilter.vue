@@ -2,6 +2,7 @@
 import { DateRange } from "@/composables/date"
 import { ref } from "vue"
 import DateRangePicker from "../forms/DateRangePicker.vue"
+import Select from "@/lib-components/forms/Select.vue"
 
 const props = defineProps<{
   dateRange: DateRange
@@ -9,6 +10,11 @@ const props = defineProps<{
   title: string
 }>()
 const dateRange = ref<DateRange>(props.dateRange)
+const sortDir = ref<string>(props.sortDir)
+const sortOptions = [
+  { label: "Newest-Oldest", value: "DESC" },
+  { label: "Oldest-Newest", value: "ASC" },
+]
 
 const emits = defineEmits<{
   (e: "sort-dir-changed", val: string): void
@@ -33,17 +39,14 @@ const dateRangeChanged = (dateRange: DateRange) => {
       </h1>
     </div>
     <div class="mt-4 flex md:mt-0 md:ml-4">
-      <select
-        @change="sortDirChanged(($event.target as HTMLInputElement).value)"
-        class="block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-      >
-        <option value="DESC">Newest-Oldest</option>
-        <option value="ASC">Oldest-Newest</option>
-      </select>
-
+      <Select
+        v-model="sortDir"
+        :options="sortOptions"
+        @update:modelValue="sortDirChanged"
+      ></Select>
       <DateRangePicker
-        :modelValue="dateRange"
-        @update:modelValue="dateRangeChanged($event)"
+        v-model="dateRange"
+        @update:modelValue="dateRangeChanged"
         class="ml-3"
       />
     </div>
