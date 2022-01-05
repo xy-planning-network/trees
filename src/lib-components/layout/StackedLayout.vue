@@ -132,6 +132,7 @@ const isActive = (url: string): boolean => {
             <div class="ml-3">
               <div
                 class="text-base font-medium text-gray-800"
+                v-if="currentUser.name"
                 v-text="currentUser.name"
               ></div>
               <div
