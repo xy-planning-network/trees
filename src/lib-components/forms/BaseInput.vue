@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import Uniques from "@/helpers/Uniques"
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import { computed, useAttrs } from "vue"
+
+const attrs = useAttrs()
+const props = withDefaults(
+  defineProps<{
+    type: string
+    help?: string
+    label?: string
+    modelValue?: string | number
+  }>(),
+  {
+    help: "",
+    label: "",
+    modelValue: "",
+  }
+)
+
+const emit = defineEmits(["update:modelValue"])
+
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+
+/**
+ * common text based inputs
+ */
+const textInputTypes = [
+  "date",
+  "datetime-local",
+  "email",
+  "month",
+  "number",
+  "password",
+  "search",
+  "tel",
+  "text",
+  "time",
+  "url",
+  "week",
+]
+
+/**
+ * determine if this input is a common text based input
+ */
+const isTextType = computed((): boolean => {
+  return typeof props.type === "string" && textInputTypes.includes(props.type)
+})
+</script>
 <template>
   <InputLabel
     class="block"
@@ -26,52 +76,8 @@
     :placeholder="label"
     :type="type"
     :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     v-bind="$attrs"
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-import InputHelp from "./InputHelp.vue";
-
-@Options({ name: "BaseInput", components: { InputLabel, InputHelp } })
-export default class BaseInput extends Vue {
-  @Prop({ type: String, required: true }) type?: string;
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false }) help?: string;
-  @Prop({ type: [String, Number], required: false }) modelValue?: string;
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
-
-  /**
-   * common text based inputs
-   */
-  textInputTypes = [
-    "date",
-    "datetime-local",
-    "email",
-    "month",
-    "number",
-    "password",
-    "search",
-    "tel",
-    "text",
-    "time",
-    "url",
-    "week",
-  ];
-
-  /**
-   * determine if this input is a common text based input
-   */
-  get isTextType(): boolean {
-    return (
-      typeof this.type === "string" && this.textInputTypes.includes(this.type)
-    );
-  }
-}
-</script>

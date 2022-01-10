@@ -1,7 +1,37 @@
+<script setup lang="ts">
+import Uniques from "@/helpers/Uniques"
+import { useAttrs } from "vue"
+import InputLabel from "./InputLabel.vue"
+
+// TODO: add horizontal layout support
+const props = withDefaults(
+  defineProps<{
+    options: {
+      label: string
+      value: string
+    }[]
+    legend?: string
+    modelValue?: string
+    vertical?: boolean
+  }>(),
+  {
+    legend: "",
+    modelValue: "",
+    vertical: true,
+  }
+)
+const emits = defineEmits(["update:modelValue"])
+const attrs = useAttrs()
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+</script>
 <template>
   <fieldset class="mt-1 space-y-2">
     <InputLabel class="block" :label="legend" tag="legend"></InputLabel>
-    <div v-for="(option, index) in options" :key="option.value">
+    <component
+      v-for="(option, index) in options"
+      :key="option.value"
+      :is="props.vertical ? 'div' : 'span'"
+    >
       <label
         class="inline-flex items-center"
         :class="{ 'cursor-not-allowed': $attrs.disabled }"
@@ -17,32 +47,12 @@
           v-bind="{
             ...$attrs,
             onChange: ($event) => {
-              $emit('update:modelValue', $event.target.value);
+              emits('update:modelValue', ($event.target as HTMLInputElement).value)
             },
           }"
         />
-        <span class="block ml-2 text-sm font-semibold text-gray-900">
-          {{ option.label }}
-        </span>
+        <InputLabel class="ml-2" :label="option.label" tag="span"></InputLabel>
       </label>
-    </div>
+    </component>
   </fieldset>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-
-@Options({ name: "Radio", components: { InputLabel } })
-export default class Radio extends Vue {
-  @Prop({ type: Array, required: true }) options!: Array<{
-    label: string;
-    value: string;
-  }>;
-  @Prop({ type: String, required: false }) legend?: string;
-  @Prop({ type: String, required: false }) modelValue?: string;
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
-}
-</script>

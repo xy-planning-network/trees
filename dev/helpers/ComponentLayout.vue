@@ -1,3 +1,16 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    showBadge?: boolean
+    cssComponent?: boolean
+    title: string
+  }>(),
+  {
+    showBadge: true,
+    cssComponent: false,
+  }
+)
+</script>
 <template>
   <div
     class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200"
@@ -28,28 +41,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { ClipboardCopyIcon } from "@heroicons/vue/outline";
-
-@Options({ components: { ClipboardCopyIcon }, name: "ComponentLayout" })
-export default class ComponentLayout extends Vue {
-  @Prop({ type: Boolean, required: false, default: true }) showBadge?: boolean;
-  @Prop({ type: Boolean, required: false }) cssComponent?: boolean;
-  @Prop({ type: String, required: true }) title!: string;
-
-  copied = false;
-
-  copy(): void {
-    const input = this.$refs.input as HTMLInputElement;
-    input.select();
-    input.setSelectionRange(0, 99999); /* For mobile devices */
-    document.execCommand("copy");
-    this.copied = true;
-    window.setTimeout(() => {
-      this.copied = false;
-    }, 1500);
-  }
-}
-</script>

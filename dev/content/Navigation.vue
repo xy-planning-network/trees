@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import { ref } from "vue"
+import User from "@/composables/user"
+
+defineProps<{
+  user: User
+}>()
+
+const actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`
+const actionsDropdownProps = [
+  { name: "currentUser", required: true, type: "User" },
+  { name: "items", required: true, type: "Array<TableTypes.MenuItem>" },
+  { name: "propsData", required: true, type: "any" },
+]
+const currentTab = ref("tab1")
+const menuItems = [
+  { label: "This is an action", event: "Navigation.EmitThisEvent1" },
+  { label: "Do this?", event: "Navigation.EmitThisEvent2" },
+  { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
+]
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+  totalItems: 100,
+  totalPages: 10,
+})
+const paginatorCopy = `<Paginator v-model="pagination" />`
+const paginatorProps = [
+  {
+    name: "modelValue",
+    required: true,
+    type: "{ page: number; perPage: number; totalItems: number; totalPages: number; }",
+  },
+]
+const tabs = [
+  { label: "Tab 1", value: "tab1" },
+  { label: "Tab 2", value: "tab2" },
+]
+const tabsCopy = `<Tabs :tabs="tabs" :pill-design="false" v-model="currentTab" />`
+const tabsProps = [
+  {
+    name: "tabs",
+    required: true,
+    type: "Array<{ label: string; value: string; }>",
+  },
+  {
+    name: "pill-design",
+    required: false,
+    type: "boolean",
+  },
+  { name: "modelValue", required: true, type: "string" },
+]
+</script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
@@ -36,6 +89,9 @@
             <ClickToCopy :value="paginatorCopy" />
           </label>
           <div class="mt-1">
+            <p class="text-center font-bold mt-2 mb-8">
+              Current Page: {{ pagination.page }}
+            </p>
             <Paginator v-model="pagination" />
             <PropsTable :props="paginatorProps" />
           </div>
@@ -53,7 +109,7 @@
             <ClickToCopy :value="tabsCopy" />
           </label>
           <div class="mt-1">
-            <Tabs :tabs="tabs" v-model="currentTab" />
+            <Tabs v-model="currentTab" :pill-design="true" :tabs="tabs" />
             <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
               <span v-if="currentTab === 'tab1'" class="xy-badge-yellow">
                 Tab 1 Content
@@ -67,49 +123,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import UserTypes from "../../src/types/users";
-
-@Options({ name: "Navigation" })
-export default class Navigation extends Vue {
-  @Prop({ type: Object, required: true }) user!: UserTypes.User;
-
-  actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`;
-  actionsDropdownProps = [
-    { name: "currentUser", required: true, type: "UserTypes.User" },
-    { name: "items", required: true, type: "Array<TableTypes.MenuItem>" },
-    { name: "propsData", required: true, type: "any" },
-  ];
-  currentTab = "tab1";
-  menuItems = [
-    { label: "This is an action", event: "Navigation.EmitThisEvent1" },
-    { label: "Do this?", event: "Navigation.EmitThisEvent2" },
-    { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
-  ];
-  pagination = { page: 1, perPage: 10, totalItems: 100, totalPages: 10 };
-  paginatorCopy = `<Paginator v-model="pagination" />`;
-  paginatorProps = [
-    {
-      name: "modelValue",
-      required: true,
-      type:
-        "{ page: number; perPage: number; totalItems: number; totalPages: number; }",
-    },
-  ];
-  tabs = [
-    { label: "Tab 1", value: "tab1" },
-    { label: "Tab 2", value: "tab2" },
-  ];
-  tabsCopy = `<Tabs :tabs="tabs" v-model="currentTab" />`;
-  tabsProps = [
-    {
-      name: "tabs",
-      required: true,
-      type: "Array<{ label: string; value: string; }>",
-    },
-    { name: "modelValue", required: true, type: "string" },
-  ];
-}
-</script>

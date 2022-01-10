@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue"
+import { XIcon } from "@heroicons/vue/outline"
+import { ref } from "vue"
+
+const props = defineProps<{
+  header: string
+  description: string
+  modelValue: boolean
+}>()
+
+const open = ref(props.modelValue)
+
+const emit = defineEmits<{
+  (e: "close", val: boolean): void
+  (e: "update:modelValue", val: boolean): void
+}>()
+
+const close = () => {
+  open.value = false
+  emit("close", open.value)
+  emit("update:modelValue", open.value)
+}
+</script>
 <template>
   <TransitionRoot as="template" :show="modelValue">
     <Dialog
@@ -55,38 +85,3 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script lang="ts">
-import { Options, Emit, Prop, Vue } from "vue-property-decorator";
-import {
-  Dialog,
-  DialogOverlay,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
-
-@Options({
-  name: "Slideover",
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-    XIcon,
-  },
-})
-export default class Slideover extends Vue {
-  @Prop({ type: String, required: true }) header!: string;
-  @Prop({ type: String, required: true }) description!: string;
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
-
-  @Emit("close")
-  @Emit("update:modelValue")
-  close(): boolean {
-    return false;
-  }
-}
-</script>

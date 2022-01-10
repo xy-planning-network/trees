@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import { onMounted, ref } from "vue"
+// TODO: spk this may benefit from composition api
+
+const idx = ref(0)
+const loading = ref(false)
+const maxIdx = ref(0)
+const messages = ref<string[]>([])
+const msg = ref("")
+const showMsg = ref(false)
+
+const fadeIn = (): void => {
+  idx.value++
+  if (idx.value > maxIdx.value) {
+    idx.value = 0
+  }
+  if (messages.value) {
+    msg.value = messages.value[idx.value]
+  }
+  showMsg.value = true
+}
+
+const fadeOut = (): void => {
+  window.setTimeout(() => {
+    showMsg.value = false
+  }, 2500)
+}
+
+onMounted(() => {
+  window.VueBus.on("Spinner-show", (spinMessages) => {
+    if (spinMessages) {
+      messages.value = spinMessages
+      maxIdx.value = spinMessages.length - 1
+      msg.value = messages.value[idx.value]
+      showMsg.value = true
+    }
+    loading.value = true
+  })
+
+  window.VueBus.on("Spinner-hide", () => {
+    idx.value = 0
+    maxIdx.value = 0
+    messages.value = []
+    msg.value = ""
+    loading.value = false
+  })
+})
+</script>
 <template>
   <div
     class="fixed top-0 left-0 flex items-center justify-center w-full h-full cursor-not-allowed z-50 bg-gray-50 bg-opacity-50"
@@ -91,59 +139,11 @@
           @after-enter="fadeOut"
           @after-leave="fadeIn"
         >
-          <div class="transition-opacity" v-show="showMsg">{{ msg }}</div>
+          <div class="text-center transition-opacity" v-show="showMsg">
+            {{ msg }}
+          </div>
         </transition>
       </div>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
-
-@Options({ name: "Spinner" })
-export default class Spinner extends Vue {
-  idx = 0;
-  loading = false;
-  maxIdx = 0;
-  messages = [];
-  msg = "";
-  showMsg = false;
-
-  mounted() {
-    window.VueBus.on("Spinner-show", (messages) => {
-      if (messages) {
-        this.messages = messages;
-        this.maxIdx = this.messages.length - 1;
-        this.msg = this.messages[this.idx];
-        this.showMsg = true;
-      }
-      this.loading = true;
-    });
-
-    window.VueBus.on("Spinner-hide", () => {
-      this.idx = 0;
-      this.maxIdx = 0;
-      this.messages = [];
-      this.msg = "";
-      this.loading = false;
-    });
-  }
-
-  fadeIn(): void {
-    this.idx++;
-    if (this.idx > this.maxIdx) {
-      this.idx = 0;
-    }
-    if (this.messages) {
-      this.msg = this.messages[this.idx];
-    }
-    this.showMsg = true;
-  }
-  fadeOut(): void {
-    window.setTimeout(() => {
-      this.showMsg = false;
-    }, 2500);
-  }
-}
-</script>

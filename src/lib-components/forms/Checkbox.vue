@@ -1,6 +1,26 @@
+<script setup lang="ts">
+import InputLabel from "./InputLabel.vue"
+import Uniques from "@/helpers/Uniques"
+import { useAttrs } from "vue"
+
+// TODO: checkbox should support the help text prop - possibly as a tooltip
+// TODO: aria-labelledby may be superfluous here since the input is wrapped in a label
+withDefaults(
+  defineProps<{
+    label?: string
+    modelValue: boolean
+  }>(),
+  {
+    label: "",
+  }
+)
+const emits = defineEmits(["update:modelValue"])
+const attrs = useAttrs()
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+</script>
 <template>
-  <div class="relative flex items-start">
-    <div class="h-5 flex items-center">
+  <div>
+    <label class="inline-flex items-center">
       <input
         :aria-labelledby="label ? `${uuid}-label` : undefined"
         :checked="modelValue"
@@ -10,28 +30,17 @@
         v-bind="{
           ...$attrs,
           onChange: ($event) => {
-            $emit('update:modelValue', $event.target.checked);
+            emits('update:modelValue', ($event.target as HTMLInputElement).checked)
           },
         }"
       />
-    </div>
-    <div class="ml-3 text-sm font-semibold leading-snug text-gray-900">
-      <label :id="`${uuid}-label`" :for="uuid" v-text="label"></label>
-    </div>
+      <InputLabel
+        class="ml-2"
+        :id="`${uuid}-label`"
+        :for="uuid"
+        :label="label"
+        tag="span"
+      ></InputLabel>
+    </label>
   </div>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-
-@Options({ name: "Checkbox" })
-export default class Checkbox extends Vue {
-  // TODO: checkbox should support the help text prop like base input, and label should use the label component or possible support a legend prop
-  @Prop({ type: Boolean, required: false }) emphasis?: boolean;
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: Boolean, required: true }) modelValue!: boolean;
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
-}
-</script>

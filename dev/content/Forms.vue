@@ -1,3 +1,136 @@
+<script setup lang="ts">
+import { ref } from "vue"
+
+const commonProps = [
+  { name: "label", required: false, type: "string" },
+  { name: "help", required: false, type: "string" },
+]
+const checked = ref(false)
+const checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`
+const checkboxProps = [
+  { name: "emphasis", required: false, type: "boolean" },
+  { name: "label", required: false, type: "string" },
+  { name: "modelValue", required: true, type: "boolean" },
+]
+const dateRange = ref({ maxDate: 0, minDate: 0 })
+const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
+const dateRangePickerProps = [
+  {
+    name: "modelValue",
+    required: true,
+    type: "{ minDate: number; maxDate: number; }",
+  },
+  { name: "startDate", required: false, type: "number" },
+  ...commonProps,
+]
+const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`
+const inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`
+const multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`
+const multiCheckboxProps = [
+  {
+    name: "options",
+    required: true,
+    type: "Array<{ label: string; value: string }>",
+  },
+  { name: "modelValue", required: true, type: "string" },
+  { name: "legend", required: false, type: "string" },
+]
+const multiCheckboxSelection = ref([])
+const radioCopy = `<Radio :options="options" v-model="selected" />`
+const radioProps = [
+  {
+    name: "options",
+    required: true,
+    type: "Array<{ label: string; value: string }>",
+  },
+  { name: "modelValue", required: true, type: "string" },
+  { name: "legend", required: false, type: "boolean" },
+]
+const radioSelection = ref("")
+const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
+const selectProps = [
+  { name: "design", required: false, type: "string" },
+  {
+    name: "options",
+    required: true,
+    type: "Array<{ label: string; value: string | number }>",
+  },
+  { name: "placeholder", required: false, type: "string" },
+  { name: "modelValue", required: true, type: "string" },
+  ...commonProps,
+]
+const options = [
+  { label: "You could select this", value: "val1" },
+  { label: "This is an option", value: "val2" },
+  { label: "Feeling good about this one?", value: "val3" },
+  { label: "This is the LAST option", value: "val4" },
+]
+
+const selected = ref("")
+
+const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
+const yesOrNoRadioSelection = ref(undefined)
+const yesOrNoRadioProps = [
+  { name: "legend", required: false, type: "string" },
+  { name: "name", required: false, type: "string" },
+  { name: "modelValue", required: false, type: "boolean" },
+]
+
+const textarea = ref("")
+const textareaProps = [
+  { name: "modelValue", required: false, type: "string" },
+  ...commonProps,
+]
+const textareaCopy = `<TextArea v-model="textarea" />`
+
+const baseInputProps = [
+  { name: "type", required: true, type: "string" },
+  { name: "modelValue", required: false, type: "string | number" },
+  ...commonProps,
+]
+
+const inputTypes = [
+  "color",
+  "date",
+  "datetime-local",
+  "email",
+  "file",
+  "hidden",
+  "month",
+  "number",
+  "password",
+  "range",
+  "search",
+  "tel",
+  "text",
+  "time",
+  "url",
+  "week",
+].map((type: string) => {
+  return {
+    label: type,
+    value: type,
+  }
+})
+
+const inputTypeSelected = ref("text")
+const customInputTypeVal = ref("")
+
+const inputLabelCopy = `<InputLabel label="I'm labeling something..." />`
+const inputLabelProps = [
+  { name: "label", required: false, type: "string" },
+  { name: "tag", required: false, type: "string" },
+]
+
+const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
+const inputHelpProps = [
+  { name: "text", required: false, type: "string" },
+  { name: "tag", required: false, type: "string" },
+]
+const toggleValue = ref(false)
+const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
+const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
+</script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
@@ -91,6 +224,7 @@
           </label>
           <div class="mt-1">
             <TextArea v-model="textarea" />
+            <div class="mt-4"><b>Value:</b> {{ textarea }}</div>
             <PropsTable :props="textareaProps" />
           </div>
         </div>
@@ -108,6 +242,7 @@
           </label>
           <div class="mt-1">
             <Checkbox label="I'm here to party!" v-model="checked" />
+            <div class="mt-4"><b>Value:</b> {{ checked }}</div>
             <PropsTable :props="checkboxProps" />
           </div>
         </div>
@@ -132,6 +267,7 @@
           </label>
           <div class="mt-1">
             <DateRangePicker v-model="dateRange" />
+            <div class="mt-4"><b>Value:</b> {{ dateRange }}</div>
             <PropsTable :props="dateRangePickerProps" />
           </div>
         </div>
@@ -151,6 +287,7 @@
               :options="options"
               v-model="multiCheckboxSelection"
             />
+            <div class="mt-4"><b>Value:</b> {{ multiCheckboxSelection }}</div>
             <PropsTable :props="multiCheckboxProps" />
           </div>
         </div>
@@ -168,6 +305,7 @@
           </label>
           <div class="mt-1">
             <Radio :options="options" v-model="radioSelection" />
+            <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
           </div>
         </div>
@@ -196,7 +334,12 @@
             <ClickToCopy :value="selectCopy" />
           </label>
           <div class="mt-1">
-            <Select :options="options" v-model="selected" />
+            <Select
+              :options="options"
+              v-model="selected"
+              placeholder="Lets make a selection"
+            />
+            <div class="mt-4"><b>Value:</b> {{ selected }}</div>
             <PropsTable :props="selectProps" />
           </div>
         </div>
@@ -213,7 +356,8 @@
             <ClickToCopy :value="yesOrNoRadioCopy" />
           </label>
           <div class="mt-1">
-            <YesOrNoRadio v-model="yesOrNoRadioSelection" />
+            <YesOrNoRadio v-model="yesOrNoRadioSelection"></YesOrNoRadio>
+            <div class="mt-4"><b>Value:</b> {{ yesOrNoRadioSelection }}</div>
             <PropsTable :props="yesOrNoRadioProps" />
           </div>
         </div>
@@ -232,6 +376,7 @@
           </label>
           <div class="mt-1">
             <Toggle v-model="toggleValue"></Toggle>
+            <div class="mt-4"><b>Value:</b> {{ toggleValue }}</div>
             <PropsTable :props="toggleProps" />
           </div>
         </div>
@@ -273,140 +418,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
-
-@Options({ name: "Forms" })
-export default class Forms extends Vue {
-  commonProps = [
-    { name: "label", required: false, type: "string" },
-    { name: "help", required: false, type: "string" },
-  ];
-  checked = false;
-  checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`;
-  checkboxProps = [
-    { name: "emphasis", required: false, type: "boolean" },
-    { name: "label", required: false, type: "string" },
-    { name: "modelValue", required: true, type: "boolean" },
-  ];
-  dateRange = { maxRange: 0, minRange: 0 };
-  dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`;
-  dateRangePickerProps = [
-    {
-      name: "modelValue",
-      required: true,
-      type: "{ minDate: number; maxDate: number; }",
-    },
-    { name: "startDate", required: false, type: "number" },
-    ...this.commonProps,
-  ];
-  inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`;
-  inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`;
-  multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`;
-  multiCheckboxProps = [
-    {
-      name: "options",
-      required: true,
-      type: "Array<{ label: string; value: string }>",
-    },
-    { name: "modelValue", required: true, type: "string" },
-    { name: "legend", required: false, type: "string" },
-  ];
-  multiCheckboxSelection = [];
-  radioCopy = `<Radio :options="options" v-model="selected" />`;
-  radioProps = [
-    {
-      name: "options",
-      required: true,
-      type: "Array<{ label: string; value: string }>",
-    },
-    { name: "modelValue", required: true, type: "string" },
-    { name: "legend", required: false, type: "boolean" },
-  ];
-  radioSelection = "";
-  selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`;
-  selectProps = [
-    { name: "design", required: false, type: "string" },
-    {
-      name: "options",
-      required: true,
-      type: "Array<{ label: string; value: string | number }>",
-    },
-    { name: "placeholder", required: false, type: "string" },
-    { name: "modelValue", required: true, type: "string" },
-    ...this.commonProps,
-  ];
-  options = [
-    { label: "You could select this", value: "val1" },
-    { label: "This is an option", value: "val2" },
-    { label: "Feeling good about this one?", value: 3 },
-    { label: "This is the LAST option", value: 4 },
-  ];
-
-  selected: string | number = "";
-
-  yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`;
-  yesOrNoRadioSelection = false;
-  yesOrNoRadioProps = [
-    { name: "legend", required: false, type: "string" },
-    { name: "name", required: false, type: "string" },
-    { name: "modelValue", required: false, type: "boolean" },
-  ];
-
-  textarea = "";
-  textareaProps = [
-    { name: "modelValue", required: false, type: "string" },
-    ...this.commonProps,
-  ];
-  textareaCopy = `<TextArea v-model="textarea" />`;
-
-  baseInputProps = [
-    { name: "type", required: true, type: "string" },
-    { name: "modelValue", required: false, type: "string | number" },
-    ...this.commonProps,
-  ];
-
-  inputTypes = [
-    "color",
-    "date",
-    "datetime-local",
-    "email",
-    "file",
-    "hidden",
-    "month",
-    "number",
-    "password",
-    "range",
-    "search",
-    "tel",
-    "text",
-    "time",
-    "url",
-    "week",
-  ].map((type: string) => {
-    return {
-      label: type,
-      value: type,
-    };
-  });
-
-  inputTypeSelected = "text";
-  customInputTypeVal = "";
-
-  inputLabelCopy = `<InputLabel label="I'm labeling something..." />`;
-  inputLabelProps = [
-    { name: "label", required: false, type: "string" },
-    { name: "tag", required: false, type: "string" },
-  ];
-
-  inputHelpCopy = `<InputHelp text="I'm just here to hint." />`;
-  inputHelpProps = [
-    { name: "text", required: false, type: "string" },
-    { name: "tag", required: false, type: "string" },
-  ];
-  toggleValue = false;
-  toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`;
-  toggleProps = [{ name: "modelValue", required: true, type: "string" }];
-}
-</script>

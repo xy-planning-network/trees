@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import Uniques from "@/helpers/Uniques"
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import { useAttrs } from "vue"
+withDefaults(
+  defineProps<{
+    help?: string
+    label?: string
+    modelValue?: string | number
+  }>(),
+  {
+    help: "",
+    label: "",
+    modelValue: "",
+  }
+)
+const attrs = useAttrs()
+const emit = defineEmits(["update:modelValue"])
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+</script>
+
 <template>
   <InputLabel
     class="block"
@@ -21,24 +43,8 @@
     ]"
     :id="uuid"
     :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     v-bind="$attrs"
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-import InputHelp from "./InputHelp.vue";
-
-@Options({ name: "TextArea", components: { InputLabel, InputHelp } })
-export default class TextArea extends Vue {
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false }) help?: string;
-  @Prop({ type: [String, Number], required: false }) modelValue?: string;
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
-}
-</script>

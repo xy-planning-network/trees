@@ -1,3 +1,15 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    label?: string
+    tag?: string
+  }>(),
+  {
+    label: "",
+    tag: "label",
+  }
+)
+</script>
 <template>
   <component
     :is="tag"
@@ -9,12 +21,3 @@
     >{{ label }}</component
   >
 </template>
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-
-@Options({ name: "InputLabel" })
-export default class InputLabel extends Vue {
-  @Prop({ type: String, required: false }) label?: string;
-  @Prop({ type: String, required: false, default: "label" }) tag?: string;
-}
-</script>

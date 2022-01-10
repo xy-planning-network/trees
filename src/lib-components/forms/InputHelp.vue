@@ -1,3 +1,15 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    tag?: string
+    text?: string
+  }>(),
+  {
+    tag: "div",
+    text: "",
+  }
+)
+</script>
 <template>
   <component
     :is="tag"
@@ -10,12 +22,3 @@
     {{ text }}
   </component>
 </template>
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-
-@Options({ name: "InputHelp" })
-export default class InputHelp extends Vue {
-  @Prop({ type: String, required: false }) text?: string;
-  @Prop({ type: String, required: false, default: "div" }) tag?: string;
-}
-</script>

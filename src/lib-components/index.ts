@@ -1,33 +1,98 @@
 // TODO: rearrange so that these are default installed by app.use(Trees);
 
 // Layout components
-export { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue";
-export { default as Cards } from "./lists/Cards.vue";
-export { default as ContentModal } from "./overlays/ContentModal.vue";
-export { default as DateFilter } from "./layout/DateFilter.vue";
-export { default as DetailList } from "./lists/DetailList.vue";
-export { default as DownloadCell } from "./lists/DownloadCell.vue";
-export { default as Flash } from "./overlays/Flash.vue";
-export { default as Modal } from "./overlays/Modal.vue";
-export { default as SidebarLayout } from "./layout/SidebarLayout.vue";
-export { default as Slideover } from "./overlays/Slideover.vue";
-export { default as StackedLayout } from "./layout/StackedLayout.vue";
-export { default as Paginator } from "./navigation/Paginator.vue";
-export { default as Spinner } from "./overlays/Spinner.vue";
-export { default as StaticTable } from "./lists/StaticTable.vue";
-export { default as Steps } from "./navigation/Steps.vue";
-export { default as Table } from "./lists/Table.vue";
-export { default as Tabs } from "./navigation/Tabs.vue";
-export { default as Toggle } from "./forms/Toggle.vue";
+import { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue"
+import { default as Cards } from "./lists/Cards.vue"
+import { default as ContentModal } from "./overlays/ContentModal.vue"
+import { default as DateFilter } from "./layout/DateFilter.vue"
+import { default as DetailList } from "./lists/DetailList.vue"
+import { default as DownloadCell } from "./lists/DownloadCell.vue"
+import { default as Flash } from "./overlays/Flash.vue"
+import { default as Modal } from "./overlays/Modal.vue"
+import { default as SidebarLayout } from "./layout/SidebarLayout.vue"
+import { default as Slideover } from "./overlays/Slideover.vue"
+import { default as StackedLayout } from "./layout/StackedLayout.vue"
+import { default as Paginator } from "./navigation/Paginator.vue"
+import { default as Spinner } from "./overlays/Spinner.vue"
+import { default as StaticTable } from "./lists/StaticTable.vue"
+import { default as Steps } from "./navigation/Steps.vue"
+import { default as Table } from "./lists/Table.vue"
+import { default as Tabs } from "./navigation/Tabs.vue"
+import { default as Toggle } from "./forms/Toggle.vue"
 
 // Form components
-export { default as BaseInput } from "./forms/BaseInput.vue";
-export { default as Checkbox } from "./forms/Checkbox.vue";
-export { default as DateRangePicker } from "./forms/DateRangePicker.vue";
-export { default as InputHelp } from "./forms/InputHelp.vue";
-export { default as InputLabel } from "./forms/InputLabel.vue";
-export { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue";
-export { default as Radio } from "./forms/Radio.vue";
-export { default as Select } from "./forms/Select.vue";
-export { default as TextArea } from "./forms/TextArea.vue";
-export { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue";
+import { default as BaseInput } from "./forms/BaseInput.vue"
+import { default as Checkbox } from "./forms/Checkbox.vue"
+import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
+import { default as InputHelp } from "./forms/InputHelp.vue"
+import { default as InputLabel } from "./forms/InputLabel.vue"
+import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
+import { default as Radio } from "./forms/Radio.vue"
+import { default as Select } from "./forms/Select.vue"
+import { default as TextArea } from "./forms/TextArea.vue"
+import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
+
+export {
+  ActionsDropdown,
+  Cards,
+  ContentModal,
+  DateFilter,
+  DetailList,
+  DownloadCell,
+  Flash,
+  Modal,
+  SidebarLayout,
+  Slideover,
+  StackedLayout,
+  Paginator,
+  Spinner,
+  StaticTable,
+  Steps,
+  Table,
+  Tabs,
+  Toggle,
+  BaseInput,
+  Checkbox,
+  DateRangePicker,
+  InputHelp,
+  InputLabel,
+  MultiCheckboxes,
+  Radio,
+  Select,
+  TextArea,
+  YesOrNoRadio,
+}
+
+/**
+ * declare global component types for App.use(Trees)
+ */
+export interface TreesComponents {
+  ActionsDropdown: typeof ActionsDropdown
+  Cards: typeof Cards
+  ContentModal: typeof ContentModal
+  DateFilter: typeof DateFilter
+  DetailList: typeof DetailList
+  DownloadCell: typeof DownloadCell
+  Flash: typeof Flash
+  Modal: typeof Modal
+  SidebarLayout: typeof SidebarLayout
+  Slideover: typeof Slideover
+  StackedLayout: typeof StackedLayout
+  Paginator: typeof Paginator
+  Spinner: typeof Spinner
+  StaticTable: typeof StaticTable
+  Steps: typeof Steps
+  Table: typeof Table
+  Tabs: typeof Tabs
+  Toggle: typeof Toggle
+  BaseInput: typeof BaseInput
+  Checkbox: typeof Checkbox
+  DateRangePicker: typeof DateRangePicker
+  InputHelp: typeof InputHelp
+  InputLabel: typeof InputLabel
+  MultiCheckboxes: typeof MultiCheckboxes
+  Radio: typeof Radio
+  Select: typeof Select
+  TextArea: typeof TextArea
+  YesOrNoRadio: typeof YesOrNoRadio
+}

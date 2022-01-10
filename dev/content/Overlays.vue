@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import { ref } from "vue"
+import { CheckIcon } from "@heroicons/vue/outline"
+
+const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
+
+const contentModalOpen = ref(false)
+const contentModalProps = [
+  { name: "modelValue", required: true, type: "boolean" },
+  { name: "title", required: false, type: "string" },
+]
+const flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`
+const modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`
+const modalProps = [
+  { name: "destructive", required: false, type: "boolean" },
+  { name: "disabled", required: false, type: "boolean" },
+  { name: "modelValue", required: true, type: "boolean" },
+  { name: "submitText", required: false, type: "string" },
+  { name: "title", required: true, type: "string" },
+]
+const open = ref(false)
+const spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`
+const slideoverOpen = ref(false)
+const slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`
+const slideoverProps = [
+  { name: "v-model", required: true, type: "boolean" },
+  { name: "header", required: false, type: "string" },
+  { name: "description", required: false, type: "description" },
+  { name: "@close", required: false, type: "function(modelValue)" },
+]
+
+const flash = function (): void {
+  window.VueBus.emit("Flash-show-generic-error", "support@trees.com")
+}
+const spinner = function (): void {
+  window.VueBus.emit("Spinner-show", [
+    "Look!",
+    "I can also display messages.",
+    "In case you need them.",
+  ])
+  window.setTimeout(() => {
+    window.VueBus.emit("Spinner-hide")
+  }, 15000)
+}
+</script>
+
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
@@ -150,47 +196,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
-import { CheckIcon } from "@heroicons/vue/outline";
-
-@Options({ name: "Overlays", components: { CheckIcon } })
-export default class Overlays extends Vue {
-  contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`;
-  contentModalOpen = false;
-  contentModalProps = [
-    { name: "modelValue", required: true, type: "boolean" },
-    { name: "title", required: false, type: "string" },
-  ];
-  flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`;
-  modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`;
-  modalProps = [
-    { name: "destructive", required: false, type: "boolean" },
-    { name: "disabled", required: false, type: "boolean" },
-    { name: "modelValue", required: true, type: "boolean" },
-    { name: "submitText", required: false, type: "string" },
-    { name: "title", required: true, type: "string" },
-  ];
-  open = false;
-  spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`;
-  slideoverOpen = false;
-  slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`;
-  slideoverProps = [
-    { name: "v-model", required: true, type: "boolean" },
-    { name: "header", required: false, type: "string" },
-    { name: "description", required: false, type: "description" },
-    { name: "@close", required: false, type: "function(modelValue)" },
-  ];
-
-  flash(): void {
-    window.VueBus.emit("Flash-show-generic-error", "support@trees.com");
-  }
-  spinner(): void {
-    window.VueBus.emit("Spinner-show");
-    window.setTimeout(() => {
-      window.VueBus.emit("Spinner-hide");
-    }, 3000);
-  }
-}
-</script>

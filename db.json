@@ -6,11 +6,36 @@
       "totalItems": 5,
       "totalPages": 1,
       "items": [
-        { "id": 1, "created_at": 1621957224, "type": "Engineering", "title": "Thing 1"  },
-        { "id": 2, "created_at": 1521957224, "type": "Design", "title": "Thing 2"  },
-        { "id": 3, "created_at": 1421957224, "type": "Engineering", "title": "Thing 3"  },
-        { "id": 4, "created_at": 1321957224, "type": "Design", "title": "Thing 4"  },
-        { "id": 5, "created_at": 1221957224, "type": "Engineering", "title": "Thing 5"  }
+        {
+          "id": 1,
+          "created_at": 1621957224,
+          "type": "Engineering",
+          "title": "Thing 1"
+        },
+        {
+          "id": 2,
+          "created_at": 1521957224,
+          "type": "Design",
+          "title": "Thing 2"
+        },
+        {
+          "id": 3,
+          "created_at": 1421957224,
+          "type": "Engineering",
+          "title": "Thing 3"
+        },
+        {
+          "id": 4,
+          "created_at": 1321957224,
+          "type": "Design",
+          "title": "Thing 4"
+        },
+        {
+          "id": 5,
+          "created_at": 1221957224,
+          "type": "Engineering",
+          "title": "Thing 5"
+        }
       ]
     }
   }

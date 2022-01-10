@@ -1,3 +1,39 @@
+<script setup lang="ts">
+import Flash from "../overlays/Flash.vue"
+import Spinner from "../overlays/Spinner.vue"
+import {
+  Dialog,
+  DialogOverlay,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue"
+import { MenuAlt2Icon, XIcon } from "@heroicons/vue/outline"
+import { CogIcon } from "@heroicons/vue/solid"
+import * as NavTypes from "@/composables/nav"
+import { ref } from "vue"
+
+const props = withDefaults(
+  defineProps<{
+    activeURL?: string
+    iconURL: string
+    navigation: NavTypes.Item[]
+    userNavigation: NavTypes.Item[]
+  }>(),
+  {
+    activeURL: "",
+  }
+)
+
+const sidebarOpen = ref<boolean>(false)
+
+const isActive = (url: string): boolean => {
+  return props.activeURL === url
+}
+</script>
 <template>
   <div class="h-screen flex overflow-hidden bg-gray-100">
     <TransitionRoot as="template" :show="sidebarOpen">
@@ -201,54 +237,3 @@
   <Flash />
   <Spinner />
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import Flash from "../overlays/Flash.vue";
-import Spinner from "../overlays/Spinner.vue";
-import {
-  Dialog,
-  DialogOverlay,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
-import { MenuAlt2Icon, UserCircleIcon, XIcon } from "@heroicons/vue/outline";
-import { CogIcon } from "@heroicons/vue/solid";
-import NavTypes from "../../types/nav";
-
-@Options({
-  components: {
-    Flash,
-    Spinner,
-    Dialog,
-    DialogOverlay,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    TransitionChild,
-    TransitionRoot,
-    CogIcon,
-    MenuAlt2Icon,
-    UserCircleIcon,
-    XIcon,
-  },
-  name: "SidebarLayout",
-})
-export default class SidebarLayout extends Vue {
-  @Prop({ type: String, required: false }) activeURL?: string;
-  @Prop({ type: String, required: true }) iconURL!: string;
-  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[];
-  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[];
-
-  sidebarOpen = false;
-
-  isActive(url: string): boolean {
-    return this.activeURL === url;
-  }
-}
-</script>

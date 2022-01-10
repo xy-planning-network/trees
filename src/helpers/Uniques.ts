@@ -1,13 +1,13 @@
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 const CreateIdAttribute = (length = 8): string => {
-  let result = "";
+  let result = ""
   for (let i = 0; i < length; i++) {
-    result += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+    result += CHARS.charAt(Math.floor(Math.random() * CHARS.length))
   }
-  return result;
-};
+  return result
+}
 
 export default {
   CreateIdAttribute,
-};
+}

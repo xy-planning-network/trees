@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import Flash from "../overlays/Flash.vue"
+import Spinner from "../overlays/Spinner.vue"
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/vue"
+import { MenuIcon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
+import * as NavTypes from "@/composables/nav"
+import User from "@/composables/user"
+
+const props = withDefaults(
+  defineProps<{
+    activeURL?: string
+    currentUser: User
+    iconURL: string
+    navigation: NavTypes.Item[]
+    userNavigation: NavTypes.Item[]
+  }>(),
+  {
+    activeURL: "",
+  }
+)
+const isActive = (url: string): boolean => {
+  return props.activeURL === url
+}
+</script>
 <template>
   <div class="min-h-screen bg-gray-100">
     <Disclosure as="nav" class="bg-white shadow-sm" v-slot="{ open }">
@@ -100,6 +132,7 @@
             <div class="ml-3">
               <div
                 class="text-base font-medium text-gray-800"
+                v-if="currentUser.name"
                 v-text="currentUser.name"
               ></div>
               <div
@@ -137,58 +170,3 @@
   <Flash />
   <Spinner />
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import Flash from "../overlays/Flash.vue";
-import Spinner from "../overlays/Spinner.vue";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/vue";
-import {
-  BellIcon,
-  MenuIcon,
-  UserCircleIcon,
-  XIcon,
-} from "@heroicons/vue/outline";
-import NavTypes from "../../types/nav";
-import UserTypes from "../../types/users";
-
-@Options({
-  components: {
-    Flash,
-    Spinner,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    BellIcon,
-    MenuIcon,
-    UserCircleIcon,
-    XIcon,
-  },
-  name: "StackedLayout",
-})
-export default class StackedLayout extends Vue {
-  @Prop({ type: String, required: false }) activeURL?: string;
-  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User;
-  @Prop({ type: String, required: true }) iconURL!: string;
-  @Prop({ type: Array, required: true }) navigation!: NavTypes.Item[];
-  @Prop({ type: Array, required: true }) userNavigation!: NavTypes.Item[];
-
-  sidebarOpen = false;
-
-  isActive(url: string): boolean {
-    return this.activeURL === url;
-  }
-}
-</script>

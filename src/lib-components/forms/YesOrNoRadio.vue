@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import Uniques from "@/helpers/Uniques"
+import { computed, useAttrs } from "vue"
+import InputLabel from "./InputLabel.vue"
+
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean
+    legend?: string
+    name?: string
+  }>(),
+  {
+    modelValue: undefined,
+    legend: "",
+    name: "",
+  }
+)
+const emits = defineEmits(["update:modelValue"])
+const attrs = useAttrs()
+const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const hasNameAttr = computed((): boolean => {
+  return typeof props.name === "string" && props.name !== ""
+})
+const onChange = (e: Event) => {
+  emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
+}
+</script>
 <template>
   <fieldset>
     <InputLabel class="block" :label="legend" tag="legend"></InputLabel>
@@ -15,12 +42,10 @@
         :checked="modelValue === true"
         v-bind="{
           ...$attrs,
-          onChange: ($event) => {
-            $emit('update:modelValue', $event.target.value === 'true');
-          },
+          onChange: onChange,
         }"
       />
-      <span class="block ml-2 text-sm font-semibold text-gray-900">Yes</span>
+      <InputLabel class="ml-2" label="Yes" tag="span"></InputLabel>
     </label>
     <label
       class="inline-flex items-center ml-6"
@@ -36,31 +61,10 @@
         :checked="modelValue === false"
         v-bind="{
           ...$attrs,
-          onChange: ($event) => {
-            $emit('update:modelValue', $event.target.value === 'true');
-          },
+          onChange: onChange,
         }"
       />
-      <span class="block ml-2 text-sm font-semibold text-gray-900">No</span>
+      <InputLabel class="ml-2" label="No" tag="span"></InputLabel>
     </label>
   </fieldset>
 </template>
-
-<script lang="ts">
-import Uniques from "@/helpers/Uniques";
-import { Options, Prop, Vue } from "vue-property-decorator";
-import InputLabel from "./InputLabel.vue";
-
-@Options({ name: "YesOrNoRadio", components: { InputLabel } })
-export default class YesOrNoRadio extends Vue {
-  @Prop({ type: Boolean, required: false }) modelValue?: boolean;
-  @Prop({ type: String, required: false }) legend?: string;
-  @Prop({ type: String, required: false, default: "" }) name?: string;
-
-  uuid = (this.$attrs.id as string) || Uniques.CreateIdAttribute();
-
-  get hasNameAttr(): boolean {
-    return typeof this.name === "string" && this.name !== "";
-  }
-}
-</script>

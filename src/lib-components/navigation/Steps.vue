@@ -1,3 +1,34 @@
+<script setup lang="ts">
+// TODO: think about whether there is value in updating and emiting step with next/previous
+// TODO: add to docs
+
+withDefaults(
+  defineProps<{
+    hideActions?: boolean
+    hidePrevious?: boolean
+    nextText?: string
+    previousText?: string
+    step: number
+    total: number
+  }>(),
+  {
+    hideActions: false,
+    hidePrevious: false,
+    nextText: "Next",
+    previousText: "Back",
+  }
+)
+
+const emit = defineEmits(["next", "previous"])
+
+const next = (): void => {
+  emit("next")
+}
+
+const previous = (): void => {
+  emit("previous")
+}
+</script>
 <template>
   <div>
     <nav class="flex items-center justify-center space-x-8">
@@ -32,41 +63,21 @@
 
     <div class="flex flex-shrink-0" v-if="!hideActions">
       <span class="inline-flex rounded-md shadow-sm" v-if="!hidePrevious">
-        <button type="button" class="xy-btn-white" @click="previous">
-          Back
-        </button>
+        <button
+          type="button"
+          class="xy-btn-white"
+          @click="previous"
+          v-text="previousText"
+        ></button>
       </span>
       <span class="ml-3 inline-flex rounded-md shadow-sm">
         <button
           type="button"
           class="xy-btn"
           @click="next"
-          v-text="nextText ? nextText : 'Next'"
+          v-text="nextText"
         ></button>
       </span>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Emit, Prop, Vue } from "vue-property-decorator";
-
-@Options({ name: "Steps" })
-export default class Steps extends Vue {
-  @Prop({ type: Boolean, required: false }) hideActions?: boolean;
-  @Prop({ type: Boolean, required: false }) hidePrevious?: boolean;
-  @Prop({ type: String, required: false }) nextText?: string;
-  @Prop({ type: Number, required: true }) step!: number;
-  @Prop({ type: Number, required: true }) total!: number;
-
-  @Emit()
-  next(): void {
-    return;
-  }
-
-  @Emit()
-  previous(): void {
-    return;
-  }
-}
-</script>

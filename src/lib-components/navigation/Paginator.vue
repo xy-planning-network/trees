@@ -1,12 +1,64 @@
+<script setup lang="ts">
+import { Pagination } from "@/composables/nav"
+import { computed, ref } from "vue"
+
+const props = defineProps<{
+  modelValue: Pagination
+}>()
+
+const emit = defineEmits<{
+  (e: "update:modelValue", pagination: Pagination): void
+}>()
+
+const pagination = ref<Pagination>(props.modelValue)
+
+const updateModelValue = () => {
+  emit("update:modelValue", pagination.value)
+}
+
+const changePage = (page: number): void => {
+  pagination.value.page = page
+  updateModelValue()
+}
+
+const pageShortcuts = computed((): number[] => {
+  const shortcuts: number[] = []
+
+  // If total pages is less than or equal to 4, just return 1, 2, 3, 4
+  if (pagination.value.totalPages <= 4) {
+    for (let i = 0; i < pagination.value.totalPages; i++) {
+      shortcuts.push(i + 1)
+    }
+    return shortcuts
+  }
+
+  // If there are more than 3 pages left, show these
+  // e.g. [4, 5, 6, 7] when there are 8 total pages and the current page is 4
+  const pagesLeft: number = pagination.value.totalPages - pagination.value.page
+  if (pagesLeft >= 3) {
+    for (let i = 0; i < 4; i++) {
+      shortcuts.push(pagination.value.page + i)
+    }
+    return shortcuts
+  }
+
+  // If there are less than 3 pages left, count backwards from the last page
+  // e.g. [5, 6, 7, 8] when on page 5, 6, 7, and 8 and there are 8 total pages
+  for (let i = 0; i < 4; i++) {
+    shortcuts.unshift(pagination.value.totalPages - i)
+  }
+  return shortcuts
+})
+</script>
 <template>
   <div class="px-4 flex items-center justify-between sm:px-0">
     <div class="w-0 flex-1 flex">
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(modelValue.page - 1)"
+        @click.prevent="changePage(pagination.page - 1)"
         :class="
-          modelValue.page == 1
+          pagination.page == 1
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
@@ -30,7 +82,7 @@
         :key="i"
         v-text="i"
         :class="
-          modelValue.page === i
+          pagination.page === i
             ? 'border-blue-500 text-blue-600 focus:outline-none focus:text-blue-800 focus:border-blue-700'
             : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
         "
@@ -42,9 +94,9 @@
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(modelValue.page + 1)"
+        @click.prevent="changePage(pagination.page + 1)"
         :class="
-          modelValue.page >= modelValue.totalPages
+          pagination.page >= pagination.totalPages
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
@@ -61,78 +113,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Emit, Options, Prop, Vue } from "vue-property-decorator";
-
-@Options({ name: "Paginator" })
-export default class Paginator extends Vue {
-  @Prop({ type: Object, required: true }) modelValue!: {
-    page: number;
-    perPage: number;
-    totalItems: number;
-    totalPages: number;
-  };
-
-  @Emit("update:modelValue")
-  updateModelValue(): {
-    page: number;
-    perPage: number;
-    totalItems: number;
-    totalPages: number;
-  } {
-    return this.modelValue;
-  }
-
-  changePage(page: number): void {
-    this.modelValue.page = page;
-    this.updateModelValue();
-  }
-  changePerPage(parent: HTMLElement, perPage: number): void {
-    parent.blur();
-    this.modelValue.page = 1;
-    this.modelValue.perPage = perPage;
-    this.updateModelValue();
-  }
-
-  get endingItem(): number {
-    const end = this.modelValue.page * this.modelValue.perPage;
-    return end > this.modelValue.totalItems ? this.modelValue.totalItems : end;
-  }
-  get pageShortcuts(): number[] {
-    const shortcuts: number[] = [];
-
-    // If total pages is less than or equal to 4, just return 1, 2, 3, 4
-    if (this.modelValue.totalPages <= 4) {
-      for (let i = 0; i < this.modelValue.totalPages; i++) {
-        shortcuts.push(i + 1);
-      }
-      return shortcuts;
-    }
-
-    // If there are more than 3 pages left, show these
-    // e.g. [4, 5, 6, 7] when there are 8 total pages and the current page is 4
-    const pagesLeft: number = this.modelValue.totalPages - this.modelValue.page;
-    if (pagesLeft >= 3) {
-      for (let i = 0; i < 4; i++) {
-        shortcuts.push(this.modelValue.page + i);
-      }
-      return shortcuts;
-    }
-
-    // If there are less than 3 pages left, count backwards from the last page
-    // e.g. [5, 6, 7, 8] when on page 5, 6, 7, and 8 and there are 8 total pages
-    for (let i = 0; i < 4; i++) {
-      shortcuts.unshift(this.modelValue.totalPages - i);
-    }
-    return shortcuts;
-  }
-  get startingItem(): number {
-    const start =
-      this.modelValue.page * this.modelValue.perPage -
-      this.modelValue.perPage +
-      1;
-    return this.modelValue.totalItems === 0 ? 0 : start;
-  }
-}
-</script>

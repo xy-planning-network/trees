@@ -1,3 +1,82 @@
+<script setup lang="ts">
+import { Flash } from "@/composables/overlay"
+import { onMounted, ref } from "vue"
+
+// TODO: spk this might benefit from the composition api to avoid race conditions where a flash is requested before the component is mounted.
+
+const flashes = ref<Flash[]>([])
+const flashTypeBorderClass = {
+  warning: "border-orange-500",
+  error: "border-red-500",
+  info: "border-blue-500",
+  success: "border-green-500",
+}
+
+const getFlashClass = (flash: Flash): string => {
+  const availableTypes = Object.keys(flashTypeBorderClass)
+  // default the flash type to "info" if no flash type or an unsupported flash.type is found
+  const type =
+    flash?.type && availableTypes.includes(flash.type)
+      ? (flash.type as "warning" | "error" | "info" | "success")
+      : "info"
+  return flashTypeBorderClass[type]
+}
+
+const remove = (flash: Flash): void => {
+  let index = 0
+  for (const f of flashes.value) {
+    if (flash.message === f.message) {
+      flashes.value.splice(index, 1)
+      return
+    }
+    index++
+  }
+}
+const renderFlash = (flash: Flash): void => {
+  flashes.value.push(flash)
+  // Super simple flash implementation. This could get "smarter" by adding an
+  // id to the flash object, and then searching for the specific flash in the
+  // array and splicing, instead of simply doing a pop().
+  setTimeout(
+    (flashes: Flash[]) => {
+      flashes.pop()
+    },
+    10000,
+    flashes.value
+  )
+}
+
+const renderGenericError = (email: string): void => {
+  renderFlash({
+    type: "error",
+    message:
+      "Whoops! Something went wrong, please reach out to " +
+      `<a class="underline text-xy-blue" href="mailto:${email}">${email}</a>` +
+      " if the issue persists.",
+  })
+}
+
+onMounted(() => {
+  window.VueBus.on("Flash-show-message", (flash) => {
+    renderFlash(flash)
+  })
+
+  window.VueBus.on("Flash-show-generic-error", (email) => {
+    renderGenericError(email)
+  })
+
+  if (window.Flashes) {
+    for (const flash of window.Flashes) {
+      if (typeof flash.type === "undefined") {
+        const values: string[] = flash.message.split(": ")
+        renderFlash({ type: values[0], message: values[1] })
+        return
+      }
+      renderFlash({ type: flash.type, message: flash.message })
+    }
+  }
+})
+</script>
 <template>
   <div
     class="fixed inset-0 flex flex-col items-end justify-end px-4 py-6 pointer-events-none sm:p-6 z-40"
@@ -16,7 +95,7 @@
         v-for="(flash, idx) in flashes"
         :key="flash.message"
         class="bg-white shadow-lg rounded-lg pointer-events-auto border-t-4 transform"
-        :class="[{ 'mt-2': idx > 0 }, flashTypeBorderClass[flash.type]]"
+        :class="[{ 'mt-2': idx > 0 }, getFlashClass(flash)]"
       >
         <div
           class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
@@ -50,72 +129,3 @@
     </transition-group>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-property-decorator";
-
-@Options({ name: "Flash" })
-export default class Flash extends Vue {
-  flashes: Array<{ type: string; message: string }> = [];
-  flashTypeBorderClass = {
-    warning: "border-orange-500",
-    error: "border-red-500",
-    info: "border-blue-500",
-    success: "border-green-500",
-  };
-
-  mounted(): void {
-    window.VueBus.on("Flash-show-message", (flash) => {
-      this.renderFlash(flash);
-    });
-
-    window.VueBus.on("Flash-show-generic-error", (email) => {
-      this.renderGenericError(email);
-    });
-
-    if (window.Flashes) {
-      for (const flash of window.Flashes) {
-        if (typeof flash.type === "undefined") {
-          const values: string[] = flash.message.split(": ");
-          this.renderFlash({ type: values[0], message: values[1] });
-          return;
-        }
-        this.renderFlash({ type: flash.type, message: flash.message });
-      }
-    }
-  }
-
-  remove(flash: { type: string; message: string }): void {
-    let index = 0;
-    for (const f of this.flashes) {
-      if (flash.message === f.message) {
-        this.flashes.splice(index, 1);
-        return;
-      }
-      index++;
-    }
-  }
-  renderFlash(flash: { type: string; message: string }): void {
-    this.flashes.push(flash);
-    // Super simple flash implementation. This could get "smarter" by adding an
-    // id to the flash object, and then searching for the specific flash in the
-    // array and splicing, instead of simply doing a pop().
-    setTimeout(
-      (flashes: Array<{ type: string; message: string }>) => {
-        flashes.pop();
-      },
-      10000,
-      this.flashes
-    );
-  }
-  renderGenericError(email: string): void {
-    this.renderFlash({
-      type: "error",
-      message:
-        "Whoops! Something went wrong, please reach out to " +
-        `<a class="underline text-xy-blue" href="mailto:${email}">${email}</a>` +
-        " if the issue persists.",
-    });
-  }
-}
-</script>

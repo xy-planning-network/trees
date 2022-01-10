@@ -1,3 +1,42 @@
+<script setup lang="ts">
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
+import { DotsVerticalIcon } from "@heroicons/vue/solid"
+import { onMounted, ref } from "vue"
+import * as TableTypes from "@/composables/table"
+import User from "@/composables/user"
+
+const props = defineProps<{
+  currentUser: User
+  items: TableTypes.MenuItem[]
+  propsData: any
+}>()
+
+const hasActionItems = ref(false)
+
+const emitEvent = (event: string): void => {
+  window.VueBus.emit(event, props.propsData)
+}
+
+const show = (item: TableTypes.MenuItem): boolean => {
+  if (!item.show) return true
+  return item.show(props.propsData, props.currentUser)
+}
+
+onMounted(() => {
+  for (let item of props.items) {
+    if (!item.show) {
+      hasActionItems.value = true
+      return
+    }
+
+    const showActionItem = item.show(props.propsData, props.currentUser)
+    if (showActionItem) {
+      hasActionItems.value = true
+      return
+    }
+  }
+})
+</script>
 <template>
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
@@ -37,46 +76,3 @@
     </transition>
   </Menu>
 </template>
-
-<script lang="ts">
-import { Options, Prop, Vue } from "vue-property-decorator";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { DotsVerticalIcon } from "@heroicons/vue/solid";
-import TableTypes from "../../types/table";
-import UserTypes from "../../types/users";
-
-@Options({
-  components: { DotsVerticalIcon, Menu, MenuButton, MenuItem, MenuItems },
-  name: "ActionsDropdown",
-})
-export default class ActionsDropdown extends Vue {
-  @Prop({ type: Object, required: true }) currentUser!: UserTypes.User;
-  @Prop({ type: Array, required: true }) items!: Array<TableTypes.MenuItem>;
-  @Prop({ type: Object, required: true }) propsData!: any;
-
-  hasActionItems = false;
-
-  mounted(): void {
-    for (let item of this.items) {
-      if (!item.show) {
-        this.hasActionItems = true;
-        return;
-      }
-
-      const showActionItem = item.show(this.propsData, this.currentUser);
-      if (showActionItem) {
-        this.hasActionItems = true;
-        return;
-      }
-    }
-  }
-
-  emitEvent(event: string): void {
-    window.VueBus.emit(event, this.propsData);
-  }
-  show(item: TableTypes.MenuItem): boolean {
-    if (!item.show) return true;
-    return item.show(this.propsData, this.currentUser);
-  }
-}
-</script>
