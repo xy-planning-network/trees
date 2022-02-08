@@ -22,14 +22,14 @@ import PopoverContent from "./PopoverContent.vue"
 const props = withDefaults(
   defineProps<{
     text?: string
-    buttonText?: string
-    buttonIcon?: RenderFunction
+    triggerText?: string
+    triggerIcon?: RenderFunction
     position?: PopoverPosition
   }>(),
   {
     text: "",
-    buttonText: "",
-    buttonIcon: InformationCircleIcon,
+    triggerText: "",
+    triggerIcon: InformationCircleIcon,
     position: "top-center",
   }
 )
@@ -90,8 +90,8 @@ const positionClasses = computed(() => {
       <HeadlessPopoverButton>
         <slot name="button" :open="open" :close="close">
           <span class="inline-flex items-center justify-center"
-            ><span v-if="buttonText" class="mr-1">{{ buttonText }}</span>
-            <component :is="buttonIcon" class="w-5 h-5" />
+            ><span v-if="triggerText" class="mr-1">{{ triggerText }}</span>
+            <component :is="triggerIcon" class="w-5 h-5" />
           </span>
         </slot>
       </HeadlessPopoverButton>
@@ -104,7 +104,7 @@ const positionClasses = computed(() => {
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <!--NOTE: use prop "static" for dev work to keep the tooptip visible during-->
+        <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
         <HeadlessPopoverPanel>
           <!--positioning wrappers-->
           <div
