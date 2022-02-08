@@ -12,9 +12,7 @@ withDefaults(
 )
 </script>
 <template>
-  <div
-    class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200"
-  >
+  <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
     <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
       <div
         class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap"

@@ -9,7 +9,7 @@ defineProps<{
 </script>
 <template>
   <div
-    class="mt-4 align-middle inline-block min-w-full border-b border-gray-200"
+    class="mt-4 align-middle inline-block min-w-full border-b border-gray-200 overflow-x-scroll w-full"
   >
     <table class="min-w-full">
       <thead>

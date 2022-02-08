@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
+import { ExclamationIcon } from "@heroicons/vue/outline"
+import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -42,6 +44,35 @@ const spinner = function (): void {
     window.VueBus.emit("Spinner-hide")
   }, 15000)
 }
+
+const popoverPositions: PopoverPosition[] = [
+  "top-left",
+  "top-center",
+  "top-right",
+  "bottom-left",
+  "bottom-center",
+  "bottom-right",
+  "left",
+  "right",
+]
+
+const popoverProps = [
+  { name: "text", required: false, type: 'string - default: ""' },
+  { name: "triggerText", required: false, type: 'string - default: ""' },
+  {
+    name: "triggerIcon",
+    required: false,
+    type: "RenderFunction - default: InformationCircleIcon",
+  },
+  {
+    name: "position",
+    required: false,
+    type: "PopoverPosition - default: top-center",
+  },
+]
+
+const simplePopoverCopy = `<Popover text="This is a simple Popover."></Popover>`
+const advancedPopoverCopy = `<Popover><PopoverContent>This is an advanced Popover.</PopoverContent></Popover>`
 </script>
 
 <template>
@@ -191,6 +222,104 @@ const spinner = function (): void {
             </Slideover>
             <PropsTable :props="slideoverProps"></PropsTable>
           </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Popover">
+        <template v-slot:description>
+          This component wraps the headless ui Popover, PopoverButton, and
+          PopoverPanel components and provides bare bones styling and
+          positioning options. The popover content is heavily customizable when
+          you supply your own PopoverContent component in the default slot. It
+          is designed to handle the most common case where a tooltip like UI is
+          required. Positioning is absolute and subject to parent container
+          overflow rules.
+        </template>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center"
+          >
+            <h3 class="mr-2">Basic Popovers - By Position</h3>
+            <ClickToCopy :value="simplePopoverCopy" />
+          </label>
+
+          <div
+            v-for="(position, index) in popoverPositions"
+            :key="index"
+            class="mt-8"
+          >
+            <div class="flex justify-center">{{ position }}</div>
+            <div class="flex justify-center">
+              <Popover :position="position" text="This is a simple Popover." />
+            </div>
+          </div>
+
+          <label
+            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center mt-8"
+          >
+            <h3 class="mr-2">
+              Advanced Popovers - Custom content and triggers
+            </h3>
+            <ClickToCopy :value="advancedPopoverCopy" />
+          </label>
+
+          <div class="mt-2 flex justify-center">
+            <Popover :button-icon="ExclamationIcon">
+              <PopoverContent>
+                <div class="flex items-center">
+                  <ExclamationIcon class="w-5 h-5 mr-2" />
+                  <div>
+                    You see that post on
+                    <a
+                      class="xy-link"
+                      href="https://news.ycombinator.com/
+              "
+                      >Hacker News</a
+                    >
+                    today?
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <div class="mt-2 flex justify-center">
+            <Popover>
+              <PopoverContent
+                class="bg-xy-blue text-white border-0 w-screen lg:max-w-md"
+              >
+                <div class="text-base p-4">
+                  Hi, hello, nice to meet you in the flesh I've only seen you
+                  from the neck up, it's weird to see your legs Low key, I know
+                  I'm shorter than what all of y'all expected It's awkward when
+                  you look me up and down but don't address it Handshakes, all
+                  sweat, what to do next… How are people supposed to act in the
+                  office? I forget Pull my phone out my pocket act like I just
+                  got a text But I didn't, I just move my thumb around for a sec
+                  Out of habit I check Slack, like it's any other day Then
+                  remember everyone is here, like 6 feet away I gotta talk, like
+                  with my mouth, if I wanna communicate But if I can't send
+                  memes and gifs, I ain't got nothing to say I miss my cat, I
+                  miss my dog, I'm ready to leave I miss my bed sheets, and
+                  farting when I please I should've told my boss I had somewhere
+                  to be Damn, this is gonna be a long a** week
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <div class="mt-2 flex justify-center">
+            <Popover text="A custom button trigger!">
+              <template #button>
+                <div class="xy-badge">
+                  Badge <ExclamationIcon class="w-4 h-4 ml-1" />
+                </div>
+              </template>
+            </Popover>
+          </div>
+
+          <PropsTable :props="popoverProps"></PropsTable>
         </div>
       </ComponentLayout>
     </div>

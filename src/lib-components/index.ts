@@ -10,6 +10,9 @@ import { default as DownloadCell } from "./lists/DownloadCell.vue"
 import { default as Flash } from "./overlays/Flash.vue"
 import { default as Modal } from "./overlays/Modal.vue"
 import { default as SidebarLayout } from "./layout/SidebarLayout.vue"
+import { default as Popover } from "./overlays/Popover/Popover.vue"
+import { default as PopoverPosition } from "./overlays/Popover/Popover.vue"
+import { default as PopoverContent } from "./overlays/Popover/PopoverContent.vue"
 import { default as Slideover } from "./overlays/Slideover.vue"
 import { default as StackedLayout } from "./layout/StackedLayout.vue"
 import { default as Paginator } from "./navigation/Paginator.vue"
@@ -44,6 +47,9 @@ export {
   SidebarLayout,
   Slideover,
   StackedLayout,
+  Popover,
+  PopoverContent,
+  PopoverPosition, // Type export
   Paginator,
   Spinner,
   StaticTable,
@@ -77,6 +83,8 @@ export interface TreesComponents {
   Modal: typeof Modal
   SidebarLayout: typeof SidebarLayout
   Slideover: typeof Slideover
+  Popover: typeof Popover
+  PopoverContent: typeof PopoverContent
   StackedLayout: typeof StackedLayout
   Paginator: typeof Paginator
   Spinner: typeof Spinner
