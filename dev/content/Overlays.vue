@@ -280,10 +280,8 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
               <template #button>
                 <span class="xy-btn">Hi, hello, nice to meet you...</span>
               </template>
-              <PopoverContent
-                class="bg-xy-blue text-white border-0 w-screen lg:max-w-md"
-              >
-                <div class="text-base p-4">
+              <PopoverContent class="bg-xy-blue border-0 w-screen lg:max-w-md">
+                <div class="text-white text-base font-medium p-8">
                   Hi, hello, nice to meet you in the flesh I've only seen you
                   from the neck up, it's weird to see your legs Low key, I know
                   I'm shorter than what all of y'all expected It's awkward when
