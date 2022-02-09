@@ -10,7 +10,11 @@ import { default as DownloadCell } from "./lists/DownloadCell.vue"
 import { default as Flash } from "./overlays/Flash.vue"
 import { default as Modal } from "./overlays/Modal.vue"
 import { default as SidebarLayout } from "./layout/SidebarLayout.vue"
+import { default as Popover } from "./overlays/Popover/Popover.vue"
+import { default as PopoverPosition } from "./overlays/Popover/Popover.vue"
+import { default as PopoverContent } from "./overlays/Popover/PopoverContent.vue"
 import { default as Slideover } from "./overlays/Slideover.vue"
+import { default as Tooltip } from "./overlays/Tooltip.vue"
 import { default as StackedLayout } from "./layout/StackedLayout.vue"
 import { default as Paginator } from "./navigation/Paginator.vue"
 import { default as Spinner } from "./overlays/Spinner.vue"
@@ -44,6 +48,9 @@ export {
   SidebarLayout,
   Slideover,
   StackedLayout,
+  Popover,
+  PopoverContent,
+  PopoverPosition, // Type export
   Paginator,
   Spinner,
   StaticTable,
@@ -51,6 +58,7 @@ export {
   Table,
   Tabs,
   Toggle,
+  Tooltip,
   BaseInput,
   Checkbox,
   DateRangePicker,
@@ -77,6 +85,8 @@ export interface TreesComponents {
   Modal: typeof Modal
   SidebarLayout: typeof SidebarLayout
   Slideover: typeof Slideover
+  Popover: typeof Popover
+  PopoverContent: typeof PopoverContent
   StackedLayout: typeof StackedLayout
   Paginator: typeof Paginator
   Spinner: typeof Spinner
@@ -85,6 +95,7 @@ export interface TreesComponents {
   Table: typeof Table
   Tabs: typeof Tabs
   Toggle: typeof Toggle
+  Tooltip: typeof Tooltip
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
   DateRangePicker: typeof DateRangePicker
