@@ -57,13 +57,6 @@ const popoverPositions: PopoverPosition[] = [
 ]
 
 const popoverProps = [
-  { name: "text", required: false, type: 'string - default: ""' },
-  { name: "triggerText", required: false, type: 'string - default: ""' },
-  {
-    name: "triggerIcon",
-    required: false,
-    type: "RenderFunction - default: InformationCircleIcon",
-  },
   {
     name: "position",
     required: false,
@@ -71,8 +64,16 @@ const popoverProps = [
   },
 ]
 
-const simplePopoverCopy = `<Popover text="This is a simple Popover."></Popover>`
+const tooltipProps = [
+  {
+    name: "position",
+    required: false,
+    type: "PopoverPosition - default: top-center",
+  },
+]
+
 const advancedPopoverCopy = `<Popover><PopoverContent>This is an advanced Popover.</PopoverContent></Popover>`
+const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
 </script>
 
 <template>
@@ -228,47 +229,37 @@ const advancedPopoverCopy = `<Popover><PopoverContent>This is an advanced Popove
       <ComponentLayout class="mt-8" title="Popover">
         <template v-slot:description>
           This component wraps the headless ui Popover, PopoverButton, and
-          PopoverPanel components and provides bare bones styling and
-          positioning options. The popover content is heavily customizable when
-          you supply your own PopoverContent component in the default slot. It
-          is designed to handle the most common case where a tooltip like UI is
-          required. Positioning is absolute and subject to parent container
-          overflow rules.
+          PopoverPanel components. It provides a #button and default slot for
+          customizing the trigger and content while offering a positioning prop.
+          The popover content is heavily customizable in the default slot. Use
+          the PopoverContent component for basic initial wrapper styling.
+          Positioning is absolute and subject to parent container overflow
+          rules.
         </template>
 
         <div>
           <label
-            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center"
-          >
-            <h3 class="mr-2">Basic Popovers - By Position</h3>
-            <ClickToCopy :value="simplePopoverCopy" />
-          </label>
-
-          <div
-            v-for="(position, index) in popoverPositions"
-            :key="index"
-            class="mt-8"
-          >
-            <div class="flex justify-center">{{ position }}</div>
-            <div class="flex justify-center">
-              <Popover :position="position" text="This is a simple Popover." />
-            </div>
-          </div>
-
-          <label
             class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center mt-8"
           >
-            <h3 class="mr-2">
-              Advanced Popovers - Custom content and triggers
-            </h3>
             <ClickToCopy :value="advancedPopoverCopy" />
           </label>
 
           <div class="mt-2 flex justify-center">
-            <Popover :button-icon="ExclamationIcon">
-              <PopoverContent>
-                <div class="flex items-center">
-                  <ExclamationIcon class="w-5 h-5 mr-2" />
+            <Popover>
+              <template #button>
+                <div class="xy-badge">
+                  Badge <ExclamationIcon class="w-4 h-4 ml-1" />
+                </div>
+              </template>
+              <div
+                class="max-w-xs rounded-lg bg-white border border-gray-100 shadow-md text-sm leading-tight font-medium"
+              >
+                <div
+                  v-for="n in 3"
+                  :key="n"
+                  class="flex items-center p-4 border-b"
+                >
+                  <ExclamationIcon class="w-7 h-7 mr-2 text-yellow-500" />
                   <div>
                     You see that post on
                     <a
@@ -280,12 +271,15 @@ const advancedPopoverCopy = `<Popover><PopoverContent>This is an advanced Popove
                     today?
                   </div>
                 </div>
-              </PopoverContent>
+              </div>
             </Popover>
           </div>
 
-          <div class="mt-2 flex justify-center">
+          <div class="mt-8 flex justify-center">
             <Popover>
+              <template #button>
+                <span class="xy-btn">Hi, hello, nice to meet you...</span>
+              </template>
               <PopoverContent
                 class="bg-xy-blue text-white border-0 w-screen lg:max-w-md"
               >
@@ -309,18 +303,37 @@ const advancedPopoverCopy = `<Popover><PopoverContent>This is an advanced Popove
             </Popover>
           </div>
 
-          <div class="mt-2 flex justify-center">
-            <Popover text="A custom button trigger!">
-              <template #button>
-                <div class="xy-badge">
-                  Badge <ExclamationIcon class="w-4 h-4 ml-1" />
-                </div>
-              </template>
-            </Popover>
-          </div>
-
           <PropsTable :props="popoverProps"></PropsTable>
         </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Tooltip">
+        <template v-slot:description>
+          A simple tooltip component. Triggered by a single universally
+          understood icon. Your tooltip content is supplied in the default slot.
+        </template>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center"
+          >
+            <ClickToCopy :value="tooltipCopy" />
+          </label>
+
+          <div
+            v-for="(position, index) in popoverPositions"
+            :key="index"
+            class="mt-8"
+          >
+            <div class="flex justify-center">{{ position }}</div>
+            <div class="flex justify-center">
+              <Tooltip :position="position">
+                This is a simple tooltip.
+              </Tooltip>
+            </div>
+          </div>
+        </div>
+        <PropsTable :props="tooltipProps"></PropsTable>
       </ComponentLayout>
     </div>
   </div>

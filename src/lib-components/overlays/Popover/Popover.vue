@@ -15,21 +15,13 @@ import {
   PopoverButton as HeadlessPopoverButton,
   PopoverPanel as HeadlessPopoverPanel,
 } from "@headlessui/vue"
-import { InformationCircleIcon } from "@heroicons/vue/outline"
-import { computed, RenderFunction } from "vue"
-import PopoverContent from "./PopoverContent.vue"
+import { computed } from "vue"
 
 const props = withDefaults(
   defineProps<{
-    text?: string
-    triggerText?: string
-    triggerIcon?: RenderFunction
     position?: PopoverPosition
   }>(),
   {
-    text: "",
-    triggerText: "",
-    triggerIcon: InformationCircleIcon,
     position: "top-center",
   }
 )
@@ -88,12 +80,7 @@ const positionClasses = computed(() => {
   <div class="flex">
     <HeadlessPopover v-slot="{ open, close }" class="relative leading-none">
       <HeadlessPopoverButton>
-        <slot name="button" :open="open" :close="close">
-          <span class="inline-flex items-center justify-center"
-            ><span v-if="triggerText" class="mr-1">{{ triggerText }}</span>
-            <component :is="triggerIcon" class="w-5 h-5" />
-          </span>
-        </slot>
+        <slot name="button" :open="open" :close="close"></slot>
       </HeadlessPopoverButton>
 
       <transition
@@ -112,11 +99,7 @@ const positionClasses = computed(() => {
             :class="positionClasses.wrapper"
           >
             <div :class="positionClasses.content">
-              <slot :open="open" :close="close">
-                <PopoverContent>
-                  {{ text }}
-                </PopoverContent>
-              </slot>
+              <slot :open="open" :close="close"></slot>
             </div>
           </div>
         </HeadlessPopoverPanel>
@@ -124,5 +107,3 @@ const positionClasses = computed(() => {
     </HeadlessPopover>
   </div>
 </template>
-
-<style></style>

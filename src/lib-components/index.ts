@@ -14,6 +14,7 @@ import { default as Popover } from "./overlays/Popover/Popover.vue"
 import { default as PopoverPosition } from "./overlays/Popover/Popover.vue"
 import { default as PopoverContent } from "./overlays/Popover/PopoverContent.vue"
 import { default as Slideover } from "./overlays/Slideover.vue"
+import { default as Tooltip } from "./overlays/Tooltip.vue"
 import { default as StackedLayout } from "./layout/StackedLayout.vue"
 import { default as Paginator } from "./navigation/Paginator.vue"
 import { default as Spinner } from "./overlays/Spinner.vue"
@@ -57,6 +58,7 @@ export {
   Table,
   Tabs,
   Toggle,
+  Tooltip,
   BaseInput,
   Checkbox,
   DateRangePicker,
@@ -93,6 +95,7 @@ export interface TreesComponents {
   Table: typeof Table
   Tabs: typeof Tabs
   Toggle: typeof Toggle
+  Tooltip: typeof Tooltip
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
   DateRangePicker: typeof DateRangePicker
