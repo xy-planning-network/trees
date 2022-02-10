@@ -24,8 +24,10 @@ withDefaults(
         <InformationCircleIcon class="w-4 h-4" />
       </div>
     </template>
-    <PopoverContent class="text-xs leading-tight font-medium">
+    <div
+      class="max-w-xs bg-white rounded-md p-2 border border-gray-100 shadow-md text-xs text-gray-700 leading-tight font-medium"
+    >
       <slot></slot>
-    </PopoverContent>
+    </div>
   </Popover>
 </template>
