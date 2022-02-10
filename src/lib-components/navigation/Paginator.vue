@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Pagination } from "@/composables/nav"
-import { computed, ref } from "vue"
+import { computed } from "vue"
 
 const props = defineProps<{
   modelValue: Pagination
@@ -10,23 +10,19 @@ const emit = defineEmits<{
   (e: "update:modelValue", pagination: Pagination): void
 }>()
 
-const pagination = ref<Pagination>(props.modelValue)
-
-const updateModelValue = () => {
-  emit("update:modelValue", pagination.value)
-}
-
 const changePage = (page: number): void => {
-  pagination.value.page = page
-  updateModelValue()
+  emit("update:modelValue", {
+    ...props.modelValue,
+    page: page,
+  })
 }
 
 const pageShortcuts = computed((): number[] => {
   const shortcuts: number[] = []
 
   // If total pages is less than or equal to 4, just return 1, 2, 3, 4
-  if (pagination.value.totalPages <= 4) {
-    for (let i = 0; i < pagination.value.totalPages; i++) {
+  if (props.modelValue.totalPages <= 4) {
+    for (let i = 0; i < props.modelValue.totalPages; i++) {
       shortcuts.push(i + 1)
     }
     return shortcuts
@@ -34,10 +30,10 @@ const pageShortcuts = computed((): number[] => {
 
   // If there are more than 3 pages left, show these
   // e.g. [4, 5, 6, 7] when there are 8 total pages and the current page is 4
-  const pagesLeft: number = pagination.value.totalPages - pagination.value.page
+  const pagesLeft: number = props.modelValue.totalPages - props.modelValue.page
   if (pagesLeft >= 3) {
     for (let i = 0; i < 4; i++) {
-      shortcuts.push(pagination.value.page + i)
+      shortcuts.push(props.modelValue.page + i)
     }
     return shortcuts
   }
@@ -45,7 +41,7 @@ const pageShortcuts = computed((): number[] => {
   // If there are less than 3 pages left, count backwards from the last page
   // e.g. [5, 6, 7, 8] when on page 5, 6, 7, and 8 and there are 8 total pages
   for (let i = 0; i < 4; i++) {
-    shortcuts.unshift(pagination.value.totalPages - i)
+    shortcuts.unshift(props.modelValue.totalPages - i)
   }
   return shortcuts
 })
@@ -56,9 +52,9 @@ const pageShortcuts = computed((): number[] => {
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(pagination.page - 1)"
+        @click.prevent="changePage(modelValue.page - 1)"
         :class="
-          pagination.page == 1
+          modelValue.page == 1
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
@@ -82,7 +78,7 @@ const pageShortcuts = computed((): number[] => {
         :key="i"
         v-text="i"
         :class="
-          pagination.page === i
+          modelValue.page === i
             ? 'border-blue-500 text-blue-600 focus:outline-none focus:text-blue-800 focus:border-blue-700'
             : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
         "
@@ -94,9 +90,9 @@ const pageShortcuts = computed((): number[] => {
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(pagination.page + 1)"
+        @click.prevent="changePage(modelValue.page + 1)"
         :class="
-          pagination.page >= pagination.totalPages
+          modelValue.page >= modelValue.totalPages
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
