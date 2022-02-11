@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import Popover, { PopoverPosition } from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
-import PopoverContent from "./Popover/PopoverContent.vue"
 
 withDefaults(
   defineProps<{
