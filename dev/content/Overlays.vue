@@ -234,7 +234,9 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           The popover content is heavily customizable in the default slot. Use
           the PopoverContent component for basic initial wrapper styling.
           Positioning is absolute and subject to parent container overflow
-          rules.
+          rules. You're responsible for managing the width of your popover
+          content. Generally, popovers should be narrow and start with a
+          max-w-sm class.
         </template>
 
         <div>
@@ -318,27 +320,53 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             <ClickToCopy :value="tooltipCopy" />
           </label>
 
-          <!--
           <div
             v-for="(position, index) in popoverPositions"
             :key="index"
             class="mt-8"
           >
             <div class="flex justify-center">{{ position }}</div>
-            <div class="flex justify-end">
+            <div class="flex justify-center">
               <Tooltip :position="position">
-                This is a simple tooltip.
+                This is a simple tooltip. This is a simple tooltip. This is a
+                simple tooltip. This is a simple tooltip. This is a simple
+                tooltip.
               </Tooltip>
             </div>
           </div>
-          -->
+        </div>
 
-          <div class="flex justify-center ml-1">
-            <div class="transform">
+        <div class="mt-8">
+          <p class="mb-4">
+            <strong>Auto positioning</strong> favors left to right positioning.
+            i.e. if there appears to be space available to the right of the
+            trigger the tooltip content will flow toward the right. Top and
+            bottom positioning is prioritized by the current viewport, giving
+            preference where more visible space currently exists.
+          </p>
+          <div class="flex justify-between">
+            <div>
+              <div>auto</div>
               <Tooltip position="auto">
                 This is a simple tooltip. This is a simple tooltip. This is a
                 simple tooltip. This is a simple tooltip. This is a simple
-                tooltip. This is a simple tooltip. This is a simple tooltip.
+                tooltip.
+              </Tooltip>
+            </div>
+            <div>
+              <div>auto</div>
+              <Tooltip position="auto">
+                This is a simple tooltip. This is a simple tooltip. This is a
+                simple tooltip. This is a simple tooltip. This is a simple
+                tooltip.
+              </Tooltip>
+            </div>
+            <div>
+              <div>auto</div>
+              <Tooltip position="auto">
+                This is a simple tooltip. This is a simple tooltip. This is a
+                simple tooltip. This is a simple tooltip. This is a simple
+                tooltip.
               </Tooltip>
             </div>
           </div>

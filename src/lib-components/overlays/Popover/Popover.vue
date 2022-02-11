@@ -11,6 +11,7 @@ export type PopoverPosition =
   | "auto"
 </script>
 <script lang="ts" setup>
+import { throttle } from "@/helpers/Throttle"
 import {
   Popover as HeadlessPopover,
   PopoverButton as HeadlessPopoverButton,
@@ -90,6 +91,7 @@ const wrapperPosition = computed(() => {
   const { vw, vh } = viewport.value
   const wrapRect = wrapper.value.el.getBoundingClientRect()
   const distToBottom = vh - anchorRect.value.bottom
+  //NOTE: edge case - there may be more space bellow in viewport, but less document space for display
   const positionAbove = anchorRect.value.top > distToBottom
   const distToRight = vw - anchorRect.value.right
   const positionLeft = anchorRect.value.left > distToRight
@@ -137,19 +139,18 @@ function getViewportDimensions() {
   }
 }
 
+const throttledSetPositions = throttle(setPositions)
+
 onMounted(() => {
   setPositions()
-  // TODO: throttle - or is this even necessary?
-  window.addEventListener("resize", setPositions)
-  window.addEventListener("scroll", setPositions)
+  window.addEventListener("resize", throttledSetPositions)
+  window.addEventListener("scroll", throttledSetPositions)
 })
 
 onUnmounted(() => {
-  window.removeEventListener("resize", setPositions)
-  window.removeEventListener("scroll", setPositions)
+  window.removeEventListener("resize", throttledSetPositions)
+  window.removeEventListener("scroll", throttledSetPositions)
 })
-
-// TODO: maybe auto positioning - dynamic based on button location and closed overflow hidden container?
 </script>
 
 <template>
@@ -175,9 +176,7 @@ onUnmounted(() => {
         >
           <!--positioning wrappers-->
           <div>
-            <div class="bg-gray-200">
-              <slot :open="open" :close="close"></slot>
-            </div>
+            <slot :open="open" :close="close"></slot>
           </div>
         </HeadlessPopoverPanel>
       </transition>
