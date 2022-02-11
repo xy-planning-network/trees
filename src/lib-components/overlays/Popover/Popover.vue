@@ -76,6 +76,7 @@ const positionClasses = computed(() => {
 
 const trigger = ref<typeof HeadlessPopoverButton>()
 const wrapper = ref<typeof HeadlessPopoverPanel>()
+const viewport = ref<{ vw: number; vh: number }>(getViewportDimensions())
 const anchorRect = ref<DOMRect>()
 
 const wrapperPosition = computed(() => {
@@ -86,39 +87,59 @@ const wrapperPosition = computed(() => {
   ) {
     return {}
   }
-
+  const { vw, vh } = viewport.value
   const wrapRect = wrapper.value.el.getBoundingClientRect()
-  const vw = Math.max(
-    document.documentElement.clientWidth || 0,
-    window.innerWidth || 0
-  )
-  const vh = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0
-  )
-
   const distToBottom = vh - anchorRect.value.bottom
   const positionAbove = anchorRect.value.top > distToBottom
+  const distToRight = vw - anchorRect.value.right
+  const positionLeft = anchorRect.value.left > distToRight
 
-  console.log(vw, vh, anchorRect.value, wrapRect, distToBottom)
+  let xPos = 0
+  if (positionLeft) {
+    xPos = anchorRect.value.left * -1
+    if (xPos < wrapRect.width * -1) {
+      xPos = (wrapRect.width - anchorRect.value.width) * -1
+    }
+  } else {
+    xPos = (wrapRect.width - distToRight) * -1
+
+    if (xPos < wrapRect.width * -1) {
+      xPos = wrapRect.width * -1
+    } else if (xPos > 0) {
+      xPos = 0
+    }
+  }
 
   return {
-    // NOTE: this appears to work pretty well for top/bottom
     top: positionAbove ? "auto" : `100%`,
     bottom: positionAbove ? "100%" : `auto`,
-    left: `${0}px`,
-    transform: `translate3d(0, 0, 0)`,
+    transform: `translate3d(${positionLeft ? xPos : xPos}px, 0, 0)`,
   }
 })
 
 const setPositions = () => {
   if (trigger.value === undefined) return
   anchorRect.value = trigger.value.el.getBoundingClientRect()
+
+  viewport.value = getViewportDimensions()
+}
+
+function getViewportDimensions() {
+  return {
+    vw: Math.max(
+      document.documentElement.clientWidth || 0,
+      window.innerWidth || 0
+    ),
+    vh: Math.max(
+      document.documentElement.clientHeight || 0,
+      window.innerHeight || 0
+    ),
+  }
 }
 
 onMounted(() => {
   setPositions()
-  // TODO: throttle
+  // TODO: throttle - or is this even necessary?
   window.addEventListener("resize", setPositions)
   window.addEventListener("scroll", setPositions)
 })
@@ -147,9 +168,13 @@ onUnmounted(() => {
         leave-to-class="opacity-0"
       >
         <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
-        <HeadlessPopoverPanel ref="wrapper" static>
+        <HeadlessPopoverPanel
+          ref="wrapper"
+          class="absolute z-10 left-0"
+          :style="wrapperPosition"
+        >
           <!--positioning wrappers-->
-          <div class="absolute z-10" :style="wrapperPosition">
+          <div>
             <div class="bg-gray-200">
               <slot :open="open" :close="close"></slot>
             </div>

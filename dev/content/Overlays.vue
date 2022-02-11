@@ -333,8 +333,8 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           </div>
           -->
 
-          <div class="flex justify-end">
-            <div class="transform -translate-x-24">
+          <div class="flex justify-center ml-1">
+            <div class="transform">
               <Tooltip position="auto">
                 This is a simple tooltip. This is a simple tooltip. This is a
                 simple tooltip. This is a simple tooltip. This is a simple
