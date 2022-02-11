@@ -328,9 +328,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             <div class="flex justify-center">{{ position }}</div>
             <div class="flex justify-center">
               <Tooltip :position="position">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
+                This is a simple tooltip.
               </Tooltip>
             </div>
           </div>

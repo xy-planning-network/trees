@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import Popover, { PopoverPosition } from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
-import PopoverContent from "./Popover/PopoverContent.vue"
 
 withDefaults(
   defineProps<{
@@ -25,7 +24,7 @@ withDefaults(
       </div>
     </template>
     <div
-      class="w-80 max-w-sm bg-white rounded-md p-2 border border-gray-100 shadow-md text-xs text-gray-700 leading-tight font-medium"
+      class="max-w-sm bg-white rounded-md p-2 border border-gray-100 shadow-md text-xs text-gray-700 leading-tight font-medium"
     >
       <slot></slot>
     </div>

@@ -24,13 +24,11 @@ const props = withDefaults(
     position?: PopoverPosition
   }>(),
   {
-    position: "top-center",
+    position: "auto",
   }
 )
 
-const positionClasses = computed(() => {
-  // NOTE: by always pushing the screen width wrapper classes to the left we can avoid overflow scrolling
-
+const staticPosition = computed(() => {
   let wrapperClasses = ""
   let contentClasses = ""
 
@@ -80,7 +78,7 @@ const wrapper = ref<typeof HeadlessPopoverPanel>()
 const viewport = ref<{ vw: number; vh: number }>(getViewportDimensions())
 const anchorRect = ref<DOMRect>()
 
-const wrapperPosition = computed(() => {
+const autoPosition = computed(() => {
   if (
     anchorRect.value === undefined ||
     wrapper.value === undefined ||
@@ -89,33 +87,48 @@ const wrapperPosition = computed(() => {
     return {}
   }
   const { vw, vh } = viewport.value
+
   const wrapRect = wrapper.value.el.getBoundingClientRect()
+  const contentRect = wrapper.value.el.firstChild.getBoundingClientRect()
   const distToBottom = vh - anchorRect.value.bottom
-  //NOTE: edge case - there may be more space bellow in viewport, but less document space for display
+  //NOTE: edge case - there may be more space bellow in viewport
+  // but less document space for display
+  // the inverse could also be true - but very rare
   const positionAbove = anchorRect.value.top > distToBottom
   const distToRight = vw - anchorRect.value.right
   const positionLeft = anchorRect.value.left > distToRight
 
+  console.log(wrapRect, contentRect, anchorRect.value, vw)
+
   let xPos = 0
   if (positionLeft) {
     xPos = anchorRect.value.left * -1
-    if (xPos < wrapRect.width * -1) {
-      xPos = (wrapRect.width - anchorRect.value.width) * -1
+    if (xPos < contentRect.width * -1) {
+      xPos = (contentRect.width - anchorRect.value.width) * -1
     }
   } else {
-    xPos = (wrapRect.width - distToRight) * -1
+    xPos = (contentRect.width - distToRight) * -1
 
+    console.log(xPos)
+    /*
     if (xPos < wrapRect.width * -1) {
       xPos = wrapRect.width * -1
     } else if (xPos > 0) {
       xPos = 0
     }
+    */
   }
 
   return {
-    top: positionAbove ? "auto" : `100%`,
-    bottom: positionAbove ? "100%" : `auto`,
-    transform: `translate3d(${positionLeft ? xPos : xPos}px, 0, 0)`,
+    wrapper: {
+      top: positionAbove ? "auto" : `100%`,
+      bottom: positionAbove ? "100%" : `auto`,
+      transform: `translate3d(${anchorRect.value.left * -1}px, 0, 0)`,
+      // left: `${anchorRect.value.left * -1}px`,
+    },
+    content: {
+      transform: `translate3d(${positionLeft ? xPos : xPos}px, 0, 0)`,
+    },
   }
 })
 
@@ -127,6 +140,7 @@ const setPositions = () => {
 }
 
 function getViewportDimensions() {
+  console.log(document.documentElement.clientWidth || 0, window.innerWidth || 0)
   return {
     vw: Math.max(
       document.documentElement.clientWidth || 0,
@@ -171,11 +185,14 @@ onUnmounted(() => {
         <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
         <HeadlessPopoverPanel
           ref="wrapper"
-          class="absolute z-10 left-0"
-          :style="wrapperPosition"
+          class="absolute z-10 transform w-screen flex px-4"
+          :class="position === 'auto' ? '' : staticPosition.wrapper"
+          :style="position === 'auto' ? autoPosition.wrapper : {}"
         >
-          <!--positioning wrappers-->
-          <div>
+          <div
+            :class="position === 'auto' ? `left-0` : staticPosition.content"
+            :style="position === 'auto' ? autoPosition.content : {}"
+          >
             <slot :open="open" :close="close"></slot>
           </div>
         </HeadlessPopoverPanel>
