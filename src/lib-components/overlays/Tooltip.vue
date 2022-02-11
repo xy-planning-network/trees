@@ -24,7 +24,7 @@ withDefaults(
       </div>
     </template>
     <div
-      class="max-w-sm bg-white rounded-md p-2 border border-gray-100 shadow-md text-xs text-gray-700 leading-tight font-medium"
+      class="w-full max-w-xs bg-white rounded-md p-2 border border-gray-100 shadow-md text-xs text-gray-700 leading-tight font-medium"
     >
       <slot></slot>
     </div>

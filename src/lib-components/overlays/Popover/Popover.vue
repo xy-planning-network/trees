@@ -96,38 +96,44 @@ const autoPosition = computed(() => {
   // the inverse could also be true - but very rare
   const positionAbove = anchorRect.value.top > distToBottom
   const distToRight = vw - anchorRect.value.right
-  const positionLeft = anchorRect.value.left > distToRight
 
-  console.log(wrapRect, contentRect, anchorRect.value, vw)
+  // this doesn't actually work quite right.  the width of the trigger f's it up
+  // TODO: should probably find a centering position
+
+  const flowLeft = anchorRect.value.left > distToRight
+
+  console.log(flowLeft)
 
   let xPos = 0
-  if (positionLeft) {
-    xPos = anchorRect.value.left * -1
-    if (xPos < contentRect.width * -1) {
-      xPos = (contentRect.width - anchorRect.value.width) * -1
+  if (flowLeft) {
+    xPos = anchorRect.value.right + anchorRect.value.width - contentRect.width
+
+    if (contentRect.width > anchorRect.value.right + anchorRect.value.width) {
+      xPos = xPos + (contentRect.width - anchorRect.value.right)
     }
   } else {
-    xPos = (contentRect.width - distToRight) * -1
+    xPos = anchorRect.value.left
+
+    if (contentRect.width > vw - anchorRect.value.left) {
+      xPos = xPos + (vw - anchorRect.value.left - contentRect.width)
+    }
 
     console.log(xPos)
-    /*
-    if (xPos < wrapRect.width * -1) {
-      xPos = wrapRect.width * -1
-    } else if (xPos > 0) {
-      xPos = 0
-    }
-    */
   }
 
   return {
     wrapper: {
       top: positionAbove ? "auto" : `100%`,
       bottom: positionAbove ? "100%" : `auto`,
-      transform: `translate3d(${anchorRect.value.left * -1}px, 0, 0)`,
-      // left: `${anchorRect.value.left * -1}px`,
+
+      // TODO: this is still a little off.
+      // TODO: also look at z-index and click off ability. - maybe set a height on container
+      transform: `translate3d(${
+        (vw - (vw - anchorRect.value.left)) * -1
+      }px, 0, 0)`, // pin to left of window
     },
     content: {
-      transform: `translate3d(${positionLeft ? xPos : xPos}px, 0, 0)`,
+      transform: `translate3d(${xPos}px, 0, 0)`,
     },
   }
 })
@@ -140,16 +146,9 @@ const setPositions = () => {
 }
 
 function getViewportDimensions() {
-  console.log(document.documentElement.clientWidth || 0, window.innerWidth || 0)
   return {
-    vw: Math.max(
-      document.documentElement.clientWidth || 0,
-      window.innerWidth || 0
-    ),
-    vh: Math.max(
-      document.documentElement.clientHeight || 0,
-      window.innerHeight || 0
-    ),
+    vw: Math.max(window.innerWidth),
+    vh: Math.max(window.innerHeight),
   }
 }
 
@@ -185,12 +184,12 @@ onUnmounted(() => {
         <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
         <HeadlessPopoverPanel
           ref="wrapper"
-          class="absolute z-10 transform w-screen flex px-4"
-          :class="position === 'auto' ? '' : staticPosition.wrapper"
+          class="absolute z-10 transform w-screen flex"
+          :class="position === 'auto' ? 'px-2' : staticPosition.wrapper"
           :style="position === 'auto' ? autoPosition.wrapper : {}"
         >
           <div
-            :class="position === 'auto' ? `left-0` : staticPosition.content"
+            :class="position === 'auto' ? `` : staticPosition.content"
             :style="position === 'auto' ? autoPosition.content : {}"
           >
             <slot :open="open" :close="close"></slot>
