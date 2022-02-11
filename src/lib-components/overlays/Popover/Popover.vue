@@ -8,6 +8,7 @@ export type PopoverPosition =
   | "bottom-right"
   | "left"
   | "right"
+  | "auto"
 </script>
 <script lang="ts" setup>
 import {
@@ -15,7 +16,7 @@ import {
   PopoverButton as HeadlessPopoverButton,
   PopoverPanel as HeadlessPopoverPanel,
 } from "@headlessui/vue"
-import { computed } from "vue"
+import { computed, onMounted, onUnmounted, ref } from "vue"
 
 const props = withDefaults(
   defineProps<{
@@ -73,13 +74,67 @@ const positionClasses = computed(() => {
   }
 })
 
+const trigger = ref<typeof HeadlessPopoverButton>()
+const wrapper = ref<typeof HeadlessPopoverPanel>()
+const anchorRect = ref<DOMRect>()
+
+const wrapperPosition = computed(() => {
+  if (
+    anchorRect.value === undefined ||
+    wrapper.value === undefined ||
+    !wrapper.value.el
+  ) {
+    return {}
+  }
+
+  const wrapRect = wrapper.value.el.getBoundingClientRect()
+  const vw = Math.max(
+    document.documentElement.clientWidth || 0,
+    window.innerWidth || 0
+  )
+  const vh = Math.max(
+    document.documentElement.clientHeight || 0,
+    window.innerHeight || 0
+  )
+
+  const distToBottom = vh - anchorRect.value.bottom
+  const positionAbove = anchorRect.value.top > distToBottom
+
+  console.log(vw, vh, anchorRect.value, wrapRect, distToBottom)
+
+  return {
+    // NOTE: this appears to work pretty well for top/bottom
+    top: positionAbove ? "auto" : `100%`,
+    bottom: positionAbove ? "100%" : `auto`,
+    left: `${0}px`,
+    transform: `translate3d(0, 0, 0)`,
+  }
+})
+
+const setPositions = () => {
+  if (trigger.value === undefined) return
+  anchorRect.value = trigger.value.el.getBoundingClientRect()
+}
+
+onMounted(() => {
+  setPositions()
+  // TODO: throttle
+  window.addEventListener("resize", setPositions)
+  window.addEventListener("scroll", setPositions)
+})
+
+onUnmounted(() => {
+  window.removeEventListener("resize", setPositions)
+  window.removeEventListener("scroll", setPositions)
+})
+
 // TODO: maybe auto positioning - dynamic based on button location and closed overflow hidden container?
 </script>
 
 <template>
   <div class="flex">
     <HeadlessPopover v-slot="{ open, close }" class="relative leading-none">
-      <HeadlessPopoverButton>
+      <HeadlessPopoverButton ref="trigger">
         <slot name="button" :open="open" :close="close"></slot>
       </HeadlessPopoverButton>
 
@@ -92,13 +147,10 @@ const positionClasses = computed(() => {
         leave-to-class="opacity-0"
       >
         <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
-        <HeadlessPopoverPanel>
+        <HeadlessPopoverPanel ref="wrapper" static>
           <!--positioning wrappers-->
-          <div
-            class="absolute z-10 transform w-screen flex"
-            :class="positionClasses.wrapper"
-          >
-            <div :class="positionClasses.content">
+          <div class="absolute z-10" :style="wrapperPosition">
+            <div class="bg-gray-200">
               <slot :open="open" :close="close"></slot>
             </div>
           </div>

@@ -226,7 +226,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
         </div>
       </ComponentLayout>
 
-      <ComponentLayout class="mt-8" title="Popover">
+      <ComponentLayout class="mt-8" title="Popover" v-if="false">
         <template v-slot:description>
           This component wraps the headless ui Popover, PopoverButton, and
           PopoverPanel components. It provides a #button and default slot for
@@ -318,19 +318,32 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             <ClickToCopy :value="tooltipCopy" />
           </label>
 
+          <!--
           <div
             v-for="(position, index) in popoverPositions"
             :key="index"
             class="mt-8"
           >
             <div class="flex justify-center">{{ position }}</div>
-            <div class="flex justify-center">
+            <div class="flex justify-end">
               <Tooltip :position="position">
                 This is a simple tooltip.
               </Tooltip>
             </div>
           </div>
+          -->
+
+          <div class="flex justify-end">
+            <div class="transform -translate-x-24">
+              <Tooltip position="auto">
+                This is a simple tooltip. This is a simple tooltip. This is a
+                simple tooltip. This is a simple tooltip. This is a simple
+                tooltip. This is a simple tooltip. This is a simple tooltip.
+              </Tooltip>
+            </div>
+          </div>
         </div>
+
         <PropsTable :props="tooltipProps"></PropsTable>
       </ComponentLayout>
     </div>
