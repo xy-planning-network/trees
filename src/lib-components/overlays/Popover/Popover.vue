@@ -9,6 +9,7 @@ export type PopoverPosition =
   | "left"
   | "right"
   | "auto"
+  | "none" // TODO: this could be useful in edge cases
 </script>
 <script lang="ts" setup>
 import { throttle } from "@/helpers/Throttle"
@@ -88,52 +89,55 @@ const autoPosition = computed(() => {
   }
   const { vw, vh } = viewport.value
 
-  const wrapRect = wrapper.value.el.getBoundingClientRect()
-  const contentRect = wrapper.value.el.firstChild.getBoundingClientRect()
+  const offset = 10 // avoid bumping up against the edge of the browser when possible
+  const wrapRect: DOMRect = wrapper.value.el.getBoundingClientRect()
+  const contentRect: DOMRect =
+    wrapper.value.el.firstChild.getBoundingClientRect()
   const distToBottom = vh - anchorRect.value.bottom
   //NOTE: edge case - there may be more space bellow in viewport
   // but less document space for display
   // the inverse could also be true - but very rare
   const positionAbove = anchorRect.value.top > distToBottom
-  const distToRight = vw - anchorRect.value.right
-
-  // this doesn't actually work quite right.  the width of the trigger f's it up
-  // TODO: should probably find a centering position
-
+  const distToRight = vw - anchorRect.value.left
   const flowLeft = anchorRect.value.left > distToRight
-
-  console.log(flowLeft)
 
   let xPos = 0
   if (flowLeft) {
-    xPos = anchorRect.value.right + anchorRect.value.width - contentRect.width
+    if (contentRect.width > anchorRect.value.right) {
+      xPos =
+        anchorRect.value.right -
+        contentRect.width +
+        (contentRect.width - anchorRect.value.right)
+    } else {
+      xPos = anchorRect.value.right - contentRect.width
+    }
 
-    if (contentRect.width > anchorRect.value.right + anchorRect.value.width) {
-      xPos = xPos + (contentRect.width - anchorRect.value.right)
+    if (vw > contentRect.width + offset) {
+      xPos = xPos + offset
     }
   } else {
-    xPos = anchorRect.value.left
-
-    if (contentRect.width > vw - anchorRect.value.left) {
-      xPos = xPos + (vw - anchorRect.value.left - contentRect.width)
+    if (contentRect.width > distToRight) {
+      xPos = anchorRect.value.left - (contentRect.width - distToRight)
+    } else {
+      xPos = anchorRect.value.left
     }
 
-    console.log(xPos)
+    if (vw > contentRect.width + offset) {
+      xPos = xPos - offset
+    }
   }
 
   return {
     wrapper: {
       top: positionAbove ? "auto" : `100%`,
       bottom: positionAbove ? "100%" : `auto`,
-
-      // TODO: this is still a little off.
-      // TODO: also look at z-index and click off ability. - maybe set a height on container
-      transform: `translate3d(${
-        (vw - (vw - anchorRect.value.left)) * -1
-      }px, 0, 0)`, // pin to left of window
+      transform: `translate(${anchorRect.value.left * -1}px, 0)`, // pin to left of window
+      width: `${vw}px`,
     },
     content: {
-      transform: `translate3d(${xPos}px, 0, 0)`,
+      top: positionAbove ? "auto" : `100%`,
+      bottom: positionAbove ? "100%" : `auto`,
+      transform: `translate(${xPos}px, 0)`,
     },
   }
 })
@@ -147,8 +151,8 @@ const setPositions = () => {
 
 function getViewportDimensions() {
   return {
-    vw: Math.max(window.innerWidth),
-    vh: Math.max(window.innerHeight),
+    vw: document.documentElement.clientWidth,
+    vh: document.documentElement.clientHeight,
   }
 }
 
@@ -181,14 +185,14 @@ onUnmounted(() => {
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <!--NOTE: use prop "static" for dev work to keep the tooptip visible-->
         <HeadlessPopoverPanel
           ref="wrapper"
-          class="absolute z-10 transform w-screen flex"
-          :class="position === 'auto' ? 'px-2' : staticPosition.wrapper"
+          class="absolute z-10 h-0 flex w-screen"
+          :class="position === 'auto' ? '' : staticPosition.wrapper"
           :style="position === 'auto' ? autoPosition.wrapper : {}"
         >
           <div
+            class="absolute"
             :class="position === 'auto' ? `` : staticPosition.content"
             :style="position === 'auto' ? autoPosition.content : {}"
           >

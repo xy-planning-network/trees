@@ -342,48 +342,15 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             bottom positioning is prioritized by the current viewport, giving
             preference where more visible space currently exists.
           </p>
-          <div class="flex justify-between">
-            <div>
-              <div>auto</div>
-              <Tooltip position="auto">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
-              </Tooltip>
-            </div>
-            <div>
-              <div>auto</div>
-              <Tooltip position="auto">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
-              </Tooltip>
-            </div>
-
-            <div>
-              <div>auto</div>
-              <Tooltip position="auto">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
-              </Tooltip>
-            </div>
-
-            <div>
-              <div>auto</div>
-              <Tooltip position="auto">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
-              </Tooltip>
-            </div>
-            <div>
-              <div>auto</div>
-              <Tooltip position="auto">
-                This is a simple tooltip. This is a simple tooltip. This is a
-                simple tooltip. This is a simple tooltip. This is a simple
-                tooltip.
-              </Tooltip>
+          <div class="grid gap-4 grid-cols-5">
+            <div v-for="index in 5" :key="index">
+              <div class="flex justify-center">
+                <Tooltip position="auto">
+                  This is a simple tooltip. This is a simple tooltip. This is a
+                  simple tooltip. This is a simple tooltip. This is a simple
+                  tooltip.</Tooltip
+                >
+              </div>
             </div>
           </div>
         </div>
