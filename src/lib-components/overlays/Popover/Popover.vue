@@ -39,7 +39,6 @@ const getViewportDimensions = () => {
 const trigger = ref<typeof HeadlessPopoverButton>()
 const wrapper = ref<typeof HeadlessPopoverPanel>()
 const viewport = ref<{ vw: number; vh: number }>(getViewportDimensions())
-const anchorRect = ref<DOMRect | undefined>()
 
 const classes = computed(() => {
   const classes = {
@@ -52,7 +51,7 @@ const classes = computed(() => {
   }
 
   // defaults classes when positioning
-  classes.wrapper = "absolute z-10 h-0 flex w-screen"
+  classes.wrapper = "h-0 flex w-screen"
   classes.content = "absolute"
 
   // merge static positioning classes
@@ -113,35 +112,40 @@ const staticPosition = computed(() => {
 })
 
 const autoPosition = computed(() => {
-  if (
-    anchorRect.value === undefined ||
-    wrapper.value === undefined ||
-    !wrapper.value.el
-  ) {
+  if (!wrapper?.value?.el || !trigger?.value?.el) {
     return {}
   }
+
   const { vw, vh } = viewport.value
 
-  const offset = 10 // avoid bumping up against the edge of the browser when possible
+  // avoid bumping up against the edge of the browser when possible
+  const offset = 10
+
+  // base the anchor rectangle off of the entire trigger dom element to move around it
+  const anchorRect: DOMRect = trigger.value.el.getBoundingClientRect()
+  // the content rectangle is best calculated by our first child (content) element inside the wrapper
   const contentRect: DOMRect =
     wrapper.value.el.firstChild.getBoundingClientRect()
-  const distToBottom = vh - anchorRect.value.bottom
-  //NOTE: edge case - there may be more space bellow in viewport
+  const distToBottom = vh - anchorRect.bottom
+  // NOTE: edge case - there may be more space below in the viewport
   // but less document space for display
-  // the inverse could also be true - but very rare
-  const positionAbove = anchorRect.value.top > distToBottom
-  const distToRight = vw - anchorRect.value.left
-  const flowLeft = anchorRect.value.left > distToRight
+  // the inverse could also be true - but will be very rare
+  // occurring with unreasonably large popover content
+  const positionAbove = anchorRect.top > distToBottom
+  const distToRight = vw - anchorRect.left
+  const flowLeft = anchorRect.left > distToRight
 
+  // translate the content container on the x axis to the correct position
+  // considering the flow the content should take
   let xPos = 0
   if (flowLeft) {
-    if (contentRect.width > anchorRect.value.right) {
+    if (contentRect.width > anchorRect.right) {
       xPos =
-        anchorRect.value.right -
+        anchorRect.right -
         contentRect.width +
-        (contentRect.width - anchorRect.value.right)
+        (contentRect.width - anchorRect.right)
     } else {
-      xPos = anchorRect.value.right - contentRect.width
+      xPos = anchorRect.right - contentRect.width
     }
 
     if (vw > contentRect.width + offset) {
@@ -149,9 +153,9 @@ const autoPosition = computed(() => {
     }
   } else {
     if (contentRect.width > distToRight) {
-      xPos = anchorRect.value.left - (contentRect.width - distToRight)
+      xPos = anchorRect.left - (contentRect.width - distToRight)
     } else {
-      xPos = anchorRect.value.left
+      xPos = anchorRect.left
     }
 
     if (vw > contentRect.width + offset) {
@@ -163,7 +167,7 @@ const autoPosition = computed(() => {
     wrapper: {
       top: positionAbove ? "auto" : `100%`,
       bottom: positionAbove ? "100%" : `auto`,
-      transform: `translate(${anchorRect.value.left * -1}px, 0)`, // pin to left of window
+      transform: `translate(${anchorRect.left * -1}px, 0)`, // pin to left of window
       width: `${vw}px`,
     },
     content: {
@@ -175,17 +179,11 @@ const autoPosition = computed(() => {
 })
 
 if (props.position === "auto") {
-  const setPositions = () => {
-    if (trigger.value === undefined) return
-    anchorRect.value = trigger.value.el.getBoundingClientRect()
-
+  const throttledSetPositions = throttle(() => {
     viewport.value = getViewportDimensions()
-  }
-
-  const throttledSetPositions = throttle(setPositions)
+  })
 
   onMounted(() => {
-    setPositions()
     window.addEventListener("resize", throttledSetPositions)
     window.addEventListener("scroll", throttledSetPositions)
   })
@@ -199,10 +197,7 @@ if (props.position === "auto") {
 
 <template>
   <div>
-    <HeadlessPopover
-      v-slot="{ open, close }"
-      class="flex relative leading-none"
-    >
+    <HeadlessPopover v-slot="{ open, close }" class="relative leading-none">
       <HeadlessPopoverButton ref="trigger">
         <slot name="button" :open="open" :close="close"></slot>
       </HeadlessPopoverButton>
@@ -217,6 +212,7 @@ if (props.position === "auto") {
       >
         <HeadlessPopoverPanel
           ref="wrapper"
+          class="absolute z-10"
           :class="classes.wrapper"
           :style="position === 'auto' ? autoPosition.wrapper : {}"
         >
