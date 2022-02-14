@@ -22,9 +22,11 @@ import { computed, onMounted, onUnmounted, ref } from "vue"
 
 const props = withDefaults(
   defineProps<{
+    as?: string
     position?: PopoverPosition
   }>(),
   {
+    as: "div",
     position: "auto",
   }
 )
@@ -196,34 +198,32 @@ if (props.position === "auto") {
 </script>
 
 <template>
-  <div>
-    <HeadlessPopover v-slot="{ open, close }" class="relative leading-none">
-      <HeadlessPopoverButton ref="trigger">
-        <slot name="button" :open="open" :close="close"></slot>
-      </HeadlessPopoverButton>
+  <HeadlessPopover v-slot="{ open, close }" class="relative" :as="as">
+    <HeadlessPopoverButton ref="trigger">
+      <slot name="button" :open="open" :close="close"></slot>
+    </HeadlessPopoverButton>
 
-      <transition
-        enter-active-class="transition-opacity transition-faster ease-out-quad"
-        leave-active-class="transition-opacity transition-fastest ease-in-quad"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
+    <transition
+      enter-active-class="transition-opacity transition-faster ease-out-quad"
+      leave-active-class="transition-opacity transition-fastest ease-in-quad"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <HeadlessPopoverPanel
+        ref="wrapper"
+        class="absolute z-10"
+        :class="classes.wrapper"
+        :style="position === 'auto' ? autoPosition.wrapper : {}"
       >
-        <HeadlessPopoverPanel
-          ref="wrapper"
-          class="absolute z-10"
-          :class="classes.wrapper"
-          :style="position === 'auto' ? autoPosition.wrapper : {}"
+        <div
+          :class="classes.content"
+          :style="position === 'auto' ? autoPosition.content : {}"
         >
-          <div
-            :class="classes.content"
-            :style="position === 'auto' ? autoPosition.content : {}"
-          >
-            <slot :open="open" :close="close"></slot>
-          </div>
-        </HeadlessPopoverPanel>
-      </transition>
-    </HeadlessPopover>
-  </div>
+          <slot :open="open" :close="close"></slot>
+        </div>
+      </HeadlessPopoverPanel>
+    </transition>
+  </HeadlessPopover>
 </template>

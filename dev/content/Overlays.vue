@@ -58,6 +58,11 @@ const popoverPositions: PopoverPosition[] = [
 
 const popoverProps = [
   {
+    name: "as",
+    required: false,
+    type: "string - default: div",
+  },
+  {
     name: "position",
     required: false,
     type: "PopoverPosition - default: auto",
@@ -65,6 +70,11 @@ const popoverProps = [
 ]
 
 const tooltipProps = [
+  {
+    name: "as",
+    required: false,
+    type: "string - default: span",
+  },
   {
     name: "position",
     required: false,
