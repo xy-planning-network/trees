@@ -60,7 +60,7 @@ const popoverProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: top-center",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
@@ -68,7 +68,7 @@ const tooltipProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: top-center",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
@@ -345,7 +345,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           <div class="grid gap-4 grid-cols-5">
             <div v-for="index in 5" :key="index">
               <div class="flex justify-center">
-                <Tooltip position="auto">
+                <Tooltip>
                   This is a simple tooltip. This is a simple tooltip. This is a
                   simple tooltip. This is a simple tooltip. This is a simple
                   tooltip.</Tooltip
