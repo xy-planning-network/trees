@@ -58,17 +58,27 @@ const popoverPositions: PopoverPosition[] = [
 
 const popoverProps = [
   {
+    name: "as",
+    required: false,
+    type: "string - default: div",
+  },
+  {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: top-center",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
 const tooltipProps = [
   {
+    name: "as",
+    required: false,
+    type: "string - default: span",
+  },
+  {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: top-center",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
@@ -234,7 +244,9 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           The popover content is heavily customizable in the default slot. Use
           the PopoverContent component for basic initial wrapper styling.
           Positioning is absolute and subject to parent container overflow
-          rules.
+          rules. You're responsible for managing the width of your popover
+          content. Generally, popovers should be narrow and start with a
+          max-w-sm class.
         </template>
 
         <div>
@@ -252,7 +264,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
                 </div>
               </template>
               <div
-                class="max-w-xs rounded-lg bg-white border border-gray-100 shadow-md text-sm leading-tight font-medium"
+                class="w-full max-w-xs rounded-lg bg-white border border-gray-100 shadow-md text-sm leading-tight font-medium"
               >
                 <div
                   v-for="n in 3"
@@ -331,6 +343,28 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             </div>
           </div>
         </div>
+
+        <div class="mt-8">
+          <p class="mb-4">
+            <strong>Auto positioning</strong> favors left to right positioning.
+            i.e. if there appears to be space available to the right of the
+            trigger the tooltip content will flow toward the right. Top and
+            bottom positioning is prioritized by the current viewport, giving
+            preference where more visible space currently exists.
+          </p>
+          <div class="grid gap-4 grid-cols-5">
+            <div v-for="index in 5" :key="index">
+              <div class="flex justify-center">
+                <Tooltip>
+                  This is a simple tooltip. This is a simple tooltip. This is a
+                  simple tooltip. This is a simple tooltip. This is a simple
+                  tooltip.</Tooltip
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
         <PropsTable :props="tooltipProps"></PropsTable>
       </ComponentLayout>
     </div>
