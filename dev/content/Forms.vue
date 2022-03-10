@@ -41,12 +41,13 @@ const radioProps = [
   {
     name: "options",
     required: true,
-    type: "Array<{ label: string; value: string }>",
+    type: "Array<{ help?: string, label: string; value: number | string }>",
   },
   { name: "modelValue", required: true, type: "string" },
-  { name: "legend", required: false, type: "boolean" },
+  { name: "help", required: false, type: "string" },
+  { name: "legend", required: false, type: "string" },
 ]
-const radioSelection = ref("")
+const radioSelection = ref<string | number>("val2")
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const selectProps = [
   { name: "design", required: false, type: "string" },
@@ -324,6 +325,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               legend="Make Complex Selections"
               help="Select all that apply."
               :options="options"
+              disabled
               v-model="multiCheckboxSelection"
             />
             <div class="mt-2"><b>Value:</b> {{ multiCheckboxSelection }}</div>
@@ -342,8 +344,36 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="radioCopy" />
           </label>
-          <div class="mt-1">
-            <Radio :options="options" v-model="radioSelection" />
+          <div class="mt-1 space-y-8">
+            <Radio
+              legend="Make Basic Choice"
+              :options="
+                options.map((option) => ({
+                  label: option.label,
+                  value: option.value,
+                }))
+              "
+              v-model="radioSelection"
+            />
+
+            <Radio
+              legend="Make Complex Choice"
+              help="Only one - I know it's hard!"
+              :options="options"
+              disabled
+              v-model="radioSelection"
+            />
+
+            <div class="flex">
+              <Radio
+                legend="In A Grid Too"
+                help="Set the columns prop to 2 or 3"
+                :options="options"
+                disabled
+                v-model="radioSelection"
+                :columns="2"
+              />
+            </div>
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
           </div>
