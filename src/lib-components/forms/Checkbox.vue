@@ -26,8 +26,9 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
         :id="uuid"
         :aria-labelledby="label ? `${uuid}-label` : undefined"
         :aria-describedby="help ? `${uuid}-help` : undefined"
-        type="checkbox"
+        :checked="modelValue"
         class="focus:ring-blue-500 h-4 w-4 text-blue-500 border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        type="checkbox"
         v-bind="{
           onChange: ($event) => {
             emits('update:modelValue', ($event.target as HTMLInputElement).checked)
@@ -38,18 +39,12 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
     </div>
     <div class="ml-3">
       <InputLabel
-        v-if="label"
         class="mt-auto"
         :id="`${uuid}-label`"
         :for="uuid"
         :label="label"
       />
-      <InputHelp
-        v-if="help"
-        class="-mt-1"
-        :id="`${uuid}-help`"
-        :text="help"
-      ></InputHelp>
+      <InputHelp class="-mt-1" :id="`${uuid}-help`" :text="help"></InputHelp>
     </div>
   </div>
 </template>
