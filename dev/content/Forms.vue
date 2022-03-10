@@ -6,7 +6,7 @@ const commonProps = [
   { name: "help", required: false, type: "string" },
 ]
 const checked = ref(false)
-const checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`
+const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const checkboxProps = [
   { name: "emphasis", required: false, type: "boolean" },
   { name: "label", required: false, type: "string" },
@@ -241,7 +241,11 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="checkboxCopy" />
           </label>
           <div class="mt-1">
-            <Checkbox label="I'm here to party!" v-model="checked" />
+            <Checkbox
+              label="I'm here to party!"
+              help="Get notified when the party starts."
+              v-model="checked"
+            />
             <div class="mt-4"><b>Value:</b> {{ checked }}</div>
             <PropsTable :props="checkboxProps" />
           </div>
