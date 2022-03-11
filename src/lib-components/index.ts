@@ -30,6 +30,7 @@ import { default as Checkbox } from "./forms/Checkbox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
 import { default as InputHelp } from "./forms/InputHelp.vue"
 import { default as InputLabel } from "./forms/InputLabel.vue"
+import { default as Legend } from "./forms/Legend.vue"
 import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
 import { default as Radio } from "./forms/Radio.vue"
 import { default as Select } from "./forms/Select.vue"
@@ -64,6 +65,7 @@ export {
   DateRangePicker,
   InputHelp,
   InputLabel,
+  Legend,
   MultiCheckboxes,
   Radio,
   Select,
@@ -101,6 +103,7 @@ export interface TreesComponents {
   DateRangePicker: typeof DateRangePicker
   InputHelp: typeof InputHelp
   InputLabel: typeof InputLabel
+  Legend: typeof Legend
   MultiCheckboxes: typeof MultiCheckboxes
   Radio: typeof Radio
   Select: typeof Select
