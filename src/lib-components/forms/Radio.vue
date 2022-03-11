@@ -49,6 +49,10 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
       >
         <div class="flex items-center h-5">
           <input
+            :aria-describedby="
+              option?.help && option.help ? `${uuid}-${index}-help` : undefined
+            "
+            :aria-labelledby="`${uuid}-${index}-label`"
             :checked="modelValue === option.value"
             class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
             :id="`${uuid}-${index}`"
