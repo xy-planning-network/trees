@@ -30,7 +30,7 @@ const multiCheckboxProps = [
   {
     name: "options",
     required: true,
-    type: "Array<{ help?: string; label: string; value: number | string }>",
+    type: "Array<{ disabled?: boolean, help?: string; label: string; value: number | string }>",
   },
   { name: "modelValue", required: true, type: "string" },
   { name: "legend", required: false, type: "string" },
@@ -41,7 +41,7 @@ const radioProps = [
   {
     name: "options",
     required: true,
-    type: "Array<{ help?: string, label: string; value: number | string }>",
+    type: "Array<{ disabled?: boolean, help?: string, label: string; value: number | string }>",
   },
   { name: "modelValue", required: true, type: "string" },
   { name: "help", required: false, type: "string" },
@@ -89,6 +89,7 @@ const selected = ref("")
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
 const yesOrNoRadioSelection = ref(undefined)
 const yesOrNoRadioProps = [
+  { name: "help", required: false, type: "string" },
   { name: "legend", required: false, type: "string" },
   { name: "name", required: false, type: "string" },
   { name: "modelValue", required: false, type: "boolean" },
