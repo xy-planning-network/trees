@@ -5,8 +5,8 @@ const commonProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
-const checked = ref(false)
-const checkboxCopy = `<Checkbox label="I'm here to party!" v-model="checked" />`
+const checked = ref(true)
+const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const checkboxProps = [
   { name: "emphasis", required: false, type: "boolean" },
   { name: "label", required: false, type: "string" },
@@ -25,28 +25,29 @@ const dateRangePickerProps = [
 ]
 const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`
 const inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`
-const multiCheckboxCopy = `<MultiCheckboxes :options="options" v-model="selected" />`
+const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" legend="Make Some Selections" help="Select all that apply." :options="options" />`
 const multiCheckboxProps = [
   {
     name: "options",
     required: true,
-    type: "Array<{ label: string; value: string }>",
+    type: "Array<{ disabled?: boolean, help?: string; label: string; value: number | string }>",
   },
   { name: "modelValue", required: true, type: "string" },
   { name: "legend", required: false, type: "string" },
 ]
-const multiCheckboxSelection = ref([])
+const multiCheckboxSelection = ref(["val2", 4])
 const radioCopy = `<Radio :options="options" v-model="selected" />`
 const radioProps = [
   {
     name: "options",
     required: true,
-    type: "Array<{ label: string; value: string }>",
+    type: "Array<{ disabled?: boolean, help?: string, label: string; value: number | string }>",
   },
   { name: "modelValue", required: true, type: "string" },
-  { name: "legend", required: false, type: "boolean" },
+  { name: "help", required: false, type: "string" },
+  { name: "legend", required: false, type: "string" },
 ]
-const radioSelection = ref("")
+const radioSelection = ref<string | number>("val2")
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const selectProps = [
   { name: "design", required: false, type: "string" },
@@ -60,10 +61,27 @@ const selectProps = [
   ...commonProps,
 ]
 const options = [
-  { label: "You could select this", value: "val1" },
-  { label: "This is an option", value: "val2" },
-  { label: "Feeling good about this one?", value: "val3" },
-  { label: "This is the LAST option", value: "val4" },
+  {
+    label: "You could select this",
+    help: "It's really quite nice.",
+    value: "val1",
+  },
+  {
+    label: "This is an option",
+    help: "Ah, indeed it is an option.",
+    value: "val2",
+  },
+  {
+    label: "Feeling good about this one?",
+    help: "Of course you are!",
+    value: 3,
+  },
+  {
+    disabled: true,
+    label: "This is the LAST option",
+    help: "There's no turning back.",
+    value: 4,
+  },
 ]
 
 const selected = ref("")
@@ -71,6 +89,7 @@ const selected = ref("")
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
 const yesOrNoRadioSelection = ref(undefined)
 const yesOrNoRadioProps = [
+  { name: "help", required: false, type: "string" },
   { name: "legend", required: false, type: "string" },
   { name: "name", required: false, type: "string" },
   { name: "modelValue", required: false, type: "boolean" },
@@ -192,6 +211,16 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
         </div>
 
         <div>
+          <div class="mt-1">
+            <BaseInput
+              :disabled="true"
+              type="text"
+              label="Disabled"
+            ></BaseInput>
+          </div>
+        </div>
+
+        <div>
           <div class="border-t pt-4 mt-4">
             <Select
               :options="inputTypes"
@@ -223,7 +252,20 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="textareaCopy" />
           </label>
           <div class="mt-1">
-            <TextArea v-model="textarea" />
+            <TextArea
+              v-model="textarea"
+              label="How about it (disabled)?"
+              help="In your own words."
+            />
+
+            <div class="mt-4">
+              <TextArea
+                :disabled="true"
+                label="How about it (disabled)?"
+                help="In your own words."
+                v-model="textarea"
+              />
+            </div>
             <div class="mt-4"><b>Value:</b> {{ textarea }}</div>
             <PropsTable :props="textareaProps" />
           </div>
@@ -240,8 +282,25 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="checkboxCopy" />
           </label>
-          <div class="mt-1">
-            <Checkbox label="I'm here to party!" v-model="checked" />
+          <div class="mt-1 space-y-8">
+            <Checkbox
+              label="I'm here to party!"
+              help="Get notified when the party starts."
+              v-model="checked"
+            />
+
+            <Checkbox
+              :disabled="true"
+              label="I'm here to party! (disabled)"
+              help="Get notified when the party starts."
+              v-model="checked"
+            />
+
+            <Checkbox
+              label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
+              v-model="checked"
+            />
+
             <div class="mt-4"><b>Value:</b> {{ checked }}</div>
             <PropsTable :props="checkboxProps" />
           </div>
@@ -282,12 +341,38 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="multiCheckboxCopy" />
           </label>
-          <div class="mt-1">
+          <div class="mt-1 space-y-8">
             <MultiCheckboxes
-              :options="options"
+              legend="Make Basic Selections"
+              :options="
+                options.map((option) => ({
+                  disabled: option.disabled,
+                  label: option.label,
+                  value: option.value,
+                }))
+              "
               v-model="multiCheckboxSelection"
             />
-            <div class="mt-4"><b>Value:</b> {{ multiCheckboxSelection }}</div>
+
+            <MultiCheckboxes
+              legend="Make Complex Selections"
+              help="Select all that apply."
+              :options="options"
+              disabled
+              v-model="multiCheckboxSelection"
+            />
+
+            <div class="flex">
+              <MultiCheckboxes
+                :columns="2"
+                help="Set the columns prop to 2, 3, or 4"
+                :options="options"
+                v-model="multiCheckboxSelection"
+              >
+                <template #legend>In A Grid Too</template>
+              </MultiCheckboxes>
+            </div>
+            <div class="mt-2"><b>Value:</b> {{ multiCheckboxSelection }}</div>
             <PropsTable :props="multiCheckboxProps" />
           </div>
         </div>
@@ -303,8 +388,37 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="radioCopy" />
           </label>
-          <div class="mt-1">
-            <Radio :options="options" v-model="radioSelection" />
+          <div class="mt-1 space-y-8">
+            <Radio
+              legend="Make Basic Choice"
+              :options="
+                options.map((option) => ({
+                  disabled: option.disabled,
+                  label: option.label,
+                  value: option.value,
+                }))
+              "
+              v-model="radioSelection"
+            />
+
+            <Radio
+              legend="Make Complex Choice"
+              help="Only one - I know it's hard!"
+              :options="options"
+              disabled
+              v-model="radioSelection"
+            />
+
+            <div class="flex">
+              <Radio
+                help="Set the columns prop to 2, 3, or 4"
+                :options="options"
+                v-model="radioSelection"
+                :columns="2"
+              >
+                <template #legend>In A Grid Too</template>
+              </Radio>
+            </div>
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
           </div>
@@ -356,7 +470,18 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="yesOrNoRadioCopy" />
           </label>
           <div class="mt-1">
-            <YesOrNoRadio v-model="yesOrNoRadioSelection"></YesOrNoRadio>
+            <YesOrNoRadio
+              legend="Is this thing on?"
+              help="Only one way to find out."
+              v-model="yesOrNoRadioSelection"
+            ></YesOrNoRadio>
+            <div class="mt-2">
+              <YesOrNoRadio
+                legend="Is this thing on? (disabled)"
+                v-model="yesOrNoRadioSelection"
+                disabled
+              ></YesOrNoRadio>
+            </div>
             <div class="mt-4"><b>Value:</b> {{ yesOrNoRadioSelection }}</div>
             <PropsTable :props="yesOrNoRadioProps" />
           </div>

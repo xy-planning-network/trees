@@ -354,13 +354,11 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           </p>
           <div class="grid gap-4 grid-cols-5">
             <div v-for="index in 5" :key="index">
-              <div class="flex justify-center">
-                <Tooltip>
-                  This is a simple tooltip. This is a simple tooltip. This is a
-                  simple tooltip. This is a simple tooltip. This is a simple
-                  tooltip.</Tooltip
-                >
-              </div>
+              <Tooltip>
+                This is a simple tooltip. This is a simple tooltip. This is a
+                simple tooltip. This is a simple tooltip. This is a simple
+                tooltip.</Tooltip
+              >
             </div>
           </div>
         </div>

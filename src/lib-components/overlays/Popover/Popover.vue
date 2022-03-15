@@ -198,7 +198,7 @@ if (props.position === "auto") {
 </script>
 
 <template>
-  <HeadlessPopover v-slot="{ open, close }" class="relative" :as="as">
+  <HeadlessPopover v-slot="{ open, close }" class="relative flex" :as="as">
     <HeadlessPopoverButton ref="trigger">
       <slot name="button" :open="open" :close="close"></slot>
     </HeadlessPopoverButton>

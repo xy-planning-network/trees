@@ -16,7 +16,7 @@ withDefaults(
     v-if="text"
     v-bind="{
       ...$attrs,
-      class: 'mt-2 text-sm leading-snug font-semibold text-gray-700',
+      class: 'mt-1 text-sm leading-snug font-normal text-gray-700',
     }"
   >
     {{ text }}
