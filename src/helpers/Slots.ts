@@ -9,8 +9,6 @@ export function hasSlotContent(
   return slot(slotProps).some((vnode: VNode) => {
     if (vnode.type === Comment) return false
 
-    console.log(vnode)
-
     if (Array.isArray(vnode.children) && !vnode.children.length) return false
 
     return (

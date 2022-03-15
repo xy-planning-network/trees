@@ -40,6 +40,8 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
       'border-gray-600',
       'rounded-md',
       'w-full',
+      'disabled:opacity-70',
+      'disabled:cursor-not-allowed',
     ]"
     :id="uuid"
     :value="modelValue"

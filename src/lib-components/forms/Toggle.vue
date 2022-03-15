@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Switch } from "@headlessui/vue"
 
+// TODO: disabled support, possibly label and help support - determine current usage first
+
 withDefaults(defineProps<{ modelValue: boolean }>(), { modelValue: false })
 const emits = defineEmits(["update:modelValue"])
 </script>

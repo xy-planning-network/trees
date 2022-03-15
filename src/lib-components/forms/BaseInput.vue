@@ -69,6 +69,8 @@ const isTextType = computed((): boolean => {
             'border-gray-600',
             'rounded-md',
             'w-full',
+            'disabled:opacity-70',
+            'disabled:cursor-not-allowed',
           ]
         : []),
     ]"

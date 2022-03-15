@@ -148,8 +148,6 @@ const inputHelpProps = [
 const toggleValue = ref(false)
 const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
 const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
-
-const showLegend = ref(false)
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -212,6 +210,16 @@ const showLegend = ref(false)
         </div>
 
         <div>
+          <div class="mt-1">
+            <BaseInput
+              :disabled="true"
+              type="text"
+              label="Disabled"
+            ></BaseInput>
+          </div>
+        </div>
+
+        <div>
           <div class="border-t pt-4 mt-4">
             <Select
               :options="inputTypes"
@@ -243,7 +251,20 @@ const showLegend = ref(false)
             <ClickToCopy :value="textareaCopy" />
           </label>
           <div class="mt-1">
-            <TextArea v-model="textarea" />
+            <TextArea
+              v-model="textarea"
+              label="How about it (disabled)?"
+              help="In your own words."
+            />
+
+            <div class="mt-4">
+              <TextArea
+                :disabled="true"
+                label="How about it (disabled)?"
+                help="In your own words."
+                v-model="textarea"
+              />
+            </div>
             <div class="mt-4"><b>Value:</b> {{ textarea }}</div>
             <PropsTable :props="textareaProps" />
           </div>
@@ -263,6 +284,13 @@ const showLegend = ref(false)
           <div class="mt-1 space-y-8">
             <Checkbox
               label="I'm here to party!"
+              help="Get notified when the party starts."
+              v-model="checked"
+            />
+
+            <Checkbox
+              :disabled="true"
+              label="I'm here to party! (disabled)"
               help="Get notified when the party starts."
               v-model="checked"
             />
@@ -441,7 +469,18 @@ const showLegend = ref(false)
             <ClickToCopy :value="yesOrNoRadioCopy" />
           </label>
           <div class="mt-1">
-            <YesOrNoRadio v-model="yesOrNoRadioSelection"></YesOrNoRadio>
+            <YesOrNoRadio
+              legend="Is this thing on?"
+              help="Only one way to find out."
+              v-model="yesOrNoRadioSelection"
+            ></YesOrNoRadio>
+            <div class="mt-2">
+              <YesOrNoRadio
+                legend="Is this thing on? (disabled)"
+                v-model="yesOrNoRadioSelection"
+                disabled
+              ></YesOrNoRadio>
+            </div>
             <div class="mt-4"><b>Value:</b> {{ yesOrNoRadioSelection }}</div>
             <PropsTable :props="yesOrNoRadioProps" />
           </div>
