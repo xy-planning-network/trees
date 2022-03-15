@@ -1,22 +1,14 @@
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    text?: string
-  }>(),
-  {
-    text: "",
-  }
-)
+import { hasSlotContent } from "@/helpers/Slots"
 </script>
-
 <template>
   <legend
-    v-if="text"
+    v-if="hasSlotContent($slots.default)"
     v-bind="{
       ...$attrs,
       class: 'text-base font-medium leading-tight text-gray-900',
     }"
   >
-    {{ text }}
+    <slot />
   </legend>
 </template>

@@ -77,6 +77,7 @@ const options = [
     value: 3,
   },
   {
+    disabled: true,
     label: "This is the LAST option",
     help: "There's no turning back.",
     value: 4,
@@ -147,6 +148,8 @@ const inputHelpProps = [
 const toggleValue = ref(false)
 const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
 const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
+
+const showLegend = ref(false)
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -314,6 +317,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               legend="Make Basic Selections"
               :options="
                 options.map((option) => ({
+                  disabled: option.disabled,
                   label: option.label,
                   value: option.value,
                 }))
@@ -328,6 +332,17 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               disabled
               v-model="multiCheckboxSelection"
             />
+
+            <div class="flex">
+              <MultiCheckboxes
+                :columns="2"
+                help="Set the columns prop to 2, 3, or 4"
+                :options="options"
+                v-model="multiCheckboxSelection"
+              >
+                <template #legend>In A Grid Too</template>
+              </MultiCheckboxes>
+            </div>
             <div class="mt-2"><b>Value:</b> {{ multiCheckboxSelection }}</div>
             <PropsTable :props="multiCheckboxProps" />
           </div>
@@ -349,6 +364,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               legend="Make Basic Choice"
               :options="
                 options.map((option) => ({
+                  disabled: option.disabled,
                   label: option.label,
                   value: option.value,
                 }))
@@ -366,13 +382,13 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <div class="flex">
               <Radio
-                legend="In A Grid Too"
-                help="Set the columns prop to 2 or 3"
+                help="Set the columns prop to 2, 3, or 4"
                 :options="options"
-                disabled
                 v-model="radioSelection"
                 :columns="2"
-              />
+              >
+                <template #legend>In A Grid Too</template>
+              </Radio>
             </div>
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
