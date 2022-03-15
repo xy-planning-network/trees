@@ -2,6 +2,7 @@
 import Uniques from "@/helpers/Uniques"
 import { computed, useAttrs } from "vue"
 import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
 
 const props = withDefaults(
   defineProps<{
