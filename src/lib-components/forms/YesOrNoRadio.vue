@@ -34,7 +34,7 @@ const onChange = (e: Event) => {
     :aria-labelledby="legend ? `${uuid}-legend` : undefined"
     :aria-describedby="help ? `${uuid}-help` : undefined"
   >
-    <div class="space-y-0.5">
+    <div v-if="legend || help" class="space-y-0.5">
       <InputLabel
         class="block my-auto"
         :label="legend"

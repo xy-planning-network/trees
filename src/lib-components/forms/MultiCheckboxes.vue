@@ -55,7 +55,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
     :aria-labelledby="hasLegend ? `${uuid}-legend` : undefined"
     :aria-describedby="help ? `${uuid}-help` : undefined"
   >
-    <div class="space-y-0.5">
+    <div v-if="hasLegend || help" class="space-y-0.5">
       <FieldsetLegend :id="`${uuid}-legend`">
         <div v-if="legend">{{ legend }}</div>
         <slot v-if="$slots.legend" name="legend"></slot>
