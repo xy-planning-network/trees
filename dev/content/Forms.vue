@@ -362,16 +362,15 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               v-model="multiCheckboxSelection"
             />
 
-            <div class="flex">
-              <MultiCheckboxes
-                :columns="2"
-                help="Set the columns prop to 2, 3, or 4"
-                :options="options"
-                v-model="multiCheckboxSelection"
-              >
-                <template #legend>In A Grid Too</template>
-              </MultiCheckboxes>
-            </div>
+            <MultiCheckboxes
+              :columns="2"
+              help="Set the columns prop to 2, 3, or 4"
+              :options="options"
+              v-model="multiCheckboxSelection"
+            >
+              <template #legend>In A Grid Too</template>
+            </MultiCheckboxes>
+
             <div class="mt-2"><b>Value:</b> {{ multiCheckboxSelection }}</div>
             <PropsTable :props="multiCheckboxProps" />
           </div>
@@ -409,16 +408,15 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               v-model="radioSelection"
             />
 
-            <div class="flex">
-              <Radio
-                help="Set the columns prop to 2, 3, or 4"
-                :options="options"
-                v-model="radioSelection"
-                :columns="2"
-              >
-                <template #legend>In A Grid Too</template>
-              </Radio>
-            </div>
+            <Radio
+              help="Set the columns prop to 2, 3, or 4"
+              :options="options"
+              v-model="radioSelection"
+              :columns="undefined"
+            >
+              <template #legend>In A Grid Too</template>
+            </Radio>
+
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
           </div>

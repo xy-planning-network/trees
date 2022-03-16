@@ -62,54 +62,58 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
       </FieldsetLegend>
       <InputHelp tag="p" :text="help" :id="`${uuid}-help`" />
     </div>
-    <div
-      class="grid gap-4"
-      :class="{
-        'sm:grid sm:gap-y-4 sm:gap-x-5 sm:space-y-0': columns !== undefined,
-        'sm:grid-cols-2': columns === 2,
-        'sm:grid-cols-3': columns === 3,
-        'sm:grid-cols-4': columns === 4,
-      }"
-    >
+    <div class="flex">
       <div
-        v-for="(option, index) in options"
-        :key="option.value"
-        class="flex items-start"
+        class="grid gap-4"
+        :class="{
+          'sm:grid sm:gap-y-4 sm:gap-x-5 sm:space-y-0': columns !== undefined,
+          'sm:grid-cols-2': columns === 2,
+          'sm:grid-cols-3': columns === 3,
+          'sm:grid-cols-4': columns === 4,
+        }"
       >
-        <div class="flex items-center h-5">
-          <input
-            :id="uuid"
-            :aria-labelledby="`${uuid}-${index}-label`"
-            :aria-describedby="
-              option?.help && option.help ? `${uuid}-${index}-help` : undefined
-            "
-            :checked="modelValue.includes(option.value)"
-            :disabled="option.disabled === true ? true : undefined"
-            class="focus:ring-blue-500 h-4 w-4 text-blue-500 border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-            type="checkbox"
-            v-bind="{
+        <div
+          v-for="(option, index) in options"
+          :key="option.value"
+          class="flex items-start"
+        >
+          <div class="flex items-center h-5">
+            <input
+              :id="uuid"
+              :aria-labelledby="`${uuid}-${index}-label`"
+              :aria-describedby="
+                option?.help && option.help
+                  ? `${uuid}-${index}-help`
+                  : undefined
+              "
+              :checked="modelValue.includes(option.value)"
+              :disabled="option.disabled === true ? true : undefined"
+              class="focus:ring-blue-500 h-4 w-4 text-blue-500 border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              type="checkbox"
+              v-bind="{
               onChange: ($event) => { onChange(($event.target as HTMLInputElement).checked, option.value) },
               ...$attrs,
             }"
-          />
-        </div>
-        <div class="ml-3">
-          <InputLabel
-            class="mt-auto"
-            :disabled="
-              ($attrs.hasOwnProperty('disabled') &&
-                $attrs.disabled !== false) ||
-              option.disabled === true
-            "
-            :id="`${uuid}-${index}-label`"
-            :for="uuid"
-            :label="option.label"
-          />
-          <InputHelp
-            class="-mt-1"
-            :id="`${uuid}-${index}-help`"
-            :text="option.help"
-          />
+            />
+          </div>
+          <div class="ml-3">
+            <InputLabel
+              class="mt-auto"
+              :disabled="
+                ($attrs.hasOwnProperty('disabled') &&
+                  $attrs.disabled !== false) ||
+                option.disabled === true
+              "
+              :id="`${uuid}-${index}-label`"
+              :for="uuid"
+              :label="option.label"
+            />
+            <InputHelp
+              class="-mt-1"
+              :id="`${uuid}-${index}-help`"
+              :text="option.help"
+            />
+          </div>
         </div>
       </div>
     </div>
