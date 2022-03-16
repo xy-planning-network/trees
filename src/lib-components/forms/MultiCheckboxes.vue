@@ -79,7 +79,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
         >
           <div class="flex items-center h-5">
             <input
-              :id="uuid"
+              :id="`${uuid}-${index}`"
               :aria-labelledby="`${uuid}-${index}-label`"
               :aria-describedby="
                 option?.help && option.help
@@ -91,7 +91,9 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
               class="focus:ring-blue-500 h-4 w-4 text-blue-500 border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
               type="checkbox"
               v-bind="{
-              onChange: ($event) => { onChange(($event.target as HTMLInputElement).checked, option.value) },
+              onChange: ($event) => { 
+                onChange(($event.target as HTMLInputElement).checked, option.value)
+              },
               ...$attrs,
             }"
             />
@@ -105,7 +107,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
                 option.disabled === true
               "
               :id="`${uuid}-${index}-label`"
-              :for="uuid"
+              :for="`${uuid}-${index}`"
               :label="option.label"
             />
             <InputHelp

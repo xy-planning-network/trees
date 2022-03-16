@@ -93,7 +93,7 @@ const hasLegend = computed(() => {
                 option.disabled === true
               "
               :id="`${uuid}-${index}-label`"
-              :for="uuid"
+              :for="`${uuid}-${index}`"
               :label="option.label"
             />
             <InputHelp
