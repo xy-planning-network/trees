@@ -1,12 +1,10 @@
-import axios, {
-  AxiosError,
-  AxiosPromise,
-  AxiosResponse,
-  AxiosRequestConfig,
-} from "axios"
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
+
+export type RequestMethod = "GET" | "PUT" | "POST" | "DELETE"
 
 export interface RequestOptions {
   skipLoader?: boolean
+  withDelay?: number
 }
 
 const apiAxiosInstance = axios.create({
@@ -16,55 +14,58 @@ const apiAxiosInstance = axios.create({
 })
 
 const BaseAPI = {
-  makeRequest(config: AxiosRequestConfig, opts: RequestOptions): AxiosPromise {
+  makeRequest<T = any>(config: AxiosRequestConfig, opts: RequestOptions) {
     config.data = JSON.stringify(config.data)
     config.headers = { "Content-Type": "application/json" }
 
-    return new Promise((resolve, reject) => {
-      const wait = window.setTimeout(() => {
-        if (!opts.skipLoader) window.VueBus.emit("Spinner-show")
-      }, 200)
+    const wait = window.setTimeout(() => {
+      if (!opts.skipLoader) window.VueBus.emit("Spinner-show")
+    }, 200)
 
-      apiAxiosInstance(config).then(
-        (success: AxiosResponse) => {
-          window.clearTimeout(wait)
-          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
-          resolve(success.data)
+    return new Promise<T>((resolve, reject) => {
+      setTimeout(
+        () => {
+          apiAxiosInstance(config)
+            .then(
+              (success: AxiosResponse<T>) => {
+                resolve(success.data)
+              },
+              (err) => {
+                reject(err)
+              }
+            )
+            .finally(() => {
+              window.clearTimeout(wait)
+              if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
+            })
         },
-        (error: AxiosError) => {
-          // TODO: come back once we've finalized format for API response and
-          // have nice UI that their session is expired with redirect to login
-          // page
-          window.clearTimeout(wait)
-          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
-          reject(error.response)
-        }
+        opts?.withDelay ? opts.withDelay : 0
       )
     })
   },
-  get(
+  get<T = any>(
     path: string,
     opts: RequestOptions,
     params?: Record<string, unknown>
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, method: "GET", params }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, method: "GET", params }, opts)
   },
-  delete(path: string, opts: RequestOptions): AxiosPromise {
-    return this.makeRequest({ url: path, method: "DELETE" }, opts)
+  delete<T = any>(path: string, opts: RequestOptions) {
+    return this.makeRequest<T>({ url: path, method: "DELETE" }, opts)
   },
-  post(
+  post<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, data, method: "POST" }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, data, method: "POST" }, opts)
   },
-  put(
+  put<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, data, method: "PUT" }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, data, method: "PUT" }, opts)
   },
 }
 
