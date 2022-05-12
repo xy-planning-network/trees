@@ -14,8 +14,6 @@ export interface UseBaseAPI<T> {
   error: ShallowRef<Error | AxiosError<T> | undefined>
   /**
    * Indicates if the request has finished
-   * It is marked true after the first request and remains unchanged
-   * In subsequent requests
    */
   isFinished: Ref<boolean>
   /**
@@ -26,6 +24,10 @@ export interface UseBaseAPI<T> {
    * Indicates if the request was canceled
    */
   isAborted: Ref<boolean>
+  /**
+   * Indicates if a first request has completed
+   */
+  hasFetched: Ref<boolean>
   /**
    * Aborts the current request
    */
@@ -46,6 +48,7 @@ export default function useBaseAPI<T = any>(
 ) {
   const result = ref<T | undefined>()
   const error = shallowRef<Error | AxiosError<T> | undefined>()
+  const hasFetched = ref<boolean>(false)
   const isFinished = ref<boolean>(false)
   const isLoading = ref<boolean>(false)
   const isAborted = ref<boolean>(false)
@@ -69,6 +72,7 @@ export default function useBaseAPI<T = any>(
     controller = new AbortController()
 
     isAborted.value = false
+    isFinished.value = false
     isLoading.value = true
 
     const requestConfig: AxiosRequestConfig = {
@@ -105,9 +109,10 @@ export default function useBaseAPI<T = any>(
       )
       .finally(() => {
         if (count == requestCount) {
+          isFinished.value = true
           isLoading.value = false
         }
-        isFinished.value = true
+        hasFetched.value = true
       })
   }
 
@@ -117,6 +122,7 @@ export default function useBaseAPI<T = any>(
     isFinished,
     isLoading,
     isAborted,
+    hasFetched,
     abort,
     execute,
   }
