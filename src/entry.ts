@@ -16,6 +16,9 @@ const install: Exclude<Plugin["install"], undefined> = function installTrees(
 // Create module definition for Vue.use()
 export default install
 
+// expose composables
+export * from "@/composables/index"
+
 // To allow individual component use, export components
 // each can be registered via Vue.component()
 export * from "@/lib-components/index"
