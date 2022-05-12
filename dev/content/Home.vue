@@ -4,6 +4,7 @@ import {
   ColorSwatchIcon,
   DocumentTextIcon,
   LocationMarkerIcon,
+  PencilAltIcon,
   TableIcon,
   UserGroupIcon,
 } from "@heroicons/vue/outline"
@@ -50,6 +51,11 @@ const features = [
     icon: UserGroupIcon,
     description:
       "Our team once built something that helped the company, and we've been grateful ever since.",
+  },
+  {
+    name: "Composables",
+    icon: PencilAltIcon,
+    description: "Functions that manage reactivity behind the scenes.",
   },
 ]
 </script>

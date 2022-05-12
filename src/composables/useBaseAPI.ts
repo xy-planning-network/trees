@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig } from "axios"
+import axios, { AxiosError, AxiosRequestConfig } from "axios"
 import { ref, Ref, shallowRef, ShallowRef } from "vue"
 import BaseAPI from "../api/base"
 import type { RequestMethod, RequestOptions } from "../api/base"
@@ -49,11 +49,13 @@ export default function useBaseAPI<T = any>(
   const isFinished = ref<boolean>(false)
   const isLoading = ref<boolean>(false)
   const isAborted = ref<boolean>(false)
+  let requestCount = 0
 
-  const controller = new AbortController()
+  let controller: AbortController | undefined
   const abort = () => {
-    controller.abort()
-    isAborted.value = true
+    if (controller !== undefined) {
+      controller.abort()
+    }
   }
 
   const execute = (
@@ -61,6 +63,11 @@ export default function useBaseAPI<T = any>(
     opts: RequestOptions = {},
     config: AxiosRequestConfig = {}
   ): Promise<T> => {
+    requestCount++
+    const count = requestCount
+
+    controller = new AbortController()
+
     isAborted.value = false
     isLoading.value = true
 
@@ -82,15 +89,24 @@ export default function useBaseAPI<T = any>(
       .then(
         (success) => {
           result.value = success
+          error.value = undefined
+          isAborted.value = false
           return success
         },
         (err) => {
           error.value = err
+
+          if (axios.isCancel(err)) {
+            isAborted.value = true
+          }
+
           throw err
         }
       )
       .finally(() => {
-        isLoading.value = false
+        if (count == requestCount) {
+          isLoading.value = false
+        }
         isFinished.value = true
       })
   }

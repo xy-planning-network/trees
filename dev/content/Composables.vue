@@ -1,0 +1,161 @@
+<script setup lang="ts">
+import { RequestOptions } from "@/api/base"
+import { AxiosError, AxiosRequestConfig } from "axios";
+import { computed } from "vue"
+import useBaseAPI from "../../src/composables/useBaseAPI"
+import { debounceLeading } from "../../src/helpers/Debounce"
+
+interface Thing {
+    id: number 
+    created_at: number
+    type: string
+    title: string
+  }
+
+  interface ThingResponse {
+    data: Thing[]
+  }
+
+const { result, error, isLoading, isFinished, isAborted, execute, abort } =
+  useBaseAPI<ThingResponse>(
+    "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+    "GET"
+  )
+
+const fetch = (opt: RequestOptions = {}, shouldAbort = false, config: AxiosRequestConfig = {}) => {
+  execute({ query: Date.now() }, opt, {...{withCredentials: false}, ...config})
+  .then(data => {
+    // you could do something with this data variable
+    // which has a Type of ThingResponse, but the result
+    // variable will already be a Ref<ThingResponse>
+    console.log(data, result)
+  }).catch((err: Error | AxiosError) => {
+    // you could do something with this err variable
+    // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
+    console.log(err, error)
+  })
+
+  if (shouldAbort) {
+    setTimeout(abort, 500)
+  }
+}
+
+const fetchDebounce = debounceLeading(() => {
+  abort()
+  fetch({ withDelay: 0, skipLoader: true }, false, {url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/things"})
+}, 100)
+
+
+const buttonText = computed(() => {
+  if (isLoading.value) return "Loading"
+  if (isFinished.value) return "Fetch Again"
+  return "Fetch"
+})
+
+const buttonTextWithDelay = computed(() => {
+  if (isLoading.value) return "Loading"
+  if (isFinished.value) return "Fetch Again w/Delay"
+  return "Fetch w/Delay"
+})
+
+const buttonTextWithAbort = computed(() => {
+  if (isLoading.value) return "Loading"
+  if (isFinished.value) return "Fetch Again & Abort"
+  return "Fetch & Abort"
+})
+</script>
+
+<template>
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <ComponentLayout :show-badge="false" title="useBaseAPI">
+        <template v-slot:description>
+          useBaseAPI wraps up the BaseAPI functionality and returns a bunch of
+          helpful reactive variables along with an execute and abort methods.
+        </template>
+
+        <code class="">
+          <pre class="overflow-scroll bg-gray-100">{{
+            `
+  interface Thing {
+    id: number 
+    created_at: number
+    type: string
+    title: string
+  }
+
+  interface ThingResponse {
+    data: Thing[]
+  }
+
+  const {
+    result,
+    error,
+    isLoading,
+    isFinished,
+    isAborted,
+    execute,
+    abort
+  } = useBaseAPI<ThingResponse>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
+
+  execute({ query: Date.now() }, { withDelay: 3000 })
+    .then(data => {
+      // you could do something with this data variable
+      // which has a Type of ThingResponse, but the result
+      // variable will already be a Ref<ThingResponse>
+      console.log(data, result)
+    }).catch((err: Error | AxiosError) => {
+      // you could do something with this err variable
+      // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
+      console.log(err, error)
+    })
+  `
+          }}</pre>
+        </code>
+        
+        <div class="space-y-4">
+          <div class="flex space-x-4">
+            <button
+              class="xy-btn"
+              @click="fetch()"
+              :disabled="isLoading"
+            >
+              {{ buttonText }}
+            </button>
+
+            <button
+              class="xy-btn"
+              @click="fetch({ withDelay: 1000 })"
+              :disabled="isLoading"
+            >
+              {{ buttonTextWithDelay }}
+            </button>
+
+            <button
+              class="xy-btn"
+              @click="fetch({ withDelay: 1000 }, true)"
+              :disabled="isLoading"
+            >
+              {{ buttonTextWithAbort }}
+            </button>
+          </div>
+
+          <button
+            class="xy-btn"
+            @click="fetchDebounce"
+          >
+            Debounced w/Abort (click fast!)
+          </button>
+        </div>
+
+        <ul class="space-y-2">
+          <li><b>Loading:</b> {{isLoading}} (run's always)</li>
+          <li><b>Finished:</b> {{isFinished}} (run's once)</li>
+          <li><b>Aborted:</b> {{isAborted}} (when aborted, reset on new fetch)</li>
+          <li><b>Error:</b><pre>{{error ? error : 'undefined'}}</pre></li>
+          <li><b>Result:</b><pre>{{result ? result : 'undefined'}}</pre></li>
+        </ul>
+      </ComponentLayout>
+    </div>
+  </div>
+</template>
