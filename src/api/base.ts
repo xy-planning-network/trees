@@ -1,6 +1,14 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 
-export type RequestMethod = "GET" | "PUT" | "POST" | "DELETE"
+export type RequestMethod =
+  | "GET"
+  | "get"
+  | "PUT"
+  | "put"
+  | "POST"
+  | "post"
+  | "DELETE"
+  | "delete"
 
 export interface RequestOptions {
   skipLoader?: boolean

@@ -36,7 +36,7 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false, config: AxiosReque
   })
 
   if (shouldAbort) {
-    setTimeout(abort, 500)
+    setTimeout(abort, 100)
   }
 }
 
@@ -48,19 +48,19 @@ const fetchDebounce = debounceLeading(() => {
 
 const buttonText = computed(() => {
   if (isLoading.value) return "Loading"
-  if (isFinished.value) return "Fetch Again"
+  if (hasFetched.value) return "Fetch Again"
   return "Fetch"
 })
 
 const buttonTextWithDelay = computed(() => {
   if (isLoading.value) return "Loading"
-  if (isFinished.value) return "Fetch Again w/Delay"
+  if (hasFetched.value) return "Fetch Again w/Delay"
   return "Fetch w/Delay"
 })
 
 const buttonTextWithAbort = computed(() => {
   if (isLoading.value) return "Loading"
-  if (isFinished.value) return "Fetch Again & Abort"
+  if (hasFetched.value) return "Fetch Again & Abort"
   return "Fetch & Abort"
 })
 </script>
@@ -125,7 +125,7 @@ execute({ query: Date.now() }, { withDelay: 3000 })
 
             <button
               class="xy-btn"
-              @click="fetch({ withDelay: 1000 })"
+              @click="fetch({ withDelay: 1250 })"
               :disabled="isLoading"
             >
               {{ buttonTextWithDelay }}
