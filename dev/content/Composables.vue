@@ -6,15 +6,19 @@ import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
 
 interface Thing {
-    id: number 
-    created_at: number
-    type: string
-    title: string
-  }
+  id: number 
+  created_at: number
+  type: string
+  title: string
+}
 
-  interface ThingResponse {
-    data: Thing[]
-  }
+interface ThingResponse {
+  page: number
+  perPage: number
+  totalItems: number
+  totalPages: number
+  items: Thing[]
+}
 
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
   useBaseAPI<ThingResponse>(
@@ -23,7 +27,7 @@ const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, ab
   )
 
 const fetch = (opt: RequestOptions = {}, shouldAbort = false, config: AxiosRequestConfig = {}) => {
-  execute({ query: Date.now() }, opt, {...{withCredentials: false}, ...config})
+  execute({ query: Date.now() }, {dataIntercept: true, ...opt}, {withCredentials: false, ...config})
   .then(data => {
     // you could do something with this data variable
     // which has a Type of ThingResponse, but the result
@@ -63,6 +67,10 @@ const buttonTextWithAbort = computed(() => {
   if (hasFetched.value) return "Fetch Again & Abort"
   return "Fetch & Abort"
 })
+
+const things = computed(() => { 
+  return result.value?.items
+})
 </script>
 
 <template>
@@ -85,7 +93,11 @@ interface Thing {
 }
 
 interface ThingResponse {
-  data: Thing[]
+  page: number
+  perPage: number
+  totalItems: number
+  totalPages: number
+  items: Thing[]
 }
 
 const {
@@ -97,7 +109,7 @@ const {
   hasFetched,
   execute,
   abort
-} = useBaseAPI<ThingResponse>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
+} = useBaseAPI<ThingResponse>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET", {dataIntercept: true})
 
 execute({ query: Date.now() }, { withDelay: 3000 })
   .then(data => {
@@ -110,6 +122,11 @@ execute({ query: Date.now() }, { withDelay: 3000 })
     // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
     console.log(err, error)
   })
+
+// this computed function is ready with whatever result contains
+const things = computed(() => { 
+  return result.value?.items
+})
   `}}</code>
         </pre>
         
@@ -156,6 +173,13 @@ execute({ query: Date.now() }, { withDelay: 3000 })
           <li><b>Error:</b><pre>{{error ? error : 'undefined'}}</pre></li>
           <li><b>Result:</b><pre class="bg-gray-50 p-2">{{result ? result : 'undefined'}}</pre></li>
         </ul>
+
+        <ul v-if="things" class="mt-6 space-y-2">
+          <li v-for="thing in things" :key="thing.id">
+            <b>{{thing.title}}</b> : <em>{{thing.type}}</em>
+          </li>
+        </ul>
+        <p v-else>No(thing)s</p>
       </ComponentLayout>
     </div>
   </div>
