@@ -10,10 +10,6 @@ export type RequestMethod =
   | "DELETE"
   | "delete"
 
-export interface TreesResponse<T> extends AxiosResponse<T> {
-  data: T
-}
-
 export interface RequestOptions {
   dataIntercept?: boolean
   skipLoader?: boolean
