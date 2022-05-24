@@ -1,5 +1,6 @@
 import { App, Plugin } from "vue"
 import BaseAPI from "@/api/base"
+import type { RequestOptions } from "@/api/base"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -24,3 +25,4 @@ export * from "@/composables/index"
 export * from "@/lib-components/index"
 
 export { BaseAPI }
+export type { RequestOptions }

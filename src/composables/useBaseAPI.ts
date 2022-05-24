@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios"
+import axios, { AxiosError } from "axios"
 import { ref, Ref, shallowRef, ShallowRef } from "vue"
 import BaseAPI from "../api/base"
 import type { RequestMethod, RequestOptions } from "../api/base"
@@ -54,11 +54,7 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (
-    data?: Record<string, unknown>,
-    opts?: RequestOptions,
-    config?: AxiosRequestConfig
-  ) => Promise<T>
+  execute: (data?: Record<string, unknown>, opts?: RequestOptions) => Promise<T>
 }
 
 /**
@@ -72,8 +68,7 @@ export interface UseBaseAPI<T> {
 export default function useBaseAPI<T = any>(
   path: string,
   method: RequestMethod = "GET",
-  initOpts: UseBaseAPIOptions = {},
-  initConfig: AxiosRequestConfig = {}
+  initOpts: UseBaseAPIOptions = {}
 ) {
   const result = ref<T | undefined>()
   const error = shallowRef<Error | AxiosError<T> | undefined>()
@@ -92,8 +87,7 @@ export default function useBaseAPI<T = any>(
 
   const execute = (
     data: Record<string, unknown> = {},
-    execOpts: RequestOptions = {},
-    execConfig: AxiosRequestConfig = {}
+    opts: RequestOptions = {}
   ): Promise<T> => {
     requestCount++
     const count = requestCount
@@ -104,17 +98,17 @@ export default function useBaseAPI<T = any>(
     isFinished.value = false
     isLoading.value = true
 
-    const requestConfig: AxiosRequestConfig = {
-      ...initConfig,
-      data: !["GET", "get"].includes(method) ? data : {},
+    const requestOpts = {
+      ...initOpts,
+      data: ["POST", "post", "PUT", "put"].includes(method) ? data : {},
       method: method,
       params: ["GET", "get"].includes(method) ? data : {},
       signal: controller.signal,
       url: path,
-      ...execConfig,
+      ...opts,
     }
 
-    return BaseAPI.makeRequest<T>(requestConfig, { ...initOpts, ...execOpts })
+    return BaseAPI.makeRequest<T>(requestOpts)
       .then(
         (success) => {
           result.value = success
@@ -170,10 +164,9 @@ export default function useBaseAPI<T = any>(
  */
 export function useBaseAPIGet<T = any>(
   url: string,
-  initOpts: UseBaseAPIOptions = {},
-  initConfig: AxiosRequestConfig = {}
+  opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
-  return useBaseAPI<T>(url, "GET", initOpts, initConfig)
+  return useBaseAPI<T>(url, "GET", opts)
 }
 
 /**
@@ -185,10 +178,9 @@ export function useBaseAPIGet<T = any>(
  */
 export function useBaseAPIDelete<T = any>(
   url: string,
-  initOpts: UseBaseAPIOptions = {},
-  initConfig: AxiosRequestConfig = {}
+  opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
-  return useBaseAPI<T>(url, "DELETE", initOpts, initConfig)
+  return useBaseAPI<T>(url, "DELETE", opts)
 }
 
 /**
@@ -200,10 +192,9 @@ export function useBaseAPIDelete<T = any>(
  */
 export function useBaseAPIPost<T = any>(
   url: string,
-  initOpts: UseBaseAPIOptions = {},
-  initConfig: AxiosRequestConfig = {}
+  opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
-  return useBaseAPI<T>(url, "POST", initOpts, initConfig)
+  return useBaseAPI<T>(url, "POST", opts)
 }
 
 /**
@@ -215,8 +206,7 @@ export function useBaseAPIPost<T = any>(
  */
 export function useBaseAPIPut<T = any>(
   url: string,
-  initOpts: UseBaseAPIOptions = {},
-  initConfig: AxiosRequestConfig = {}
+  opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
-  return useBaseAPI<T>(url, "PUT", initOpts, initConfig)
+  return useBaseAPI<T>(url, "PUT", opts)
 }

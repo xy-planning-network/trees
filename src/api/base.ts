@@ -10,112 +10,108 @@ export type RequestMethod =
   | "DELETE"
   | "delete"
 
-export interface RequestOptions {
+export interface RequestOptions extends AxiosRequestConfig {
+  /**
+   * returns the nested data key inside the AxiosResponse data when true
+   */
   dataIntercept?: boolean
+  /**
+   * disables the full screen loading interface during the request when true
+   */
   skipLoader?: boolean
+  /**
+   * artificially delay's the request by the time specified when set
+   */
   withDelay?: number
 }
 
-const apiAxiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
-  responseType: "json",
-  withCredentials: true,
-})
+interface APIResponse extends AxiosResponse {
+  config: RequestOptions
+}
+
+/**
+ * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
+ * @param config RequestOptions
+ * @returns Promise
+ */
+const apiDelayReqIntercept = (config: RequestOptions) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(config)
+    }, config.withDelay || 0)
+  })
+}
 
 /**
  * apiDataIntercept removes any secondary data properties from an Axios response.
  * example: an AxiosResponse has it's own data key and the server response also nests
  * it's primary response data under another data key.
+ * This axios intercept should always be last in the chain of intercepts.
  * @param response AxiosResponse
  * @returns any
  */
-const apiDataIntercept = (response: AxiosResponse) => {
-  if (response.data?.data) {
+const apiDataRespIntercept = (response: APIResponse) => {
+  if (response.config.dataIntercept && response.data?.data) {
     return response.data
   }
 
   return response
 }
 
-/**
- * apiDelay is a thin wrapper for causing some function to run on a delay
- * @param func (...args: any[]) => void
- * @param delay number
- */
-const apiDelay = (func: (...args: any[]) => void, delay = 0) => {
-  setTimeout(func, delay)
-}
+const apiAxiosInstance = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
+  responseType: "json",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+
+// apply request intercepts
+apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
+
+// apply response intercepts
+// the data intercept should be last in the chain as it heavily mutates the APIResponse
+apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
 
 const BaseAPI = {
-  makeRequest<T = any>(
-    config: AxiosRequestConfig,
-    opts: RequestOptions
-  ): Promise<T> {
-    config.data = JSON.stringify(config.data)
-    config.headers = { "Content-Type": "application/json" }
-
-    let dataIntercept: number | null
-
-    if (opts.dataIntercept) {
-      dataIntercept =
-        apiAxiosInstance.interceptors.response.use(apiDataIntercept)
-    }
-
+  makeRequest<T = any>(opts: RequestOptions): Promise<T> {
     const wait = window.setTimeout(() => {
       if (!opts.skipLoader) {
         window.VueBus.emit("Spinner-show")
       }
     }, 200)
 
-    return new Promise<T>((resolve, reject) => {
-      apiAxiosInstance(config)
-        .then(
-          (success) => {
-            apiDelay(() => {
-              resolve(success.data)
-            }, opts.withDelay || 0)
-          },
-          (err) => {
-            apiDelay(() => {
-              reject(err)
-            }, opts.withDelay || 0)
-          }
-        )
-        .finally(() => {
-          if (dataIntercept !== null) {
-            apiAxiosInstance.interceptors.response.eject(dataIntercept)
-          }
-
-          apiDelay(() => {
-            window.clearTimeout(wait)
-            if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
-          }, opts.withDelay || 0)
-        })
-    })
+    return apiAxiosInstance(opts)
+      .then((success) => success.data)
+      .finally(() => {
+        if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
+        window.clearTimeout(wait)
+      })
   },
   get<T = any>(
     path: string,
     opts: RequestOptions,
     params?: Record<string, unknown>
   ) {
-    return this.makeRequest<T>({ url: path, method: "GET", params }, opts)
+    return this.makeRequest<T>({ url: path, method: "GET", params, ...opts })
   },
   delete<T = any>(path: string, opts: RequestOptions) {
-    return this.makeRequest<T>({ url: path, method: "DELETE" }, opts)
+    return this.makeRequest<T>({ url: path, method: "DELETE", ...opts })
   },
   post<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "POST" }, opts)
+    return this.makeRequest<T>({ url: path, data, method: "POST", ...opts })
   },
   put<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "PUT" }, opts)
+    return this.makeRequest<T>({ url: path, data, method: "PUT", ...opts })
   },
 }
 

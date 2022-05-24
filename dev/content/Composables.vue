@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RequestOptions } from "@/api/base"
-import { AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosError } from "axios";
 import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
@@ -23,11 +23,12 @@ interface ThingResponse {
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
   useBaseAPI<ThingResponse>(
     "https://my-json-server.typicode.com/xy-planning-network/trees/things",
-    "GET"
+    "GET",
+    { dataIntercept: true, withCredentials: false}
   )
 
-const fetch = (opt: RequestOptions = {}, shouldAbort = false, config: AxiosRequestConfig = {}) => {
-  execute({ query: Date.now() }, {dataIntercept: true, ...opt}, {withCredentials: false, ...config})
+const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
+  execute({ query: Date.now() }, opt)
   .then(data => {
     // you could do something with this data variable
     // which has a Type of ThingResponse, but the result
@@ -46,7 +47,7 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false, config: AxiosReque
 
 const fetchDebounce = debounceLeading(() => {
   abort()
-  fetch({ withDelay: 0, skipLoader: true }, false, {url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/things"})
+  fetch({ withDelay: 0, skipLoader: true, url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/things" }, false)
 }, 100)
 
 
@@ -142,7 +143,7 @@ const things = computed(() => {
 
             <button
               class="xy-btn"
-              @click="fetch({ withDelay: 1250 })"
+              @click="fetch({ withDelay: 1500 })"
               :disabled="isLoading"
             >
               {{ buttonTextWithDelay }}
