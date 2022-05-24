@@ -25,34 +25,35 @@ export interface RequestOptions extends AxiosRequestConfig {
   withDelay?: number
 }
 
-interface APIResponse extends AxiosResponse {
+interface APIResponse<T = any> extends AxiosResponse<T> {
   config: RequestOptions
 }
 
 /**
  * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
  * @param config RequestOptions
- * @returns Promise
+ * @returns RequestOptions
  */
 const apiDelayReqIntercept = (config: RequestOptions) => {
+  const delay = config.withDelay || 0
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(config)
-    }, config.withDelay || 0)
+    }, Math.max(delay, 0))
   })
 }
 
 /**
- * apiDataIntercept removes any secondary data properties from an Axios response.
- * example: an AxiosResponse has it's own data key and the server response also nests
- * it's primary response data under another data key.
+ * apiDataIntercept promotes any secondary data keys from an Axios response to the first level data key.
+ * example: an AxiosResponse has it's own data key and the server response also nests it's primary response
+ * payload under another data key, that payload data is promoted to being directly under the AxiosResponse data key.
  * This axios intercept should always be last in the chain of intercepts.
- * @param response AxiosResponse
- * @returns any
+ * @param response APIResponse
+ * @returns APIResponse
  */
 const apiDataRespIntercept = (response: APIResponse) => {
   if (response.config.dataIntercept && response.data?.data) {
-    return response.data
+    response.data = response.data.data
   }
 
   return response

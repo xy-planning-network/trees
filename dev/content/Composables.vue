@@ -5,24 +5,27 @@ import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
 
-interface Thing {
-  id: number 
-  created_at: number
-  type: string
-  title: string
-}
-
-interface ThingResponse {
+interface Paginated<T> {
   page: number
   perPage: number
   totalItems: number
   totalPages: number
-  items: Thing[]
+  items: T[]
+}
+
+interface Conifer {
+  id: number 
+  name: number
+  type: string
+  leaf: {
+    type: string
+    length: string
+  }
 }
 
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
-  useBaseAPI<ThingResponse>(
-    "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+  useBaseAPI<Paginated<Conifer>>(
+    "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
     "GET",
     { dataIntercept: true, withCredentials: false}
   )
@@ -47,7 +50,7 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
 
 const fetchDebounce = debounceLeading(() => {
   abort()
-  fetch({ withDelay: 0, skipLoader: true, url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/things" }, false)
+  fetch({ withDelay: 0, skipLoader: true, url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/conifers" }, false)
 }, 100)
 
 
@@ -69,7 +72,7 @@ const buttonTextWithAbort = computed(() => {
   return "Fetch & Abort"
 })
 
-const things = computed(() => { 
+const conifers = computed(() => { 
   return result.value?.items
 })
 </script>
@@ -86,19 +89,22 @@ const things = computed(() => {
         
           <pre class="overflow-scroll bg-gray-50 p-4">
             <code class="language-typescript">{{`
-interface Thing {
-  id: number 
-  created_at: number
-  type: string
-  title: string
-}
-
-interface ThingResponse {
+interface Paginated<T> {
   page: number
   perPage: number
   totalItems: number
   totalPages: number
-  items: Thing[]
+  items: T[]
+}
+
+interface Conifer {
+  id: number 
+  name: number
+  type: string
+  leaf: {
+    type: string
+    length: string
+  }
 }
 
 const {
@@ -110,13 +116,13 @@ const {
   hasFetched,
   execute,
   abort
-} = useBaseAPI<ThingResponse>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET", {dataIntercept: true})
+} = useBaseAPI<Paginated<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET", {dataIntercept: true})
 
 execute({ query: Date.now() }, { withDelay: 3000 })
   .then(data => {
     // you could do something with this data variable
-    // which has a Type of ThingResponse, but the result
-    // variable will already be a Ref<ThingResponse>
+    // which has a Type of Paginated<Conifer>, but the result
+    // variable will already be a Ref<Paginated<Conifer>>
     console.log(data, result)
   }).catch((err: Error | AxiosError) => {
     // you could do something with this err variable
@@ -175,12 +181,12 @@ const things = computed(() => {
           <li><b>Result:</b><pre class="bg-gray-50 p-2">{{result ? result : 'undefined'}}</pre></li>
         </ul>
 
-        <ul v-if="things" class="mt-6 space-y-2">
-          <li v-for="thing in things" :key="thing.id">
-            <b>{{thing.title}}</b> : <em>{{thing.type}}</em>
+        <ul v-if="conifers" class="mt-6 space-y-2">
+          <li v-for="conifer in conifers" :key="conifer.id">
+            <b>{{conifer.name}}</b>: <em>{{conifer.leaf.type}}</em>
           </li>
         </ul>
-        <p v-else>No(thing)s</p>
+        <p v-else>No trees on these trails.</p>
       </ComponentLayout>
     </div>
   </div>
