@@ -38,5 +38,60 @@
         }
       ]
     }
+  },
+  "conifers": {
+    "data": {
+      "page": 1,
+      "perPage": 10,
+      "totalItems": 5,
+      "totalPages": 1,
+      "items": [
+        {
+          "id": 3,
+          "name": "Loblolly Pine",
+          "type": "conifer",
+          "leaf": {
+            "type": "Needle-leaf",
+            "length": "5-9"
+          }
+        },
+        {
+          "id": 16,
+          "name": "Cedar-of-Lebanon",
+          "type": "conifer",
+          "leaf": {
+            "type": "Needle-leaf",
+            "length": "1-1.25"
+          }
+        },
+        {
+          "id": 17,
+          "name": "European Larch",
+          "type": "conifer",
+          "leaf": {
+            "type": "Needle-leaf",
+            "length": "0.75-1.25"
+          }
+        },
+        {
+          "id": 33,
+          "name": "Sawara False-cypress",
+          "type": "conifer",
+          "leaf": {
+            "type": "Scale-leaf",
+            "length": "0.125"
+          }
+        },
+        {
+          "id": 37,
+          "name": "Ashe Juniper",
+          "type": "conifer",
+          "leaf": {
+            "type": "Scale-leaf",
+            "length": "0.0625"
+          }
+        }
+      ]
+    }
   }
 }
