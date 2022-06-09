@@ -1,5 +1,6 @@
 import { App, Plugin } from "vue"
 import BaseAPI from "@/api/base"
+import type { RequestOptions } from "@/api/base"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -16,8 +17,12 @@ const install: Exclude<Plugin["install"], undefined> = function installTrees(
 // Create module definition for Vue.use()
 export default install
 
+// expose composables
+export * from "@/composables/index"
+
 // To allow individual component use, export components
 // each can be registered via Vue.component()
 export * from "@/lib-components/index"
 
 export { BaseAPI }
+export type { RequestOptions }

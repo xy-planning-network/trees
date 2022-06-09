@@ -1,70 +1,116 @@
-import axios, {
-  AxiosError,
-  AxiosPromise,
-  AxiosResponse,
-  AxiosRequestConfig,
-} from "axios"
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 
-export interface RequestOptions {
+export type RequestMethod =
+  | "GET"
+  | "get"
+  | "PUT"
+  | "put"
+  | "POST"
+  | "post"
+  | "DELETE"
+  | "delete"
+
+export interface RequestOptions extends AxiosRequestConfig {
+  /**
+   * returns the nested data key inside the AxiosResponse data when true
+   */
+  dataIntercept?: boolean
+  /**
+   * disables the full screen loading interface during the request when true
+   */
   skipLoader?: boolean
+  /**
+   * artificially delay's the request by the time specified when set
+   */
+  withDelay?: number
+}
+
+interface APIResponse<T = any> extends AxiosResponse<T> {
+  config: RequestOptions
+}
+
+/**
+ * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
+ * @param config RequestOptions
+ * @returns RequestOptions
+ */
+const apiDelayReqIntercept = (config: RequestOptions) => {
+  const delay = config.withDelay || 0
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(config)
+    }, Math.max(delay, 0))
+  })
+}
+
+/**
+ * apiDataIntercept promotes any secondary data keys from an Axios response to the first level data key.
+ * example: an AxiosResponse has it's own data key and the server response also nests it's primary response
+ * payload under another data key, that payload data is promoted to being directly under the AxiosResponse data key.
+ * @param response APIResponse
+ * @returns APIResponse
+ */
+const apiDataRespIntercept = (response: APIResponse) => {
+  if (response.config.dataIntercept && response.data?.data) {
+    response.data = response.data.data
+  }
+
+  return response
 }
 
 const apiAxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
   responseType: "json",
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 })
 
+// apply request intercepts
+apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
+
+// apply response intercepts
+apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
+
 const BaseAPI = {
-  makeRequest(config: AxiosRequestConfig, opts: RequestOptions): AxiosPromise {
-    config.data = JSON.stringify(config.data)
-    config.headers = { "Content-Type": "application/json" }
+  makeRequest<T = any>(opts: RequestOptions): Promise<T> {
+    const wait = window.setTimeout(() => {
+      if (!opts.skipLoader) {
+        window.VueBus.emit("Spinner-show")
+      }
+    }, 200)
 
-    return new Promise((resolve, reject) => {
-      const wait = window.setTimeout(() => {
-        if (!opts.skipLoader) window.VueBus.emit("Spinner-show")
-      }, 200)
-
-      apiAxiosInstance(config).then(
-        (success: AxiosResponse) => {
-          window.clearTimeout(wait)
-          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
-          resolve(success.data)
-        },
-        (error: AxiosError) => {
-          // TODO: come back once we've finalized format for API response and
-          // have nice UI that their session is expired with redirect to login
-          // page
-          window.clearTimeout(wait)
-          if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
-          reject(error.response)
-        }
-      )
-    })
+    return apiAxiosInstance(opts)
+      .then((success) => success.data)
+      .finally(() => {
+        if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
+        window.clearTimeout(wait)
+      })
   },
-  get(
+  get<T = any>(
     path: string,
     opts: RequestOptions,
     params?: Record<string, unknown>
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, method: "GET", params }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, method: "GET", params, ...opts })
   },
-  delete(path: string, opts: RequestOptions): AxiosPromise {
-    return this.makeRequest({ url: path, method: "DELETE" }, opts)
+  delete<T = any>(path: string, opts: RequestOptions) {
+    return this.makeRequest<T>({ url: path, method: "DELETE", ...opts })
   },
-  post(
+  post<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, data, method: "POST" }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, data, method: "POST", ...opts })
   },
-  put(
+  put<T = any>(
     path: string,
     data: Record<string, unknown>,
     opts: RequestOptions
-  ): AxiosPromise {
-    return this.makeRequest({ url: path, data, method: "PUT" }, opts)
+  ) {
+    return this.makeRequest<T>({ url: path, data, method: "PUT", ...opts })
   },
 }
 

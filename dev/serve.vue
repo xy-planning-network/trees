@@ -6,9 +6,11 @@ import {
   DocumentTextIcon,
   HomeIcon,
   LocationMarkerIcon,
+  PencilAltIcon,
   TableIcon,
   UserGroupIcon,
 } from "@heroicons/vue/outline"
+import Composables from "./content/Composables.vue"
 import Elements from "./content/Elements.vue"
 import Forms from "./content/Forms.vue"
 import Home from "./content/Home.vue"
@@ -31,6 +33,7 @@ const navigation = [
   { name: "Overlays", url: "/trees/?page=Overlays", icon: CollectionIcon },
   { name: "Elements", url: "/trees/?page=Elements", icon: ColorSwatchIcon },
   { name: "Team", url: "/trees/?page=Team", icon: UserGroupIcon },
+  { name: "Composables", url: "/trees/?page=Composables", icon: PencilAltIcon },
 ]
 const user = ref({
   accountID: 1,
@@ -81,6 +84,7 @@ onMounted(() => {
       <Overlays v-if="showing('Overlays')" />
       <Elements v-if="showing('Elements')" />
       <Team v-if="showing('Team')" />
+      <Composables v-if="showing('Composables')" />
       <button
         type="button"
         class="xy-btn"
