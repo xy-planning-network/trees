@@ -144,10 +144,11 @@ export default flasher
  * the a flash queue when a flashStore isn't provided
  * @returns UseFlashes
  */
-export function useFlashes(flashStore?: Ref<FlashStore>) {
+export function useFlashes(flashStore?: FlashStore) {
+  const storeRef = flashStore ? ref(flashStore) : globalFlashStore
   return {
-    flasher: flashStore ? newFlasher(flashStore.value) : globalFlasher,
-    flashes: flashStore ? flashStore : globalFlashStore,
+    flasher: flashStore ? newFlasher(storeRef.value) : globalFlasher,
+    flashes: storeRef,
   }
 }
 
