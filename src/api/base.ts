@@ -47,7 +47,6 @@ const apiDelayReqIntercept = (config: RequestOptions) => {
  * apiDataIntercept promotes any secondary data keys from an Axios response to the first level data key.
  * example: an AxiosResponse has it's own data key and the server response also nests it's primary response
  * payload under another data key, that payload data is promoted to being directly under the AxiosResponse data key.
- * This axios intercept should always be last in the chain of intercepts.
  * @param response APIResponse
  * @returns APIResponse
  */
@@ -72,7 +71,6 @@ const apiAxiosInstance = axios.create({
 apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
 
 // apply response intercepts
-// the data intercept should be last in the chain as it heavily mutates the APIResponse
 apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
 
 const BaseAPI = {
