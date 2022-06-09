@@ -3,6 +3,7 @@ import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
+import flasher from "@/composables/useFlashes"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -11,7 +12,6 @@ const contentModalProps = [
   { name: "modelValue", required: true, type: "boolean" },
   { name: "title", required: false, type: "string" },
 ]
-const flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`
 const modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`
 const modalProps = [
   { name: "destructive", required: false, type: "boolean" },
@@ -30,10 +30,6 @@ const slideoverProps = [
   { name: "description", required: false, type: "description" },
   { name: "@close", required: false, type: "function(modelValue)" },
 ]
-
-const flash = function (): void {
-  window.VueBus.emit("Flash-show-generic-error", "support@trees.com")
-}
 const spinner = function (): void {
   window.VueBus.emit("Spinner-show", [
     "Look!",
@@ -132,14 +128,60 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
         </template>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="flashCopy" />
-          </label>
-          <div class="mt-1">
-            <button type="button" class="xy-btn" @click="flash()">
-              Show Me
-            </button>
-          </div>
+          <pre><code class="language-typescript">import {flasher} from "@xy-planning-network/trees"</code></pre>
+          <ul class="mt-1 space-y-2">
+            <li>
+              <InputLabel
+                label="Flash generic error using configured email address:"
+              />
+              <pre><code class="language-typescript">/* Import and do this anytime, best just before createApp() */
+flasher.setConfig({email: "support@trees.com"})
+/* Call this whenever you need it. */
+flasher.genericError()</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="flasher.genericError()"
+              >
+                Show Me
+              </button>
+            </li>
+            <li>
+              <InputLabel
+                label="Flash generic error with custom email address:"
+              />
+              <pre><code class="language-typescript">flasher.genericError("help@trees.com")</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="flasher.genericError('help@trees.com')"
+              >
+                Show Me
+              </button>
+            </li>
+            <li>
+              <InputLabel label="Flash success:" />
+              <pre><code class="language-typescript">flasher.success("Hooray!")</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="flasher.success('Hooray!')"
+              >
+                Flash Success
+              </button>
+            </li>
+            <li>
+              <InputLabel label="Flash persistent info:" />
+              <pre><code class="language-typescript">flasher.info("Sticky!")</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="flasher.info('Sticky!')"
+              >
+                Flash Persistent
+              </button>
+            </li>
+          </ul>
         </div>
       </ComponentLayout>
 
