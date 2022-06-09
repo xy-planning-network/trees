@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {
   FlashType,
-  useFlashes,
+  useGlobalFlashes,
   loadWindowFlashes,
 } from "@/composables/useFlashes"
 import { onMounted } from "vue"
 
 // TODO: (spk) swipe to remove?!
+
+const { flasher, flashes } = useGlobalFlashes()
 
 const getFlashClass = (type: FlashType) => {
   switch (type) {
@@ -20,8 +22,6 @@ const getFlashClass = (type: FlashType) => {
       return "border-green-500"
   }
 }
-
-const { flasher, flashes } = useFlashes()
 onMounted(() => {
   // NOTE: (spk) here for backwards compatibility
   window.VueBus.on("Flash-show-message", (flash) => {

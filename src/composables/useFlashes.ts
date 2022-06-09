@@ -133,21 +133,15 @@ export const newFlasher = (
   }
 }
 
-// simplify application usage by setting up a global store and flasher
-const globalFlashStore = ref(new Map<string, FlashMessage>())
-const globalFlasher = newFlasher(globalFlashStore.value)
-const flasher = globalFlasher
-export default flasher
-
 /**
  * useFlashes exposes the module level global flashes and flasher for shared access to
  * the a flash queue when a flashStore isn't provided
  * @returns UseFlashes
  */
-export function useFlashes(flashStore?: FlashStore) {
-  const storeRef = flashStore ? ref(flashStore) : globalFlashStore
+export function useFlashes(flashStore: FlashStore) {
+  const storeRef = ref(flashStore)
   return {
-    flasher: flashStore ? newFlasher(storeRef.value) : globalFlasher,
+    flasher: newFlasher(storeRef.value),
     flashes: storeRef,
   }
 }
@@ -167,5 +161,15 @@ export const loadWindowFlashes = (flasher: FlasherAPI) => {
       }
       flasher.add(flash as FlashMessage)
     }
+  }
+}
+
+// simplify application usage by setting up a global store and flasher
+export const { flasher, flashes } = useFlashes(new Map<string, FlashMessage>())
+export default flasher
+export function useGlobalFlashes() {
+  return {
+    flasher,
+    flashes,
   }
 }
