@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAppFlasher } from "@/composables"
 import { ref, watch } from "vue"
 import BaseAPI from "../../api/base"
 import DateFilter from "../layout/DateFilter.vue"
@@ -50,11 +51,7 @@ const loadAndRender = (checkForContent: boolean): void => {
       if (checkForContent) hasContent.value = items.value.length != 0
     },
     () => {
-      // TODO: let's make this really generic or configurable
-      window.VueBus.emit(
-        "Flash-show-generic-error",
-        "archive@xyplanningnetwork.com"
-      )
+      useAppFlasher().genericError()
     }
   )
 }

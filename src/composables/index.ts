@@ -19,4 +19,8 @@ export {
   useBaseAPIDelete,
 }
 
-export * from "./useFlashes"
+// Only expose the useFlashes composable for custom flashing and useAppFlasher.
+import useAppFlasher, { useFlashes } from "./useFlashes"
+import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"
+export type { FlashMessage, FlashType, FlashStore, Flasher }
+export { useFlashes, useAppFlasher }

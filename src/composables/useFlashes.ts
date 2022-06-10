@@ -26,12 +26,26 @@ export interface FlashMessage {
 export type FlashType = "warning" | "error" | "info" | "success"
 
 /**
+ * A storage type for flash management.
+ */
+export type FlashStore = Map<string, FlashMessage>
+
+/**
+ * A Flasher instance config.
+ */
+export interface FlasherConfig {
+  removeDelay?: number
+  email?: string
+}
+
+/**
  * The FlasherAPI offers a simple set of methods for adding and removing flash messages.
  * The implementor of the FlasherAPI is responsible for determining where flashes are stored.
  */
-export interface FlasherAPI {
+export interface Flasher {
   add(flash: FlashMessage): string
   remove(id: string): void
+  flash(flash: FlashMessage): string
   error(msg: string, persistent?: boolean): string
   info(msg: string, persistent?: boolean): string
   success(msg: string, persistent?: boolean): string
@@ -41,27 +55,14 @@ export interface FlasherAPI {
 }
 
 /**
- * A storage type for flash management.
+ * useFlashes exposes the module level global flashes and flasher for shared access to
+ * the a flash queue when a flashStore isn't provided
+ * @returns UseFlashes
  */
-type FlashStore = Map<string, FlashMessage>
+export function useFlashes(flasherConfig: FlasherConfig = {}) {
+  const flashes: Ref<FlashStore> = ref<Map<string, FlashMessage>>(new Map())
 
-/**
- *
- */
-interface FlasherConfig {
-  removeDelay?: number
-  email?: string
-}
-
-/**
- * newFlasher implements the FlasherAPI interface on the FlashStore it recieves
- * the flash remove delay and a default email address for generic flashes is configurable
- */
-export const newFlasher = (
-  flashStore: FlashStore,
-  flasherConfig?: FlasherConfig
-) => {
-  let config: FlasherConfig = {
+  let config = {
     removeDelay: 10000,
     email: "",
   }
@@ -73,76 +74,82 @@ export const newFlasher = (
     }
   }
 
+  const remove = (id: string) => {
+    flashes.value.delete(id)
+  }
+
+  const add = (flash: FlashMessage) => {
+    const ID = Uniques.CreateIdAttribute()
+    flashes.value.set(ID, flash)
+
+    if (flash.persistent === undefined || !flash.persistent) {
+      setTimeout(() => remove(ID), config.removeDelay)
+    }
+
+    return ID
+  }
+
+  const flash = (flash: FlashMessage) => {
+    return add(flash)
+  }
+
+  const error = (message: string, persistent = false) => {
+    return add({ message, persistent, type: "error" })
+  }
+
+  const info = (message: string, persistent = false) => {
+    return add({
+      message,
+      persistent,
+      type: "info",
+    })
+  }
+
+  const success = (message: string, persistent = false) => {
+    return add({
+      message,
+      persistent,
+      type: "success",
+    })
+  }
+
+  const warning = (message: string, persistent = false) => {
+    return add({
+      message,
+      persistent,
+      type: "warning",
+    })
+  }
+
+  const genericError = (email = "", persistent = false) => {
+    const msgEmail = email || config.email
+    const message = msgEmail
+      ? `Whoops! Something went wrong, please reach out to 
+        <a class="underline text-xy-blue" href="mailto:${msgEmail}">${msgEmail}</a> 
+        if the issue persists.`
+      : `Whoops! Something went wrong.`
+    return add({
+      message,
+      persistent,
+      type: "error",
+    })
+  }
+
   setConfig(flasherConfig || {})
 
   return {
-    add(flash: FlashMessage) {
-      const ID = Uniques.CreateIdAttribute()
-      flashStore.set(ID, flash)
-
-      if (flash.persistent === undefined || !flash.persistent) {
-        setTimeout(() => this.remove(ID), config.removeDelay)
-      }
-
-      return ID
+    flasher: {
+      add,
+      remove,
+      flash,
+      error,
+      warning,
+      info,
+      success,
+      genericError,
+      setConfig,
     },
-    remove(id: string) {
-      flashStore.delete(id)
-    },
-    flash(flash: FlashMessage) {
-      return this.add(flash)
-    },
-    error(message: string, persistent = false) {
-      return this.add({ message, persistent, type: "error" })
-    },
-    info(message: string, persistent = false) {
-      return this.add({
-        message,
-        persistent,
-        type: "info",
-      })
-    },
-    success(message: string, persistent = false) {
-      return this.add({
-        message,
-        persistent,
-        type: "success",
-      })
-    },
-    warning(message: string, persistent = false) {
-      return this.add({
-        message,
-        persistent,
-        type: "warning",
-      })
-    },
-    genericError(email = "", persistent = false) {
-      const msgEmail = email || config.email
-      const message = msgEmail
-        ? `Whoops! Something went wrong, please reach out to 
-        <a class="underline text-xy-blue" href="mailto:${msgEmail}">${msgEmail}</a> 
-        if the issue persists.`
-        : `Whoops! Something went wrong.`
-      return this.add({
-        message,
-        persistent,
-        type: "error",
-      })
-    },
-    setConfig,
-  }
-}
-
-/**
- * useFlashes exposes the module level global flashes and flasher for shared access to
- * the a flash queue when a flashStore isn't provided
- * @returns UseFlashes
- */
-export function useFlashes(flashStore: FlashStore) {
-  const storeRef = ref(flashStore)
-  return {
-    flasher: newFlasher(storeRef.value),
-    flashes: storeRef,
+    flashes,
   }
 }
 
@@ -151,7 +158,7 @@ export function useFlashes(flashStore: FlashStore) {
  * The flasher argument ultimately determines what flashes ref they should be added to.
  * @param flasher FlashAPI
  */
-export const loadWindowFlashes = (flasher: FlasherAPI) => {
+export const loadWindowFlashes = (flasher: Flasher) => {
   if (window.Flashes) {
     for (const flash of window.Flashes) {
       if (typeof flash.type === "undefined") {
@@ -164,12 +171,24 @@ export const loadWindowFlashes = (flasher: FlasherAPI) => {
   }
 }
 
-// simplify application usage by setting up a global store and flasher
-export const { flasher, flashes } = useFlashes(new Map<string, FlashMessage>())
-export default flasher
-export function useGlobalFlashes() {
-  return {
-    flasher,
-    flashes,
+// simplify application usage by setting up a global store and singleton app flasher
+let appFlashes: Ref<FlashStore> | null = null
+let appFlasher: Flasher | null = null
+export function useAppFlashes() {
+  if (appFlasher === null) {
+    const { flashes, flasher } = useFlashes()
+    appFlashes = flashes
+    appFlasher = flasher
   }
+  return {
+    flasher: appFlasher,
+    flashes: appFlashes,
+  }
+}
+
+// most components and pages will only need access to the flasher
+// this allows for a simple import statement with direct usage
+export default function useAppFlasher() {
+  const { flasher } = useAppFlashes()
+  return flasher
 }

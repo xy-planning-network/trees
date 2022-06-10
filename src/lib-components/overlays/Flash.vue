@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import {
   FlashType,
-  useGlobalFlashes,
+  useAppFlashes,
   loadWindowFlashes,
 } from "@/composables/useFlashes"
 import { onMounted } from "vue"
 
-// TODO: (spk) swipe to remove?!
-
-const { flasher, flashes } = useGlobalFlashes()
+const { flasher, flashes } = useAppFlashes()
 
 const getFlashClass = (type: FlashType) => {
   switch (type) {

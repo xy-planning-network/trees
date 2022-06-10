@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { nextTick, ref } from "vue"
+import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
-import flasher from "@/composables/useFlashes"
+import useAppFlasher from "@/composables/useFlashes"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -128,20 +128,20 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
         </template>
 
         <div>
-          <pre><code class="language-typescript">import {flasher} from "@xy-planning-network/trees"</code></pre>
+          <pre><code class="language-typescript">import {useAppFlasher} from "@xy-planning-network/trees"</code></pre>
           <ul class="mt-1 space-y-2">
             <li>
               <InputLabel
                 label="Flash generic error using configured email address:"
               />
               <pre><code class="language-typescript">/* Import and do this anytime, best just before createApp() */
-flasher.setConfig({email: "support@trees.com"})
+useAppFlasher().setConfig({email: "support@trees.com"})
 /* Call this whenever you need it. */
-flasher.genericError()</code></pre>
+useAppFlasher().genericError()</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="flasher.genericError()"
+                @click="useAppFlasher().genericError()"
               >
                 Show Me
               </button>
@@ -150,33 +150,33 @@ flasher.genericError()</code></pre>
               <InputLabel
                 label="Flash generic error with custom email address:"
               />
-              <pre><code class="language-typescript">flasher.genericError("help@trees.com")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher().genericError("help@trees.com")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="flasher.genericError('help@trees.com')"
+                @click="useAppFlasher().genericError('help@trees.com')"
               >
                 Show Me
               </button>
             </li>
             <li>
               <InputLabel label="Flash success:" />
-              <pre><code class="language-typescript">flasher.success("Hooray!")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher().success("Hooray!")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="flasher.success('Hooray!')"
+                @click="useAppFlasher().success('Hooray!')"
               >
                 Flash Success
               </button>
             </li>
             <li>
               <InputLabel label="Flash persistent info:" />
-              <pre><code class="language-typescript">flasher.info("Sticky!")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher().info("Sticky!")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="flasher.info('Sticky!')"
+                @click="useAppFlasher().info('Sticky!', true)"
               >
                 Flash Persistent
               </button>
