@@ -1,3 +1,4 @@
+import useAppSpinner from "@/composables/useSpinner"
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 
 export type RequestMethod =
@@ -77,14 +78,14 @@ const BaseAPI = {
   makeRequest<T = any>(opts: RequestOptions): Promise<T> {
     const wait = window.setTimeout(() => {
       if (!opts.skipLoader) {
-        window.VueBus.emit("Spinner-show")
+        useAppSpinner().show()
       }
     }, 200)
 
     return apiAxiosInstance(opts)
       .then((success) => success.data)
       .finally(() => {
-        if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
+        if (!opts.skipLoader) useAppSpinner().hide()
         window.clearTimeout(wait)
       })
   },

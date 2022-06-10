@@ -4,6 +4,7 @@ import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
 import useAppFlasher from "@/composables/useFlashes"
+import { useAppSpinner } from "@/composables"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -21,7 +22,7 @@ const modalProps = [
   { name: "title", required: true, type: "string" },
 ]
 const open = ref(false)
-const spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`
+const spinnerCopy = `useAppSpinner().show(); window.setTimeout(() => { useAppSpinner().hide(); }, 3000);`
 const slideoverOpen = ref(false)
 const slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`
 const slideoverProps = [
@@ -31,13 +32,13 @@ const slideoverProps = [
   { name: "@close", required: false, type: "function(modelValue)" },
 ]
 const spinner = function (): void {
-  window.VueBus.emit("Spinner-show", [
+  useAppSpinner().show([
     "Look!",
     "I can also display messages.",
     "In case you need them.",
   ])
   window.setTimeout(() => {
-    window.VueBus.emit("Spinner-hide")
+    useAppSpinner().hide()
   }, 15000)
 }
 

@@ -54,6 +54,11 @@ export interface Flasher {
   setConfig(config: FlasherConfig): void
 }
 
+export interface UseFlashes {
+  flasher: Flasher
+  flashes: Ref<FlashStore>
+}
+
 /**
  * useFlashes exposes the module level global flashes and flasher for shared access to
  * the a flash queue when a flashStore isn't provided
@@ -172,17 +177,14 @@ export const loadWindowFlashes = (flasher: Flasher) => {
 }
 
 // simplify application usage by setting up a global store and singleton app flasher
-let appFlashes: Ref<FlashStore> | null = null
-let appFlasher: Flasher | null = null
+let appFlashes: UseFlashes | undefined = undefined
 export function useAppFlashes() {
-  if (appFlasher === null) {
-    const { flashes, flasher } = useFlashes()
-    appFlashes = flashes
-    appFlasher = flasher
+  if (appFlashes === undefined) {
+    appFlashes = useFlashes()
   }
   return {
-    flasher: appFlasher,
-    flashes: appFlashes,
+    flasher: appFlashes.flasher,
+    flashes: appFlashes.flashes,
   }
 }
 
