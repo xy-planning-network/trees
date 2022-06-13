@@ -417,6 +417,41 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               <template #legend>In A Grid Too</template>
             </Radio>
 
+            <div class="">
+              <RadioCards
+                legend="Cards Any One?"
+                help="Just use the RadioCards component."
+                :options="
+                  options.map((option) => ({
+                    disabled: option.disabled,
+                    label: option.label,
+                    value: option.value,
+                  }))
+                "
+                v-model="radioSelection"
+                :columns="2"
+              />
+            </div>
+
+            <div class="">
+              <RadioCards
+                :disabled="true"
+                legend="Cards Any One?"
+                help="Just use the RadioCards component."
+                :options="
+                  options.map((option) => ({
+                    disabled: option.disabled,
+                    help: option.help,
+                    label: option.label,
+                    value: option.value,
+                    sublabel: '$499/mo',
+                  }))
+                "
+                v-model="radioSelection"
+                :columns="2"
+              />
+            </div>
+
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />
           </div>

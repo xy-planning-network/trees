@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { hasSlotContent } from "@/helpers/Slots"
+withDefaults(
+  defineProps<{
+    tag?: string
+  }>(),
+  {
+    tag: "legend",
+  }
+)
 </script>
 <template>
-  <legend
+  <component
+    :is="tag"
     v-if="hasSlotContent($slots.default)"
     v-bind="{
       ...$attrs,
@@ -10,5 +19,5 @@ import { hasSlotContent } from "@/helpers/Slots"
     }"
   >
     <slot />
-  </legend>
+  </component>
 </template>
