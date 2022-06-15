@@ -131,12 +131,21 @@ const nameAttr = computed(() => {
               <RadioGroupDescription v-if="option.help" as="div">
                 <InputHelp tag="div" class="mt-auto" :text="option.help" />
               </RadioGroupDescription>
-              <div v-if="option.sublabel" class="mt-auto mb-0">
-                <RadioGroupDescription as="div" class="mt-4">
-                  <InputLabel
-                    tag="span"
-                    class="mt-auto mb-auto"
-                    :label="option.sublabel"
+              <div
+                v-if="option.sublabel || $slots.sublabel"
+                class="mt-auto mb-0"
+              >
+                <RadioGroupDescription
+                  as="div"
+                  class="font-semibold leading-snug mt-4 text-gray-900 text-sm"
+                >
+                  {{ option.sublabel }}
+                  <slot
+                    name="sublabel"
+                    :active="active"
+                    :checked="checked"
+                    :disabled="disabled"
+                    :option="option"
                   />
                 </RadioGroupDescription>
               </div>

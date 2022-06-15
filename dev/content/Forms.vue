@@ -47,7 +47,7 @@ const radioProps = [
   { name: "help", required: false, type: "string" },
   { name: "legend", required: false, type: "string" },
 ]
-const radioSelection = ref<string | number>()
+const radioSelection = ref<string | number>("val1")
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const selectProps = [
   { name: "design", required: false, type: "string" },
@@ -421,20 +421,23 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <div class="">
               <form>
                 <RadioCards
+                  v-model="radioSelection"
                   legend="Cards Any One?"
                   help="Just use the RadioCards component."
                   :options="
                     options.map((option) => ({
                       disabled: option.disabled,
+                      help: option.help,
                       label: option.label,
                       value: option.value,
+                      sublabel: '$499/mo',
                     }))
                   "
-                  v-model="radioSelection"
                   :columns="2"
                   name="my_input"
                   required
                 />
+                <input type="hidden" name="page" value="Forms" />
                 <input class="xy-btn mt-2" type="submit" value="submit" />
               </form>
             </div>
@@ -450,12 +453,15 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                     help: option.help,
                     label: option.label,
                     value: option.value,
-                    sublabel: '$499/mo',
                   }))
                 "
                 v-model="radioSelection"
                 :columns="2"
-              />
+              >
+                <template #sublabel="{ option, checked }">
+                  {{ option.value }}:{{ checked }}
+                </template>
+              </RadioCards>
             </div>
 
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
