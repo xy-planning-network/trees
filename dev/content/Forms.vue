@@ -47,7 +47,7 @@ const radioProps = [
   { name: "help", required: false, type: "string" },
   { name: "legend", required: false, type: "string" },
 ]
-const radioSelection = ref<string | number>("val2")
+const radioSelection = ref<string | number>()
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const selectProps = [
   { name: "design", required: false, type: "string" },
@@ -413,24 +413,30 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               :options="options"
               v-model="radioSelection"
               :columns="undefined"
+              required
             >
               <template #legend>In A Grid Too</template>
             </Radio>
 
             <div class="">
-              <RadioCards
-                legend="Cards Any One?"
-                help="Just use the RadioCards component."
-                :options="
-                  options.map((option) => ({
-                    disabled: option.disabled,
-                    label: option.label,
-                    value: option.value,
-                  }))
-                "
-                v-model="radioSelection"
-                :columns="2"
-              />
+              <form>
+                <RadioCards
+                  legend="Cards Any One?"
+                  help="Just use the RadioCards component."
+                  :options="
+                    options.map((option) => ({
+                      disabled: option.disabled,
+                      label: option.label,
+                      value: option.value,
+                    }))
+                  "
+                  v-model="radioSelection"
+                  :columns="2"
+                  name="my_input"
+                  required
+                />
+                <input class="xy-btn mt-2" type="submit" value="submit" />
+              </form>
             </div>
 
             <div class="">
