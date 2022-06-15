@@ -49,6 +49,7 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 // this is usful when the component is used inside a form element and
 // tracking v-model isn't required.
 const internalState = ref()
+const invalid = ref<boolean>()
 const checked = computed(() => {
   if (props.modelValue === undefined) {
     return internalState.value
@@ -57,30 +58,15 @@ const checked = computed(() => {
   return props.modelValue
 })
 
-// manage some custom required validation using an invisible input field
-const validationInputRef = ref<any>()
-const invalid = ref<boolean>()
-const errMsg = "Please select one of these options."
-const onInvalid = () => {
-  if (validationInputRef.value === undefined) {
-    return
-  }
-
-  invalid.value = true
-  validationInputRef.value.setCustomValidity(errMsg)
-}
-
 const onChange = (val: ModelValue) => {
   internalState.value = val
-  emit("update:modelValue", val)
-
-  if (validationInputRef.value === undefined) {
-    return
-  }
-
   invalid.value = false
-  validationInputRef.value.setCustomValidity("")
+  emit("update:modelValue", val)
 }
+
+const nameAttr = computed(() => {
+  return typeof attrs.name === "string" && attrs.name !== "" ? attrs.name : uuid
+})
 </script>
 
 <template>
@@ -88,7 +74,6 @@ const onChange = (val: ModelValue) => {
     :modelValue="checked"
     @update:model-value="onChange"
     :disabled="typeof attrs.disabled === 'boolean' ? attrs.disabled : false"
-    :name="attrs.name ? attrs.name : uuid"
     :aria-invalid="invalid === true ? 'true' : null"
     :aria-errormessage="invalid === true ? `error-${uuid}` : null"
   >
@@ -99,7 +84,7 @@ const onChange = (val: ModelValue) => {
       <InputHelp :text="help" />
     </RadioGroupDescription>
     <div v-if="invalid === true" :id="`error-${uuid}`" class="sr-only">
-      {{ errMsg }}
+      Please select one of these options.
     </div>
 
     <div
@@ -160,17 +145,19 @@ const onChange = (val: ModelValue) => {
             ]"
             aria-hidden="true"
           />
+          <input
+            class="sr-only top-1 left-1"
+            aria-hidden="true"
+            :checked="checked"
+            :name="nameAttr"
+            :required="attrs.required !== undefined && attrs.required !== false"
+            tabindex="-1"
+            type="radio"
+            :value="option.value"
+            @invalid="invalid = true"
+          />
         </div>
       </RadioGroupOption>
-      <input
-        ref="validationInputRef"
-        class="absolute sr-only top-1 left-4"
-        aria-hidden="true"
-        type="checkbox"
-        :checked="internalState !== undefined"
-        :required="attrs.required !== undefined && attrs.required !== false"
-        @invalid="onInvalid"
-      />
     </div>
   </RadioGroup>
 </template>
