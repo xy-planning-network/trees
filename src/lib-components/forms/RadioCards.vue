@@ -10,6 +10,15 @@ import { CheckCircleIcon } from "@heroicons/vue/solid"
 import { computed, ref, useAttrs } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 
+/*
+ * NOTE (spk) headless UI introduced a "name" prop that includes a hidden field
+ * to use the modelValue inside of forms.  It does not however resolve the issue of
+ * supporting HTML5 form validation, so we'll add our own hidden radio buttons to support both.
+ *
+ * The headless technique does include supporting complex modelValues such as objects, which we may
+ * need in the future.  We can revist required validation at that time using a singular hidden checkbox.
+ */
+
 type ModelValue = string | number
 
 type RadioCard = {
