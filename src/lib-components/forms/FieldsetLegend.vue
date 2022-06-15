@@ -15,7 +15,7 @@ withDefaults(
     v-if="hasSlotContent($slots.default)"
     v-bind="{
       ...$attrs,
-      class: 'text-base font-medium leading-tight text-gray-900',
+      class: 'text-sm font-semibold leading-snug text-gray-900',
     }"
   >
     <slot />

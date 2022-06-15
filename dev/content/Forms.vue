@@ -412,7 +412,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               help="Set the columns prop to 2, 3, or 4"
               :options="options"
               v-model="radioSelection"
-              :columns="undefined"
+              :columns="2"
               required
             >
               <template #legend>In A Grid Too</template>
