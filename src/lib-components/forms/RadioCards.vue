@@ -8,6 +8,8 @@ import {
 } from "@headlessui/vue"
 import { CheckCircleIcon } from "@heroicons/vue/solid"
 import { computed, ref, useAttrs } from "vue"
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 
 /*
