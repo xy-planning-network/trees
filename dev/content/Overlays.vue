@@ -3,7 +3,7 @@ import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
-import useAppFlasher from "@/composables/useFlashes"
+import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
@@ -125,20 +125,22 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
       <ComponentLayout class="mt-8" title="Flash">
         <template v-slot:description>
           We look for an array of flashes on <code>window.Flashes</code> and we
-          can emit events on the bus that render flashes.
+          can deploy flashes from anywhere with the useAppFlashes composable.
         </template>
 
         <div>
-          <pre><code class="language-typescript">import {useAppFlasher} from "@xy-planning-network/trees"</code></pre>
           <ul class="mt-1 space-y-2">
             <li>
               <InputLabel
                 label="Flash generic error using configured email address:"
               />
-              <pre><code class="language-typescript">/* Import and do this anytime, best just before createApp() */
-useAppFlasher().setConfig({email: "support@trees.com"})
-/* Call this whenever you need it. */
-useAppFlasher().genericError()</code></pre>
+              <pre><code class="language-typescript">/* Import and do this anytime, best before createApp() or inside a root app level component */
+import {useAppFlashes} from "@xy-planning-network/trees"
+useAppFlashes().configure({email: "support@trees.com"})
+
+/* use as needed.  imports of useAppFlasher throughout the app will produce the same result */
+useAppFlashes().flasher.genericError()
+</code></pre>
               <button
                 type="button"
                 class="xy-btn"
@@ -148,6 +150,11 @@ useAppFlasher().genericError()</code></pre>
               </button>
             </li>
             <li>
+              <InputLabel
+                label="useAppFlasher is the default export as is what you need most of the time."
+              />
+              <pre><code class="language-typescript">import useAppFlasher from "@xy-planning-network/trees"</code></pre>
+
               <InputLabel
                 label="Flash generic error with custom email address:"
               />
@@ -161,8 +168,11 @@ useAppFlasher().genericError()</code></pre>
               </button>
             </li>
             <li>
-              <InputLabel label="Flash success:" />
-              <pre><code class="language-typescript">useAppFlasher().success("Hooray!")</code></pre>
+              <InputLabel label="Flash (error, info, success, warning):" />
+              <pre><code class="language-typescript">useAppFlasher().error("Hooray!")
+useAppFlasher().info("Hooray!")
+useAppFlasher().success("Hooray!")
+useAppFlasher().warning("Hooray!")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
@@ -173,7 +183,7 @@ useAppFlasher().genericError()</code></pre>
             </li>
             <li>
               <InputLabel label="Flash persistent info:" />
-              <pre><code class="language-typescript">useAppFlasher().info("Sticky!")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher().info("Sticky!", true)</code></pre>
               <button
                 type="button"
                 class="xy-btn"

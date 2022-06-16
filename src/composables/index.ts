@@ -20,10 +20,10 @@ export {
 }
 
 // flashes: Only expose the useFlashes composable for custom flashing and useAppFlasher.
-import useAppFlasher, { useFlashes } from "./useFlashes"
+import { useFlashes, useAppFlashes, useAppFlasher } from "./useFlashes"
 import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"
 export type { FlashMessage, FlashType, FlashStore, Flasher }
-export { useFlashes, useAppFlasher }
+export { useFlashes, useAppFlashes, useAppFlasher }
 
 // spinner
 import useAppSpinner, { useSpinnerDisplay } from "./useSpinner"

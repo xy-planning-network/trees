@@ -51,12 +51,12 @@ export interface Flasher {
   success(msg: string, persistent?: boolean): string
   warning(msg: string, persistent?: boolean): string
   genericError(email?: string, persistent?: boolean): string
-  setConfig(config: FlasherConfig): void
 }
 
 export interface UseFlashes {
   flasher: Flasher
   flashes: Ref<FlashStore>
+  configure(config: FlasherConfig): void
 }
 
 /**
@@ -72,7 +72,7 @@ export function useFlashes(flasherConfig: FlasherConfig = {}) {
     email: "",
   }
 
-  const setConfig = (newConfig: FlasherConfig) => {
+  const configure = (newConfig: FlasherConfig) => {
     config = {
       ...config,
       ...newConfig,
@@ -140,7 +140,7 @@ export function useFlashes(flasherConfig: FlasherConfig = {}) {
     })
   }
 
-  setConfig(flasherConfig || {})
+  configure(flasherConfig || {})
 
   return {
     flasher: {
@@ -152,9 +152,9 @@ export function useFlashes(flasherConfig: FlasherConfig = {}) {
       info,
       success,
       genericError,
-      setConfig,
     },
     flashes,
+    configure,
   }
 }
 
@@ -182,15 +182,19 @@ export function useAppFlashes() {
   if (appFlashes === undefined) {
     appFlashes = useFlashes()
   }
+
   return {
     flasher: appFlashes.flasher,
     flashes: appFlashes.flashes,
+    configure: appFlashes.configure,
   }
 }
 
-// most components and pages will only need access to the flasher
-// this allows for a simple import statement with direct usage
-export default function useAppFlasher() {
-  const { flasher } = useAppFlashes()
-  return flasher
+// most components and pages will only need access to the flasher of the global appFlashes
+// this allows for a simple import statement with direct access to the flash methods
+// import { useAppFlasher } from "@xy-planning-network/trees"
+//
+// useAppFlasher().genericError()
+export function useAppFlasher() {
+  return useAppFlashes().flasher
 }

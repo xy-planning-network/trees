@@ -12,10 +12,10 @@ import ComponentLayout from "./helpers/ComponentLayout.vue"
 import PropsTable from "./helpers/PropsTable.vue"
 import "./main.css"
 import mitt from "mitt"
-import useAppFlasher from "@/composables/useFlashes"
+import { useAppFlashes } from "@/composables/useFlashes"
 
 window.VueBus = mitt()
-useAppFlasher().setConfig({ email: "support@trees.com" })
+useAppFlashes().configure({ email: "support@trees.com" })
 
 const app = createApp(Serve)
 app.use(Trees)

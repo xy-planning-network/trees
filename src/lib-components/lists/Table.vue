@@ -11,7 +11,7 @@ import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
 import * as TableTypes from "@/composables/table"
-import useAppFlasher from "@/composables/useFlashes"
+import { useAppFlasher } from "@/composables/useFlashes"
 
 const props = withDefaults(
   defineProps<{
