@@ -1,4 +1,4 @@
-import useAppSpinner from "@/composables/useSpinner"
+import { useAppSpinner } from "@/composables/useSpinner"
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 
 export type RequestMethod =

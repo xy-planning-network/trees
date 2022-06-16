@@ -26,5 +26,5 @@ export type { FlashMessage, FlashType, FlashStore, Flasher }
 export { useFlashes, useAppFlashes, useAppFlasher }
 
 // spinner
-import useAppSpinner, { useSpinnerDisplay } from "./useSpinner"
-export { useAppSpinner, useSpinnerDisplay }
+import { useSpinnerDisplay, useAppSpinner } from "./useSpinner"
+export { useSpinnerDisplay, useAppSpinner }

@@ -3,8 +3,6 @@ import { onMounted } from "vue"
 import XYSpinner from "../indicators/XYSpinner.vue"
 import { useAppSpinnerDisplay } from "@/composables/useSpinner"
 
-// TODO: (spk) messages can be hard to read depending on what's behind the overlay.
-
 const { idx, loading, maxIdx, messages, msg, showMsg, show, hide } =
   useAppSpinnerDisplay()
 

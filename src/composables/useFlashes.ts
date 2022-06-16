@@ -183,11 +183,7 @@ export function useAppFlashes() {
     appFlashes = useFlashes()
   }
 
-  return {
-    flasher: appFlashes.flasher,
-    flashes: appFlashes.flashes,
-    configure: appFlashes.configure,
-  }
+  return appFlashes
 }
 
 // most components and pages will only need access to the flasher of the global appFlashes

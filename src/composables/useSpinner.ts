@@ -52,6 +52,7 @@ export function useSpinnerDisplay() {
   }
 }
 
+// simplify application usage by setting up a global spinner composable as a singleton
 let appSpinner: UseSpinnerDisplay | undefined = undefined
 export function useAppSpinnerDisplay() {
   if (appSpinner === undefined) {
@@ -60,7 +61,12 @@ export function useAppSpinnerDisplay() {
   return appSpinner
 }
 
-export default function useAppSpinner() {
+// most components will only need access to the show/hide methods of the global appSpinner
+// import { useAppSpinner } from "@xy-planning-network/trees"
+//
+// useAppSpinner().show()
+// useAppSpinner().hide()
+export function useAppSpinner() {
   const { show, hide } = useAppSpinnerDisplay()
   return {
     show,
