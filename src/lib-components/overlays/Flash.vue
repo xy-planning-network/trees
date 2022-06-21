@@ -21,16 +21,6 @@ const getFlashClass = (type: FlashType) => {
   }
 }
 onMounted(() => {
-  // NOTE: (spk) here for backwards compatibility
-  window.VueBus.on("Flash-show-message", (flash) => {
-    flasher.flash(flash)
-  })
-
-  // NOTE: (spk) here for backwards compatibility
-  window.VueBus.on("Flash-show-generic-error", (email) => {
-    flasher.genericError(email)
-  })
-
   // NOTE: (spk) there's a strong argument that this component should accept flashes: Flash[] as a prop
   // and a parent container like StackedLayout or SidebarLayout should handle initiating useFlashes
   // and be singularly responsible for loading flashes from the window.

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { onMounted } from "vue"
 import XYSpinner from "../indicators/XYSpinner.vue"
 import { useAppSpinnerDisplay } from "@/composables/useSpinner"
 
-const { idx, loading, maxIdx, messages, msg, showMsg, show, hide } =
-  useAppSpinnerDisplay()
+const { idx, loading, maxIdx, messages, msg, showMsg } = useAppSpinnerDisplay()
 
 const fadeIn = (): void => {
   idx.value++
@@ -22,18 +20,6 @@ const fadeOut = (): void => {
     showMsg.value = false
   }, 2500)
 }
-
-onMounted(() => {
-  // NOTE: (spk) here for backwards compatibility
-  window.VueBus.on("Spinner-show", (spinMessages) => {
-    show(spinMessages)
-  })
-
-  // NOTE: (spk) here for backwards compatibility
-  window.VueBus.on("Spinner-hide", () => {
-    hide()
-  })
-})
 </script>
 <template>
   <div
