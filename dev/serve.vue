@@ -1,5 +1,15 @@
+<script lang="ts">
+declare global {
+  interface Window {
+    Prism: {
+      highlightAll: () => void
+    }
+  }
+}
+</script>
+
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -63,6 +73,12 @@ onMounted(() => {
   if (page) currentPage.value = page
   const search = new URLSearchParams(window.location.search).get("currentNav")
   if (search) currentNav.value = search
+
+  nextTick(() => window.Prism.highlightAll())
+})
+
+watch(currentPage, () => {
+  nextTick(() => window.Prism.highlightAll())
 })
 </script>
 
