@@ -107,7 +107,7 @@ const loadAndRender = (): void => {
       items.value = success.data.items
     },
     () => {
-      useAppFlasher().genericError()
+      useAppFlasher.genericError()
     }
   )
 }

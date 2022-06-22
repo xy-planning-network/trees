@@ -51,7 +51,7 @@ const loadAndRender = (checkForContent: boolean): void => {
       if (checkForContent) hasContent.value = items.value.length != 0
     },
     () => {
-      useAppFlasher().genericError()
+      useAppFlasher.genericError()
     }
   )
 }

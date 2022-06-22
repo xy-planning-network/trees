@@ -190,7 +190,5 @@ export function useAppFlashes() {
 // this allows for a simple import statement with direct access to the flash methods
 // import { useAppFlasher } from "@xy-planning-network/trees"
 //
-// useAppFlasher().genericError()
-export function useAppFlasher() {
-  return useAppFlashes().flasher
-}
+// useAppFlasher.genericError()
+export const useAppFlasher = { ...useAppFlashes().flasher }

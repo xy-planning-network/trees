@@ -78,14 +78,14 @@ const BaseAPI = {
   ): Promise<T> {
     const wait = window.setTimeout(() => {
       if (!opts.skipLoader) {
-        useAppSpinner().show()
+        useAppSpinner.show()
       }
     }, 200)
 
     return apiAxiosInstance({ ...config, ...opts })
       .then((success) => success.data)
       .finally(() => {
-        if (!opts.skipLoader) useAppSpinner().hide()
+        if (!opts.skipLoader) useAppSpinner.hide()
         window.clearTimeout(wait)
       })
   },

@@ -22,7 +22,7 @@ const modalProps = [
   { name: "title", required: true, type: "string" },
 ]
 const open = ref(false)
-const spinnerCopy = `useAppSpinner().show(); window.setTimeout(() => { useAppSpinner().hide(); }, 3000);`
+const spinnerCopy = `useAppSpinner.show(); window.setTimeout(() => { useAppSpinner.hide(); }, 3000);`
 const slideoverOpen = ref(false)
 const slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`
 const slideoverProps = [
@@ -32,13 +32,13 @@ const slideoverProps = [
   { name: "@close", required: false, type: "function(modelValue)" },
 ]
 const spinner = function (): void {
-  useAppSpinner().show([
+  useAppSpinner.show([
     "Look!",
     "I can also display messages.",
     "In case you need them.",
   ])
   window.setTimeout(() => {
-    useAppSpinner().hide()
+    useAppSpinner.hide()
   }, 15000)
 }
 
@@ -144,7 +144,7 @@ useAppFlashes().flasher.genericError()
               <button
                 type="button"
                 class="xy-btn"
-                @click="useAppFlasher().genericError()"
+                @click="useAppFlasher.genericError()"
               >
                 Show Me
               </button>
@@ -158,36 +158,36 @@ useAppFlashes().flasher.genericError()
               <InputLabel
                 label="Flash generic error with custom email address:"
               />
-              <pre><code class="language-typescript">useAppFlasher().genericError("help@trees.com")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher.genericError("help@trees.com")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="useAppFlasher().genericError('help@trees.com')"
+                @click="useAppFlasher.genericError('help@trees.com')"
               >
                 Show Me
               </button>
             </li>
             <li>
               <InputLabel label="Flash (error, info, success, warning):" />
-              <pre><code class="language-typescript">useAppFlasher().error("Hooray!")
-useAppFlasher().info("Hooray!")
-useAppFlasher().success("Hooray!")
-useAppFlasher().warning("Hooray!")</code></pre>
+              <pre><code class="language-typescript">useAppFlasher.error("Hooray!")
+useAppFlasher.info("Hooray!")
+useAppFlasher.success("Hooray!")
+useAppFlasher.warning("Hooray!")</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="useAppFlasher().success('Hooray!')"
+                @click="useAppFlasher.success('Hooray!')"
               >
                 Flash Success
               </button>
             </li>
             <li>
               <InputLabel label="Flash persistent info:" />
-              <pre><code class="language-typescript">useAppFlasher().info("Sticky!", true)</code></pre>
+              <pre><code class="language-typescript">useAppFlasher.info("Sticky!", true)</code></pre>
               <button
                 type="button"
                 class="xy-btn"
-                @click="useAppFlasher().info('Sticky!', true)"
+                @click="useAppFlasher.info('Sticky!', true)"
               >
                 Flash Persistent
               </button>

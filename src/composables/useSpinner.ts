@@ -64,12 +64,9 @@ export function useAppSpinnerDisplay() {
 // most components will only need access to the show/hide methods of the global appSpinner
 // import { useAppSpinner } from "@xy-planning-network/trees"
 //
-// useAppSpinner().show()
-// useAppSpinner().hide()
-export function useAppSpinner() {
+// useAppSpinner.show()
+// useAppSpinner.hide()
+export const useAppSpinner = (() => {
   const { show, hide } = useAppSpinnerDisplay()
-  return {
-    show,
-    hide,
-  }
-}
+  return { show, hide }
+})()
