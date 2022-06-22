@@ -46,7 +46,7 @@ const hasLegend = computed(() => {
       </FieldsetLegend>
       <InputHelp tag="p" :text="help" :id="`${uuid}-help`" />
     </div>
-    <div class="">
+    <div class="flex">
       <div
         class="grid gap-4"
         :class="{

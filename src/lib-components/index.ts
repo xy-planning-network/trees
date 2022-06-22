@@ -33,6 +33,7 @@ import { default as InputLabel } from "./forms/InputLabel.vue"
 import { default as FieldsetLegend } from "./forms/FieldsetLegend.vue"
 import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
 import { default as Radio } from "./forms/Radio.vue"
+import { default as RadioCards } from "./forms/RadioCards.vue"
 import { default as Select } from "./forms/Select.vue"
 import { default as TextArea } from "./forms/TextArea.vue"
 import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
@@ -68,6 +69,7 @@ export {
   FieldsetLegend,
   MultiCheckboxes,
   Radio,
+  RadioCards,
   Select,
   TextArea,
   YesOrNoRadio,
@@ -106,6 +108,7 @@ export interface TreesComponents {
   FieldsetLegend: typeof FieldsetLegend
   MultiCheckboxes: typeof MultiCheckboxes
   Radio: typeof Radio
+  RadioCards: typeof RadioCards
   Select: typeof Select
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio
