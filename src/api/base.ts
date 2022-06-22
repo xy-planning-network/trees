@@ -10,7 +10,7 @@ export type RequestMethod =
   | "DELETE"
   | "delete"
 
-export interface RequestOptions extends AxiosRequestConfig {
+export interface RequestOptions {
   /**
    * returns the nested data key inside the AxiosResponse data when true
    */
@@ -26,7 +26,7 @@ export interface RequestOptions extends AxiosRequestConfig {
 }
 
 interface APIResponse<T = any> extends AxiosResponse<T> {
-  config: RequestOptions
+  config: RequestOptions & AxiosRequestConfig
 }
 
 /**
@@ -34,7 +34,7 @@ interface APIResponse<T = any> extends AxiosResponse<T> {
  * @param config RequestOptions
  * @returns RequestOptions
  */
-const apiDelayReqIntercept = (config: RequestOptions) => {
+const apiDelayReqIntercept = (config: RequestOptions & AxiosRequestConfig) => {
   const delay = config.withDelay || 0
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -62,9 +62,6 @@ const apiAxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
   responseType: "json",
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
 })
 
 // apply request intercepts
@@ -74,14 +71,17 @@ apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
 apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
 
 const BaseAPI = {
-  makeRequest<T = any>(opts: RequestOptions): Promise<T> {
+  makeRequest<T = any>(
+    config: AxiosRequestConfig,
+    opts: RequestOptions
+  ): Promise<T> {
     const wait = window.setTimeout(() => {
       if (!opts.skipLoader) {
         window.VueBus.emit("Spinner-show")
       }
     }, 200)
 
-    return apiAxiosInstance(opts)
+    return apiAxiosInstance({ ...config, ...opts })
       .then((success) => success.data)
       .finally(() => {
         if (!opts.skipLoader) window.VueBus.emit("Spinner-hide")
@@ -93,24 +93,31 @@ const BaseAPI = {
     opts: RequestOptions,
     params?: Record<string, unknown>
   ) {
-    return this.makeRequest<T>({ url: path, method: "GET", params, ...opts })
+    return this.makeRequest<T>({ url: path, method: "GET", params }, opts)
   },
   delete<T = any>(path: string, opts: RequestOptions) {
-    return this.makeRequest<T>({ url: path, method: "DELETE", ...opts })
+    return this.makeRequest<T>({ url: path, method: "DELETE" }, opts)
   },
   post<T = any>(
     path: string,
-    data: Record<string, unknown>,
+    data: Record<string, unknown> | FormData,
     opts: RequestOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "POST", ...opts })
+    return this.makeRequest<T>({ url: path, data, method: "POST" }, opts)
   },
   put<T = any>(
     path: string,
-    data: Record<string, unknown>,
+    data: Record<string, unknown> | FormData,
     opts: RequestOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "PUT", ...opts })
+    return this.makeRequest<T>(
+      {
+        url: path,
+        data,
+        method: "PUT",
+      },
+      opts
+    )
   },
 }
 

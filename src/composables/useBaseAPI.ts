@@ -54,7 +54,10 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (data?: Record<string, unknown>, opts?: RequestOptions) => Promise<T>
+  execute: (
+    data?: Record<string, unknown> | FormData,
+    opts?: RequestOptions
+  ) => Promise<T>
 }
 
 /**
@@ -86,7 +89,7 @@ export default function useBaseAPI<T = any>(
   }
 
   const execute = (
-    data: Record<string, unknown> = {},
+    data: Record<string, unknown> | FormData = {},
     opts: RequestOptions = {}
   ): Promise<T> => {
     requestCount++
@@ -98,17 +101,15 @@ export default function useBaseAPI<T = any>(
     isFinished.value = false
     isLoading.value = true
 
-    const requestOpts = {
-      ...initOpts,
+    const requestConfig = {
       data: ["POST", "post", "PUT", "put"].includes(method) ? data : {},
       method: method,
       params: ["GET", "get"].includes(method) ? data : {},
       signal: controller.signal,
       url: path,
-      ...opts,
     }
 
-    return BaseAPI.makeRequest<T>(requestOpts)
+    return BaseAPI.makeRequest<T>(requestConfig, { ...initOpts, ...opts })
       .then(
         (success) => {
           result.value = success
