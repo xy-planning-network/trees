@@ -278,7 +278,7 @@ import TreesFormComponents from "./plugins/trees"
 // import your project's main stylesheet
 import "@/main.css"
 
-// initialize mitt on VueBus for flashes support
+// initialize mitt on VueBus for event support
 window.VueBus = Mitt()
 
 // initialize the app
