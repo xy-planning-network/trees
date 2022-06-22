@@ -52,7 +52,7 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const uuid = Uniques.CreateIdAttribute()
 
 // tracking internal state separate from modelValue
 // allows v-model to be undefined by the consumer but still supports
@@ -141,14 +141,14 @@ const nameAttr = computed(() => {
                   as="div"
                   class="font-semibold leading-snug mt-4 text-gray-900 text-sm"
                 >
-                  {{ option.sublabel }}
                   <slot
                     name="sublabel"
                     :active="active"
                     :checked="checked"
                     :disabled="disabled"
                     :option="option"
-                  />
+                    >{{ option.sublabel }}</slot
+                  >
                 </RadioGroupDescription>
               </div>
             </div>

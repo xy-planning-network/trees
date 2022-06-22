@@ -445,8 +445,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <div class="">
               <RadioCards
                 :disabled="true"
-                legend="Cards Any One?"
-                help="Just use the RadioCards component."
+                legend="Need a complex sublabel on your cards?"
+                help="The sublabel display is supported by both options.sublabel and a named slot #sublabel."
                 :options="
                   options.map((option) => ({
                     disabled: option.disabled,
@@ -462,6 +462,25 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                   {{ option.value }}:{{ checked }}
                 </template>
               </RadioCards>
+            </div>
+
+            <div class="prose mt-4">
+              <p>
+                The <code>sublabel</code> slot receives the following scoped
+                slot props:
+              </p>
+              <ul>
+                <li>active: boolean</li>
+                <li>checked: boolean</li>
+                <li>disabled: boolean</li>
+                <li>
+                  option:
+                  <code
+                    >{disabled: boolean, help: string, label: string, sublabel:
+                    string, value: string | number, ... }</code
+                  >
+                </li>
+              </ul>
             </div>
 
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
