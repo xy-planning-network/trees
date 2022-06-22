@@ -186,9 +186,27 @@ export function useAppFlashes() {
   return appFlashes
 }
 
-// most components and pages will only need access to the flasher of the global appFlashes
+// most components and pages will only need access to some of the flasher methods of the global appFlashes
+// preferring that each fowarded method returns void as the string ID of the flash will have no value
+//
 // this allows for a simple import statement with direct access to the flash methods
 // import { useAppFlasher } from "@xy-planning-network/trees"
 //
 // useAppFlasher.genericError()
-export const useAppFlasher = { ...useAppFlashes().flasher }
+export const useAppFlasher = {
+  error(msg: string, persistent?: boolean) {
+    useAppFlashes().flasher.error(msg, persistent)
+  },
+  info(msg: string, persistent?: boolean) {
+    useAppFlashes().flasher.warning(msg, persistent)
+  },
+  success(msg: string, persistent?: boolean) {
+    useAppFlashes().flasher.info(msg, persistent)
+  },
+  warning(msg: string, persistent?: boolean) {
+    useAppFlashes().flasher.success(msg, persistent)
+  },
+  genericError(email?: string, persistent?: boolean) {
+    useAppFlashes().flasher.genericError(email, persistent)
+  },
+}
