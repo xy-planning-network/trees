@@ -47,7 +47,7 @@ const radioProps = [
   { name: "help", required: false, type: "string" },
   { name: "legend", required: false, type: "string" },
 ]
-const radioSelection = ref<string | number>("val2")
+const radioSelection = ref<string | number>("val1")
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const selectProps = [
   { name: "design", required: false, type: "string" },
@@ -412,10 +412,76 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               help="Set the columns prop to 2, 3, or 4"
               :options="options"
               v-model="radioSelection"
-              :columns="undefined"
+              :columns="2"
+              required
             >
               <template #legend>In A Grid Too</template>
             </Radio>
+
+            <div class="">
+              <form>
+                <RadioCards
+                  v-model="radioSelection"
+                  legend="Cards Any One?"
+                  help="Just use the RadioCards component."
+                  :options="
+                    options.map((option) => ({
+                      disabled: option.disabled,
+                      help: option.help,
+                      label: option.label,
+                      value: option.value,
+                      sublabel: '$499/mo',
+                    }))
+                  "
+                  :columns="2"
+                  name="my_input"
+                  required
+                />
+                <input type="hidden" name="page" value="Forms" />
+                <input class="xy-btn mt-2" type="submit" value="submit" />
+              </form>
+            </div>
+
+            <div class="">
+              <RadioCards
+                :disabled="true"
+                legend="Need a complex sublabel on your cards?"
+                help="The sublabel display is supported by both options.sublabel and a named slot #sublabel."
+                :options="
+                  options.map((option) => ({
+                    disabled: option.disabled,
+                    help: option.help,
+                    label: option.label,
+                    value: option.value,
+                  }))
+                "
+                v-model="radioSelection"
+                :columns="2"
+              >
+                <template #sublabel="{ option, checked }">
+                  {{ option.value }}:{{ checked }}
+                </template>
+              </RadioCards>
+            </div>
+
+            <div class="prose mt-4">
+              <p>
+                The <code>sublabel</code> slot receives the following scoped
+                slot props:
+              </p>
+              <ul>
+                <li>active: boolean</li>
+                <li>checked: boolean</li>
+                <li>disabled: boolean</li>
+                <li>
+                  option:
+                  <code
+                    >{disabled: boolean, help: string, label: string, sublabel:
+                    string, value: string | number, ... }</code
+                  >
+                </li>
+              </ul>
+            </div>
 
             <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
             <PropsTable :props="radioProps" />

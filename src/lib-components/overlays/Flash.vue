@@ -1,80 +1,30 @@
 <script setup lang="ts">
-import { Flash } from "@/composables/overlay"
-import { onMounted, ref } from "vue"
+import {
+  FlashType,
+  useAppFlashes,
+  loadWindowFlashes,
+} from "@/composables/useFlashes"
+import { onMounted } from "vue"
 
-// TODO: spk this might benefit from the composition api to avoid race conditions where a flash is requested before the component is mounted.
+const { flasher, flashes } = useAppFlashes()
 
-const flashes = ref<Flash[]>([])
-const flashTypeBorderClass = {
-  warning: "border-orange-500",
-  error: "border-red-500",
-  info: "border-blue-500",
-  success: "border-green-500",
-}
-
-const getFlashClass = (flash: Flash): string => {
-  const availableTypes = Object.keys(flashTypeBorderClass)
-  // default the flash type to "info" if no flash type or an unsupported flash.type is found
-  const type =
-    flash?.type && availableTypes.includes(flash.type)
-      ? (flash.type as "warning" | "error" | "info" | "success")
-      : "info"
-  return flashTypeBorderClass[type]
-}
-
-const remove = (flash: Flash): void => {
-  let index = 0
-  for (const f of flashes.value) {
-    if (flash.message === f.message) {
-      flashes.value.splice(index, 1)
-      return
-    }
-    index++
+const getFlashClass = (type: FlashType) => {
+  switch (type) {
+    case "warning":
+      return "border-orange-500"
+    case "error":
+      return "border-red-500"
+    case "info":
+      return "border-blue-500"
+    case "success":
+      return "border-green-500"
   }
 }
-const renderFlash = (flash: Flash): void => {
-  flashes.value.push(flash)
-  // Super simple flash implementation. This could get "smarter" by adding an
-  // id to the flash object, and then searching for the specific flash in the
-  // array and splicing, instead of simply doing a pop().
-  setTimeout(
-    (flashes: Flash[]) => {
-      flashes.pop()
-    },
-    10000,
-    flashes.value
-  )
-}
-
-const renderGenericError = (email: string): void => {
-  renderFlash({
-    type: "error",
-    message:
-      "Whoops! Something went wrong, please reach out to " +
-      `<a class="underline text-xy-blue" href="mailto:${email}">${email}</a>` +
-      " if the issue persists.",
-  })
-}
-
 onMounted(() => {
-  window.VueBus.on("Flash-show-message", (flash) => {
-    renderFlash(flash)
-  })
-
-  window.VueBus.on("Flash-show-generic-error", (email) => {
-    renderGenericError(email)
-  })
-
-  if (window.Flashes) {
-    for (const flash of window.Flashes) {
-      if (typeof flash.type === "undefined") {
-        const values: string[] = flash.message.split(": ")
-        renderFlash({ type: values[0], message: values[1] })
-        return
-      }
-      renderFlash({ type: flash.type, message: flash.message })
-    }
-  }
+  // NOTE: (spk) there's a strong argument that this component should accept flashes: Flash[] as a prop
+  // and a parent container like StackedLayout or SidebarLayout should handle initiating useFlashes
+  // and be singularly responsible for loading flashes from the window.
+  loadWindowFlashes(flasher)
 })
 </script>
 <template>
@@ -83,7 +33,7 @@ onMounted(() => {
   >
     <transition-group
       tag="div"
-      class="max-w-sm w-full"
+      class="max-w-sm space-y-2 w-full"
       enter-active-class="ease-out duration-300"
       enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
       enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
@@ -92,10 +42,10 @@ onMounted(() => {
       leave-to-class="opacity-0"
     >
       <div
-        v-for="(flash, idx) in flashes"
+        v-for="[id, flash] in flashes"
         :key="flash.message"
         class="bg-white shadow-lg rounded-lg pointer-events-auto border-t-4 transform"
-        :class="[{ 'mt-2': idx > 0 }, getFlashClass(flash)]"
+        :class="[getFlashClass(flash.type)]"
       >
         <div
           class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
@@ -110,7 +60,7 @@ onMounted(() => {
               </div>
               <div class="ml-4 flex-shrink-0 flex">
                 <button
-                  @click="remove(flash)"
+                  @click="flasher.remove(id)"
                   class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
                 >
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -129,3 +79,23 @@ onMounted(() => {
     </transition-group>
   </div>
 </template>
+
+<style>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
+</style>

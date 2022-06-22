@@ -27,7 +27,7 @@ const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, ab
   useBaseAPI<Paginated<Conifer>>(
     "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
     "GET",
-    { dataIntercept: true, withCredentials: false}
+    { dataIntercept: true }
   )
 
 const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
@@ -50,8 +50,8 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
 
 const fetchDebounce = debounceLeading(() => {
   abort()
-  fetch({ withDelay: 0, skipLoader: true, url: "https://deelay.me/1000/https://my-json-server.typicode.com/xy-planning-network/trees/conifers" }, false)
-}, 100)
+  fetch({ withDelay: 0 }, false)
+}, 50)
 
 
 const buttonText = computed(() => {

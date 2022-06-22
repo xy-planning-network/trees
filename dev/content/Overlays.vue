@@ -3,6 +3,8 @@ import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
+import { useAppFlasher } from "@/composables/useFlashes"
+import { useAppSpinner } from "@/composables"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -11,7 +13,6 @@ const contentModalProps = [
   { name: "modelValue", required: true, type: "boolean" },
   { name: "title", required: false, type: "string" },
 ]
-const flashCopy = `window.VueBus.emit("Flash-show-generic-error", "support@trees.com")`
 const modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`
 const modalProps = [
   { name: "destructive", required: false, type: "boolean" },
@@ -21,7 +22,7 @@ const modalProps = [
   { name: "title", required: true, type: "string" },
 ]
 const open = ref(false)
-const spinnerCopy = `window.VueBus.emit("Spinner-show"); window.setTimeout(() => { window.VueBus.emit("Spinner-hide"); }, 3000);`
+const spinnerCopy = `useAppSpinner.show(); window.setTimeout(() => { useAppSpinner.hide(); }, 3000);`
 const slideoverOpen = ref(false)
 const slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Header" description="A very helpful slideover description"></Slideover>`
 const slideoverProps = [
@@ -30,18 +31,14 @@ const slideoverProps = [
   { name: "description", required: false, type: "description" },
   { name: "@close", required: false, type: "function(modelValue)" },
 ]
-
-const flash = function (): void {
-  window.VueBus.emit("Flash-show-generic-error", "support@trees.com")
-}
 const spinner = function (): void {
-  window.VueBus.emit("Spinner-show", [
+  useAppSpinner.show([
     "Look!",
     "I can also display messages.",
     "In case you need them.",
   ])
   window.setTimeout(() => {
-    window.VueBus.emit("Spinner-hide")
+    useAppSpinner.hide()
   }, 15000)
 }
 
@@ -128,18 +125,74 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
       <ComponentLayout class="mt-8" title="Flash">
         <template v-slot:description>
           We look for an array of flashes on <code>window.Flashes</code> and we
-          can emit events on the bus that render flashes.
+          can deploy flashes from anywhere with the useAppFlashes composable.
         </template>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="flashCopy" />
-          </label>
-          <div class="mt-1">
-            <button type="button" class="xy-btn" @click="flash()">
-              Show Me
-            </button>
-          </div>
+          <ul class="mt-1 space-y-2">
+            <li>
+              <InputLabel
+                label="Flash generic error using configured email address:"
+              />
+              <pre><code class="language-typescript">/* Import and do this anytime, best before createApp() or inside a root app level component */
+import {useAppFlashes} from "@xy-planning-network/trees"
+useAppFlashes().configure({email: "support@trees.com"})
+
+/* use as needed.  imports of useAppFlasher throughout the app will produce the same result */
+useAppFlashes().flasher.genericError()
+</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="useAppFlasher.genericError()"
+              >
+                Show Me
+              </button>
+            </li>
+            <li>
+              <InputLabel
+                label="useAppFlasher is the default export as is what you need most of the time."
+              />
+              <pre><code class="language-typescript">import useAppFlasher from "@xy-planning-network/trees"</code></pre>
+
+              <InputLabel
+                label="Flash generic error with custom email address:"
+              />
+              <pre><code class="language-typescript">useAppFlasher.genericError("help@trees.com")</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="useAppFlasher.genericError('help@trees.com')"
+              >
+                Show Me
+              </button>
+            </li>
+            <li>
+              <InputLabel label="Flash (error, info, success, warning):" />
+              <pre><code class="language-typescript">useAppFlasher.error("Hooray!")
+useAppFlasher.info("Hooray!")
+useAppFlasher.success("Hooray!")
+useAppFlasher.warning("Hooray!")</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="useAppFlasher.success('Hooray!')"
+              >
+                Flash Success
+              </button>
+            </li>
+            <li>
+              <InputLabel label="Flash persistent info:" />
+              <pre><code class="language-typescript">useAppFlasher.info("Sticky!", true)</code></pre>
+              <button
+                type="button"
+                class="xy-btn"
+                @click="useAppFlasher.info('Sticky!', true)"
+              >
+                Flash Persistent
+              </button>
+            </li>
+          </ul>
         </div>
       </ComponentLayout>
 

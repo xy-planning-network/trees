@@ -11,6 +11,7 @@ import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
 import * as TableTypes from "@/composables/table"
+import { useAppFlasher } from "@/composables/useFlashes"
 
 const props = withDefaults(
   defineProps<{
@@ -106,10 +107,7 @@ const loadAndRender = (): void => {
       items.value = success.data.items
     },
     () => {
-      window.VueBus.emit(
-        "Flash-show-generic-error",
-        "membership@xyplanningnetwork.com"
-      )
+      useAppFlasher.genericError()
     }
   )
 }

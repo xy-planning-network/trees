@@ -18,3 +18,13 @@ export {
   useBaseAPIPost,
   useBaseAPIDelete,
 }
+
+// flashes: Only expose the useFlashes composable for custom flashing and useAppFlasher.
+import { useFlashes, useAppFlashes, useAppFlasher } from "./useFlashes"
+import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"
+export type { FlashMessage, FlashType, FlashStore, Flasher }
+export { useFlashes, useAppFlashes, useAppFlasher }
+
+// spinner
+import { useSpinnerDisplay, useAppSpinner } from "./useSpinner"
+export { useSpinnerDisplay, useAppSpinner }
