@@ -12,8 +12,11 @@ import ComponentLayout from "./helpers/ComponentLayout.vue"
 import PropsTable from "./helpers/PropsTable.vue"
 import "./main.css"
 import mitt from "mitt"
+import { useAppFlashes } from "@/composables/useFlashes"
 
 window.VueBus = mitt()
+useAppFlashes().configure({ email: "support@trees.com" })
+
 const app = createApp(Serve)
 app.use(Trees)
 app.component("ClickToCopy", ClickToCopy)

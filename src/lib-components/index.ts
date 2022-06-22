@@ -23,6 +23,7 @@ import { default as Steps } from "./navigation/Steps.vue"
 import { default as Table } from "./lists/Table.vue"
 import { default as Tabs } from "./navigation/Tabs.vue"
 import { default as Toggle } from "./forms/Toggle.vue"
+import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 
 // Form components
 import { default as BaseInput } from "./forms/BaseInput.vue"
@@ -73,6 +74,7 @@ export {
   Select,
   TextArea,
   YesOrNoRadio,
+  XYSpinner,
 }
 
 /**
@@ -112,4 +114,5 @@ export interface TreesComponents {
   Select: typeof Select
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio
+  XYSpinner: typeof XYSpinner
 }
