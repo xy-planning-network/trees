@@ -198,13 +198,13 @@ export const useAppFlasher = {
     useAppFlashes().flasher.error(msg, persistent)
   },
   info(msg: string, persistent?: boolean) {
-    useAppFlashes().flasher.warning(msg, persistent)
-  },
-  success(msg: string, persistent?: boolean) {
     useAppFlashes().flasher.info(msg, persistent)
   },
-  warning(msg: string, persistent?: boolean) {
+  success(msg: string, persistent?: boolean) {
     useAppFlashes().flasher.success(msg, persistent)
+  },
+  warning(msg: string, persistent?: boolean) {
+    useAppFlashes().flasher.warning(msg, persistent)
   },
   genericError(email?: string, persistent?: boolean) {
     useAppFlashes().flasher.genericError(email, persistent)
