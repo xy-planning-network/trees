@@ -5,6 +5,9 @@ import {
   UsersIcon,
 } from "@heroicons/vue/solid"
 import User from "@/composables/user"
+import { markRaw } from "vue"
+import { ActionsDropdown } from "@/lib-components"
+import { useAppFlasher } from "@/composables"
 
 const props = defineProps<{ user: User }>()
 
@@ -69,6 +72,17 @@ const tableData = {
         return new Date(row.created_at * 1000).toLocaleString()
       },
     },
+    {
+      display: "",
+      component: markRaw(ActionsDropdown),
+      items: [
+        {
+          label: "Show Flash",
+          event: "example-event/show-flash",
+          show: () => true,
+        },
+      ],
+    },
   ],
   refreshTrigger: 0,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
@@ -79,6 +93,15 @@ const tableProps = [
   { name: "loader", required: false, type: "boolean" },
   { name: "tableData", required: true, type: "TableTypes.Dynamic" },
 ]
+
+window.VueBus.on("example-event/show-flash", (row) => {
+  useAppFlasher.success(
+    `
+    ${row.title} started on 
+    ${new Date(row.created_at * 1000).toLocaleString()}.
+    `
+  )
+})
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">

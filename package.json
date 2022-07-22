@@ -58,6 +58,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.4.2",
     "@heroicons/vue": "^1.0.5",
+    "@popperjs/core": "^2.11.5",
     "axios": "^0.27.2",
     "flatpickr": "^4.6.9"
   },
