@@ -4,13 +4,13 @@ import { DotsVerticalIcon } from "@heroicons/vue/solid"
 import { computed } from "vue"
 import * as TableTypes from "@/composables/table"
 import User from "@/composables/user"
-import { usePopper, Placement } from "@/composables/usePopper"
+import { usePopper, PopperPosition } from "@/composables/usePopper"
 
 const props = withDefaults(
   defineProps<{
     currentUser: User
     items: TableTypes.MenuItem[]
-    placement?: Placement
+    placement?: PopperPosition
     propsData: any
   }>(),
   {

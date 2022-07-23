@@ -1,11 +1,7 @@
 import { ref, onMounted, watchEffect, VNode } from "vue"
-import {
-  createPopper,
-  Options,
-  Placement as PopperPlacement,
-} from "@popperjs/core"
+import { createPopper, Options, Placement } from "@popperjs/core"
 
-export type Placement = PopperPlacement
+export type PopperPosition = Placement
 
 export function usePopper(options: Options) {
   const reference = ref<VNode | HTMLElement>()

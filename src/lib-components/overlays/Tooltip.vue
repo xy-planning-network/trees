@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import Popover, { PopoverPosition } from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
+import { PopperPosition } from "@/composables/usePopper"
 
 withDefaults(
   defineProps<{
     as?: string
-    position?: PopoverPosition
+    position?: PopperPosition
   }>(),
   {
     as: "span",
@@ -26,7 +26,7 @@ withDefaults(
       </div>
     </template>
     <div
-      class="w-full max-w-xs bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
+      class="max-w-xs bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
     >
       <slot></slot>
     </div>

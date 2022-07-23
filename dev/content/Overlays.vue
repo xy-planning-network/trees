@@ -2,9 +2,9 @@
 import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
-import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
+import { PopperPosition } from "@/composables/usePopper"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -42,15 +42,20 @@ const spinner = function (): void {
   }, 15000)
 }
 
-const popoverPositions: PopoverPosition[] = [
-  "top-left",
-  "top-center",
-  "top-right",
-  "bottom-left",
-  "bottom-center",
-  "bottom-right",
-  "left",
+const popoverPositions: PopperPosition[] = [
+  "auto",
+  "top",
+  "bottom",
   "right",
+  "left",
+  "top-start",
+  "top-end",
+  "bottom-start",
+  "bottom-end",
+  "right-start",
+  "right-end",
+  "left-start",
+  "left-end",
 ]
 
 const popoverProps = [
@@ -62,7 +67,7 @@ const popoverProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: auto",
+    type: `${popoverPositions.join(" | ")} - default: auto`,
   },
 ]
 
@@ -75,7 +80,7 @@ const tooltipProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: auto",
+    type: `${popoverPositions.join(" | ")} - default: auto`,
   },
 ]
 
@@ -296,74 +301,59 @@ useAppFlasher.warning("Hooray!")</code></pre>
           customizing the trigger and content while offering a positioning prop.
           The popover content is heavily customizable in the default slot. Use
           the PopoverContent component for basic initial wrapper styling.
-          Positioning is absolute and subject to parent container overflow
-          rules. You're responsible for managing the width of your popover
-          content. Generally, popovers should be narrow and start with a
-          max-w-sm class.
+          Positioning is fixed and determined by the Popper.js integration.
+          You're responsible for managing the width of your popover content.
+          Generally, popovers should be narrow and start with a max-w-sm class.
+          While it supports a positioning property you are encouraged to stick
+          with auto unless you have confidence your popover can display given
+          viewport constraints. For example table actions use bottom-end which
+          should generally be safe given the menu size and location of tables in
+          body content.
         </template>
 
         <div>
           <label
-            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center mt-8"
+            class="flex flex-inline justify-center mt-8 text-sm font-medium text-gray-700 text-center"
           >
             <ClickToCopy :value="advancedPopoverCopy" />
           </label>
 
-          <div class="mt-2 flex justify-center">
-            <Popover>
-              <template #button>
-                <div class="xy-badge">
-                  Badge <ExclamationIcon class="w-4 h-4 ml-1" />
-                </div>
-              </template>
-              <div
-                class="w-full max-w-xs rounded-lg bg-white border border-gray-100 shadow-md text-sm leading-tight font-medium"
-              >
+          <div
+            v-for="(position, index) in popoverPositions"
+            :key="index"
+            class="mt-8"
+          >
+            <div class="flex justify-center">{{ position }}</div>
+            <div class="flex justify-center">
+              <Popover :position="position">
+                <template #button>
+                  <div class="xy-badge">
+                    Badge <ExclamationIcon class="w-4 h-4 ml-1" />
+                  </div>
+                </template>
                 <div
-                  v-for="n in 3"
-                  :key="n"
-                  class="flex items-center p-4 border-b"
+                  class="w-full max-w-xs rounded-lg bg-white border border-gray-100 shadow-md text-sm leading-tight font-medium"
                 >
-                  <ExclamationIcon class="w-7 h-7 mr-2 text-yellow-500" />
-                  <div>
-                    You see that post on
-                    <a
-                      class="xy-link"
-                      href="https://news.ycombinator.com/
+                  <div
+                    v-for="n in 3"
+                    :key="n"
+                    class="flex items-center p-4 border-b"
+                  >
+                    <ExclamationIcon class="w-7 h-7 mr-2 text-yellow-500" />
+                    <div>
+                      You see that post on
+                      <a
+                        class="xy-link"
+                        href="https://news.ycombinator.com/
               "
-                      >Hacker News</a
-                    >
-                    today?
+                        >Hacker News</a
+                      >
+                      today?
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Popover>
-          </div>
-
-          <div class="mt-8 flex justify-center">
-            <Popover>
-              <template #button>
-                <span class="xy-btn">Hi, hello, nice to meet you...</span>
-              </template>
-              <PopoverContent class="bg-xy-blue border-0 w-screen lg:max-w-md">
-                <div class="text-white text-base font-medium p-8">
-                  Hi, hello, nice to meet you in the flesh I've only seen you
-                  from the neck up, it's weird to see your legs Low key, I know
-                  I'm shorter than what all of y'all expected It's awkward when
-                  you look me up and down but don't address it Handshakes, all
-                  sweat, what to do next… How are people supposed to act in the
-                  office? I forget Pull my phone out my pocket act like I just
-                  got a text But I didn't, I just move my thumb around for a sec
-                  Out of habit I check Slack, like it's any other day Then
-                  remember everyone is here, like 6 feet away I gotta talk, like
-                  with my mouth, if I wanna communicate But if I can't send
-                  memes and gifs, I ain't got nothing to say I miss my cat, I
-                  miss my dog, I'm ready to leave I miss my bed sheets, and
-                  farting when I please I should've told my boss I had somewhere
-                  to be Damn, this is gonna be a long a** week
-                </div>
-              </PopoverContent>
-            </Popover>
+              </Popover>
+            </div>
           </div>
 
           <PropsTable :props="popoverProps"></PropsTable>
@@ -374,11 +364,13 @@ useAppFlasher.warning("Hooray!")</code></pre>
         <template v-slot:description>
           A simple tooltip component. Triggered by a single universally
           understood icon. Your tooltip content is supplied in the default slot.
+          While it supports a positioning argument you are encouraged to stick
+          with auto.
         </template>
 
         <div>
           <label
-            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center"
+            class="flex flex-inline justify-center text-sm font-medium text-gray-700 text-center"
           >
             <ClickToCopy :value="tooltipCopy" />
           </label>
@@ -399,11 +391,7 @@ useAppFlasher.warning("Hooray!")</code></pre>
 
         <div class="mt-8">
           <p class="mb-4">
-            <strong>Auto positioning</strong> favors left to right positioning.
-            i.e. if there appears to be space available to the right of the
-            trigger the tooltip content will flow toward the right. Top and
-            bottom positioning is prioritized by the current viewport, giving
-            preference where more visible space currently exists.
+            <strong>More Auto Positioning Tests</strong>
           </p>
           <div class="grid gap-4 grid-cols-5">
             <div v-for="index in 5" :key="index">
