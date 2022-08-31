@@ -2,6 +2,7 @@
 
 // Layout components
 import { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue"
+import { default as Card } from "./layout/Card.vue"
 import { default as Cards } from "./lists/Cards.vue"
 import { default as ContentModal } from "./overlays/ContentModal.vue"
 import { default as DateFilter } from "./layout/DateFilter.vue"
@@ -41,6 +42,7 @@ import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
 
 export {
   ActionsDropdown,
+  Card,
   Cards,
   ContentModal,
   DateFilter,

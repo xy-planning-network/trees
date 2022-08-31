@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
+import Card from "../../src/lib-components/layout/Card.vue"
 
 const commonProps = [
   { name: "label", required: false, type: "string" },
@@ -149,25 +150,42 @@ const inputHelpProps = [
 const toggleValue = ref(false)
 const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
 const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
+
+const description = ref("")
+
+onMounted(() => {
+  setTimeout(() => {
+    description.value = "some description"
+  }, 5000)
+})
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Input HTML Attributes" :show-badge="false">
-        <template v-slot:description>
-          <div class="mt-4">
+    <div class="max-w-3xl mx-auto space-y-8">
+      <ComponentLayout title="Input HTML Attributes" badge="none">
+        <template v-if="description" #description>{{ description }} </template>
+        <div class="prose">
+          <p>
             Generally, all of these inputs will support common html attributes
             such as <code>disabled</code> and <code>required</code> or input
             specific attributes like <code>rows</code> for textareas. You can
             even use the <code>class</code> attribute as needed to apply
             additional classes.
-          </div>
+          </p>
 
-          <div class="mt-4">
+          <p>
             Out of the box they will support a dynamically generated id
             attribute which is used for accessibility concerns with labels and
             help text.
-          </div>
+          </p>
+        </div>
+
+        <template #action>
+          <ActionsDropdown
+            :props-data="null"
+            :current-user="{ id: 0, email: '' }"
+            :items="[{ label: 'item', event: 'what' }]"
+          ></ActionsDropdown>
         </template>
       </ComponentLayout>
 

@@ -80,7 +80,7 @@ const conifers = computed(() => {
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-      <ComponentLayout :show-badge="false" title="useBaseAPI">
+      <ComponentLayout badge="composable" title="useBaseAPI">
         <template v-slot:description>
           useBaseAPI wraps up the BaseAPI functionality and returns a bunch of
           helpful reactive variables along with an execute and abort methods.

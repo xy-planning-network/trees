@@ -1,41 +1,59 @@
 <script setup lang="ts">
-withDefaults(
+import Card from "@/lib-components/layout/Card.vue"
+import { computed } from "vue"
+
+type badgeType = "component" | "composable" | "css" | "none"
+
+const props = withDefaults(
   defineProps<{
-    showBadge?: boolean
-    cssComponent?: boolean
+    badge?: badgeType
     title: string
   }>(),
   {
-    showBadge: true,
-    cssComponent: false,
+    badge: "component",
   }
 )
+
+const badge = computed(() => {
+  switch (props.badge) {
+    case "composable":
+      return {
+        type: "xy-badge-blue",
+        name: "Composable",
+      }
+    case "component":
+      return {
+        type: "xy-badge-blue",
+        name: "Vue Component",
+      }
+    case "css":
+      return {
+        type: "xy-badge-yello",
+        name: "CSS Class Component",
+      }
+    default:
+      return undefined
+  }
+})
 </script>
 <template>
-  <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
-    <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-      <div
-        class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap"
-      >
-        <div class="ml-4 mt-4">
-          <h3
-            class="text-lg leading-6 font-medium text-gray-900"
-            v-text="title"
-          ></h3>
-          <p class="mt-1 text-sm text-gray-700">
-            <slot name="description"></slot>
-          </p>
-        </div>
-        <div v-if="showBadge" class="ml-4 mt-4 flex-shrink-0">
-          <span v-if="cssComponent" class="xy-badge-yellow">
-            CSS Class Component
-          </span>
-          <span v-else class="xy-badge-blue"> Vue Component </span>
-        </div>
+  <Card>
+    <template #title>
+      {{ title }}
+    </template>
+
+    <template v-if="$slots['description']" #description>
+      <slot name="description" />
+    </template>
+
+    <template #header-accessory>
+      <div v-if="badge !== undefined">
+        <span :class="badge.type">{{ badge.name }}</span>
       </div>
+    </template>
+
+    <div class="space-y-6">
+      <slot />
     </div>
-    <div class="px-4 py-5 sm:p-6 space-y-6">
-      <slot></slot>
-    </div>
-  </div>
+  </Card>
 </template>
