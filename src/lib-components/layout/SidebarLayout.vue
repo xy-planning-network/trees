@@ -86,7 +86,7 @@ const isActive = (url: string): boolean => {
                 </button>
               </div>
             </TransitionChild>
-            <div class="flex-shrink-0 flex justify-center px-4">
+            <div class="shrink-0 flex justify-center px-4">
               <img class="w-auto h-12" :src="iconURL" alt="Logo" />
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
@@ -119,23 +119,23 @@ const isActive = (url: string): boolean => {
             </div>
           </div>
         </TransitionChild>
-        <div class="flex-shrink-0 w-14" aria-hidden="true">
+        <div class="shrink-0 w-14" aria-hidden="true">
           <!-- Dummy element to force sidebar to shrink to fit close icon -->
         </div>
       </Dialog>
     </TransitionRoot>
 
     <!-- Static sidebar for desktop -->
-    <div class="hidden md:flex md:flex-shrink-0">
+    <div class="hidden md:flex md:shrink-0">
       <div class="flex flex-col w-64">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div
-          class="flex flex-col flex-grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
+          class="flex flex-col grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
         >
-          <div class="flex items-center flex-shrink-0 px-4">
+          <div class="flex items-center shrink-0 px-4">
             <img class="w-auto h-12" :src="iconURL" alt="Logo" />
           </div>
-          <div class="mt-5 flex-grow flex flex-col">
+          <div class="mt-5 grow flex flex-col">
             <nav class="flex-1 px-2 bg-white space-y-1">
               <a
                 v-for="item in navigation"
@@ -167,7 +167,7 @@ const isActive = (url: string): boolean => {
       </div>
     </div>
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
-      <div class="relative z-10 flex-shrink-0 flex h-16 bg-xy-blue shadow">
+      <div class="relative z-10 shrink-0 flex h-16 bg-xy-blue shadow">
         <button
           class="px-4 border-r border-gray-200 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 md:hidden"
           @click="sidebarOpen = true"

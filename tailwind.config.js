@@ -2,6 +2,5 @@
 const baseConfig = require("./config/tailwind.config")
 module.exports = {
   ...baseConfig,
-  mode: "jit",
-  purge: [...baseConfig.purge, "./dev/**/*.vue"],
+  content: [...baseConfig.content, "./dev/**/*.vue"],
 }

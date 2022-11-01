@@ -10,7 +10,7 @@ const attrs = useAttrs()
 </script>
 <template>
   <div :class="attrs?.class ? attrs?.class : 'h-20 w-20'">
-    <div class="aspect-w-1 aspect-h-1 overflow-hidden">
+    <div class="aspect-square overflow-hidden">
       <div class="flex justify-center relative">
         <p class="sr-only">
           <slot></slot>

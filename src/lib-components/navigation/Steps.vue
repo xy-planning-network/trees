@@ -61,7 +61,7 @@ const previous = (): void => {
       </ul>
     </nav>
 
-    <div class="flex flex-shrink-0" v-if="!hideActions">
+    <div class="flex shrink-0" v-if="!hideActions">
       <span class="inline-flex rounded-md shadow-sm" v-if="!hidePrevious">
         <button
           type="button"

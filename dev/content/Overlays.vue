@@ -303,11 +303,11 @@ useAppFlasher.warning("Hooray!")</code></pre>
         </template>
 
         <div>
-          <label
-            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center mt-8"
-          >
-            <ClickToCopy :value="advancedPopoverCopy" />
-          </label>
+          <div class="flex justify-center mb-8">
+            <label class="block text-sm font-medium text-gray-700">
+              <ClickToCopy :value="advancedPopoverCopy" />
+            </label>
+          </div>
 
           <div class="mt-2 flex justify-center">
             <Popover>
@@ -377,11 +377,11 @@ useAppFlasher.warning("Hooray!")</code></pre>
         </template>
 
         <div>
-          <label
-            class="block text-sm font-medium text-gray-700 text-center flex flex-inline justify-center"
-          >
-            <ClickToCopy :value="tooltipCopy" />
-          </label>
+          <div class="flex justify-center mb-8">
+            <label class="block text-sm font-medium text-gray-700">
+              <ClickToCopy :value="tooltipCopy" />
+            </label>
+          </div>
 
           <div
             v-for="(position, index) in popoverPositions"

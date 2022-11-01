@@ -36,7 +36,7 @@ const isActive = (url: string): boolean => {
       <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
-            <div class="flex-shrink-0 flex items-center">
+            <div class="shrink-0 flex items-center">
               <img class="block h-8 w-auto" :src="iconURL" alt="XY Trees" />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -126,7 +126,7 @@ const isActive = (url: string): boolean => {
         </div>
         <div class="pt-4 pb-3 border-t border-gray-200">
           <div class="flex items-center px-4">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <UserCircleIcon class="text-gray-500 h-10 w-10 rounded-full" />
             </div>
             <div class="ml-3">

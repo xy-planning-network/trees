@@ -58,7 +58,7 @@ onMounted(() => {
                   v-html="flash.message"
                 ></p>
               </div>
-              <div class="ml-4 flex-shrink-0 flex">
+              <div class="ml-4 shrink-0 flex">
                 <button
                   @click="flasher.remove(id)"
                   class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
