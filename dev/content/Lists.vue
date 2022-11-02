@@ -124,7 +124,7 @@ const tableProps = [
                       <p class="text-sm font-medium text-indigo-600 truncate">
                         {{ props.item.title }}
                       </p>
-                      <div class="ml-2 flex-shrink-0 flex">
+                      <div class="ml-2 shrink-0 flex">
                         <p
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                           v-text="props.item.title"
@@ -135,7 +135,7 @@ const tableProps = [
                       <div class="sm:flex">
                         <p class="flex items-center text-sm text-gray-500">
                           <UsersIcon
-                            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                            class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
                           {{ props.item.type }}
@@ -144,7 +144,7 @@ const tableProps = [
                           class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"
                         >
                           <LocationMarkerIcon
-                            class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                            class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
                           Remote
@@ -154,7 +154,7 @@ const tableProps = [
                         class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
                       >
                         <CalendarIcon
-                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                          class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />
                         <p>

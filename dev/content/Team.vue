@@ -60,9 +60,9 @@ const people = [
             <div
               class="space-y-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-6 sm:space-y-0"
             >
-              <div class="aspect-w-3 aspect-h-2 sm:aspect-w-3 sm:aspect-h-4">
+              <div class="aspect-[3/2] sm:aspect-[3/4] overflow-hidden">
                 <img
-                  class="object-cover shadow-lg rounded-lg"
+                  class="h-full w-full object-cover shadow-lg rounded-lg"
                   :src="person.imageUrl"
                   alt=""
                 />

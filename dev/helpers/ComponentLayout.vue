@@ -26,7 +26,7 @@ withDefaults(
             <slot name="description"></slot>
           </p>
         </div>
-        <div v-if="showBadge" class="ml-4 mt-4 flex-shrink-0">
+        <div v-if="showBadge" class="ml-4 mt-4 shrink-0">
           <span v-if="cssComponent" class="xy-badge-yellow">
             CSS Class Component
           </span>

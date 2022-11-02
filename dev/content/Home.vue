@@ -82,7 +82,7 @@ const features = [
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div v-for="feature in features" :key="feature.name" class="pt-6">
             <div
-              class="flow-root bg-coolGray-50 rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
+              class="flow-root bg-gray-50 rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
               @click="update(feature.name)"
             >
               <div class="-mt-6">
@@ -116,8 +116,8 @@ const features = [
           <div
             class="py-12 px-4 sm:px-6 md:flex md:flex-col md:py-16 md:pl-0 md:pr-10 md:border-r md:border-blue-900 lg:pr-16"
           >
-            <blockquote class="mt-6 md:flex-grow md:flex md:flex-col">
-              <div class="relative text-lg font-medium text-white md:flex-grow">
+            <blockquote class="mt-6 md:grow md:flex md:flex-col">
+              <div class="relative text-lg font-medium text-white md:grow">
                 <svg
                   class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-blue-600"
                   fill="currentColor"
@@ -137,7 +137,7 @@ const features = [
               <footer class="mt-8">
                 <div class="flex items-start">
                   <div
-                    class="flex-shrink-0 inline-flex rounded-full border-2 border-white"
+                    class="shrink-0 inline-flex rounded-full border-2 border-white"
                   >
                     <img
                       class="h-12 w-12 rounded-full"
@@ -160,8 +160,8 @@ const features = [
           <div
             class="py-12 px-4 border-t-2 border-blue-900 sm:px-6 md:py-16 md:pr-0 md:pl-10 md:border-t-0 md:border-l lg:pl-16"
           >
-            <blockquote class="mt-6 md:flex-grow md:flex md:flex-col">
-              <div class="relative text-lg font-medium text-white md:flex-grow">
+            <blockquote class="mt-6 md:grow md:flex md:flex-col">
+              <div class="relative text-lg font-medium text-white md:grow">
                 <svg
                   class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-blue-600"
                   fill="currentColor"
@@ -180,7 +180,7 @@ const features = [
               <footer class="mt-8">
                 <div class="flex items-start">
                   <div
-                    class="flex-shrink-0 inline-flex rounded-full border-2 border-white"
+                    class="shrink-0 inline-flex rounded-full border-2 border-white"
                   >
                     <img
                       class="h-12 w-12 rounded-full"

@@ -94,8 +94,7 @@ Note you may need a deep merge utility depending on the depth of properties you 
 const treesConfig = require("@xy-planning-network/trees/config/tailwind.config")
 module.exports = {
   ...treesConfig,
-  mode: "jit", // Optional
-  purge: [...treesConfig.purge, ...["./src/**/*.vue"]],
+  content: [...treesConfig.content, ...["./src/**/*.vue"]],
 }
 ```
 

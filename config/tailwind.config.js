@@ -1,19 +1,10 @@
 /* eslint-disable */
-const path = require("path");
-const colors = require("tailwindcss/colors");
-const treesTheme = require("./theme");
+const path = require("path")
+const treesTheme = require("./theme")
 
 module.exports = {
-  purge: [path.resolve(__dirname, "../src/lib-components/**/*.vue")],
-  variants: {
-    opacity: ["disabled"],
-    cursor: ["disabled"],
-    extend: {
-      backgroundColor: ["active"],
-    },
-  },
+  content: [path.resolve(__dirname, "../src/lib-components/**/*.vue")],
   plugins: [
-    require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/line-clamp"),
     require("@tailwindcss/typography")({
@@ -26,12 +17,7 @@ module.exports = {
     },
     extend: {
       animation: treesTheme.animation,
-      colors: {
-        transparent: "transparent",
-        current: "currentColor",
-        ...colors,
-        ...treesTheme.colors,
-      },
+      colors: treesTheme.colors,
       fontFamily: treesTheme.fontFamily,
       typography: (theme) => {
         return {
@@ -49,8 +35,8 @@ module.exports = {
               },
             },
           },
-        };
+        }
       },
     },
   },
-};
+}
