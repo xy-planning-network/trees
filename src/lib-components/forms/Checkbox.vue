@@ -19,6 +19,13 @@ const emits = defineEmits(["update:modelValue"])
 const attrs = useAttrs()
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 </script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <div class="relative flex items-start">
     <div class="flex items-center h-5">

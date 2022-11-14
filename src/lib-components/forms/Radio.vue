@@ -33,6 +33,13 @@ const hasLegend = computed(() => {
   return props.legend !== "" || slots.legend !== undefined
 })
 </script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <fieldset
     class="space-y-5"

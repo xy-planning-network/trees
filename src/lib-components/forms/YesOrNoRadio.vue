@@ -28,6 +28,13 @@ const onChange = (e: Event) => {
   emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
 }
 </script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <fieldset
     class="space-y-3"
@@ -49,15 +56,15 @@ const onChange = (e: Event) => {
         :for="`${hasNameAttr ? name : uuid}-true`"
       >
         <input
-          type="radio"
           class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
           :id="`${hasNameAttr ? name : uuid}-true`"
           :name="hasNameAttr ? name : uuid"
-          :value="true"
           :checked="modelValue === true"
           v-bind="{
             ...$attrs,
             onChange: onChange,
+            type: 'radio',
+            value: true,
           }"
         />
         <InputLabel
@@ -75,15 +82,15 @@ const onChange = (e: Event) => {
         :for="`${hasNameAttr ? name : uuid}-false`"
       >
         <input
-          type="radio"
           class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
           :id="`${hasNameAttr ? name : uuid}-false`"
           :name="hasNameAttr ? name : uuid"
-          :value="false"
           :checked="modelValue === false"
           v-bind="{
             ...$attrs,
             onChange: onChange,
+            type: 'radio',
+            value: false,
           }"
         />
         <InputLabel

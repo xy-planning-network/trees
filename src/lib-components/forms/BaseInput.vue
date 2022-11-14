@@ -76,10 +76,12 @@ const isTextType = computed((): boolean => {
     ]"
     :id="uuid"
     :placeholder="label"
-    :type="type"
-    :value="modelValue"
     @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    v-bind="$attrs"
+    v-bind="{
+      ...$attrs,
+      type: type,
+      value: modelValue,
+    }"
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>

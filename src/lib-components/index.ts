@@ -26,6 +26,7 @@ import { default as Toggle } from "./forms/Toggle.vue"
 import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 
 // Form components
+import { default as Field } from "./forms/Field.vue"
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
@@ -46,6 +47,7 @@ export {
   DateFilter,
   DetailList,
   DownloadCell,
+  Field,
   Flash,
   Modal,
   SidebarLayout,
@@ -87,6 +89,7 @@ export interface TreesComponents {
   DateFilter: typeof DateFilter
   DetailList: typeof DetailList
   DownloadCell: typeof DownloadCell
+  Field: typeof Field
   Flash: typeof Flash
   Modal: typeof Modal
   SidebarLayout: typeof SidebarLayout

@@ -23,6 +23,7 @@ const props = withDefaults(
 
 const emit = defineEmits(["update:modelValue"])
 const attrs = useAttrs()
+const { type, ...safeAttrs } = attrs
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 
 const classes = computed((): string => {
@@ -36,6 +37,13 @@ const classes = computed((): string => {
   )[props.design]
 })
 </script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <InputLabel :id="`${uuid}-label`" :for="uuid" :label="label"></InputLabel>
   <select
@@ -43,9 +51,9 @@ const classes = computed((): string => {
     :aria-describedby="help ? `${uuid}-help` : undefined"
     :class="classes"
     :id="uuid"
-    :value="modelValue"
     v-bind="{
-      ...$attrs,
+      ...safeAttrs,
+      value: modelValue,
       onChange: ($event) => {
         emit('update:modelValue', ($event.target as HTMLInputElement).value)
       },

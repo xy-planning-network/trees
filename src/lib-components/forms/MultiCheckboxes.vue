@@ -49,6 +49,13 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
   emit("update:modelValue", updateModelValue)
 }
 </script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <fieldset
     class="space-y-5"
@@ -89,12 +96,12 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
               :checked="modelValue.includes(option.value)"
               :disabled="option.disabled === true ? true : undefined"
               class="focus:ring-blue-500 h-4 w-4 text-blue-500 border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-              type="checkbox"
               v-bind="{
               onChange: ($event) => { 
                 onChange(($event.target as HTMLInputElement).checked, option.value)
               },
               ...$attrs,
+              type: 'checkbox'
             }"
             />
           </div>

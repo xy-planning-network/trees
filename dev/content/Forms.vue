@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import type { Field } from "@/composables/forms"
 
 const commonProps = [
   { name: "label", required: false, type: "string" },
@@ -149,6 +150,223 @@ const inputHelpProps = [
 const toggleValue = ref(false)
 const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
 const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
+
+const fieldsOptions = [
+  { label: "Option 1", value: 1 },
+  { label: "Option 2", value: "two" },
+  { label: "Option 3", value: "3" },
+]
+
+/*
+{
+  type: FieldType
+  help?: string
+  label?: string
+  legend?: string
+  options?: { label: string; value: string | number }[]
+  placeholder?: string
+  required?: boolean
+  modelValue: string | number | boolean
+}
+*/
+
+const fields = ref<Field[]>([
+  {
+    name: "date",
+    type: "date",
+    value: "",
+    required: true,
+    placeholder: "date",
+    label: "date",
+    help: "Gimme some help",
+  },
+  {
+    name: "date-range",
+    type: "date-range",
+    value: {
+      minDate: 0,
+      maxDate: 0,
+    },
+    required: true,
+    placeholder: "date-range",
+    label: "date-range",
+    help: "Gimme some help",
+  },
+  {
+    name: "datetime-local",
+    type: "datetime-local",
+    value: "",
+    required: true,
+    placeholder: "datetime-local",
+    label: "datetime-local",
+    help: "Gimme some help",
+  },
+  {
+    name: "email",
+    type: "email",
+    value: "",
+    required: true,
+    placeholder: "email",
+    label: "email",
+    help: "Gimme some help",
+  },
+  {
+    name: "month",
+    type: "month",
+    value: "",
+    required: true,
+    placeholder: "month",
+    label: "month",
+    help: "Gimme some help",
+  },
+  {
+    name: "number",
+    type: "number",
+    value: "",
+    required: true,
+    placeholder: "number",
+    label: "number",
+    help: "Gimme some help",
+  },
+  {
+    name: "password",
+    type: "password",
+    value: "",
+    required: true,
+    placeholder: "password",
+    label: "password",
+    help: "Gimme some help",
+  },
+  {
+    name: "search",
+    type: "search",
+    value: "",
+    required: true,
+    placeholder: "search",
+    label: "search",
+    help: "Gimme some help",
+  },
+  {
+    name: "tel",
+    type: "tel",
+    value: "",
+    required: true,
+    placeholder: "tel",
+    label: "tel",
+    help: "Gimme some help",
+  },
+  {
+    name: "text",
+    type: "text",
+    value: "",
+    required: true,
+    placeholder: "text",
+    label: "text",
+    help: "Gimme some help",
+  },
+  {
+    name: "time",
+    type: "time",
+    value: "",
+    required: true,
+    placeholder: "time",
+    label: "time",
+    help: "Gimme some help",
+  },
+  {
+    name: "url",
+    type: "url",
+    value: "",
+    required: true,
+    placeholder: "url",
+    label: "url",
+    help: "Gimme some help",
+  },
+  {
+    name: "week",
+    type: "week",
+    value: "",
+    required: true,
+    placeholder: "week",
+    label: "week",
+    help: "Gimme some help",
+  },
+  {
+    name: "checkbox",
+    type: "checkbox",
+    value: false,
+    required: true,
+    placeholder: "checkbox",
+    label: "checkbox",
+    help: "Gimme some help",
+  },
+  {
+    name: "multi-checkbox",
+    type: "multi-checkbox",
+    value: [],
+    required: true,
+    placeholder: "multi-checkbox",
+    label: "multi-checkbox",
+    help: "Gimme some help",
+    options: fieldsOptions,
+  },
+  {
+    name: "radio",
+    type: "radio",
+    value: "",
+    required: true,
+    placeholder: "radio",
+    label: "radio",
+    help: "Gimme some help",
+    options: fieldsOptions,
+  },
+  {
+    name: "radio-cards",
+    type: "radio-cards",
+    value: "",
+    required: true,
+    placeholder: "radio-cards",
+    label: "radio-card",
+    help: "Gimme some help",
+    options: fieldsOptions,
+  },
+  {
+    name: "select",
+    type: "select",
+    value: "",
+    required: true,
+    placeholder: "select",
+    label: "select",
+    help: "Gimme some help",
+    options: fieldsOptions,
+  },
+  {
+    name: "textarea",
+    type: "textarea",
+    value: "",
+    required: true,
+    placeholder: "textarea",
+    label: "textarea",
+    help: "Gimme some help",
+  },
+  {
+    name: "toggle",
+    type: "toggle",
+    value: false,
+    placeholder: "toggle",
+    label: "toggle",
+    help: "Gimme some help",
+  },
+  {
+    name: "yes-no-radio",
+    type: "yes-no-radio",
+    value: undefined,
+    required: true,
+    placeholder: "yes-no-radio",
+    label: "yes-no-radio",
+    help: "Gimme some help",
+  },
+])
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -601,6 +819,14 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <div class="mt-1">
             <InputHelp text="I'm just here to hint" />
             <PropsTable :props="inputHelpProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Dynamic Inputs">
+        <div class="space-y-6">
+          <div v-for="(field, i) in fields" :key="i">
+            <Field v-model="field.value" :field="field as Field" />
           </div>
         </div>
       </ComponentLayout>
