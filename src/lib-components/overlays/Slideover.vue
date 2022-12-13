@@ -33,7 +33,7 @@ const close = () => {
     <Dialog
       as="div"
       static
-      class="fixed inset-0 z-40 overflow-hidden bg-black bg-opacity-50"
+      class="fixed inset-0 z-20 overflow-hidden bg-black bg-opacity-50"
       @close="close()"
       :open="modelValue"
     >

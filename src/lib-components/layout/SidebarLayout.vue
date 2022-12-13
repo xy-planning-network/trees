@@ -40,7 +40,7 @@ const isActive = (url: string): boolean => {
       <Dialog
         as="div"
         static
-        class="fixed inset-0 flex z-40 md:hidden"
+        class="fixed inset-0 flex z-10 md:hidden"
         @close="sidebarOpen = false"
         :open="sidebarOpen"
       >
