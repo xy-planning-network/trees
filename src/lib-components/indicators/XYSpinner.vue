@@ -15,7 +15,7 @@ const attrs = useAttrs()
         <p class="sr-only">
           <slot></slot>
         </p>
-        <div class="animate-spin-gear">
+        <div class="animate-spin-gear drop-shadow-md">
           <svg
             width="100%"
             height="100%"

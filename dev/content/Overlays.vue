@@ -418,6 +418,92 @@ useAppFlasher.warning("Hooray!")</code></pre>
 
         <PropsTable :props="tooltipProps"></PropsTable>
       </ComponentLayout>
+
+      <ComponentLayout
+        class="mt-8"
+        :show-badge="false"
+        title="Stacking Context"
+      >
+        <template v-slot:description>
+          Overlay components naturally can introduce complications in stacking
+          context and z-index for any application. We've made best attempts to
+          set sane z-index values on each overlay component in an order that
+          makes sense for the component's general usage. These components are all
+          wrapped in the <code>&lt;Portal /&gt;</code> component made available
+          by HeadlessUI/Vue to ensure they share a stacking context. We've
+          additionally, preserved the highest order z-index (z-50) for consumers
+          when necessary.
+        </template>
+
+        <div class="prose prose-sm">
+          <h4>Tailwind CSS z-index Values</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>z-index</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Popover/Tooltip</td>
+                <td>z-10</td>
+              </tr>
+              <tr>
+                <td>App Sidebar Mobile Nav</td>
+                <td>z-10</td>
+              </tr>
+              <tr>
+                <td>Slideover</td>
+                <td>z-20</td>
+              </tr>
+              <tr>
+                <td>Modal</td>
+                <td>z-30</td>
+              </tr>
+              <tr>
+                <td>Spinner</td>
+                <td>z-40</td>
+              </tr>
+              <tr>
+                <td>Flash</td>
+                <td>z-45</td>
+              </tr>
+              <tr>
+                <td>Unused (preserved for consumers)</td>
+                <td>z-50</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Climbing Above The Rest</h4>
+          <p>
+            In the event that you need to establish a z-index level above any of
+            the overlay components, you'll need to wrap your component in the
+            HeadlessUI/Vue <code>&lt;Portal /&gt;</code> component. This convenience component is not
+            documented by HeadlessUI, but is effectively a wrapper around the
+            Vue Teleport component. It maintains a single container before the
+            closing body tag and teleports all Portal markup to that location
+            ensuring the same stacking context between those DOM elements.
+          </p>
+
+          <p>
+            <pre class="overflow-scroll bg-gray-50 p-4">
+<code class="language-typescript">{{`<script lang="ts" setup>
+  import { Portal } from "@headlessui/vue"
+</script>
+
+<template>
+  <Portal>
+    <div class="fixed top-0 left-0 right-0 bottom-0 z-50">
+      <h1>Head and shoulders above the rest!</h1>
+    </div>
+  </Portal>
+</template>`}}</code>
+            </pre>
+          </p>
+        </div>
+      </ComponentLayout>
     </div>
   </div>
 </template>
