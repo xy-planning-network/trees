@@ -1,34 +1,12 @@
-import { useAppSpinner } from "@/composables/useSpinner"
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
-
-export type RequestMethod =
-  | "GET"
-  | "get"
-  | "PUT"
-  | "put"
-  | "POST"
-  | "post"
-  | "DELETE"
-  | "delete"
-
-export interface RequestOptions {
-  /**
-   * returns the nested data key inside the AxiosResponse data when true
-   */
-  dataIntercept?: boolean
-  /**
-   * disables the full screen loading interface during the request when true
-   */
-  skipLoader?: boolean
-  /**
-   * artificially delay's the request by the time specified when set
-   */
-  withDelay?: number
-}
-
-interface APIResponse<T = any> extends AxiosResponse<T> {
-  config: RequestOptions & AxiosRequestConfig
-}
+import {
+  HTTP_CANCELLED_ERROR,
+  HttpClient,
+  HttpError,
+  HttpPromise,
+  RequestOptions,
+} from "./client"
+import { useAppSpinner } from "@/composables/useSpinner"
 
 /**
  * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
@@ -44,21 +22,6 @@ const apiDelayReqIntercept = (config: RequestOptions & AxiosRequestConfig) => {
   })
 }
 
-/**
- * apiDataIntercept promotes any secondary data keys from an Axios response to the first level data key.
- * example: an AxiosResponse has it's own data key and the server response also nests it's primary response
- * payload under another data key, that payload data is promoted to being directly under the AxiosResponse data key.
- * @param response APIResponse
- * @returns APIResponse
- */
-const apiDataRespIntercept = (response: APIResponse) => {
-  if (response.config.dataIntercept && response.data?.data) {
-    response.data = response.data.data
-  }
-
-  return response
-}
-
 const apiAxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
   responseType: "json",
@@ -68,56 +31,98 @@ const apiAxiosInstance = axios.create({
 // apply request intercepts
 apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
 
-// apply response intercepts
-apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
+export const httpRequest = <T = any>(
+  config: AxiosRequestConfig,
+  opts: RequestOptions
+): HttpPromise<T> => {
+  const options: RequestOptions = {
+    skipLoader: false,
+    withDelay: 0,
+    ...opts,
+  }
 
-const BaseAPI = {
-  makeRequest<T = any>(
-    config: AxiosRequestConfig,
-    opts: RequestOptions
-  ): Promise<T> {
-    const wait = window.setTimeout(() => {
-      if (!opts.skipLoader) {
-        useAppSpinner.show()
+  const wait = window.setTimeout(() => {
+    if (options.skipLoader !== true) {
+      useAppSpinner.show()
+    }
+  }, 200)
+
+  return apiAxiosInstance({ ...config, ...opts })
+    .then((success: AxiosResponse<T>) => {
+      return success.data
+    })
+    .catch((err: unknown) => {
+      if (axios.isAxiosError(err)) {
+        throw new HttpError(
+          err.message,
+          err.response?.status,
+          err.response?.data,
+          axios.isCancel(err) ? "HttpCanceledError" : undefined
+        )
       }
-    }, 200)
 
-    return apiAxiosInstance({ ...config, ...opts })
-      .then((success) => success.data)
-      .finally(() => {
-        if (!opts.skipLoader) useAppSpinner.hide()
-        window.clearTimeout(wait)
-      })
-  },
+      if (err instanceof Error) {
+        throw new HttpError(err.message, 0)
+      }
+
+      throw new HttpError("An unknown error has occurred.", 0)
+    })
+    .finally(() => {
+      if (options.skipLoader !== true) {
+        useAppSpinner.hide()
+      }
+
+      window.clearTimeout(wait)
+    })
+}
+
+const BaseAPI: HttpClient = {
   get<T = any>(
     path: string,
-    opts: RequestOptions,
+    opts?: RequestOptions,
     params?: Record<string, unknown>
   ) {
-    return this.makeRequest<T>({ url: path, method: "GET", params }, opts)
+    return httpRequest<T>({ url: path, method: "GET", params }, opts || {})
   },
-  delete<T = any>(path: string, opts: RequestOptions) {
-    return this.makeRequest<T>({ url: path, method: "DELETE" }, opts)
+  delete<T = any>(path: string, opts?: RequestOptions) {
+    return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
+  },
+  hasErrStatus(err: unknown, codes: number | number[]) {
+    if (typeof codes === "number") {
+      codes = [codes]
+    }
+
+    if (this.isHttpError(err)) {
+      return codes.includes(err.status)
+    }
+
+    return false
+  },
+  isHttpCancel(err: unknown): boolean {
+    return this.isHttpError(err) && err.name === HTTP_CANCELLED_ERROR
+  },
+  isHttpError(err: unknown): err is HttpError {
+    return err instanceof HttpError
   },
   post<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts: RequestOptions
+    opts?: RequestOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "POST" }, opts)
+    return httpRequest<T>({ url: path, data, method: "POST" }, opts || {})
   },
   put<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts: RequestOptions
+    opts?: RequestOptions
   ) {
-    return this.makeRequest<T>(
+    return httpRequest<T>(
       {
         url: path,
         data,
         method: "PUT",
       },
-      opts
+      opts || {}
     )
   },
 }

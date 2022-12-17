@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import { RequestOptions } from "@/api/base"
-import { AxiosError } from "axios";
+import { onMounted} from "vue"
+import http from "@/api/base"
+import { HttpError, RequestOptions, TrailsResponsePaged } from "@/api/client"
 import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
-
-interface Paginated<T> {
-  page: number
-  perPage: number
-  totalItems: number
-  totalPages: number
-  items: T[]
-}
 
 interface Conifer {
   id: number 
@@ -24,23 +17,23 @@ interface Conifer {
 }
 
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
-  useBaseAPI<Paginated<Conifer>>(
+  useBaseAPI<TrailsResponsePaged<Conifer>>(
     "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
-    "GET",
-    { dataIntercept: true }
+    "GET"
   )
 
 const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
   execute({ query: Date.now() }, opt)
-  .then(data => {
+  .then((response) => {
     // you could do something with this data variable
-    // which has a Type of ThingResponse, but the result
-    // variable will already be a Ref<ThingResponse>
-    console.log(data, result)
-  }).catch((err: Error | AxiosError) => {
+    // which has a Type of TrailsResponsePaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsResponsePaged<Conifer>>
+    console.log(response, result.value)
+  }).catch((err: Error | HttpError) => {
     // you could do something with this err variable
-    // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
-    console.log(err, error)
+    // but the error variable will already be a ShallowRef<Error | HttpError<T>>
+    console.log(err, error, http.isHttpError(err), http.hasErrStatus(err, 0))
+    console.log(err.stack)
   })
 
   if (shouldAbort) {
@@ -72,8 +65,21 @@ const buttonTextWithAbort = computed(() => {
   return "Fetch & Abort"
 })
 
-const conifers = computed(() => { 
-  return result.value?.items
+onMounted(async () => {    
+  try {
+    const { data } = await http.get<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/conifers")
+     console.log(data.items)
+  } catch (e) {
+    console.log(e)
+  }
+
+  http.get<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/conifers")
+    .then(({ data }) => {
+      console.log(data)
+    })
+    .catch(e => {
+      console.log(e)
+    })
 })
 </script>
 
@@ -89,7 +95,7 @@ const conifers = computed(() => {
         
           <pre class="overflow-scroll bg-gray-50 p-4">
             <code class="language-typescript">{{`
-interface Paginated<T> {
+interface TrailsResponsePaged<T> {
   page: number
   perPage: number
   totalItems: number
@@ -116,17 +122,17 @@ const {
   hasFetched,
   execute,
   abort
-} = useBaseAPI<Paginated<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET", {dataIntercept: true})
+} = useBaseAPI<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
 
 execute({ query: Date.now() }, { withDelay: 3000 })
   .then(data => {
     // you could do something with this data variable
-    // which has a Type of Paginated<Conifer>, but the result
-    // variable will already be a Ref<Paginated<Conifer>>
+    // which has a Type of TrailsResponsePaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsResponsePaged<Conifer>>
     console.log(data, result)
-  }).catch((err: Error | AxiosError) => {
+  }).catch((err: Error | HttpError) => {
     // you could do something with this err variable
-    // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
+    // but the error variable will already be a ShallowRef<Error | HttpError>
     console.log(err, error)
   })
 
@@ -181,8 +187,8 @@ const things = computed(() => {
           <li><b>Result:</b><pre class="bg-gray-50 p-2">{{result ? result : 'undefined'}}</pre></li>
         </ul>
 
-        <ul v-if="conifers" class="mt-6 space-y-2">
-          <li v-for="conifer in conifers" :key="conifer.id">
+        <ul v-if="result?.data" class="mt-6 space-y-2">
+          <li v-for="conifer in result.data.items" :key="conifer.id">
             <b>{{conifer.name}}</b>: <em>{{conifer.leaf.type}}</em>
           </li>
         </ul>

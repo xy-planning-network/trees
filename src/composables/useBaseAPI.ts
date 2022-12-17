@@ -1,7 +1,12 @@
-import axios, { AxiosError } from "axios"
 import { ref, Ref, shallowRef, ShallowRef } from "vue"
-import BaseAPI from "../api/base"
-import type { RequestMethod, RequestOptions } from "../api/base"
+import BaseAPI, { httpRequest } from "../api/base"
+import type {
+  HttpPromise,
+  HttpError,
+  RequestMethod,
+  RequestOptions,
+  RequestPayload,
+} from "../api/client"
 
 /**
  * UseBaseAPIOptions extends Trees/RequestOptions
@@ -28,7 +33,7 @@ export interface UseBaseAPI<T> {
   /**
    * Any errors that may have occurred
    */
-  error: ShallowRef<Error | AxiosError<T> | undefined>
+  error: ShallowRef<Error | HttpError<T> | undefined>
   /**
    * Indicates if the request has finished
    */
@@ -54,10 +59,7 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (
-    data?: Record<string, unknown> | FormData,
-    opts?: RequestOptions
-  ) => Promise<T>
+  execute: (data?: RequestPayload, opts?: RequestOptions) => HttpPromise<T>
 }
 
 /**
@@ -72,9 +74,9 @@ export default function useBaseAPI<T = any>(
   path: string,
   method: RequestMethod = "GET",
   initOpts: UseBaseAPIOptions = {}
-) {
+): UseBaseAPI<T> {
   const result = ref<T | undefined>()
-  const error = shallowRef<Error | AxiosError<T> | undefined>()
+  const error = shallowRef<Error | HttpError<T> | undefined>()
   const hasFetched = ref<boolean>(false)
   const isFinished = ref<boolean>(false)
   const isLoading = ref<boolean>(false)
@@ -109,7 +111,7 @@ export default function useBaseAPI<T = any>(
       url: path,
     }
 
-    return BaseAPI.makeRequest<T>(requestConfig, { ...initOpts, ...opts })
+    return httpRequest<T>(requestConfig, { ...initOpts, ...opts })
       .then(
         (success) => {
           result.value = success
@@ -120,7 +122,7 @@ export default function useBaseAPI<T = any>(
         (err) => {
           error.value = err
 
-          if (axios.isCancel(err)) {
+          if (BaseAPI.isHttpCancel(err)) {
             isAborted.value = true
           }
 
