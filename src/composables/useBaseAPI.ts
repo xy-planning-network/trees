@@ -104,7 +104,9 @@ export default function useBaseAPI<T = any>(
     isLoading.value = true
 
     const requestConfig = {
-      data: ["POST", "post", "PUT", "put"].includes(method) ? data : {},
+      data: ["PATCH", "patch", "POST", "post", "PUT", "put"].includes(method)
+        ? data
+        : {},
       method: method,
       params: ["GET", "get"].includes(method) ? data : {},
       signal: controller.signal,
@@ -184,6 +186,20 @@ export function useBaseAPIDelete<T = any>(
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "DELETE", opts)
+}
+
+/**
+ * useBaseAPIPatch is a convenience function for useBaseAPI
+ * @param path {string} the api path or full url for the
+ * @param initOpts {UseBaseAPIOptions}
+ * @param initConfig {AxiosRequestConfig}
+ * @returns {UseBaseAPI<T>}
+ */
+export function useBaseAPIPatch<T = any>(
+  url: string,
+  opts: UseBaseAPIOptions = {}
+): UseBaseAPI<T> {
+  return useBaseAPI<T>(url, "PATCH", opts)
 }
 
 /**

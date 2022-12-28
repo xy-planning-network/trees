@@ -5,6 +5,8 @@
 export type RequestMethod =
   | "GET"
   | "get"
+  | "PATCH"
+  | "patch"
   | "PUT"
   | "put"
   | "POST"
@@ -166,6 +168,17 @@ export interface HttpClient {
    * @returns boolean
    */
   isHttpCancel(err: unknown): boolean
+  /**
+   * The method to make an http PATCH request.
+   * @param path string
+   * @param data RequestPayload
+   * @param opts RequestOptions
+   */
+  patch<T>(
+    path: string,
+    data?: RequestPayload,
+    opts?: RequestOptions
+  ): HttpPromise<T>
   /**
    * The method to make an http POST request.
    * @param path string

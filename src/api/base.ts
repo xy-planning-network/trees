@@ -104,6 +104,13 @@ const BaseAPI: HttpClient = {
   isHttpError(err: unknown): err is HttpError {
     return err instanceof HttpError
   },
+  patch<T = any>(
+    path: string,
+    data: Record<string, unknown> | FormData,
+    opts?: RequestOptions
+  ) {
+    return httpRequest<T>({ url: path, data, method: "PATCH" }, opts || {})
+  },
   post<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
