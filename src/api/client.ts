@@ -161,7 +161,7 @@ export interface HttpClient {
    * @param err unknown
    * @returns payload is HttpError
    */
-  isHttpError(err: unknown): err is HttpError
+  isHttpError<T>(err: unknown): err is HttpError<T>
   /**
    * A convenience method for checking if a variable is a cancelled http request error.
    * @param err unknown

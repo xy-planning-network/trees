@@ -3,7 +3,9 @@ import BaseAPI from "@/api/base"
 import type {
   HttpPromise,
   HttpError,
+  QueryParams,
   RequestOptions,
+  RequestPayload,
   TrailsResponse,
   TrailsResponsePaged,
 } from "@/api/client"
@@ -34,7 +36,9 @@ export { BaseAPI }
 export type {
   HttpPromise,
   HttpError,
+  QueryParams,
   RequestOptions,
+  RequestPayload,
   TrailsResponse,
   TrailsResponsePaged,
 }

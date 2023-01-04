@@ -101,7 +101,7 @@ const BaseAPI: HttpClient = {
   isHttpCancel(err: unknown): boolean {
     return this.isHttpError(err) && err.name === HTTP_CANCELLED_ERROR
   },
-  isHttpError(err: unknown): err is HttpError {
+  isHttpError<T>(err: unknown): err is HttpError<T> {
     return err instanceof HttpError
   },
   patch<T = any>(
