@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted} from "vue"
 import http from "@/api/base"
 import { HttpError, RequestOptions, TrailsResponsePaged } from "@/api/client"
 import { computed } from "vue"
@@ -29,11 +28,10 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
     // which has a Type of TrailsResponsePaged<Conifer>, but the result
     // variable will already be a Ref<TrailsResponsePaged<Conifer>>
     console.log(response, result.value)
-  }).catch((err: Error | HttpError) => {
+  }).catch((err: unknown) => {
     // you could do something with this err variable
     // but the error variable will already be a ShallowRef<Error | HttpError<T>>
-    console.log(err, error, http.isHttpError(err), http.hasErrStatus(err, 0))
-    console.log(err.stack)
+    console.log(err, error.value, http.isHttpError(err), http.hasErrStatus(err, 0))
   })
 
   if (shouldAbort) {
@@ -63,23 +61,6 @@ const buttonTextWithAbort = computed(() => {
   if (isLoading.value) return "Loading"
   if (hasFetched.value) return "Fetch Again & Abort"
   return "Fetch & Abort"
-})
-
-onMounted(async () => {    
-  try {
-    const { data } = await http.get<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/conifers")
-     console.log(data.items)
-  } catch (e) {
-    console.log(e)
-  }
-
-  http.get<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/conifers")
-    .then(({ data }) => {
-      console.log(data)
-    })
-    .catch(e => {
-      console.log(e)
-    })
 })
 </script>
 
@@ -130,10 +111,10 @@ execute({ query: Date.now() }, { withDelay: 3000 })
     // which has a Type of TrailsResponsePaged<Conifer>, but the result
     // variable will already be a Ref<TrailsResponsePaged<Conifer>>
     console.log(data, result)
-  }).catch((err: Error | HttpError) => {
+  }).catch((err: unknown) => {
     // you could do something with this err variable
     // but the error variable will already be a ShallowRef<Error | HttpError>
-    console.log(err, error)
+    console.log(err, error.value)
   })
 
 // this computed function is ready with whatever result contains
