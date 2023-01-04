@@ -19,7 +19,6 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-empty-interface": [
       "error",

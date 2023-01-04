@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import http from "@/api/base"
-import { HttpError, RequestOptions, TrailsResponsePaged } from "@/api/client"
+import { RequestOptions, TrailsResponsePaged } from "@/api/client"
 import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
