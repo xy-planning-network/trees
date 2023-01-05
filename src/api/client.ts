@@ -162,26 +162,6 @@ export interface HttpClient {
    */
   delete<T>(path: string, opts?: RequestOptions): HttpPromise<T>
   /**
-   * A convenience method for checking if a variable in a failed request has an http status code.
-   * This is most useful for checking for specific http status codes in error callbacks.
-   * @param err unknown
-   * @param codes number | number[]
-   * @returns boolean
-   */
-  hasErrStatus(err: unknown, codes: number | number[]): boolean
-  /**
-   * A type guard for checking if a variable is in the shape of a HttpError
-   * @param err unknown
-   * @returns payload is HttpError
-   */
-  isHttpError<T>(err: unknown): err is HttpError<T>
-  /**
-   * A convenience method for checking if a variable is a cancelled http request error.
-   * @param err unknown
-   * @returns boolean
-   */
-  isHttpCancel(err: unknown): boolean
-  /**
    * The method to make an http PATCH request.
    * @param path string
    * @param data RequestPayload

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 import {
   HTTP_CANCELLED_ERROR,
+  HTTP_ERROR,
   HttpClient,
   HttpError,
   HttpPromise,
@@ -57,7 +58,7 @@ export const httpRequest = <T = any>(
           err.message,
           err.response?.status,
           err.response?.data,
-          axios.isCancel(err) ? "HttpCanceledError" : undefined
+          axios.isCancel(err) ? HTTP_CANCELLED_ERROR : HTTP_ERROR
         )
       }
 
@@ -86,23 +87,6 @@ const BaseAPI: HttpClient = {
   },
   delete<T = any>(path: string, opts?: RequestOptions) {
     return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
-  },
-  hasErrStatus(err: unknown, codes: number | number[]) {
-    if (typeof codes === "number") {
-      codes = [codes]
-    }
-
-    if (this.isHttpError(err)) {
-      return codes.includes(err.status)
-    }
-
-    return false
-  },
-  isHttpCancel(err: unknown): boolean {
-    return this.isHttpError(err) && err.name === HTTP_CANCELLED_ERROR
-  },
-  isHttpError<T>(err: unknown): err is HttpError<T> {
-    return err instanceof HttpError
   },
   patch<T = any>(
     path: string,
@@ -135,3 +119,40 @@ const BaseAPI: HttpClient = {
 }
 
 export default BaseAPI
+
+/**
+ * A convenience method for checking if a variable in a failed request has an http status code.
+ * This is most useful for checking for specific http status codes in error callbacks.
+ * @param err unknown
+ * @param codes number | number[]
+ * @returns boolean
+ */
+export const hasHttpErrStatus = (err: unknown, codes: number | number[]) => {
+  if (typeof codes === "number") {
+    codes = [codes]
+  }
+
+  if (isHttpError(err)) {
+    return codes.includes(err.status)
+  }
+
+  return false
+}
+
+/**
+ * A type guard for checking if a variable is in the shape of a HttpError
+ * @param err unknown
+ * @returns err is HttpError
+ */
+export const isHttpError = <T>(err: unknown): err is HttpError<T> => {
+  return err instanceof HttpError
+}
+
+/**
+ * A convenience method for checking if a variable is a cancelled http request error.
+ * @param err unknown
+ * @returns boolean
+ */
+export const isHttpCancel = (err: unknown): boolean => {
+  return isHttpError(err) && err.name === HTTP_CANCELLED_ERROR
+}

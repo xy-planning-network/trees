@@ -1,5 +1,5 @@
 import { ref, Ref, shallowRef, ShallowRef } from "vue"
-import BaseAPI, { httpRequest } from "../api/base"
+import { httpRequest, isHttpCancel } from "../api/base"
 import type {
   HttpPromise,
   HttpError,
@@ -124,7 +124,7 @@ export default function useBaseAPI<T = any>(
         (err) => {
           error.value = err
 
-          if (BaseAPI.isHttpCancel(err)) {
+          if (isHttpCancel(err)) {
             isAborted.value = true
           }
 
