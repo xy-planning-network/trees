@@ -62,6 +62,19 @@ export class HttpError<T = unknown> extends Error {
 export interface HttpPromise<T = any> extends Promise<T> {}
 
 /**
+ * TrailsPromise
+ * The successfully resolved interface of an http client request returned by @xy-planning-network/Trails.
+ */
+export interface TrailsPromise<T = any> extends Promise<TrailsResponse<T>> {}
+
+/**
+ * TrailsPromisePaged
+ * The successfully resolved interface of a paged http client request returned by @xy-planning-network/Trails.
+ */
+export interface TrailsPromisePaged<T = any>
+  extends Promise<TrailsResponsePaged<T>> {}
+
+/**
  * TrailsResponse
  * A convenience interface to represent the shape of a Trails delivered API response.
  *

@@ -6,6 +6,8 @@ import type {
   QueryParams,
   RequestOptions,
   RequestPayload,
+  TrailsPromise,
+  TrailsPromisePaged,
   TrailsResponse,
   TrailsResponsePaged,
 } from "@/api/client"
@@ -39,6 +41,8 @@ export type {
   QueryParams,
   RequestOptions,
   RequestPayload,
+  TrailsPromise,
+  TrailsPromisePaged,
   TrailsResponse,
   TrailsResponsePaged,
 }
