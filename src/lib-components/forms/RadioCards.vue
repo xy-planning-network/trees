@@ -114,11 +114,11 @@ const nameAttr = computed(() => {
         v-slot="{ active, checked, disabled }"
       >
         <div
+          class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
           :class="[
             checked ? 'border-transparent' : 'border-gray-300',
             active ? 'border-blue-500 ring-2 ring-blue-500' : '',
-            'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none',
-            disabled ? 'opacity-75' : '',
+            disabled ? 'cursor-auto opacity-75' : '',
           ]"
         >
           <div class="flex-1 flex pr-1">
