@@ -85,10 +85,10 @@ export interface TrailsPromisePaged<T = any>
  * }
  *
  * BaseAPI.get<TrailsResponse<User>>(`/user/${id}`)
- *     .then(result => {
+ *     .then((result) => {
  *         const id = result.data.id
  *         const email = result.data.email
- *         const user = { ...result.data }
+ *         const user = result.data
  *     })
  */
 export interface TrailsResponse<T = any> {
@@ -106,11 +106,11 @@ export interface TrailsResponse<T = any> {
  * }
  *
  * BaseAPI.get<TrailsResponsePaged<User>>(`/users`)
- *     .then(result => {
+ *     .then((result) => {
  *         const currentPage = result.data.page
- *         const users = { ...result.data.items }
+ *         const users = result.data.items
  *
- *         result.data.items.forEach(u => {
+ *         users.forEach((u) => {
  *             console.log(u.id)
  *         })
  *     })
