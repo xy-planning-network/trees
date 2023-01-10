@@ -64,12 +64,40 @@ export interface HttpPromise<T = any> extends Promise<T> {}
 /**
  * TrailsPromise
  * The successfully resolved interface of an http client request returned by @xy-planning-network/Trails.
+ *
+ * Example Usage:
+ * interface User {
+ *     id: number
+ *     email: string
+ * }
+ *
+ * const UsersAPI = {
+ *    update(
+ *      id: number,
+ *      data: ReqPayload,
+ *      opts?: ReqOptions
+ *    ): TrailsPromise<User> {
+ *      return BaseAPI.put<TrailsResp<User>>(`/users/${id}`, data, opts)
+ *    }
+ * }
  */
 export interface TrailsPromise<T = any> extends Promise<TrailsResp<T>> {}
 
 /**
  * TrailsPromisePaged
  * The successfully resolved interface of a paged http client request returned by @xy-planning-network/Trails.
+ *
+ * Example Usage:
+ * interface User {
+ *     id: number
+ *     email: string
+ * }
+ *
+ * const UsersAPI = {
+ *    index(opts?: ReqOptions, params?: QueryParams): TrailsPromisePaged<User> {
+ *    return BaseAPI.get<TrailsRespPaged<User>>("/users", opts, params)
+ *    }
+ * }
  */
 export interface TrailsPromisePaged<T = any>
   extends Promise<TrailsRespPaged<T>> {}

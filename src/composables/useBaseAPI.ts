@@ -59,7 +59,7 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (data?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
+  execute: (payload?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
 }
 
 /**

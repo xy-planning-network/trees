@@ -2,8 +2,10 @@
 import { isHttpError } from "@/api/base"
 import { ReqOptions, TrailsRespPaged } from "@/api/client"
 import { computed } from "vue"
-import useBaseAPI from "../../src/composables/useBaseAPI"
-import { debounceLeading } from "../../src/helpers/Debounce"
+import useBaseAPI from "../../../src/composables/useBaseAPI"
+import { debounceLeading } from "../../../src/helpers/Debounce"
+import CodeSample from "../../helpers/CodeSample.vue"
+import ProseBase from "../../helpers/ProseBase.vue"
 
 interface Conifer {
   id: number 
@@ -65,24 +67,79 @@ const buttonTextWithAbort = computed(() => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+  
       <ComponentLayout :show-badge="false" title="useBaseAPI">
         <template v-slot:description>
-          useBaseAPI wraps up the BaseAPI functionality and returns a bunch of
+          useBaseAPI is a set of composable methods that wrap up the BaseAPI functionality and returns a bunch of
           helpful reactive variables along with an execute and abort methods.
         </template>
 
-        
-          <pre class="overflow-scroll bg-gray-50 p-4">
-            <code class="language-typescript">{{`
-interface TrailsRespPaged<T> {
-  page: number
-  perPage: number
-  totalItems: number
-  totalPages: number
-  items: T[]
+        <ProseBase>
+            <h4>The useBaseAPI Interface</h4>
+            <CodeSample>{{`  
+/**
+ * UseBaseAPIOptions extends Trees/ReqOptions
+ * these options are used only in the instantiation
+ * of a new UseBaseAPI composable
+ */
+export interface UseBaseAPIOptions extends ReqOptions {
+  /**
+   * Whether to immediately fire the execute function during instantiation
+   */
+  immediate?: boolean
 }
+
+/**
+ * UseBaseAPI is a composable the wraps up the
+ * usage of Trees/BaseAPI and returns reactive
+ * state variables along with reusaable execute and abort functions
+ */
+export interface UseBaseAPI<T> {
+  /**
+   * Axios response data
+   */
+  result: Ref<T | undefined>
+  /**
+   * Any errors that may have occurred
+   */
+  error: ShallowRef<Error | HttpError<T> | undefined>
+  /**
+   * Indicates if the request has finished
+   */
+  isFinished: Ref<boolean>
+  /**
+   * Indicates if the request is currently loading
+   */
+  isLoading: Ref<boolean>
+  /**
+   * Indicates if the request was canceled
+   */
+  isAborted: Ref<boolean>
+  /**
+   * Indicates if a first request has completed
+   */
+  hasFetched: Ref<boolean>
+  /**
+   * Aborts the current request
+   * can be used multiple times
+   */
+  abort: () => void
+  /**
+   * Manually call the axios request
+   * can be used multiple times
+   */
+  execute: (payload?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
+} 
+            `}}</CodeSample>
+
+          <h4>Example Usage</h4>
+            <CodeSample>{{`
+import {
+    useBaseAPI,
+    HttpError,
+    isHttpError,
+    TrailsRespPaged
+} from "@xy-planning-network/trees"
 
 interface Conifer {
   id: number 
@@ -121,8 +178,7 @@ execute({ query: Date.now() }, { withDelay: 3000 })
 const things = computed(() => { 
   return result.value?.items
 })
-  `}}</code>
-        </pre>
+  `}}</CodeSample></ProseBase>
         
         <div class="space-y-4">
           <div class="flex space-x-4">
@@ -175,6 +231,4 @@ const things = computed(() => {
         </ul>
         <p v-else>No trees on these trails.</p>
       </ComponentLayout>
-    </div>
-  </div>
 </template>

@@ -20,7 +20,6 @@ import {
   TableIcon,
   UserGroupIcon,
 } from "@heroicons/vue/outline"
-import Composables from "./content/Composables.vue"
 import Elements from "./content/Elements.vue"
 import Forms from "./content/Forms.vue"
 import Home from "./content/Home.vue"
@@ -28,6 +27,7 @@ import Lists from "./content/Lists.vue"
 import Navigation from "./content/Navigation.vue"
 import Overlays from "./content/Overlays.vue"
 import Team from "./content/Team.vue"
+import Tools from "./content/Tools.vue"
 
 const currentPage = ref("Home")
 const currentNav = ref("StackedLayout")
@@ -42,8 +42,8 @@ const navigation = [
   { name: "Lists", url: "/trees/?page=Lists", icon: TableIcon },
   { name: "Overlays", url: "/trees/?page=Overlays", icon: CollectionIcon },
   { name: "Elements", url: "/trees/?page=Elements", icon: ColorSwatchIcon },
+  { name: "Tools", url: "/trees/?page=Additional Tools", icon: PencilAltIcon },
   { name: "Team", url: "/trees/?page=Team", icon: UserGroupIcon },
-  { name: "Composables", url: "/trees/?page=Composables", icon: PencilAltIcon },
 ]
 const user = ref({
   accountID: 1,
@@ -99,8 +99,8 @@ watch(currentPage, () => {
       <Lists v-if="showing('Lists')" :user="user" />
       <Overlays v-if="showing('Overlays')" />
       <Elements v-if="showing('Elements')" />
+      <Tools v-if="showing('Additional Tools')" />
       <Team v-if="showing('Team')" />
-      <Composables v-if="showing('Composables')" />
       <button
         type="button"
         class="xy-btn"
