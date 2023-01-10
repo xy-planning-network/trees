@@ -3,16 +3,16 @@
  * The HTTP request methods that our http client supports.
  */
 export type RequestMethod =
+  | "DELETE"
+  | "delete"
   | "GET"
   | "get"
   | "PATCH"
   | "patch"
-  | "PUT"
-  | "put"
   | "POST"
   | "post"
-  | "DELETE"
-  | "delete"
+  | "PUT"
+  | "put"
 
 /**
  * RequestOptions
@@ -38,14 +38,14 @@ export const HTTP_CANCELLED_ERROR = "HttpCanceledError"
  */
 export class HttpError<T = unknown> extends Error {
   /**
-   * The http response status code.
-   */
-  status: number
-
-  /**
    * The http response body.
    */
   response?: T
+
+  /**
+   * The http response status code.
+   */
+  status: number
 
   constructor(message?: string, status?: number, response?: T, name?: string) {
     super(message || "")
@@ -143,6 +143,13 @@ export type RequestPayload = Record<string, any> | FormData
  */
 export interface HttpClient {
   /**
+   * The method to make an http DELETE request.
+   * @param path string
+   * @param opts RequestOptions
+   * @returns HttpPromise<T>
+   */
+  delete<T>(path: string, opts?: RequestOptions): HttpPromise<T>
+  /**
    * The method to make an http GET request.
    * @param path string
    * @param opts RequestOptions
@@ -154,13 +161,6 @@ export interface HttpClient {
     opts?: RequestOptions,
     params?: QueryParams
   ): HttpPromise<T>
-  /**
-   * The method to make an http DELETE request.
-   * @param path string
-   * @param opts RequestOptions
-   * @returns HttpPromise<T>
-   */
-  delete<T>(path: string, opts?: RequestOptions): HttpPromise<T>
   /**
    * The method to make an http PATCH request.
    * @param path string

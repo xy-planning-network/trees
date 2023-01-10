@@ -78,15 +78,15 @@ export const httpRequest = <T = any>(
 }
 
 const BaseAPI: HttpClient = {
+  delete<T = any>(path: string, opts?: RequestOptions) {
+    return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
+  },
   get<T = any>(
     path: string,
     opts?: RequestOptions,
     params?: Record<string, unknown>
   ) {
     return httpRequest<T>({ url: path, method: "GET", params }, opts || {})
-  },
-  delete<T = any>(path: string, opts?: RequestOptions) {
-    return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
   },
   patch<T = any>(
     path: string,
