@@ -1,9 +1,5 @@
 import { App, Plugin } from "vue"
-import BaseAPI, {
-  hasHttpErrStatus,
-  isHttpCancel,
-  isHttpError,
-} from "@/api/base"
+import BaseAPI, { isHttpCancel, isHttpError } from "@/api/base"
 import type {
   HttpPromise,
   HttpError,
@@ -39,7 +35,7 @@ export * from "@/composables/index"
 export * from "@/lib-components/index"
 
 // Http Client exports
-export { BaseAPI, hasHttpErrStatus, isHttpCancel, isHttpError }
+export { BaseAPI, isHttpCancel, isHttpError }
 export type {
   HttpPromise,
   HttpError,

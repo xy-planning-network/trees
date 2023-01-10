@@ -121,25 +121,6 @@ const BaseAPI: HttpClient = {
 export default BaseAPI
 
 /**
- * A convenience method for checking if a variable in a failed request has an http status code.
- * This is most useful for checking for specific http status codes in error callbacks.
- * @param err unknown
- * @param codes number | number[]
- * @returns boolean
- */
-export const hasHttpErrStatus = (err: unknown, codes: number | number[]) => {
-  if (typeof codes === "number") {
-    codes = [codes]
-  }
-
-  if (isHttpError(err)) {
-    return codes.includes(err.status)
-  }
-
-  return false
-}
-
-/**
  * A type guard for checking if a variable is in the shape of a HttpError
  * @param err unknown
  * @returns err is HttpError

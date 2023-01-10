@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { hasHttpErrStatus, isHttpError } from "@/api/base"
+import { isHttpError } from "@/api/base"
 import { RequestOptions, TrailsResponsePaged } from "@/api/client"
 import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
@@ -31,7 +31,7 @@ const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
   }).catch((err: unknown) => {
     // you could do something with this err variable
     // but the error variable will already be a ShallowRef<Error | HttpError<T>>
-    console.log(err, error.value, isHttpError(err), hasHttpErrStatus(err, 0))
+    console.log(err, error.value, isHttpError(err))
   })
 
   if (shouldAbort) {
@@ -114,7 +114,7 @@ execute({ query: Date.now() }, { withDelay: 3000 })
   }).catch((err: unknown) => {
     // you could do something with this err variable
     // but the error variable will already be a ShallowRef<Error | HttpError>
-    console.log(err, error.value, isHttpError(err), hasHttpErrStatus(err, 0))
+    console.log(err, error.value, isHttpError(err))
   })
 
 // this computed function is ready with whatever result contains
