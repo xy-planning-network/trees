@@ -1,8 +1,8 @@
 /**
- * RequestMethod
+ * ReqMethod
  * The HTTP request methods that our http client supports.
  */
-export type RequestMethod =
+export type ReqMethod =
   | "DELETE"
   | "delete"
   | "GET"
@@ -15,10 +15,10 @@ export type RequestMethod =
   | "put"
 
 /**
- * RequestOptions
+ * ReqOptions
  * The set of options available for any http client request.
  */
-export interface RequestOptions {
+export interface ReqOptions {
   /**
    * Disable the full screen loading interface during the request when true.
    */
@@ -29,8 +29,8 @@ export interface RequestOptions {
   withDelay?: number
 }
 
-export const HTTP_ERROR = "HttpError"
-export const HTTP_CANCELLED_ERROR = "HttpCanceledError"
+export const HTTP_ERR = "HttpError"
+export const HTTP_ERR_CANCEL = "HttpErrorCanceled"
 
 /**
  * HttpError
@@ -49,7 +49,7 @@ export class HttpError<T = unknown> extends Error {
 
   constructor(message?: string, status?: number, response?: T, name?: string) {
     super(message || "")
-    this.name = name || HTTP_ERROR
+    this.name = name || HTTP_ERR
     this.status = status || 0
     this.response = response
   }
@@ -65,17 +65,17 @@ export interface HttpPromise<T = any> extends Promise<T> {}
  * TrailsPromise
  * The successfully resolved interface of an http client request returned by @xy-planning-network/Trails.
  */
-export interface TrailsPromise<T = any> extends Promise<TrailsResponse<T>> {}
+export interface TrailsPromise<T = any> extends Promise<TrailsResp<T>> {}
 
 /**
  * TrailsPromisePaged
  * The successfully resolved interface of a paged http client request returned by @xy-planning-network/Trails.
  */
 export interface TrailsPromisePaged<T = any>
-  extends Promise<TrailsResponsePaged<T>> {}
+  extends Promise<TrailsRespPaged<T>> {}
 
 /**
- * TrailsResponse
+ * TrailsResp
  * A convenience interface to represent the shape of a Trails delivered API response.
  *
  * Example Usage:
@@ -84,19 +84,19 @@ export interface TrailsPromisePaged<T = any>
  *     email: string
  * }
  *
- * BaseAPI.get<TrailsResponse<User>>(`/user/${id}`)
+ * BaseAPI.get<TrailsResp<User>>(`/user/${id}`)
  *     .then((result) => {
  *         const id = result.data.id
  *         const email = result.data.email
  *         const user = result.data
  *     })
  */
-export interface TrailsResponse<T = any> {
+export interface TrailsResp<T = any> {
   data: T
 }
 
 /**
- * TrailsResponsePaged
+ * TrailsRespPaged
  * A convenience interface to represent the shape of a paginated Trails delivered API response.
  *
  * Example Usage:
@@ -105,7 +105,7 @@ export interface TrailsResponse<T = any> {
  *     email: string
  * }
  *
- * BaseAPI.get<TrailsResponsePaged<User>>(`/users`)
+ * BaseAPI.get<TrailsRespPaged<User>>(`/users`)
  *     .then((result) => {
  *         const currentPage = result.data.page
  *         const users = result.data.items
@@ -115,7 +115,7 @@ export interface TrailsResponse<T = any> {
  *         })
  *     })
  */
-export interface TrailsResponsePaged<T = any> {
+export interface TrailsRespPaged<T = any> {
   data: {
     items: T[]
     page: number
@@ -132,10 +132,10 @@ export interface TrailsResponsePaged<T = any> {
 export type QueryParams = Record<string, any>
 
 /**
- * RequestPayload
+ * ReqPayload
  * Http POST and PUT payloads.
  */
-export type RequestPayload = Record<string, any> | FormData
+export type ReqPayload = Record<string, any> | FormData
 
 /**
  * HttpClient
@@ -145,53 +145,37 @@ export interface HttpClient {
   /**
    * The method to make an http DELETE request.
    * @param path string
-   * @param opts RequestOptions
+   * @param opts ReqOptions
    * @returns HttpPromise<T>
    */
-  delete<T>(path: string, opts?: RequestOptions): HttpPromise<T>
+  delete<T>(path: string, opts?: ReqOptions): HttpPromise<T>
   /**
    * The method to make an http GET request.
    * @param path string
-   * @param opts RequestOptions
+   * @param opts ReqOptions
    * @param params QueryParams
    * @returns HttpPromise<T>
    */
-  get<T>(
-    path: string,
-    opts?: RequestOptions,
-    params?: QueryParams
-  ): HttpPromise<T>
+  get<T>(path: string, opts?: ReqOptions, params?: QueryParams): HttpPromise<T>
   /**
    * The method to make an http PATCH request.
    * @param path string
-   * @param data RequestPayload
-   * @param opts RequestOptions
+   * @param data ReqPayload
+   * @param opts ReqOptions
    */
-  patch<T>(
-    path: string,
-    data?: RequestPayload,
-    opts?: RequestOptions
-  ): HttpPromise<T>
+  patch<T>(path: string, data?: ReqPayload, opts?: ReqOptions): HttpPromise<T>
   /**
    * The method to make an http POST request.
    * @param path string
-   * @param data RequestPayload
-   * @param opts RequestOptions
+   * @param data ReqPayload
+   * @param opts ReqOptions
    */
-  post<T>(
-    path: string,
-    data?: RequestPayload,
-    opts?: RequestOptions
-  ): HttpPromise<T>
+  post<T>(path: string, data?: ReqPayload, opts?: ReqOptions): HttpPromise<T>
   /**
    * The method to make an http PUT request.
    * @param path string
-   * @param data RequestPayload
-   * @param opts RequestOptions
+   * @param data ReqPayload
+   * @param opts ReqOptions
    */
-  put<T>(
-    path: string,
-    data?: RequestPayload,
-    opts?: RequestOptions
-  ): HttpPromise<T>
+  put<T>(path: string, data?: ReqPayload, opts?: ReqOptions): HttpPromise<T>
 }

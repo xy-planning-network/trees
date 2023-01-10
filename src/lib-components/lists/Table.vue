@@ -11,7 +11,7 @@ import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
 import * as TableTypes from "@/composables/table"
 import { useAppFlasher } from "@/composables/useFlashes"
-import { TrailsResponsePaged } from "@/api/client"
+import { TrailsRespPaged } from "@/api/client"
 
 const props = withDefaults(
   defineProps<{
@@ -96,7 +96,7 @@ const loadAndRender = (): void => {
     q: query.value,
   }
 
-  BaseAPI.get<TrailsResponsePaged<unknown>>(
+  BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableData.url,
     { skipLoader: !props.loader },
     params

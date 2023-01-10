@@ -1,20 +1,20 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
 import {
-  HTTP_CANCELLED_ERROR,
-  HTTP_ERROR,
+  HTTP_ERR_CANCEL,
+  HTTP_ERR,
   HttpClient,
   HttpError,
   HttpPromise,
-  RequestOptions,
+  ReqOptions,
 } from "./client"
 import { useAppSpinner } from "@/composables/useSpinner"
 
 /**
- * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
- * @param config RequestOptions
- * @returns RequestOptions
+ * apiDelayIntercept delays the request of an api call by the configured withDelay value in ReqOptions
+ * @param config ReqOptions
+ * @returns ReqOptions
  */
-const apiDelayReqIntercept = (config: RequestOptions & AxiosRequestConfig) => {
+const apiDelayReqIntercept = (config: ReqOptions & AxiosRequestConfig) => {
   const delay = config.withDelay || 0
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -34,9 +34,9 @@ apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
 
 export const httpRequest = <T = any>(
   config: AxiosRequestConfig,
-  opts: RequestOptions
+  opts: ReqOptions
 ): HttpPromise<T> => {
-  const options: RequestOptions = {
+  const options: ReqOptions = {
     skipLoader: false,
     withDelay: 0,
     ...opts,
@@ -58,7 +58,7 @@ export const httpRequest = <T = any>(
           err.message,
           err.response?.status,
           err.response?.data,
-          axios.isCancel(err) ? HTTP_CANCELLED_ERROR : HTTP_ERROR
+          axios.isCancel(err) ? HTTP_ERR_CANCEL : HTTP_ERR
         )
       }
 
@@ -78,12 +78,12 @@ export const httpRequest = <T = any>(
 }
 
 const BaseAPI: HttpClient = {
-  delete<T = any>(path: string, opts?: RequestOptions) {
+  delete<T = any>(path: string, opts?: ReqOptions) {
     return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
   },
   get<T = any>(
     path: string,
-    opts?: RequestOptions,
+    opts?: ReqOptions,
     params?: Record<string, unknown>
   ) {
     return httpRequest<T>({ url: path, method: "GET", params }, opts || {})
@@ -91,21 +91,21 @@ const BaseAPI: HttpClient = {
   patch<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts?: RequestOptions
+    opts?: ReqOptions
   ) {
     return httpRequest<T>({ url: path, data, method: "PATCH" }, opts || {})
   },
   post<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts?: RequestOptions
+    opts?: ReqOptions
   ) {
     return httpRequest<T>({ url: path, data, method: "POST" }, opts || {})
   },
   put<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts?: RequestOptions
+    opts?: ReqOptions
   ) {
     return httpRequest<T>(
       {
@@ -135,5 +135,5 @@ export const isHttpError = <T>(err: unknown): err is HttpError<T> => {
  * @returns boolean
  */
 export const isHttpCancel = (err: unknown): boolean => {
-  return isHttpError(err) && err.name === HTTP_CANCELLED_ERROR
+  return isHttpError(err) && err.name === HTTP_ERR_CANCEL
 }

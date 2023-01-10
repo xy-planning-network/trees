@@ -3,17 +3,17 @@ import { httpRequest, isHttpCancel } from "../api/base"
 import type {
   HttpPromise,
   HttpError,
-  RequestMethod,
-  RequestOptions,
-  RequestPayload,
+  ReqMethod,
+  ReqOptions,
+  ReqPayload,
 } from "../api/client"
 
 /**
- * UseBaseAPIOptions extends Trees/RequestOptions
+ * UseBaseAPIOptions extends Trees/ReqOptions
  * these options are used only in the instantiation
  * of a new UseBaseAPI composable
  */
-export interface UseBaseAPIOptions extends RequestOptions {
+export interface UseBaseAPIOptions extends ReqOptions {
   /**
    * Whether to immediately fire the execute function during instantiation
    */
@@ -59,20 +59,20 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (data?: RequestPayload, opts?: RequestOptions) => HttpPromise<T>
+  execute: (data?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
 }
 
 /**
  * useBaseAPI is a composable wrapper of BaseAPI
  * @param path {string} the api path or full url for the
- * @param method {RequestMethod} the initial request type
+ * @param method {ReqMethod} the initial request type
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export default function useBaseAPI<T = any>(
   path: string,
-  method: RequestMethod = "GET",
+  method: ReqMethod = "GET",
   initOpts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   const result = ref<T | undefined>()
@@ -92,7 +92,7 @@ export default function useBaseAPI<T = any>(
 
   const execute = (
     data: Record<string, unknown> | FormData = {},
-    opts: RequestOptions = {}
+    opts: ReqOptions = {}
   ): Promise<T> => {
     requestCount++
     const count = requestCount

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isHttpError } from "@/api/base"
-import { RequestOptions, TrailsResponsePaged } from "@/api/client"
+import { ReqOptions, TrailsRespPaged } from "@/api/client"
 import { computed } from "vue"
 import useBaseAPI from "../../src/composables/useBaseAPI"
 import { debounceLeading } from "../../src/helpers/Debounce"
@@ -16,17 +16,17 @@ interface Conifer {
 }
 
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
-  useBaseAPI<TrailsResponsePaged<Conifer>>(
+  useBaseAPI<TrailsRespPaged<Conifer>>(
     "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
     "GET"
   )
 
-const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
+const fetch = (opt: ReqOptions = {}, shouldAbort = false,) => {
   execute({ query: Date.now() }, opt)
   .then((response) => {
     // you could do something with this data variable
-    // which has a Type of TrailsResponsePaged<Conifer>, but the result
-    // variable will already be a Ref<TrailsResponsePaged<Conifer>>
+    // which has a Type of TrailsRespPaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsRespPaged<Conifer>>
     console.log(response, result.value)
   }).catch((err: unknown) => {
     // you could do something with this err variable
@@ -76,7 +76,7 @@ const buttonTextWithAbort = computed(() => {
         
           <pre class="overflow-scroll bg-gray-50 p-4">
             <code class="language-typescript">{{`
-interface TrailsResponsePaged<T> {
+interface TrailsRespPaged<T> {
   page: number
   perPage: number
   totalItems: number
@@ -103,13 +103,13 @@ const {
   hasFetched,
   execute,
   abort
-} = useBaseAPI<TrailsResponsePaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
+} = useBaseAPI<TrailsRespPaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
 
 execute({ query: Date.now() }, { withDelay: 3000 })
   .then(data => {
     // you could do something with this data variable
-    // which has a Type of TrailsResponsePaged<Conifer>, but the result
-    // variable will already be a Ref<TrailsResponsePaged<Conifer>>
+    // which has a Type of TrailsRespPaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsRespPaged<Conifer>>
     console.log(data, result)
   }).catch((err: unknown) => {
     // you could do something with this err variable

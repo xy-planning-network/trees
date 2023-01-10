@@ -4,12 +4,12 @@ import type {
   HttpPromise,
   HttpError,
   QueryParams,
-  RequestOptions,
-  RequestPayload,
+  ReqOptions,
+  ReqPayload,
   TrailsPromise,
   TrailsPromisePaged,
-  TrailsResponse,
-  TrailsResponsePaged,
+  TrailsResp,
+  TrailsRespPaged,
 } from "@/api/client"
 
 // Import vue components
@@ -40,10 +40,10 @@ export type {
   HttpPromise,
   HttpError,
   QueryParams,
-  RequestOptions,
-  RequestPayload,
+  ReqOptions,
+  ReqPayload,
   TrailsPromise,
   TrailsPromisePaged,
-  TrailsResponse,
-  TrailsResponsePaged,
+  TrailsResp,
+  TrailsRespPaged,
 }
