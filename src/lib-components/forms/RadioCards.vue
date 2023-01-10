@@ -118,7 +118,7 @@ const nameAttr = computed(() => {
           :class="[
             checked ? 'border-transparent' : 'border-gray-300',
             active ? 'border-blue-500 ring-2 ring-blue-500' : '',
-            disabled ? 'cursor-auto opacity-75' : '',
+            disabled ? 'cursor-not-allowed opacity-75' : '',
           ]"
         >
           <div class="flex-1 flex pr-1">
