@@ -5,6 +5,8 @@ import { ExclamationIcon } from "@heroicons/vue/outline"
 import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
+import ProseBase from "../helpers/ProseBase.vue"
+import CodeSample from "../helpers/CodeSample.vue"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -128,19 +130,20 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           can deploy flashes from anywhere with the useAppFlashes composable.
         </template>
 
-        <div>
-          <ul class="mt-1 space-y-2">
-            <li>
-              <InputLabel
-                label="Flash generic error using configured email address:"
-              />
-              <pre><code class="language-typescript">/* Import and do this anytime, best before createApp() or inside a root app level component */
+        <ProseBase>
+          <div class="mt-1 space-y-2">
+            <div>
+              <h4>Flash generic error using configured email address:</h4>
+              <CodeSample>{{
+                `
+/* Import and do this anytime, best before createApp() or inside a root app level component */
 import {useAppFlashes} from "@xy-planning-network/trees"
 useAppFlashes().configure({email: "support@trees.com"})
 
 /* use as needed.  imports of useAppFlasher throughout the app will produce the same result */
 useAppFlashes().flasher.genericError()
-</code></pre>
+              `
+              }}</CodeSample>
               <button
                 type="button"
                 class="xy-btn"
@@ -148,17 +151,24 @@ useAppFlashes().flasher.genericError()
               >
                 Show Me
               </button>
-            </li>
-            <li>
-              <InputLabel
-                label="useAppFlasher is the default export as is what you need most of the time."
-              />
-              <pre><code class="language-typescript">import useAppFlasher from "@xy-planning-network/trees"</code></pre>
+            </div>
+            <div>
+              <h4>
+                useAppFlasher is the default export as is what you need most of
+                the time.
+              </h4>
+              <CodeSample>{{
+                `
+import useAppFlasher from "@xy-planning-network/trees"
+              `
+              }}</CodeSample>
 
-              <InputLabel
-                label="Flash generic error with custom email address:"
-              />
-              <pre><code class="language-typescript">useAppFlasher.genericError("help@trees.com")</code></pre>
+              <h4>Flash generic error with custom email address:</h4>
+              <CodeSample>{{
+                `
+useAppFlasher.genericError("help@trees.com")
+              `
+              }}</CodeSample>
               <button
                 type="button"
                 class="xy-btn"
@@ -166,13 +176,17 @@ useAppFlashes().flasher.genericError()
               >
                 Show Me
               </button>
-            </li>
-            <li>
-              <InputLabel label="Flash (error, info, success, warning):" />
-              <pre><code class="language-typescript">useAppFlasher.error("Hooray!")
+            </div>
+            <div>
+              <h4>Flash (error, info, success, warning):</h4>
+              <CodeSample>{{
+                `
+useAppFlasher.error("Hooray!")
 useAppFlasher.info("Hooray!")
 useAppFlasher.success("Hooray!")
-useAppFlasher.warning("Hooray!")</code></pre>
+useAppFlasher.warning("Hooray!")
+              `
+              }}</CodeSample>
               <button
                 type="button"
                 class="xy-btn"
@@ -180,10 +194,14 @@ useAppFlasher.warning("Hooray!")</code></pre>
               >
                 Flash Success
               </button>
-            </li>
-            <li>
-              <InputLabel label="Flash persistent info:" />
-              <pre><code class="language-typescript">useAppFlasher.info("Sticky!", true)</code></pre>
+            </div>
+            <div>
+              <h4>Flash persistent info:</h4>
+              <CodeSample>{{
+                `
+useAppFlasher.info("Sticky!", true)
+              `
+              }}</CodeSample>
               <button
                 type="button"
                 class="xy-btn"
@@ -191,9 +209,9 @@ useAppFlasher.warning("Hooray!")</code></pre>
               >
                 Flash Persistent
               </button>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </div>
+        </ProseBase>
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Modal">
@@ -428,14 +446,14 @@ useAppFlasher.warning("Hooray!")</code></pre>
           Overlay components naturally can introduce complications in stacking
           context and z-index for any application. We've made best attempts to
           set sane z-index values on each overlay component in an order that
-          makes sense for the component's general usage. These components are all
-          wrapped in the <code>&lt;Portal /&gt;</code> component made available
-          by HeadlessUI/Vue to ensure they share a stacking context. We've
-          additionally, preserved the highest order z-index (z-50) for consumers
-          when necessary.
+          makes sense for the component's general usage. These components are
+          all wrapped in the <code>&lt;Portal /&gt;</code> component made
+          available by HeadlessUI/Vue to ensure they share a stacking context.
+          We've additionally, preserved the highest order z-index (z-50) for
+          consumers when necessary.
         </template>
 
-        <div class="prose prose-sm">
+        <ProseBase>
           <h4>Tailwind CSS z-index Values</h4>
           <table>
             <thead>
@@ -480,29 +498,29 @@ useAppFlasher.warning("Hooray!")</code></pre>
           <p>
             In the event that you need to establish a z-index level above any of
             the overlay components, you'll need to wrap your component in the
-            HeadlessUI/Vue <code>&lt;Portal /&gt;</code> component. This convenience component is not
-            documented by HeadlessUI, but is effectively a wrapper around the
-            Vue Teleport component. It maintains a single container before the
-            closing body tag and teleports all Portal markup to that location
-            ensuring the same stacking context between those DOM elements.
+            HeadlessUI/Vue <code>&lt;Portal /&gt;</code> component. This
+            convenience component is not documented by HeadlessUI, but is
+            effectively a wrapper around the Vue Teleport component. It
+            maintains a single container before the closing body tag and
+            teleports all Portal markup to that location ensuring the same
+            stacking context between those DOM elements.
           </p>
+          <CodeSample language="html"
+            >{{ `
+            <script lang="ts" setup>
+              import { Portal } from "@headlessui/vue"
+            </script>
 
-          <p>
-            <pre class="overflow-scroll bg-gray-50 p-4">
-<code class="language-typescript">{{`<script lang="ts" setup>
-  import { Portal } from "@headlessui/vue"
-</script>
-
-<template>
-  <Portal>
-    <div class="fixed top-0 left-0 right-0 bottom-0 z-50">
-      <h1>Head and shoulders above the rest!</h1>
-    </div>
-  </Portal>
-</template>`}}</code>
-            </pre>
-          </p>
-        </div>
+            <template>
+              <Portal>
+                <div class="fixed top-0 left-0 right-0 bottom-0 z-50">
+                  <h1>Head and shoulders above the rest!</h1>
+                </div>
+              </Portal>
+            </template>
+            ` }}</CodeSample
+          >
+        </ProseBase>
       </ComponentLayout>
     </div>
   </div>

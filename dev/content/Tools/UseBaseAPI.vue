@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { RequestOptions } from "@/api/base"
-import { AxiosError } from "axios";
+import { isHttpError } from "@/api/base"
+import { ReqOptions, TrailsRespPaged } from "@/api/client"
 import { computed } from "vue"
-import useBaseAPI from "../../src/composables/useBaseAPI"
-import { debounceLeading } from "../../src/helpers/Debounce"
-
-interface Paginated<T> {
-  page: number
-  perPage: number
-  totalItems: number
-  totalPages: number
-  items: T[]
-}
+import useBaseAPI from "../../../src/composables/useBaseAPI"
+import { debounceLeading } from "../../../src/helpers/Debounce"
+import CodeSample from "../../helpers/CodeSample.vue"
+import ProseBase from "../../helpers/ProseBase.vue"
 
 interface Conifer {
   id: number 
@@ -24,23 +18,22 @@ interface Conifer {
 }
 
 const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, abort } =
-  useBaseAPI<Paginated<Conifer>>(
+  useBaseAPI<TrailsRespPaged<Conifer>>(
     "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
-    "GET",
-    { dataIntercept: true }
+    "GET"
   )
 
-const fetch = (opt: RequestOptions = {}, shouldAbort = false,) => {
+const fetch = (opt: ReqOptions = {}, shouldAbort = false,) => {
   execute({ query: Date.now() }, opt)
-  .then(data => {
+  .then((response) => {
     // you could do something with this data variable
-    // which has a Type of ThingResponse, but the result
-    // variable will already be a Ref<ThingResponse>
-    console.log(data, result)
-  }).catch((err: Error | AxiosError) => {
+    // which has a Type of TrailsRespPaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsRespPaged<Conifer>>
+    console.log(response, result.value)
+  }).catch((err: unknown) => {
     // you could do something with this err variable
-    // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
-    console.log(err, error)
+    // but the error variable will already be a ShallowRef<Error | HttpError<T>>
+    console.log(err, error.value, isHttpError(err))
   })
 
   if (shouldAbort) {
@@ -71,31 +64,82 @@ const buttonTextWithAbort = computed(() => {
   if (hasFetched.value) return "Fetch Again & Abort"
   return "Fetch & Abort"
 })
-
-const conifers = computed(() => { 
-  return result.value?.items
-})
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+  
       <ComponentLayout :show-badge="false" title="useBaseAPI">
         <template v-slot:description>
-          useBaseAPI wraps up the BaseAPI functionality and returns a bunch of
+          useBaseAPI is a set of composable methods that wrap up the BaseAPI functionality and returns a bunch of
           helpful reactive variables along with an execute and abort methods.
         </template>
 
-        
-          <pre class="overflow-scroll bg-gray-50 p-4">
-            <code class="language-typescript">{{`
-interface Paginated<T> {
-  page: number
-  perPage: number
-  totalItems: number
-  totalPages: number
-  items: T[]
+        <ProseBase>
+            <h4>The useBaseAPI Interface</h4>
+            <CodeSample>{{`  
+/**
+ * UseBaseAPIOptions extends Trees/ReqOptions
+ * these options are used only in the instantiation
+ * of a new UseBaseAPI composable
+ */
+export interface UseBaseAPIOptions extends ReqOptions {
+  /**
+   * Whether to immediately fire the execute function during instantiation
+   */
+  immediate?: boolean
 }
+
+/**
+ * UseBaseAPI is a composable the wraps up the
+ * usage of Trees/BaseAPI and returns reactive
+ * state variables along with reusaable execute and abort functions
+ */
+export interface UseBaseAPI<T> {
+  /**
+   * Axios response data
+   */
+  result: Ref<T | undefined>
+  /**
+   * Any errors that may have occurred
+   */
+  error: ShallowRef<Error | HttpError<T> | undefined>
+  /**
+   * Indicates if the request has finished
+   */
+  isFinished: Ref<boolean>
+  /**
+   * Indicates if the request is currently loading
+   */
+  isLoading: Ref<boolean>
+  /**
+   * Indicates if the request was canceled
+   */
+  isAborted: Ref<boolean>
+  /**
+   * Indicates if a first request has completed
+   */
+  hasFetched: Ref<boolean>
+  /**
+   * Aborts the current request
+   * can be used multiple times
+   */
+  abort: () => void
+  /**
+   * Manually call the axios request
+   * can be used multiple times
+   */
+  execute: (payload?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
+} 
+            `}}</CodeSample>
+
+          <h4>Example Usage</h4>
+            <CodeSample>{{`
+import {
+    useBaseAPI,
+    HttpError,
+    isHttpError,
+    TrailsRespPaged
+} from "@xy-planning-network/trees"
 
 interface Conifer {
   id: number 
@@ -116,26 +160,25 @@ const {
   hasFetched,
   execute,
   abort
-} = useBaseAPI<Paginated<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET", {dataIntercept: true})
+} = useBaseAPI<TrailsRespPaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", "GET")
 
 execute({ query: Date.now() }, { withDelay: 3000 })
   .then(data => {
     // you could do something with this data variable
-    // which has a Type of Paginated<Conifer>, but the result
-    // variable will already be a Ref<Paginated<Conifer>>
+    // which has a Type of TrailsRespPaged<Conifer>, but the result
+    // variable will already be a Ref<TrailsRespPaged<Conifer>>
     console.log(data, result)
-  }).catch((err: Error | AxiosError) => {
+  }).catch((err: unknown) => {
     // you could do something with this err variable
-    // but the error variable will already be a ShallowRef<Error | AxiosError<T>>
-    console.log(err, error)
+    // but the error variable will already be a ShallowRef<Error | HttpError>
+    console.log(err, error.value, isHttpError(err))
   })
 
 // this computed function is ready with whatever result contains
 const things = computed(() => { 
   return result.value?.items
 })
-  `}}</code>
-        </pre>
+  `}}</CodeSample></ProseBase>
         
         <div class="space-y-4">
           <div class="flex space-x-4">
@@ -181,13 +224,11 @@ const things = computed(() => {
           <li><b>Result:</b><pre class="bg-gray-50 p-2">{{result ? result : 'undefined'}}</pre></li>
         </ul>
 
-        <ul v-if="conifers" class="mt-6 space-y-2">
-          <li v-for="conifer in conifers" :key="conifer.id">
+        <ul v-if="result?.data" class="mt-6 space-y-2">
+          <li v-for="conifer in result.data.items" :key="conifer.id">
             <b>{{conifer.name}}</b>: <em>{{conifer.leaf.type}}</em>
           </li>
         </ul>
         <p v-else>No trees on these trails.</p>
       </ComponentLayout>
-    </div>
-  </div>
 </template>

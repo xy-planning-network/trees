@@ -1,14 +1,19 @@
-import axios, { AxiosError } from "axios"
 import { ref, Ref, shallowRef, ShallowRef } from "vue"
-import BaseAPI from "../api/base"
-import type { RequestMethod, RequestOptions } from "../api/base"
+import { httpRequest, isHttpCancel } from "../api/base"
+import type {
+  HttpPromise,
+  HttpError,
+  ReqMethod,
+  ReqOptions,
+  ReqPayload,
+} from "../api/client"
 
 /**
- * UseBaseAPIOptions extends Trees/RequestOptions
+ * UseBaseAPIOptions extends Trees/ReqOptions
  * these options are used only in the instantiation
  * of a new UseBaseAPI composable
  */
-export interface UseBaseAPIOptions extends RequestOptions {
+export interface UseBaseAPIOptions extends ReqOptions {
   /**
    * Whether to immediately fire the execute function during instantiation
    */
@@ -28,7 +33,7 @@ export interface UseBaseAPI<T> {
   /**
    * Any errors that may have occurred
    */
-  error: ShallowRef<Error | AxiosError<T> | undefined>
+  error: ShallowRef<Error | HttpError<T> | undefined>
   /**
    * Indicates if the request has finished
    */
@@ -54,27 +59,24 @@ export interface UseBaseAPI<T> {
    * Manually call the axios request
    * can be used multiple times
    */
-  execute: (
-    data?: Record<string, unknown> | FormData,
-    opts?: RequestOptions
-  ) => Promise<T>
+  execute: (payload?: ReqPayload, opts?: ReqOptions) => HttpPromise<T>
 }
 
 /**
  * useBaseAPI is a composable wrapper of BaseAPI
  * @param path {string} the api path or full url for the
- * @param method {RequestMethod} the initial request type
+ * @param method {ReqMethod} the initial request type
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export default function useBaseAPI<T = any>(
   path: string,
-  method: RequestMethod = "GET",
+  method: ReqMethod = "GET",
   initOpts: UseBaseAPIOptions = {}
-) {
+): UseBaseAPI<T> {
   const result = ref<T | undefined>()
-  const error = shallowRef<Error | AxiosError<T> | undefined>()
+  const error = shallowRef<Error | HttpError<T> | undefined>()
   const hasFetched = ref<boolean>(false)
   const isFinished = ref<boolean>(false)
   const isLoading = ref<boolean>(false)
@@ -90,7 +92,7 @@ export default function useBaseAPI<T = any>(
 
   const execute = (
     data: Record<string, unknown> | FormData = {},
-    opts: RequestOptions = {}
+    opts: ReqOptions = {}
   ): Promise<T> => {
     requestCount++
     const count = requestCount
@@ -102,14 +104,16 @@ export default function useBaseAPI<T = any>(
     isLoading.value = true
 
     const requestConfig = {
-      data: ["POST", "post", "PUT", "put"].includes(method) ? data : {},
+      data: ["PATCH", "patch", "POST", "post", "PUT", "put"].includes(method)
+        ? data
+        : {},
       method: method,
       params: ["GET", "get"].includes(method) ? data : {},
       signal: controller.signal,
       url: path,
     }
 
-    return BaseAPI.makeRequest<T>(requestConfig, { ...initOpts, ...opts })
+    return httpRequest<T>(requestConfig, { ...initOpts, ...opts })
       .then(
         (success) => {
           result.value = success
@@ -120,7 +124,7 @@ export default function useBaseAPI<T = any>(
         (err) => {
           error.value = err
 
-          if (axios.isCancel(err)) {
+          if (isHttpCancel(err)) {
             isAborted.value = true
           }
 
@@ -182,6 +186,20 @@ export function useBaseAPIDelete<T = any>(
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "DELETE", opts)
+}
+
+/**
+ * useBaseAPIPatch is a convenience function for useBaseAPI
+ * @param path {string} the api path or full url for the
+ * @param initOpts {UseBaseAPIOptions}
+ * @param initConfig {AxiosRequestConfig}
+ * @returns {UseBaseAPI<T>}
+ */
+export function useBaseAPIPatch<T = any>(
+  url: string,
+  opts: UseBaseAPIOptions = {}
+): UseBaseAPI<T> {
+  return useBaseAPI<T>(url, "PATCH", opts)
 }
 
 /**
