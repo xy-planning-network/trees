@@ -1,62 +1,26 @@
-import { useAppSpinner } from "@/composables/useSpinner"
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
-
-export type RequestMethod =
-  | "GET"
-  | "get"
-  | "PUT"
-  | "put"
-  | "POST"
-  | "post"
-  | "DELETE"
-  | "delete"
-
-export interface RequestOptions {
-  /**
-   * returns the nested data key inside the AxiosResponse data when true
-   */
-  dataIntercept?: boolean
-  /**
-   * disables the full screen loading interface during the request when true
-   */
-  skipLoader?: boolean
-  /**
-   * artificially delay's the request by the time specified when set
-   */
-  withDelay?: number
-}
-
-interface APIResponse<T = any> extends AxiosResponse<T> {
-  config: RequestOptions & AxiosRequestConfig
-}
+import {
+  HTTP_ERR_CANCEL,
+  HTTP_ERR,
+  HttpClient,
+  HttpError,
+  HttpPromise,
+  ReqOptions,
+} from "./client"
+import { useAppSpinner } from "@/composables/useSpinner"
 
 /**
- * apiDelayIntercept delays the request of an api call by the configured withDelay value in RequestOptions
- * @param config RequestOptions
- * @returns RequestOptions
+ * apiDelayIntercept delays the request of an api call by the configured withDelay value in ReqOptions
+ * @param config ReqOptions
+ * @returns ReqOptions
  */
-const apiDelayReqIntercept = (config: RequestOptions & AxiosRequestConfig) => {
+const apiDelayReqIntercept = (config: ReqOptions & AxiosRequestConfig) => {
   const delay = config.withDelay || 0
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(config)
     }, Math.max(delay, 0))
   })
-}
-
-/**
- * apiDataIntercept promotes any secondary data keys from an Axios response to the first level data key.
- * example: an AxiosResponse has it's own data key and the server response also nests it's primary response
- * payload under another data key, that payload data is promoted to being directly under the AxiosResponse data key.
- * @param response APIResponse
- * @returns APIResponse
- */
-const apiDataRespIntercept = (response: APIResponse) => {
-  if (response.config.dataIntercept && response.data?.data) {
-    response.data = response.data.data
-  }
-
-  return response
 }
 
 const apiAxiosInstance = axios.create({
@@ -68,58 +32,108 @@ const apiAxiosInstance = axios.create({
 // apply request intercepts
 apiAxiosInstance.interceptors.request.use(apiDelayReqIntercept)
 
-// apply response intercepts
-apiAxiosInstance.interceptors.response.use(apiDataRespIntercept)
+export const httpRequest = <T = any>(
+  config: AxiosRequestConfig,
+  opts: ReqOptions
+): HttpPromise<T> => {
+  const options: ReqOptions = {
+    skipLoader: false,
+    withDelay: 0,
+    ...opts,
+  }
 
-const BaseAPI = {
-  makeRequest<T = any>(
-    config: AxiosRequestConfig,
-    opts: RequestOptions
-  ): Promise<T> {
-    const wait = window.setTimeout(() => {
-      if (!opts.skipLoader) {
-        useAppSpinner.show()
+  const wait = window.setTimeout(() => {
+    if (options.skipLoader !== true) {
+      useAppSpinner.show()
+    }
+  }, 200)
+
+  return apiAxiosInstance({ ...config, ...opts })
+    .then((success: AxiosResponse<T>) => {
+      return success.data
+    })
+    .catch((err: unknown) => {
+      if (axios.isAxiosError(err)) {
+        throw new HttpError(
+          err.message,
+          err.response?.status,
+          err.response?.data,
+          axios.isCancel(err) ? HTTP_ERR_CANCEL : HTTP_ERR
+        )
       }
-    }, 200)
 
-    return apiAxiosInstance({ ...config, ...opts })
-      .then((success) => success.data)
-      .finally(() => {
-        if (!opts.skipLoader) useAppSpinner.hide()
-        window.clearTimeout(wait)
-      })
+      if (err instanceof Error) {
+        throw new HttpError(err.message, 0)
+      }
+
+      throw new HttpError("An unknown error has occurred.", 0)
+    })
+    .finally(() => {
+      if (options.skipLoader !== true) {
+        useAppSpinner.hide()
+      }
+
+      window.clearTimeout(wait)
+    })
+}
+
+const BaseAPI: HttpClient = {
+  delete<T = any>(path: string, opts?: ReqOptions) {
+    return httpRequest<T>({ url: path, method: "DELETE" }, opts || {})
   },
   get<T = any>(
     path: string,
-    opts: RequestOptions,
+    opts?: ReqOptions,
     params?: Record<string, unknown>
   ) {
-    return this.makeRequest<T>({ url: path, method: "GET", params }, opts)
+    return httpRequest<T>({ url: path, method: "GET", params }, opts || {})
   },
-  delete<T = any>(path: string, opts: RequestOptions) {
-    return this.makeRequest<T>({ url: path, method: "DELETE" }, opts)
+  patch<T = any>(
+    path: string,
+    data: Record<string, unknown> | FormData,
+    opts?: ReqOptions
+  ) {
+    return httpRequest<T>({ url: path, data, method: "PATCH" }, opts || {})
   },
   post<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts: RequestOptions
+    opts?: ReqOptions
   ) {
-    return this.makeRequest<T>({ url: path, data, method: "POST" }, opts)
+    return httpRequest<T>({ url: path, data, method: "POST" }, opts || {})
   },
   put<T = any>(
     path: string,
     data: Record<string, unknown> | FormData,
-    opts: RequestOptions
+    opts?: ReqOptions
   ) {
-    return this.makeRequest<T>(
+    return httpRequest<T>(
       {
         url: path,
         data,
         method: "PUT",
       },
-      opts
+      opts || {}
     )
   },
 }
 
 export default BaseAPI
+
+/**
+ * A type guard for checking if a variable is in the shape of a HttpError
+ * @param err unknown
+ * @returns err is HttpError
+ */
+export const isHttpError = <T>(err: unknown): err is HttpError<T> => {
+  return err instanceof HttpError
+}
+
+/**
+ * A convenience method for checking if a variable is a cancelled http request error.
+ * @param err unknown
+ * @returns boolean
+ */
+export const isHttpCancel = (err: unknown): boolean => {
+  return isHttpError(err) && err.name === HTTP_ERR_CANCEL
+}

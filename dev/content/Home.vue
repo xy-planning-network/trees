@@ -47,15 +47,15 @@ const features = [
     description: "Elements are elemental. Check them out. CSS only.",
   },
   {
+    name: "Additional Tools",
+    icon: PencilAltIcon,
+    description: "Sometimes you need more than just UI elements.",
+  },
+  {
     name: "Team",
     icon: UserGroupIcon,
     description:
       "Our team once built something that helped the company, and we've been grateful ever since.",
-  },
-  {
-    name: "Composables",
-    icon: PencilAltIcon,
-    description: "Functions that manage reactivity behind the scenes.",
   },
 ]
 </script>

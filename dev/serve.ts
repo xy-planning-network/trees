@@ -13,12 +13,21 @@ import PropsTable from "./helpers/PropsTable.vue"
 import "./main.css"
 import mitt from "mitt"
 import { useAppFlashes } from "@/composables/useFlashes"
+import Highlight from "@point-hub/vue-highlight"
+import "highlight.js/styles/atom-one-dark.css"
+import html from "highlight.js/lib/languages/xml"
+import typescript from "highlight.js/lib/languages/typescript"
+
+// Register Language
+Highlight.registerLanguage("html", html)
+Highlight.registerLanguage("typescript", typescript)
 
 window.VueBus = mitt()
 useAppFlashes().configure({ email: "support@trees.com" })
 
 const app = createApp(Serve)
 app.use(Trees)
+app.use(Highlight.plugin)
 app.component("ClickToCopy", ClickToCopy)
 app.component("ComponentLayout", ComponentLayout)
 app.component("PropsTable", PropsTable)

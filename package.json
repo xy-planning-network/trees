@@ -28,9 +28,12 @@
     "lint": "eslint --ext .js,.ts,.vue src",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue src dev && prettier -w -u src dev",
     "preview": "vite preview --config vite.docs.config.ts",
-    "typecheck": "vue-tsc -p src --noEmit"
+    "typecheck": "npm run typecheck:src && npm run typecheck:docs",
+    "typecheck:src": "vue-tsc -p src --noEmit",
+    "typecheck:docs": "vue-tsc -p dev --noEmit"
   },
   "devDependencies": {
+    "@point-hub/vue-highlight": "^0.1.4",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.7",

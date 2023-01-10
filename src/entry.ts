@@ -1,6 +1,16 @@
 import { App, Plugin } from "vue"
-import BaseAPI from "@/api/base"
-import type { RequestOptions } from "@/api/base"
+import BaseAPI, { isHttpCancel, isHttpError } from "@/api/base"
+import type {
+  HttpPromise,
+  HttpError,
+  QueryParams,
+  ReqOptions,
+  ReqPayload,
+  TrailsPromise,
+  TrailsPromisePaged,
+  TrailsResp,
+  TrailsRespPaged,
+} from "@/api/client"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -24,5 +34,16 @@ export * from "@/composables/index"
 // each can be registered via Vue.component()
 export * from "@/lib-components/index"
 
-export { BaseAPI }
-export type { RequestOptions }
+// Http Client exports
+export { BaseAPI, isHttpCancel, isHttpError }
+export type {
+  HttpPromise,
+  HttpError,
+  QueryParams,
+  ReqOptions,
+  ReqPayload,
+  TrailsPromise,
+  TrailsPromisePaged,
+  TrailsResp,
+  TrailsRespPaged,
+}
