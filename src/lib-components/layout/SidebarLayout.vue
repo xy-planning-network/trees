@@ -89,8 +89,8 @@ const isActive = (url: string): boolean => {
             <div class="shrink-0 flex justify-center px-4">
               <img class="w-auto h-12" :src="iconURL" alt="Logo" />
             </div>
-            <div class="mt-5 flex-1 h-0 overflow-y-auto">
-              <nav class="px-2 space-y-1">
+            <div class="mt-5 flex flex-col flex-1 h-0 overflow-y-auto">
+              <nav class="flex-1 px-2 space-y-1">
                 <a
                   v-for="item in navigation"
                   :key="item.name"
@@ -116,6 +116,11 @@ const isActive = (url: string): boolean => {
                   {{ item.name }}
                 </a>
               </nav>
+              <div v-if="$slots['sidebar-bottom']" class="mt-auto">
+                <div class="mt-6 px-2">
+                  <slot name="sidebar-bottom" />
+                </div>
+              </div>
             </div>
           </div>
         </TransitionChild>
@@ -162,6 +167,12 @@ const isActive = (url: string): boolean => {
                 {{ item.name }}
               </a>
             </nav>
+
+            <div v-if="$slots['sidebar-bottom']" class="mt-atuo">
+              <div class="mt-6 px-2">
+                <slot name="sidebar-bottom" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
