@@ -28,6 +28,7 @@ import Navigation from "./content/Navigation.vue"
 import Overlays from "./content/Overlays.vue"
 import Team from "./content/Team.vue"
 import Tools from "./content/Tools.vue"
+import TreeIcon from "./assets/trees-square-icon.svg"
 
 const currentPage = ref("Home")
 const currentNav = ref("StackedLayout")
@@ -111,6 +112,23 @@ watch(currentPage, () => {
       >
         Swap Dat Nav
       </button>
+
+      <template v-if="currentNav === 'SidebarLayout'" #sidebar-bottom>
+        <div class="bg-gray-50 rounded-md p-4 space-y-3">
+          <div class="flex space-x-2 items-center">
+            <div class="h-14 w-14">
+              <img :src="TreeIcon" />
+            </div>
+            <h5 class="h5 leading-tight flex-1">
+              Thought Experiment Of The Day
+            </h5>
+          </div>
+          <p class="text-sm font-medium italic">
+            If a tree falls in a forest and no one is around to hear it, does it
+            make a sound?
+          </p>
+        </div>
+      </template>
     </component>
   </div>
 </template>
