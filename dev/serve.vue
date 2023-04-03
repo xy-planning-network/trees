@@ -13,6 +13,7 @@ import { computed, nextTick, onMounted, ref, watch } from "vue"
 import {
   CollectionIcon,
   ColorSwatchIcon,
+  CursorClickIcon,
   DocumentTextIcon,
   HomeIcon,
   LocationMarkerIcon,
@@ -24,6 +25,7 @@ import Elements from "./content/Elements.vue"
 import Forms from "./content/Forms.vue"
 import Home from "./content/Home.vue"
 import Lists from "./content/Lists.vue"
+import Marketing from "./content/Marketing.vue"
 import Navigation from "./content/Navigation.vue"
 import Overlays from "./content/Overlays.vue"
 import Team from "./content/Team.vue"
@@ -42,6 +44,7 @@ const navigation = [
   },
   { name: "Lists", url: "/trees/?page=Lists", icon: TableIcon },
   { name: "Overlays", url: "/trees/?page=Overlays", icon: CollectionIcon },
+  { name: "Marketing", url: "/trees/?page=Marketing", icon: CursorClickIcon },
   { name: "Elements", url: "/trees/?page=Elements", icon: ColorSwatchIcon },
   { name: "Tools", url: "/trees/?page=Additional Tools", icon: PencilAltIcon },
   { name: "Team", url: "/trees/?page=Team", icon: UserGroupIcon },
@@ -102,6 +105,7 @@ watch(currentPage, () => {
       <Elements v-if="showing('Elements')" />
       <Tools v-if="showing('Additional Tools')" />
       <Team v-if="showing('Team')" />
+      <Marketing v-if="showing('Marketing')" />
       <button
         type="button"
         class="xy-btn"

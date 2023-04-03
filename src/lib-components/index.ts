@@ -25,6 +25,9 @@ import { default as Tabs } from "./navigation/Tabs.vue"
 import { default as Toggle } from "./forms/Toggle.vue"
 import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 
+// Marketing components
+import { default as BannerCTA } from "./marketing/BannerCTA.vue"
+
 // Form components
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
@@ -41,6 +44,7 @@ import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
 
 export {
   ActionsDropdown,
+  BannerCTA,
   Cards,
   ContentModal,
   DateFilter,
@@ -82,6 +86,7 @@ export {
  */
 export interface TreesComponents {
   ActionsDropdown: typeof ActionsDropdown
+  BannerCTA: typeof BannerCTA
   Cards: typeof Cards
   ContentModal: typeof ContentModal
   DateFilter: typeof DateFilter

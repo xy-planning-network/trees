@@ -2,6 +2,7 @@
 import {
   CollectionIcon,
   ColorSwatchIcon,
+  CursorClickIcon,
   DocumentTextIcon,
   LocationMarkerIcon,
   PencilAltIcon,
@@ -40,6 +41,11 @@ const features = [
     name: "Overlays",
     icon: CollectionIcon,
     description: "Take it over. Emit to the bus. Get it right. Get it tight.",
+  },
+  {
+    name: "Marketing",
+    icon: CursorClickIcon,
+    description: "Get 'em to click, with something shiny and blue?",
   },
   {
     name: "Elements",

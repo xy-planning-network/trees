@@ -10,6 +10,7 @@ import Trees from "@/entry"
 import ClickToCopy from "./helpers/ClickToCopy.vue"
 import ComponentLayout from "./helpers/ComponentLayout.vue"
 import PropsTable from "./helpers/PropsTable.vue"
+import EventsTable from "./helpers/EventsTable.vue"
 import "./main.css"
 import mitt from "mitt"
 import { useAppFlashes } from "@/composables/useFlashes"
@@ -31,4 +32,5 @@ app.use(Highlight.plugin)
 app.component("ClickToCopy", ClickToCopy)
 app.component("ComponentLayout", ComponentLayout)
 app.component("PropsTable", PropsTable)
+app.component("EventsTable", EventsTable)
 app.mount("#app")

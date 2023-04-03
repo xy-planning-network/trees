@@ -9,6 +9,11 @@ const btnSecondary = ref<HTMLElement>()
 const btnGreen = ref<HTMLElement>()
 const btnRed = ref<HTMLElement>()
 const btnWhite = ref<HTMLElement>()
+const btnPrimaryText = ref<HTMLElement>()
+const btnSecondaryText = ref<HTMLElement>()
+const btnGreenText = ref<HTMLElement>()
+const btnRedText = ref<HTMLElement>()
+const btnWhiteText = ref<HTMLElement>()
 const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
 </script>
@@ -104,6 +109,71 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
             <button ref="btnWhite" type="button" class="xy-btn-white">
               White
             </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="btnPrimaryText?.outerHTML" />
+          </label>
+          <div class="mt-1">
+            <button ref="btnPrimaryText" type="button" class="xy-btn-text">
+              Primary Text
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="btnSecondaryText?.outerHTML" />
+          </label>
+          <div class="mt-1">
+            <button
+              ref="btnSecondaryText"
+              type="button"
+              class="xy-btn-text-secondary"
+            >
+              Secondary Text
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="btnGreenText?.outerHTML" />
+          </label>
+          <div class="mt-1">
+            <button ref="btnGreenText" type="button" class="xy-btn-text-green">
+              Green Text
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="btnRedText?.outerHTML" />
+          </label>
+          <div class="mt-1">
+            <button ref="btnRedText" type="button" class="xy-btn-text-red">
+              Red Text
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="btnWhiteText?.outerHTML" />
+          </label>
+          <div class="mt-1 flex">
+            <div class="bg-xy-blue px-6 py-4">
+              <button
+                ref="btnWhiteText"
+                type="button"
+                class="xy-btn-text-white"
+              >
+                White Text
+              </button>
+            </div>
           </div>
         </div>
       </ComponentLayout>

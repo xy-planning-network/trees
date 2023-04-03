@@ -28,6 +28,7 @@ const copy = function () {
     @click="copy"
   />
   <input
+    aria-hidden="true"
     ref="input"
     style="position: absolute; left: -999em"
     type="text"

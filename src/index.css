@@ -77,11 +77,31 @@
   }
 
   .xy-btn-red {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-xs md:text-sm font-semibold rounded-md shadow-md text-red-700 bg-red-100 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-red-700 bg-red-100 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .xy-btn-white {
     @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-semibold rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-text {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-bold rounded-md text-blue-600 hover:bg-gray-700 hover:bg-opacity-5 active:bg-gray-700 active:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-80 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-text-secondary {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-bold rounded-md text-gray-600 hover:bg-gray-700 hover:bg-opacity-5 active:bg-gray-700 active:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-90 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-text-green {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-bold rounded-md text-green-700 hover:bg-gray-700 hover:bg-opacity-5 active:bg-gray-700 active:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-80 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-text-red {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-bold rounded-md text-red-700 hover:bg-gray-700 hover:bg-opacity-5 active:bg-gray-700 active:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-red-300 disabled:opacity-80 disabled:cursor-not-allowed;
+  }
+
+  .xy-btn-text-white {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-bold rounded-md text-white hover:bg-gray-900 hover:bg-opacity-5 active:bg-gray-900 active:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 disabled:opacity-95 disabled:cursor-not-allowed;
   }
 
   /* Header classes */
