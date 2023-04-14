@@ -74,12 +74,6 @@ onMounted(() => {
   if (page) currentPage.value = page
   const search = new URLSearchParams(window.location.search).get("currentNav")
   if (search) currentNav.value = search
-
-  nextTick(() => window.Prism.highlightAll())
-})
-
-watch(currentPage, () => {
-  nextTick(() => window.Prism.highlightAll())
 })
 </script>
 
