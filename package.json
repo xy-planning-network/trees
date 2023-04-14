@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc -p src --emitDeclarationOnly && npm run copy:types && tsc-alias -p src/tsconfig.json",
+    "build": "npm run lint && vue-tsc -p src --emitDeclarationOnly && vite build && npm run copy:types && tsc-alias -p src/tsconfig.json",
     "build:docs": "vue-tsc -p dev --noEmit && vite build --config vite.docs.config.ts",
     "copy:types": "copyfiles -f ./src/*.d.ts ./types",
     "lint": "eslint --ext .js,.ts,.vue src",
