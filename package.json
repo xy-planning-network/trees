@@ -7,8 +7,6 @@
   "files": [
     "config/*",
     "dist/*",
-    "eslint-config-base/*",
-    "prettier-config/*",
     "src/**/*.css",
     "src/**/*.vue",
     "types/*"
