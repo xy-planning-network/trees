@@ -72,7 +72,7 @@ const updateModelValue = (value: boolean) => {
             <div>
               <slot name="icon"></slot>
               <div class="mt-3 text-center sm:mt-5">
-                <DialogTitle as="h3" v-text="title"></DialogTitle>
+                <DialogTitle as="h3">{{ title }}</DialogTitle>
                 <div class="mt-2">
                   <slot></slot>
                 </div>

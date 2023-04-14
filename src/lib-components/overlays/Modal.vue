@@ -96,8 +96,8 @@ const updateModelValue = (value: boolean) => {
                 <DialogTitle
                   as="h3"
                   class="text-center text-lg leading-6 font-medium text-gray-900"
-                  v-text="title"
-                ></DialogTitle>
+                  >{{ title }}</DialogTitle
+                >
                 <div class="mt-2">
                   <slot></slot>
                 </div>
