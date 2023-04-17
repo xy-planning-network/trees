@@ -32,7 +32,7 @@ const isActive = (url: string): boolean => {
 </script>
 <template>
   <div class="min-h-screen bg-gray-100">
-    <Disclosure as="nav" class="bg-white shadow-sm" v-slot="{ open }">
+    <Disclosure v-slot="{ open }" as="nav" class="bg-white shadow-sm">
       <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
@@ -131,8 +131,8 @@ const isActive = (url: string): boolean => {
             </div>
             <div class="ml-3">
               <div
-                class="text-base font-medium text-gray-800"
                 v-if="currentUser.name"
+                class="text-base font-medium text-gray-800"
                 v-text="currentUser.name"
               ></div>
               <div

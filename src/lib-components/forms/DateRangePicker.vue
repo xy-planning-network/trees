@@ -56,9 +56,9 @@ onMounted(() => {
 </script>
 <template>
   <BaseInput
+    :id="uuid"
     type="text"
     placeholder="mm-dd-yyyy range"
-    :id="uuid"
     :label="label"
     :help="help"
   ></BaseInput>

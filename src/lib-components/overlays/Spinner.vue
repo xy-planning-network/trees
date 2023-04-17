@@ -25,11 +25,11 @@ const fadeOut = (): void => {
 <template>
   <Portal>
     <div
-      class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-50"
       v-if="loading"
+      class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-50"
     >
       <XYSpinner class="w-32 h-32" />
-      <div class="mt-2" v-show="messages">
+      <div v-show="messages" class="mt-2">
         <transition
           appear
           enter-active-class="ease-out duration-1000"
@@ -42,8 +42,8 @@ const fadeOut = (): void => {
           @after-leave="fadeIn"
         >
           <div
-            class="container font-medium text-lg leading-snug text-center transition-opacity"
             v-show="showMsg"
+            class="container font-medium text-lg leading-snug text-center transition-opacity"
           >
             {{ msg }}
           </div>

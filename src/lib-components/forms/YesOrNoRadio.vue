@@ -40,7 +40,7 @@ const onChange = (e: Event) => {
         :label="legend"
         tag="legend"
       ></InputLabel>
-      <InputHelp tag="p" :text="help" :id="`${uuid}-help`" />
+      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
     </div>
     <div>
       <label
@@ -49,9 +49,9 @@ const onChange = (e: Event) => {
         :for="`${hasNameAttr ? name : uuid}-true`"
       >
         <input
+          :id="`${hasNameAttr ? name : uuid}-true`"
           type="radio"
           class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :id="`${hasNameAttr ? name : uuid}-true`"
           :name="hasNameAttr ? name : uuid"
           :value="true"
           :checked="modelValue === true"
@@ -75,9 +75,9 @@ const onChange = (e: Event) => {
         :for="`${hasNameAttr ? name : uuid}-false`"
       >
         <input
+          :id="`${hasNameAttr ? name : uuid}-false`"
           type="radio"
           class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :id="`${hasNameAttr ? name : uuid}-false`"
           :name="hasNameAttr ? name : uuid"
           :value="false"
           :checked="modelValue === false"

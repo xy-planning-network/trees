@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// TODO: track down instances and see if this is really needed
+/* eslint-disable vue/no-v-html */
+
 import {
   FlashType,
   useAppFlashes,
@@ -58,12 +61,12 @@ onMounted(() => {
                   <p
                     class="w-0 flex-1 text-sm leading-5 font-medium text-gray-900"
                     v-html="flash.message"
-                  ></p>
+                  />
                 </div>
                 <div class="ml-4 shrink-0 flex">
                   <button
-                    @click="flasher.remove(id)"
                     class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
+                    @click="flasher.remove(id)"
                   >
                     <svg
                       class="h-5 w-5"

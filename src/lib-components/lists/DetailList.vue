@@ -88,7 +88,7 @@ loadAndRender(true)
       @date-range-changed="dateRange = $event"
     />
 
-    <div class="shadow overflow-hidden sm:rounded-md border" v-if="hasContent">
+    <div v-if="hasContent" class="shadow overflow-hidden sm:rounded-md border">
       <ul>
         <li
           v-for="(item, idx) in items"
@@ -100,12 +100,12 @@ loadAndRender(true)
       </ul>
     </div>
 
-    <slot name="empty" v-else></slot>
+    <slot v-else name="empty"></slot>
 
     <Paginator
-      v-model="pagination"
-      @update:modelValue="loadAndRender(false)"
       v-if="hasContent"
+      v-model="pagination"
+      @update:model-value="loadAndRender(false)"
     />
   </div>
 </template>
