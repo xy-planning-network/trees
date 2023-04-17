@@ -16,18 +16,18 @@ import User from "@/composables/user"
 
 const props = withDefaults(
   defineProps<{
-    activeURL?: string
+    activeUrl?: string
     currentUser: User
-    iconURL: string
+    iconUrl: string
     navigation: NavTypes.Item[]
     userNavigation: NavTypes.Item[]
   }>(),
   {
-    activeURL: "",
+    activeUrl: "",
   }
 )
 const isActive = (url: string): boolean => {
-  return props.activeURL === url
+  return props.activeUrl === url
 }
 </script>
 <template>
@@ -37,7 +37,7 @@ const isActive = (url: string): boolean => {
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="shrink-0 flex items-center">
-              <img class="block h-8 w-auto" :src="iconURL" alt="XY Trees" />
+              <img class="block h-8 w-auto" :src="iconUrl" alt="XY Trees" />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
               <a
