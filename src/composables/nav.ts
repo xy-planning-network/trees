@@ -1,3 +1,5 @@
+import { ComputedRef } from "vue"
+import { Ref } from "vue"
 import { Component, RenderFunction } from "vue"
 
 export interface Item {
@@ -12,4 +14,24 @@ export interface Pagination {
   perPage: number
   totalItems: number
   totalPages: number
+}
+
+export interface ActionMenuItemCallback {
+  label: string
+  callback: (...args: any[]) => void
+  show?:
+    | ((...args: any[]) => boolean)
+    | Ref<boolean>
+    | ComputedRef<boolean>
+    | boolean
+}
+
+export interface ActionMenuEmit {
+  id: string
+  label: string
+  show?:
+    | ((...args: any[]) => boolean)
+    | Ref<boolean>
+    | ComputedRef<boolean>
+    | boolean
 }
