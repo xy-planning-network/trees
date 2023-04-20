@@ -16,7 +16,7 @@ export interface Pagination {
   totalPages: number
 }
 
-export interface ActionMenuItemCallback {
+export interface ActionMenuItem {
   label: string
   callback: (...args: any[]) => void
   show?:

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import type { ActionMenuEmit } from "@/composables/nav"
-import type { ActionMenuItemCallback } from "@/composables/nav"
-import ActionsDropdownEmit from "@/lib-components/navigation/ActionsDropdownEmit.vue"
-import ActionsDropdownCallback from "@/lib-components/navigation/ActionsDropdownCallback.vue"
+import type { ActionMenuItem } from "@/composables/nav"
 import things from "../../db.json"
 
 const showAlert = ref(true)
@@ -57,7 +55,7 @@ const actionEmitClick = (id: string) => {
   }
 }
 
-const actionCallback: ActionMenuItemCallback[] = [
+const actionCallback: ActionMenuItem[] = [
   {
     callback: () => alert(treesList[0]),
     label: "Alert",
@@ -81,12 +79,14 @@ const actionCallback: ActionMenuItemCallback[] = [
 <template>
   <div class="container mx-auto space-y-6">
     <div>
+      <!--
       <h3>ActionsDropdownEmit</h3>
-      <ActionsDropdownEmit :items="actionEmits" @click="actionEmitClick" />
+      <ActionsDropdown :items="actionEmits" @click="actionEmitClick" />
+      -->
     </div>
     <div>
       <h3>ActionsDropdownCallback</h3>
-      <ActionsDropdownCallback :items="actionCallback" />
+      <ActionsDropdown :items="actionCallback" />
     </div>
   </div>
 </template>

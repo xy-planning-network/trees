@@ -1,5 +1,12 @@
-import { Component, ComponentPublicInstance, RenderFunction } from "vue"
+import {
+  Component,
+  ComponentPublicInstance,
+  ComputedRef,
+  Ref,
+  ShallowRef,
+} from "vue"
 import User from "@/composables/user"
+import { ActionMenuItem } from "@/composables/nav"
 
 export interface Column {
   display: string
@@ -29,19 +36,17 @@ export interface MenuItem {
   show?(propsData: any, currentUser: User): boolean
 }
 
-export interface Static {
-  currentUser: User
-  columns: Array<Column>
-  items: Record<string, unknown>[]
+export interface TableActionItem<T = TableData> extends ActionMenuItem {
+  callback: (data: T) => void
+  show?: ((data: T) => boolean) | Ref<boolean> | ComputedRef<boolean> | boolean
 }
 
-export type TableRow = Record<string, unknown>
-
-export interface TableColumn<T = TableRow> {
+export interface TableColumn<T = TableData> {
+  actions?: TableActions<T>
   /**
    * The alignment the table cell should have
    */
-  alignment?: "left" | "center" | "right"
+  alignment?: TableCellAlignment
   /**
    * The text to display as the column header
    */
@@ -49,16 +54,14 @@ export interface TableColumn<T = TableRow> {
   /**
    * The property value from your table data to use as the cell data
    */
-  display: keyof T | ((row: T) => string | number) | RenderFunction
+  display:
+    | keyof T
+    | ((data: T) => string | number | boolean | null | undefined)
+    | ShallowRef<Component>
 }
 
-export interface SimpleTable<T = TableRow> {
-  /**
-   * The columns your table should display
-   */
-  columns: TableColumn<T>[]
-  /**
-   * The data that should be used to display the table row
-   */
-  data: T[]
-}
+export type TableActions<T = TableData> = TableActionItem<T>[]
+export type TableCellAlignment = "left" | "center" | "right"
+export type TableData = Record<string, any>
+export type TableColumns<T extends TableData = any> = TableColumn<T>[]
+export type TableRowsData = TableData[]

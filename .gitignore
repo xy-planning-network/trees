@@ -5,6 +5,7 @@ node_modules
 /trees
 dist-ssr
 xy-planning-network-trees-*.tgz
+dev/content/Scratch.vue
 
 # local env files
 .env.local

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DownloadIcon } from "@heroicons/vue/solid"
 defineProps<{
-  row: Record<string, unknown>
+  propsData: Record<string, unknown>
 }>()
 </script>
 <template>

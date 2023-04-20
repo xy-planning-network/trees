@@ -6,7 +6,8 @@ import {
 } from "@heroicons/vue/solid"
 import User from "@/composables/user"
 import DownloadCell from "@/lib-components/lists/DownloadCell.vue"
-import { TableColumn } from "@/composables/table"
+import type { TableColumns, TableActions } from "@/composables/table"
+import { computed, ref, shallowRef } from "vue"
 
 const props = defineProps<{ user: User }>()
 
@@ -43,31 +44,53 @@ interface Data {
   change: string
 }
 
-interface Table<T> {
-  columns: TableColumn<T>[]
-  rows: T[]
-}
-const staticTableData: Table<Data> = {
-  columns: [
-    { header: "This", display: "this" },
-    {
-      header: "Does",
-      display: (row) => {
-        return row["does"]
-      },
+const staticData = ref<Data[]>([
+  { this: "Jimothy", does: "says", not: "what", change: "?" },
+  { this: "Timothy", does: "says", not: "how", change: "?" },
+  { this: "Frimothy", does: "says", not: "never", change: "!" },
+  { this: "Limothy", does: "says", not: "can we", change: "?" },
+  { this: "Yimpothy", does: "says", not: "do it", change: "!" },
+])
+
+const staticTableColumns: TableColumns<Data> = [
+  { header: "This", display: "this" },
+  {
+    header: "Does",
+    display: (row) => {
+      return row["does"]
     },
-    { header: "Not", display: "not", alignment: "left" },
-    { header: "Change", display: "change", alignment: "center" },
-    { header: "Download", display: DownloadCell, alignment: "right" },
-  ],
-  rows: [
-    { this: "Jimothy", does: "says", not: "what", change: "?" },
-    { this: "Timothy", does: "says", not: "how", change: "?" },
-    { this: "Frimothy", does: "says", not: "never", change: "!" },
-    { this: "Limothy", does: "says", not: "can we", change: "?" },
-    { this: "Yimpothy", does: "says", not: "do it", change: "!" },
-  ],
-}
+  },
+  { header: "Not", display: "not", alignment: "left" },
+  { header: "Change", display: "change", alignment: "center" },
+  {
+    header: "Download",
+    display: shallowRef(DownloadCell),
+    alignment: "right",
+  },
+]
+
+const showAction = ref(true)
+const staticTableActions: TableActions<Data> = [
+  {
+    callback: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
+    label: "Speak",
+    show: showAction,
+  },
+  {
+    callback: (d) => {
+      const index = staticData.value.findIndex((i) => {
+        return i.this === d.this
+      })
+
+      staticData.value.splice(index, 1)
+    },
+    label: "Remove",
+    show: computed(() => {
+      return staticData.value.length > 2
+    }),
+  },
+]
+
 const staticTableProps = [
   { name: "tableData", required: true, type: "TableTypes.Static" },
 ]
@@ -205,9 +228,13 @@ const tableProps = [
             <ClickToCopy :value="staticTableCopy" />
           </label>
           <div class="mt-1">
+            <button class="xy-btn" @click="showAction = !showAction">
+              Toggle Speack Action
+            </button>
             <StaticTable
-              :columns="staticTableData.columns"
-              :rows="staticTableData.rows"
+              :table-columns="staticTableColumns"
+              :table-data="staticData"
+              :table-actions="staticTableActions"
             />
             <PropsTable :props="staticTableProps" />
           </div>
