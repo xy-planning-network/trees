@@ -39,15 +39,15 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
     </div>
     <div class="ml-3">
       <InputLabel
+        :id="`${uuid}-label`"
         class="mt-auto"
         :disabled="
           $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
         "
-        :id="`${uuid}-label`"
         :for="uuid"
         :label="label"
       />
-      <InputHelp class="-mt-1" :id="`${uuid}-help`" :text="help"></InputHelp>
+      <InputHelp :id="`${uuid}-help`" class="-mt-1" :text="help"></InputHelp>
     </div>
   </div>
 </template>

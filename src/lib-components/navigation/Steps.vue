@@ -36,13 +36,13 @@ const previous = (): void => {
       <ul class="flex items-center space-x-5">
         <li v-for="index in total" :key="index">
           <span
-            class="block w-2.5 h-2.5 bg-xy-green rounded-full hover:bg-green-900 focus:bg-green-900"
             v-if="step > index"
+            class="block w-2.5 h-2.5 bg-xy-green rounded-full hover:bg-green-900 focus:bg-green-900"
           ></span>
 
           <div
-            class="relative flex items-center justify-center"
             v-else-if="step === index"
+            class="relative flex items-center justify-center"
           >
             <span class="absolute w-5 h-5 p-px flex">
               <span class="w-full h-full rounded-full bg-green-100"></span>
@@ -53,16 +53,16 @@ const previous = (): void => {
           </div>
 
           <span
+            v-else
             href="#"
             class="block w-2.5 h-2.5 bg-gray-200 rounded-full hover:bg-gray-400 focus:bg-gray-400"
-            v-else
           ></span>
         </li>
       </ul>
     </nav>
 
-    <div class="flex shrink-0" v-if="!hideActions">
-      <span class="inline-flex rounded-md shadow-sm" v-if="!hidePrevious">
+    <div v-if="!hideActions" class="flex shrink-0">
+      <span v-if="!hidePrevious" class="inline-flex rounded-md shadow-sm">
         <button
           type="button"
           class="xy-btn-white"

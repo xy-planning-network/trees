@@ -84,7 +84,7 @@ const tableProps = [
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <ComponentLayout title="Cards">
-        <template v-slot:description>
+        <template #description>
           This is for data that we want to show up on cards, hence the clever
           name.
         </template>
@@ -101,7 +101,7 @@ const tableProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Detail List">
-        <template v-slot:description>
+        <template #description>
           This relies primarily on slots to determine the content and actions
           that can be taken on an item. It primarily handles pagination,
           fetching new data, sorting, and filtering. The UI needs to be built
@@ -117,17 +117,17 @@ const tableProps = [
               title="Things"
               url="https://my-json-server.typicode.com/xy-planning-network/trees/things"
             >
-              <template v-slot:default="props">
+              <template #default="{ item }">
                 <div class="block cursor-pointer hover:bg-gray-50">
                   <div class="px-4 py-4 sm:px-6">
                     <div class="flex items-center justify-between">
                       <p class="text-sm font-medium text-indigo-600 truncate">
-                        {{ props.item.title }}
+                        {{ item.title }}
                       </p>
                       <div class="ml-2 shrink-0 flex">
                         <p
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                          v-text="props.item.title"
+                          v-text="item.title"
                         ></p>
                       </div>
                     </div>
@@ -138,7 +138,7 @@ const tableProps = [
                             class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                          {{ props.item.type }}
+                          {{ item.type }}
                         </p>
                         <p
                           class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"
@@ -160,10 +160,8 @@ const tableProps = [
                         <p>
                           Started on
                           {{ " " }}
-                          <time :datetime="props.item.created_at">{{
-                            new Date(
-                              props.item.created_at * 1000
-                            ).toLocaleString()
+                          <time :datetime="item.created_at">{{
+                            new Date(item.created_at * 1000).toLocaleString()
                           }}</time>
                         </p>
                       </div>
@@ -178,7 +176,7 @@ const tableProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Static Table">
-        <template v-slot:description>
+        <template #description>
           This is for tables where we already have the data and do not need to
           make an external call.
         </template>
@@ -195,7 +193,7 @@ const tableProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Table">
-        <template v-slot:description>
+        <template #description>
           This bakes a table into simple column definitions. This can be
           combined with the ActionsDropdown for lots of nifty functionality.
         </template>
@@ -212,7 +210,7 @@ const tableProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Table Cells">
-        <template v-slot:description>
+        <template #description>
           These can be passed to the column's component field for rendering UI
           in the table cell.
         </template>

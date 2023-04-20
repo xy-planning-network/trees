@@ -141,7 +141,7 @@ const features = [
                   >
                     <img
                       class="h-12 w-12 rounded-full"
-                      src="https://4e5jbr2e8ha51iaeaa2xu4qj-wpengine.netdna-ssl.com/wp-content/uploads/2020/11/Taylor-Deardorff.png"
+                      src="https://s3.amazonaws.com/shecodesio-production/students/avatars/000/020/285/medium/Z00CLp0K_400x400.jpg?1610918116"
                       alt=""
                     />
                   </div>
@@ -184,7 +184,7 @@ const features = [
                   >
                     <img
                       class="h-12 w-12 rounded-full"
-                      src="https://4e5jbr2e8ha51iaeaa2xu4qj-wpengine.netdna-ssl.com/wp-content/uploads/2020/11/Jillian-Berry.png"
+                      src="https://content.malakye.com/media/uploads/images/personalprofiles/thumbs/742194_637214344006622155.png"
                       alt=""
                     />
                   </div>

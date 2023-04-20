@@ -16,7 +16,7 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <ComponentLayout :css-component="true" title="Badges">
-        <template v-slot:description>
+        <template #description>
           Badges are used to display tags or categoies categories of
           information.
         </template>
@@ -50,7 +50,7 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" :css-component="true" title="Buttons">
-        <template v-slot:description>
+        <template #description>
           Buttons are the best. Clickable. What's not to love.
         </template>
 
@@ -109,7 +109,7 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" :css-component="true" title="Links">
-        <template v-slot:description>
+        <template #description>
           These things can really take you places. You'd be a fool to ignore.
         </template>
 
@@ -124,7 +124,7 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" :css-component="true" title="Typography">
-        <template v-slot:description>
+        <template #description>
           Text. Who needs it? We need it!
         </template>
 

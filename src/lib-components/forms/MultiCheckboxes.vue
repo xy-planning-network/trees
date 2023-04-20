@@ -60,7 +60,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
         <div v-if="legend">{{ legend }}</div>
         <slot v-if="$slots.legend" name="legend"></slot>
       </FieldsetLegend>
-      <InputHelp tag="p" :text="help" :id="`${uuid}-help`" />
+      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
     </div>
     <div class="flex">
       <div
@@ -100,19 +100,19 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
           </div>
           <div class="ml-3">
             <InputLabel
+              :id="`${uuid}-${index}-label`"
               class="mt-auto"
               :disabled="
                 ($attrs.hasOwnProperty('disabled') &&
                   $attrs.disabled !== false) ||
                 option.disabled === true
               "
-              :id="`${uuid}-${index}-label`"
               :for="`${uuid}-${index}`"
               :label="option.label"
             />
             <InputHelp
-              class="-mt-1"
               :id="`${uuid}-${index}-help`"
+              class="-mt-1"
               :text="option.help"
             />
           </div>

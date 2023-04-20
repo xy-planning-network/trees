@@ -55,7 +55,7 @@ const tabsProps = [
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <ComponentLayout title="Actions Dropdown">
-        <template v-slot:description>
+        <template #description>
           This is an accessible component that handles a dropdown menu to take
           further actions. It emits an event to the bus so that they can be
           handled by a parent or sibling component.
@@ -79,7 +79,7 @@ const tabsProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Paginator">
-        <template v-slot:description>
+        <template #description>
           This is used to create page numbers based on our server side paging
           implementation underneath a list of data.
         </template>
@@ -99,7 +99,7 @@ const tabsProps = [
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Tabs">
-        <template v-slot:description>
+        <template #description>
           These are used to display different groups of content. It turns into a
           select on mobile.
         </template>

@@ -42,12 +42,12 @@ const dateRangeChanged = (dateRange: DateRange) => {
       <Select
         v-model="sortDir"
         :options="sortOptions"
-        @update:modelValue="sortDirChanged"
+        @update:model-value="sortDirChanged"
       ></Select>
       <DateRangePicker
         v-model="dateRange"
-        @update:modelValue="dateRangeChanged"
         class="ml-3"
+        @update:model-value="dateRangeChanged"
       />
     </div>
   </div>

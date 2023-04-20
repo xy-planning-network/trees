@@ -69,7 +69,7 @@ const buttonTextWithAbort = computed(() => {
 <template>
   
       <ComponentLayout :show-badge="false" title="useBaseAPI">
-        <template v-slot:description>
+        <template #description>
           useBaseAPI is a set of composable methods that wrap up the BaseAPI functionality and returns a bunch of
           helpful reactive variables along with an execute and abort methods.
         </template>
@@ -184,24 +184,24 @@ const things = computed(() => {
           <div class="flex space-x-4">
             <button
               class="xy-btn"
-              @click="fetch()"
               :disabled="isLoading"
+              @click="fetch()"
             >
               {{ buttonText }}
             </button>
 
             <button
               class="xy-btn"
-              @click="fetch({ withDelay: 1500 })"
               :disabled="isLoading"
+              @click="fetch({ withDelay: 1500 })"
             >
               {{ buttonTextWithDelay }}
             </button>
 
             <button
               class="xy-btn"
-              @click="fetch({ withDelay: 1000 }, true)"
               :disabled="isLoading"
+              @click="fetch({ withDelay: 1000 }, true)"
             >
               {{ buttonTextWithAbort }}
             </button>

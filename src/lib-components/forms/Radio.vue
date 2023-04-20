@@ -44,7 +44,7 @@ const hasLegend = computed(() => {
         <div v-if="legend">{{ legend }}</div>
         <slot v-if="$slots.legend" name="legend"></slot>
       </FieldsetLegend>
-      <InputHelp tag="p" :text="help" :id="`${uuid}-help`" />
+      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
     </div>
     <div class="flex">
       <div
@@ -63,6 +63,7 @@ const hasLegend = computed(() => {
         >
           <div class="flex items-center h-5">
             <input
+              :id="`${uuid}-${index}`"
               :aria-describedby="
                 option?.help && option.help
                   ? `${uuid}-${index}-help`
@@ -72,7 +73,6 @@ const hasLegend = computed(() => {
               :checked="modelValue === option.value"
               class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
               :disabled="option.disabled === true ? true : undefined"
-              :id="`${uuid}-${index}`"
               :name="uuid"
               type="radio"
               :value="option.value"
@@ -86,19 +86,19 @@ const hasLegend = computed(() => {
           </div>
           <div class="ml-3">
             <InputLabel
+              :id="`${uuid}-${index}-label`"
               class="mt-auto"
               :disabled="
                 ($attrs.hasOwnProperty('disabled') &&
                   $attrs.disabled !== false) ||
                 option.disabled === true
               "
-              :id="`${uuid}-${index}-label`"
               :for="`${uuid}-${index}`"
               :label="option.label"
             />
             <InputHelp
-              class="-mt-1"
               :id="`${uuid}-${index}-help`"
+              class="-mt-1"
               :text="option.help"
             />
           </div>

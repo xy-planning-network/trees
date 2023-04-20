@@ -57,6 +57,25 @@ Additional peer dependecies will be installed by NPM. If you are using NPM < 7 y
 
 ## Setup
 
+### ESLint
+
+**Initialize ESLint rules in .eslintrc.js**
+
+```js
+/* eslint-env node */
+module.exports = {
+  extends: "./node_modules/@xy-planning-network/trees/config/eslint.js",
+}
+```
+
+### Prettier
+
+**Initialize Prettier rules in .prettierrc.json**
+
+```json
+"@xy-planning-network/trees/config/prettier.js"
+```
+
 ### Fonts
 
 **Include Inter Var in html template**

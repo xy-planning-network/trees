@@ -31,8 +31,8 @@ const updateModelValue = (value: boolean) => {
       as="div"
       static
       class="fixed z-30 inset-0 overflow-y-auto"
-      @close="updateModelValue(false)"
       :open="modelValue"
+      @close="updateModelValue(false)"
     >
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -72,7 +72,7 @@ const updateModelValue = (value: boolean) => {
             <div>
               <slot name="icon"></slot>
               <div class="mt-3 text-center sm:mt-5">
-                <DialogTitle as="h3" v-text="title"></DialogTitle>
+                <DialogTitle as="h3">{{ title }}</DialogTitle>
                 <div class="mt-2">
                   <slot></slot>
                 </div>
