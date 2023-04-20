@@ -26,7 +26,7 @@
     "build:docs": "vue-tsc -p dev --noEmit && vite build --config vite.docs.config.ts",
     "copy:types": "copyfiles -f ./src/*.d.ts ./types",
     "format": "prettier --write src dev",
-    "lint": "eslint --ext .js,.ts,.vue src",
+    "lint": "eslint --ext .js,.ts,.vue src dev",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue src dev",
     "preview": "vite preview --config vite.docs.config.ts",
     "typecheck": "npm run typecheck:src && npm run typecheck:docs",
