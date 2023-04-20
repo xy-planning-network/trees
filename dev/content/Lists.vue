@@ -5,6 +5,8 @@ import {
   UsersIcon,
 } from "@heroicons/vue/solid"
 import User from "@/composables/user"
+import DownloadCell from "@/lib-components/lists/DownloadCell.vue"
+import { TableColumn } from "@/composables/table"
 
 const props = defineProps<{ user: User }>()
 
@@ -33,15 +35,32 @@ const downloadMe = {
   goHere: "/download-something-but-im-broken-and-now-im-crying-web-is-hard",
 }
 const staticTableCopy = `<StaticTable :table-data="tableData" />`
-const staticTableData = {
-  currentUser: props.user,
+
+interface Data {
+  this: string
+  does: string
+  not: string
+  change: string
+}
+
+interface Table<T> {
+  columns: TableColumn<T>[]
+  rows: T[]
+}
+const staticTableData: Table<Data> = {
   columns: [
-    { display: "This", key: "this" },
-    { display: "Does", key: "does" },
-    { display: "Not", key: "not" },
-    { display: "Change", key: "change" },
+    { header: "This", display: "this" },
+    {
+      header: "Does",
+      display: (row) => {
+        return row["does"]
+      },
+    },
+    { header: "Not", display: "not", alignment: "left" },
+    { header: "Change", display: "change", alignment: "center" },
+    { header: "Download", display: DownloadCell, alignment: "right" },
   ],
-  items: [
+  rows: [
     { this: "Jimothy", does: "says", not: "what", change: "?" },
     { this: "Timothy", does: "says", not: "how", change: "?" },
     { this: "Frimothy", does: "says", not: "never", change: "!" },
@@ -186,7 +205,10 @@ const tableProps = [
             <ClickToCopy :value="staticTableCopy" />
           </label>
           <div class="mt-1">
-            <StaticTable :table-data="staticTableData" />
+            <StaticTable
+              :columns="staticTableData.columns"
+              :rows="staticTableData.rows"
+            />
             <PropsTable :props="staticTableProps" />
           </div>
         </div>

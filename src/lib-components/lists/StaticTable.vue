@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import { ComponentPublicInstance, getCurrentInstance } from "vue"
-import * as TableTypes from "@/composables/table"
+import { computed, defineComponent } from "vue"
+import type { TableColumn, TableRow } from "@/composables/table"
 
-defineProps<{
-  tableData: TableTypes.Static
+const props = defineProps<{
+  columns: TableColumn<TableRow>[]
+  rows: TableRow[]
 }>()
 
-const cellValue = (
-  item: Record<string, any>,
-  col: TableTypes.Column
-): string => {
-  if (col.key) {
-    return item[col.key]
-  }
+const tableColumns = computed(() => {
+  return props.columns.map((column) => {
+    return {
+      ...column,
+      alignment: column?.alignment ? column?.alignment : "left",
+    }
+  })
+})
 
-  if (col.presenter) {
-    // TODO: discuss this pattern.  Current usage can be replaced with modules.
-    // https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
-    const internalInstance = getCurrentInstance()
-    return col.presenter(
-      item,
-      internalInstance?.proxy as ComponentPublicInstance
-    )
-  }
-
-  return ""
-}
+const tableRows = computed(() => {
+  return props.rows.map((row) => {
+    return row
+  })
+})
 </script>
 <template>
   <div class="flex flex-col">
@@ -38,37 +33,50 @@ const cellValue = (
             <thead>
               <tr>
                 <th
-                  v-for="(col, idx) in tableData.columns"
+                  v-for="(col, idx) in tableColumns"
                   :key="idx"
-                  class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase bg-gray-50 leading-4"
-                  v-text="col.display"
-                ></th>
+                  class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+                  :class="{
+                    'text-left': col.alignment === 'left',
+                    'text-right': col.alignment === 'right',
+                    'text-center': col.alignment === 'center',
+                  }"
+                >
+                  {{ col.header }}
+                </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr
-                v-for="(item, rowIdx) in tableData.items"
-                :key="item.id ? (item.id as string) : rowIdx"
-              >
+              <tr v-for="(row, rowIdx) in tableRows" :key="rowIdx">
                 <td
-                  v-for="(col, colIdx) in tableData.columns"
+                  v-for="(col, colIdx) in tableColumns"
                   :key="rowIdx + '-' + colIdx"
                   class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
+                  :class="{
+                    'text-left': col.alignment === 'left',
+                    'text-right': col.alignment === 'right',
+                    'text-center': col.alignment === 'center',
+                  }"
                 >
-                  <component
-                    :is="col.component"
-                    v-if="col.component"
-                    :props-data="item"
-                    :current-user="tableData.currentUser"
-                    :attribute="col.key"
-                  ></component>
-                  <span v-else v-text="cellValue(item, col)"></span>
+                  <template v-if="typeof col.display === 'string'">{{
+                    row[col.display]
+                  }}</template>
+
+                  <template
+                    v-else-if="
+                      typeof col.display === 'function' &&
+                      col.display instanceof defineComponent
+                    "
+                    >{{ col.display(row) }}</template
+                  >
+
+                  <component :is="col.display" :row="row" />
                 </td>
               </tr>
 
-              <tr v-if="tableData.items.length == 0">
+              <tr v-if="rows.length === 0">
                 <td
-                  :colspan="tableData.columns.length"
+                  :colspan="columns.length"
                   class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                 >
                   No items were found!
