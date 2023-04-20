@@ -89,7 +89,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <ComponentLayout title="Content Modal">
-        <template v-slot:description>
+        <template #description>
           This bad boy is used to show the user some content. The default slot
           is for the primary content.
         </template>
@@ -107,7 +107,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
               Show Me
             </button>
             <ContentModal v-model="contentModalOpen" title="Good Job!">
-              <template v-slot:icon>
+              <template #icon>
                 <div
                   class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
                 >
@@ -125,7 +125,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Flash">
-        <template v-slot:description>
+        <template #description>
           We look for an array of flashes on <code>window.Flashes</code> and we
           can deploy flashes from anywhere with the useAppFlashes composable.
         </template>
@@ -215,7 +215,7 @@ useAppFlasher.info("Sticky!", true)
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Modal">
-        <template v-slot:description>
+        <template #description>
           This component wraps hiding and showing the model. The parent passes a
           boolean that controls hidding and showing it. The default slot is for
           the primary content, while an optional named slot (buttons) can be
@@ -247,7 +247,7 @@ useAppFlasher.info("Sticky!", true)
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Spinner">
-        <template v-slot:description>
+        <template #description>
           This is automatically handled in axios if the request takes longer
           than 200 milliseconds. It can also be shown/hidden using the VueBus.
           It blocks any user interaction while it's shown.
@@ -265,7 +265,7 @@ useAppFlasher.info("Sticky!", true)
         </div>
       </ComponentLayout>
       <ComponentLayout class="mt-8" title="Slideover">
-        <template v-slot:description>
+        <template #description>
           A sidebar like content container that "slides over" your main content
           on a trigger. It has a default slot for the primary content of the
           sidebar. Use the @close event to fire of any actions you might need to
@@ -308,7 +308,7 @@ useAppFlasher.info("Sticky!", true)
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Popover">
-        <template v-slot:description>
+        <template #description>
           This component wraps the headless ui Popover, PopoverButton, and
           PopoverPanel components. It provides a #button and default slot for
           customizing the trigger and content while offering a positioning prop.
@@ -389,7 +389,7 @@ useAppFlasher.info("Sticky!", true)
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Tooltip">
-        <template v-slot:description>
+        <template #description>
           A simple tooltip component. Triggered by a single universally
           understood icon. Your tooltip content is supplied in the default slot.
         </template>
@@ -442,7 +442,7 @@ useAppFlasher.info("Sticky!", true)
         :show-badge="false"
         title="Stacking Context"
       >
-        <template v-slot:description>
+        <template #description>
           Overlay components naturally can introduce complications in stacking
           context and z-index for any application. We've made best attempts to
           set sane z-index values on each overlay component in an order that

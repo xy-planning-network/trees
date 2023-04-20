@@ -9,7 +9,7 @@ declare global {
 </script>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref } from "vue"
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -81,11 +81,11 @@ onMounted(() => {
   <div id="app">
     <Home v-if="showing('Home')" @update="goTo" />
     <component
-      v-else
       :is="currentNav"
-      :activeURL="currentPageURL"
+      v-else
+      :active-url="currentPageURL"
       :current-user="user"
-      iconURL="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+      icon-url="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
       :navigation="navigation"
       :user-navigation="userNavigation"
     >

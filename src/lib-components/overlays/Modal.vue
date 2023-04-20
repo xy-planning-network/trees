@@ -43,8 +43,8 @@ const updateModelValue = (value: boolean) => {
       as="div"
       static
       class="fixed z-30 inset-0 overflow-y-auto"
-      @close="updateModelValue(false)"
       :open="modelValue"
+      @close="updateModelValue(false)"
     >
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -104,22 +104,22 @@ const updateModelValue = (value: boolean) => {
               </div>
             </div>
             <div
-              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
               v-if="submitText"
+              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
             >
               <button
                 type="button"
                 class="xy-btn w-full sm:ml-3 sm:w-auto sm:text-sm"
-                @click="submit()"
-                v-text="submitText"
                 :class="[destructive ? 'xy-btn-red' : 'xy-btn']"
                 :disabled="disabled"
+                @click="submit()"
+                v-text="submitText"
               ></button>
               <button
+                ref="cancelButtonRef"
                 type="button"
                 class="xy-btn-white mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 @click="updateModelValue(false)"
-                ref="cancelButtonRef"
               >
                 Cancel
               </button>

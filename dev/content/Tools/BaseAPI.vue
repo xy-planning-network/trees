@@ -5,7 +5,7 @@ import ProseBase from "../../helpers/ProseBase.vue"
 
 <template>
   <ComponentLayout :show-badge="false" title="BaseAPI">
-    <template v-slot:description>
+    <template #description>
       Need an HTTP client? Don't worry we've got you covered. BaseAPI offers an
       easy to understand API for making http requests.
     </template>

@@ -68,21 +68,21 @@ const notPillDesign = computed((): boolean => {
       <label for="tabs" class="sr-only">Select a tab</label>
       <Select
         name="tabs"
-        :modelValue="modelValue"
-        @update:modelValue="updateModelValue($event)"
+        :model-value="modelValue"
         :options="tabs"
+        @update:model-value="updateModelValue($event)"
       />
     </div>
     <div class="hidden sm:block">
       <div :class="{ 'border-b border-gray-200': notPillDesign }">
         <nav class="flex" :class="[pillDesign ? 'ml-8' : '-mb-px']">
           <a
-            href="#"
-            :class="classes(tab.value, idx > 0)"
             v-for="(tab, idx) in tabs"
             :key="idx"
-            v-text="tab.label"
+            href="#"
+            :class="classes(tab.value, idx > 0)"
             @click.prevent="updateModelValue(tab.value)"
+            v-text="tab.label"
           >
           </a>
         </nav>

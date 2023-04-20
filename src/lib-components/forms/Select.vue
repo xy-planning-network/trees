@@ -39,10 +39,10 @@ const classes = computed((): string => {
 <template>
   <InputLabel :id="`${uuid}-label`" :for="uuid" :label="label"></InputLabel>
   <select
+    :id="uuid"
     :aria-labelledby="label ? `${uuid}-label` : undefined"
     :aria-describedby="help ? `${uuid}-help` : undefined"
     :class="classes"
-    :id="uuid"
     :value="modelValue"
     v-bind="{
       ...$attrs,
@@ -56,9 +56,9 @@ const classes = computed((): string => {
     </option>
     <option
       v-for="option in options"
+      :key="option.value"
       :value="option.value"
       v-text="option.label"
-      :key="option.value"
     ></option>
   </select>
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>

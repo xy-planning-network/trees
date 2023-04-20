@@ -59,15 +59,15 @@ onMounted(() => {
       >
         <div class="py-1">
           <template v-for="(item, idx) in items" :key="idx">
-            <MenuItem as="div" v-slot="{ active }" v-if="show(item)">
+            <MenuItem v-if="show(item)" v-slot="{ active }" as="div">
               <button
                 type="submit"
                 :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                   'block w-full text-left px-4 py-2 text-sm font-semibold',
                 ]"
-                v-text="item.label"
                 @click="emitEvent(item.event)"
+                v-text="item.label"
               ></button>
             </MenuItem>
           </template>

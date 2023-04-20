@@ -34,8 +34,8 @@ const close = () => {
       as="div"
       static
       class="fixed inset-0 z-20 overflow-hidden bg-black bg-opacity-50"
-      @close="close()"
       :open="modelValue"
+      @close="close()"
     >
       <div class="absolute inset-0 overflow-hidden">
         <DialogOverlay class="absolute inset-0" />

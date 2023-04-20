@@ -19,7 +19,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits(["update:model-value"])
 
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 
@@ -50,12 +50,13 @@ const isTextType = computed((): boolean => {
 </script>
 <template>
   <InputLabel
-    class="block"
     :id="`${uuid}-label`"
+    class="block"
     :for="uuid"
     :label="label"
   ></InputLabel>
   <input
+    :id="uuid"
     :aria-labelledby="label ? `${uuid}-label` : undefined"
     :aria-describedby="help ? `${uuid}-help` : undefined"
     :class="[
@@ -74,12 +75,13 @@ const isTextType = computed((): boolean => {
           ]
         : []),
     ]"
-    :id="uuid"
     :placeholder="label"
     :type="type"
     :value="modelValue"
-    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     v-bind="$attrs"
+    @input="
+      emit('update:model-value', ($event.target as HTMLInputElement).value)
+    "
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>

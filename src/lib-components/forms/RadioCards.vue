@@ -61,7 +61,7 @@ const uuid = Uniques.CreateIdAttribute()
 // tracking v-model isn't required.
 const internalState = ref()
 const invalid = ref<boolean>()
-const checked = computed(() => {
+const checkedState = computed(() => {
   if (props.modelValue === undefined) {
     return internalState.value
   }
@@ -82,11 +82,11 @@ const nameAttr = computed(() => {
 
 <template>
   <RadioGroup
-    :modelValue="checked"
-    @update:model-value="onChange"
+    :model-value="checkedState"
     :disabled="typeof attrs.disabled === 'boolean' ? attrs.disabled : false"
     :aria-invalid="invalid === true ? 'true' : null"
     :aria-errormessage="invalid === true ? `error-${uuid}` : null"
+    @update:model-value="onChange"
   >
     <RadioGroupLabel v-if="legend" class="block">
       <FieldsetLegend tag="div">{{ legend }}</FieldsetLegend>
@@ -106,12 +106,12 @@ const nameAttr = computed(() => {
       }"
     >
       <RadioGroupOption
-        as="template"
         v-for="option in options"
-        :disabled="option?.disabled ? option.disabled : false"
         :key="option.value"
-        :value="option.value"
         v-slot="{ active, checked, disabled }"
+        as="template"
+        :disabled="option?.disabled ? option.disabled : false"
+        :value="option.value"
       >
         <div
           class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"

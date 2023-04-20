@@ -25,6 +25,10 @@ const props = withDefaults(
   }
 )
 
+defineEmits<{
+  (e: "handleClick", v: any): void
+}>()
+
 const currentSort = ref(
   props.tableData.defaultSort ? props.tableData.defaultSort : ""
 )
@@ -149,7 +153,7 @@ loadAndRender()
     <div
       class="flex flex-col mb-4 space-y-4 lg:space-y-0 lg:flex-row lg:justify-between"
     >
-      <div class="w-full max-w-lg lg:max-w-xs" v-if="tableData.search">
+      <div v-if="tableData.search" class="w-full max-w-lg lg:max-w-xs">
         <label for="search" class="sr-only">Search</label>
         <div class="relative">
           <div
@@ -168,18 +172,18 @@ loadAndRender()
             </svg>
           </div>
           <input
+            v-model.trim="query"
             class="pl-10"
             type="search"
-            v-model.trim="query"
             placeholder="Search"
             @change="reloadTable()"
           />
         </div>
       </div>
-      <div class="w-full max-w-lg lg:max-w-xs" v-if="tableData.dateSearch">
+      <div v-if="tableData.dateSearch" class="w-full max-w-lg lg:max-w-xs">
         <DateRangePicker
           v-model="dateRange"
-          @update:modelValue="dateRangeChanged"
+          @update:model-value="dateRangeChanged"
         />
       </div>
     </div>
@@ -191,23 +195,23 @@ loadAndRender()
         <thead>
           <tr>
             <th
-              class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase border-b border-gray-200 bg-gray-50 leading-4"
               v-for="(col, idx) in tableData.columns"
               :key="idx"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase border-b border-gray-200 bg-gray-50 leading-4"
             >
               <span v-if="!!col.display.length">{{ col.display }}</span>
               <span
+                v-if="col.sort"
                 class="cursor-pointer"
                 @click.prevent="handleSort(col.sort as string)"
-                v-if="col.sort"
               >
                 <svg
+                  v-if="currentSort !== col.sort"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   class="h-5 inline"
-                  v-if="currentSort !== col.sort"
                 >
                   <path
                     stroke-linecap="round"
@@ -217,11 +221,11 @@ loadAndRender()
                   />
                 </svg>
                 <svg
+                  v-else-if="currentSortDirection == 'desc'"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   class="h-5 inline"
-                  v-else-if="currentSortDirection == 'desc'"
                 >
                   <path
                     fill-rule="evenodd"
@@ -230,11 +234,11 @@ loadAndRender()
                   />
                 </svg>
                 <svg
+                  v-else
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   class="h-5 inline"
-                  v-else
                 >
                   <path
                     fill-rule="evenodd"
@@ -251,13 +255,13 @@ loadAndRender()
           <tr
             v-for="(item, rowIdx) in items"
             :key="item.id ? item.id : rowIdx"
-            @click="$emit('handleClick', item)"
             :class="{ 'cursor-pointer': clickable }"
+            @click="$emit('handleClick', item)"
           >
             <td
-              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
               v-for="(col, colIdx) in tableData.columns"
               :key="rowIdx + '-' + colIdx"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
               :class="col.class"
             >
               <component
@@ -285,9 +289,9 @@ loadAndRender()
     </div>
 
     <Paginator
-      v-model="pagination"
-      @update:modelValue="loadAndRender()"
       v-if="hasContent"
+      v-model="pagination"
+      @update:model-value="loadAndRender()"
     />
   </div>
 </template>

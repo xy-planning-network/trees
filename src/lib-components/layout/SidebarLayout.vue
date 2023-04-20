@@ -41,8 +41,8 @@ const isActive = (url: string): boolean => {
         as="div"
         static
         class="fixed inset-0 flex z-10 md:hidden"
-        @close="sidebarOpen = false"
         :open="sidebarOpen"
+        @close="sidebarOpen = false"
       >
         <TransitionChild
           as="template"

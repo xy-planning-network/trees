@@ -16,18 +16,19 @@ withDefaults(
   }
 )
 const attrs = useAttrs()
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits(["update:model-value"])
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 </script>
 
 <template>
   <InputLabel
-    class="block"
     :id="`${uuid}-label`"
+    class="block"
     :for="uuid"
     :label="label"
   ></InputLabel>
   <textarea
+    :id="uuid"
     :aria-labelledby="label ? `${uuid}-label` : undefined"
     :aria-describedby="help ? `${uuid}-help` : undefined"
     :class="[
@@ -43,10 +44,11 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
       'disabled:opacity-70',
       'disabled:cursor-not-allowed',
     ]"
-    :id="uuid"
     :value="modelValue"
-    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     v-bind="$attrs"
+    @input="
+      emit('update:model-value', ($event.target as HTMLInputElement).value)
+    "
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
 </template>
