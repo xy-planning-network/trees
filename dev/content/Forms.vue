@@ -5,7 +5,7 @@ const commonProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
-const checked = ref(true)
+const isChecked = ref(true)
 const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const checkboxProps = [
   { name: "emphasis", required: false, type: "boolean" },
@@ -154,7 +154,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <ComponentLayout title="Input HTML Attributes" :show-badge="false">
-        <template v-slot:description>
+        <template #description>
           <div class="mt-4">
             Generally, all of these inputs will support common html attributes
             such as <code>disabled</code> and <code>required</code> or input
@@ -172,7 +172,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Base Input">
-        <template v-slot:description>
+        <template #description>
           Covers many of the most common <code>&lt;input&gt;</code> fields with
           a <code>type="${type}"</code> attribute. Checkout the list of common
           <a
@@ -223,18 +223,18 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
         <div>
           <div class="border-t pt-4 mt-4">
             <Select
+              v-model="inputTypeSelected"
               :options="inputTypes"
               label="Try out some common input types"
               placeholder="Select an input type"
-              v-model="inputTypeSelected"
               class="mb-8"
             />
             <BaseInput
+              v-model="customInputTypeVal"
               :help="`Some help text for a ${inputTypeSelected}`"
               :type="inputTypeSelected"
               :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
               :placeholder="`A placeholder for a ${inputTypeSelected}`"
-              v-model="customInputTypeVal"
             ></BaseInput>
             <div class="mt-4"><b>Value:</b> {{ customInputTypeVal }}</div>
             <PropsTable :props="baseInputProps" />
@@ -243,7 +243,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Textarea">
-        <template v-slot:description>
+        <template #description>
           A common and consistent textarea input.
         </template>
 
@@ -260,10 +260,10 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <div class="mt-4">
               <TextArea
+                v-model="textarea"
                 :disabled="true"
                 label="How about it (disabled)?"
                 help="In your own words."
-                v-model="textarea"
               />
             </div>
             <div class="mt-4"><b>Value:</b> {{ textarea }}</div>
@@ -273,7 +273,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Checkbox">
-        <template v-slot:description>
+        <template #description>
           Checkboxes are a wrapped component given that they have a complex
           structure.
         </template>
@@ -284,31 +284,31 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <Checkbox
+              v-model="isChecked"
               label="I'm here to party!"
               help="Get notified when the party starts."
-              v-model="checked"
             />
 
             <Checkbox
+              v-model="isChecked"
               :disabled="true"
               label="I'm here to party! (disabled)"
               help="Get notified when the party starts."
-              v-model="checked"
             />
 
             <Checkbox
+              v-model="isChecked"
               label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
-              v-model="checked"
             />
 
-            <div class="mt-4"><b>Value:</b> {{ checked }}</div>
+            <div class="mt-4"><b>Value:</b> {{ isChecked }}</div>
             <PropsTable :props="checkboxProps" />
           </div>
         </div>
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Date Range Picker">
-        <template v-slot:description>
+        <template #description>
           We are using
           <a
             href="https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types"
@@ -333,7 +333,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Multi Checkboxes">
-        <template v-slot:description>
+        <template #description>
           This can be used to select an array of values.
         </template>
 
@@ -343,6 +343,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <MultiCheckboxes
+              v-model="multiCheckboxSelection"
               legend="Make Basic Selections"
               :options="
                 options.map((option) => ({
@@ -351,22 +352,21 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                   value: option.value,
                 }))
               "
-              v-model="multiCheckboxSelection"
             />
 
             <MultiCheckboxes
+              v-model="multiCheckboxSelection"
               legend="Make Complex Selections"
               help="Select all that apply."
               :options="options"
               disabled
-              v-model="multiCheckboxSelection"
             />
 
             <MultiCheckboxes
+              v-model="multiCheckboxSelection"
               :columns="2"
               help="Set the columns prop to 2, 3, or 4"
               :options="options"
-              v-model="multiCheckboxSelection"
             >
               <template #legend>In A Grid Too</template>
             </MultiCheckboxes>
@@ -378,7 +378,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Radio">
-        <template v-slot:description>
+        <template #description>
           Similar to checkboxes, these are wrapped in a vue component given
           their nested structure so that we are consistent across all projects.
         </template>
@@ -389,6 +389,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <Radio
+              v-model="radioSelection"
               legend="Make Basic Choice"
               :options="
                 options.map((option) => ({
@@ -397,21 +398,20 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                   value: option.value,
                 }))
               "
-              v-model="radioSelection"
             />
 
             <Radio
+              v-model="radioSelection"
               legend="Make Complex Choice"
               help="Only one - I know it's hard!"
               :options="options"
               disabled
-              v-model="radioSelection"
             />
 
             <Radio
+              v-model="radioSelection"
               help="Set the columns prop to 2, 3, or 4"
               :options="options"
-              v-model="radioSelection"
               :columns="2"
               required
             >
@@ -444,6 +444,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <div class="">
               <RadioCards
+                v-model="radioSelection"
                 :disabled="true"
                 legend="Need a complex sublabel on your cards?"
                 help="The sublabel display is supported by both options.sublabel and a named slot #sublabel."
@@ -455,7 +456,6 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                     value: option.value,
                   }))
                 "
-                v-model="radioSelection"
                 :columns="2"
               >
                 <template #sublabel="{ option, checked }">
@@ -490,7 +490,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Select">
-        <template v-slot:description>
+        <template #description>
           Similar to checkboxes, these are wrapped in a vue component given
           their nested structure so that we are consistent across all projects.
           <br /><br />Note that the
@@ -513,8 +513,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1">
             <Select
-              :options="options"
               v-model="selected"
+              :options="options"
               placeholder="Lets make a selection"
             />
             <div class="mt-4"><b>Value:</b> {{ selected }}</div>
@@ -524,7 +524,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Yes or No Radio">
-        <template v-slot:description>
+        <template #description>
           This is a "yes" or "no" UI form input that maps to a boolean. You
           could even use it in a truth or dare app. Whoa.
         </template>
@@ -535,14 +535,14 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1">
             <YesOrNoRadio
+              v-model="yesOrNoRadioSelection"
               legend="Is this thing on?"
               help="Only one way to find out."
-              v-model="yesOrNoRadioSelection"
             ></YesOrNoRadio>
             <div class="mt-2">
               <YesOrNoRadio
-                legend="Is this thing on? (disabled)"
                 v-model="yesOrNoRadioSelection"
+                legend="Is this thing on? (disabled)"
                 disabled
               ></YesOrNoRadio>
             </div>
@@ -553,7 +553,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Toggle">
-        <template v-slot:description>
+        <template #description>
           Just a another toggle for boolean switches. A great UI alternative to
           checkboxes and boolean value radio button pairs. Currently does not
           support a label property. Bring your own label.
@@ -572,7 +572,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Input Label">
-        <template v-slot:description>
+        <template #description>
           For whenever you just need a consistent label for a custom layout. Use
           the tag property for a custom html element like legend.
         </template>
@@ -589,7 +589,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Input Help">
-        <template v-slot:description>
+        <template #description>
           For whenever you just need a consistent help text component. Use the
           tag property for a custom html element like legend.
         </template>

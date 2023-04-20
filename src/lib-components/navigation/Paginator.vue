@@ -52,12 +52,12 @@ const pageShortcuts = computed((): number[] => {
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(modelValue.page - 1)"
         :class="
           modelValue.page == 1
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
+        @click.prevent="changePage(modelValue.page - 1)"
       >
         <svg class="mr-3 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -72,17 +72,17 @@ const pageShortcuts = computed((): number[] => {
 
     <div class="hidden md:flex">
       <a
-        href="#"
-        class="-mt-px border-t-2 pt-4 px-4 inline-flex items-center text-sm leading-5 font-medium"
         v-for="i in pageShortcuts"
         :key="i"
-        v-text="i"
+        href="#"
+        class="-mt-px border-t-2 pt-4 px-4 inline-flex items-center text-sm leading-5 font-medium"
         :class="
           modelValue.page === i
             ? 'border-blue-500 text-blue-600 focus:outline-none focus:text-blue-800 focus:border-blue-700'
             : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
         "
         @click.prevent="changePage(i)"
+        v-text="i"
       ></a>
     </div>
 
@@ -90,12 +90,12 @@ const pageShortcuts = computed((): number[] => {
       <a
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
-        @click.prevent="changePage(modelValue.page + 1)"
         :class="
           modelValue.page >= modelValue.totalPages
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
+        @click.prevent="changePage(modelValue.page + 1)"
       >
         Next
         <svg class="ml-3 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">

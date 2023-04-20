@@ -18,20 +18,20 @@ import { ref } from "vue"
 
 const props = withDefaults(
   defineProps<{
-    activeURL?: string
-    iconURL: string
+    activeUrl?: string
+    iconUrl: string
     navigation: NavTypes.Item[]
     userNavigation: NavTypes.Item[]
   }>(),
   {
-    activeURL: "",
+    activeUrl: "",
   }
 )
 
 const sidebarOpen = ref<boolean>(false)
 
 const isActive = (url: string): boolean => {
-  return props.activeURL === url
+  return props.activeUrl === url
 }
 </script>
 <template>
@@ -41,8 +41,8 @@ const isActive = (url: string): boolean => {
         as="div"
         static
         class="fixed inset-0 flex z-10 md:hidden"
-        @close="sidebarOpen = false"
         :open="sidebarOpen"
+        @close="sidebarOpen = false"
       >
         <TransitionChild
           as="template"
@@ -87,7 +87,7 @@ const isActive = (url: string): boolean => {
               </div>
             </TransitionChild>
             <div class="shrink-0 flex justify-center px-4">
-              <img class="w-auto h-12" :src="iconURL" alt="Logo" />
+              <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
             </div>
             <div class="mt-5 flex flex-col flex-1 h-0 overflow-y-auto">
               <nav class="flex-1 px-2 space-y-1">
@@ -138,7 +138,7 @@ const isActive = (url: string): boolean => {
           class="flex flex-col grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
         >
           <div class="flex items-center shrink-0 px-4">
-            <img class="w-auto h-12" :src="iconURL" alt="Logo" />
+            <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
           </div>
           <div class="mt-5 grow flex flex-col">
             <nav class="flex-1 px-2 bg-white space-y-1">

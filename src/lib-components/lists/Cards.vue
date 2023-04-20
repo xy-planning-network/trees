@@ -12,9 +12,9 @@ defineProps<{
     :class="'lg:grid-cols-' + cards.length"
   >
     <div
-      class="bg-white overflow-hidden shadow rounded-lg"
       v-for="(card, idx) in cards"
       :key="idx"
+      class="bg-white overflow-hidden shadow rounded-lg"
     >
       <div class="px-4 py-5 sm:p-6 text-center">
         <dl>

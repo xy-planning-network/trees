@@ -34,8 +34,8 @@ const close = () => {
       as="div"
       static
       class="fixed inset-0 z-20 overflow-hidden bg-black bg-opacity-50"
-      @close="close()"
       :open="modelValue"
+      @close="close()"
     >
       <div class="absolute inset-0 overflow-hidden">
         <DialogOverlay class="absolute inset-0" />
@@ -56,7 +56,8 @@ const close = () => {
               >
                 <div class="py-6 px-4 bg-blue-700 sm:px-6">
                   <div class="flex items-center justify-between">
-                    <DialogTitle as="h3" class="text-white" v-text="header">
+                    <DialogTitle as="h3" class="text-white">
+                      {{ header }}
                     </DialogTitle>
                     <div class="ml-3 h-7 flex items-center">
                       <button

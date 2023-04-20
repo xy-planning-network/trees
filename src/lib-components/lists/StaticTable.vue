@@ -38,9 +38,9 @@ const cellValue = (
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase bg-gray-50 leading-4"
                   v-for="(col, idx) in tableData.columns"
                   :key="idx"
+                  class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase bg-gray-50 leading-4"
                   v-text="col.display"
                 ></th>
               </tr>
@@ -51,9 +51,9 @@ const cellValue = (
                 :key="item.id ? (item.id as string) : rowIdx"
               >
                 <td
-                  class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                   v-for="(col, colIdx) in tableData.columns"
                   :key="rowIdx + '-' + colIdx"
+                  class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                 >
                   <component
                     :is="col.component"
