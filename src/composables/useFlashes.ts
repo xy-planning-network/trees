@@ -1,6 +1,12 @@
 import { Ref, ref } from "vue"
 import Uniques from "@/helpers/Uniques"
 
+declare global {
+  interface Window {
+    Flashes: FlashMessage[]
+  }
+}
+
 /**
  * FlashMessage represents the shape of an on screen notification
  * to a user.
