@@ -1,4 +1,4 @@
-import { ComputedRef, Ref, VNodeChild } from "vue"
+import { ComputedRef, Ref, VNodeChild, h } from "vue"
 import { ActionMenuItem } from "@/composables/nav"
 
 export interface DynamicTableOptions {

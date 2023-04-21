@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTable } from "@/composables/useTable"
 import { TableActions, TableColumns, TableRowsData } from "@/composables/table"
+import { ActionsDropdown } from "@/lib-components"
 
 const props = withDefaults(
   defineProps<{
