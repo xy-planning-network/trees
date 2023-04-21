@@ -1,34 +1,17 @@
-import { Component, computed, isVNode, ref, RenderFunction } from "vue"
+import { Ref, computed, isVNode, ref } from "vue"
 import { TableColumns, TableRowsData, TableActions } from "./table"
 
-const isEmpty = (v: unknown): boolean => {
+const isEmptyCellValue = (v: unknown): boolean => {
   return v === null || v === undefined
 }
 
-const isColumnComponent = (display: unknown): display is Component => {
-  if (typeof display === "string") {
-    return false
-  }
-
-  if (isVNode(display)) {
-    return true
-  }
-
-  // TODO: renderFunctions like heroicons imports will be true
-  if (typeof display === "function") {
-    return false
-  }
-
-  return true
-}
-
 export const useTable = (
-  data: TableRowsData,
+  rowData: TableRowsData | Ref<TableRowsData>,
   cols: TableColumns,
   acts: TableActions
 ) => {
   const tableColumn = ref(cols)
-  const tableData = ref(data)
+  const tableData = ref(rowData)
   const tableActions = ref(acts)
 
   const hasActions = computed(() => {
@@ -45,33 +28,28 @@ export const useTable = (
   })
 
   const rows = computed(() => {
-    return tableData.value.map((data) => {
+    return tableData.value.map((rowData, rowIdx) => {
       return {
         actions: tableActions.value.map((action) => {
           return {
             ...action,
-            callback: () => action.callback(data),
+            callback: () => action.callback(rowData, rowIdx),
             show:
               typeof action.show === "function"
-                ? action.show(data)
+                ? action.show(rowData, rowIdx)
                 : action.show,
           }
         }),
-        data: data,
+        rowData: rowData,
         cells: columns.value.map((col) => {
-          let stringVal = undefined
-          if (typeof col.display === "string") {
-            stringVal = data[col.display]
-          }
-
-          if (typeof col.display === "function") {
-            stringVal = (col.display as Function)(data)
-          }
+          const val = col.render
+            ? col.render(rowData, rowIdx)
+            : rowData[col.key]
 
           return {
             ...col,
-            isComponent: isColumnComponent(col.display) ? true : false,
-            stringVal: isEmpty(stringVal) ? "-" : String(stringVal),
+            isComponent: isVNode(val),
+            val: val,
           }
         }),
       }
@@ -81,6 +59,7 @@ export const useTable = (
   return {
     columns,
     hasActions,
+    isEmptyCellValue,
     rows,
   }
 }

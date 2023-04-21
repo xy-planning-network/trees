@@ -5,7 +5,7 @@ defineProps<{
 }>()
 </script>
 <template>
-  <a href="#" class="float-right">
+  <a href="#">
     <DownloadIcon
       class="h-6 w-6 group-hover:text-gray-500 transition text-right"
       text-anchor="end"

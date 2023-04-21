@@ -4,8 +4,8 @@ import { TableActions, TableColumns, TableRowsData } from "@/composables/table"
 
 const props = withDefaults(
   defineProps<{
-    tableActions?: TableActions
-    tableColumns: TableColumns
+    tableActions?: TableActions<any>
+    tableColumns: TableColumns<any>
     tableData: TableRowsData
   }>(),
   {
@@ -13,7 +13,7 @@ const props = withDefaults(
   }
 )
 
-const { columns, hasActions, rows } = useTable(
+const { columns, hasActions, isEmptyCellValue, rows } = useTable(
   props.tableData,
   props.tableColumns,
   props.tableActions
@@ -39,14 +39,16 @@ const { columns, hasActions, rows } = useTable(
                     'text-center': col.alignment === 'center',
                   }"
                 >
-                  {{ col.header }}
+                  {{ col.title }}
                 </th>
 
                 <!--Table Actions Header-->
                 <th
                   v-if="hasActions"
                   class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
-                />
+                >
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -62,10 +64,12 @@ const { columns, hasActions, rows } = useTable(
                     }"
                   >
                     <template v-if="cell.isComponent">
-                      <component :is="cell.display" :props-data="row.data" />
+                      <component :is="cell.val" />
                     </template>
 
-                    <template v-else>{{ cell.stringVal }}</template>
+                    <span v-else :class="cell.classNames">
+                      {{ isEmptyCellValue(cell.val) ? "-" : String(cell.val) }}
+                    </span>
                   </component>
                 </template>
 

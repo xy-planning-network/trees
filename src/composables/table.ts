@@ -1,26 +1,7 @@
-import {
-  Component,
-  ComponentPublicInstance,
-  ComputedRef,
-  Ref,
-  ShallowRef,
-} from "vue"
-import User from "@/composables/user"
+import { ComputedRef, Ref, VNodeChild } from "vue"
 import { ActionMenuItem } from "@/composables/nav"
 
-export interface Column {
-  display: string
-  class?: string
-  key?: string
-  presenter?(row: any, instance: ComponentPublicInstance): any
-  component?: Component
-  items?: Array<MenuItem>
-  sort?: string
-}
-
-export interface Dynamic {
-  currentUser: User
-  columns: Array<Column>
+export interface DynamicTableOptions {
   dateSearch?: boolean
   defaultSort?: string
   defaultSortDirection?: string
@@ -30,38 +11,64 @@ export interface Dynamic {
   url: string
 }
 
-export interface MenuItem {
-  label: string
-  event: string
-  show?(propsData: any, currentUser: User): boolean
+export interface DynamicTableAPI {
+  /**
+   * Force refresh the table data with the current api params state
+   * @returns void
+   */
+  refresh: () => void
+  /**
+   * Reset the table data back to page 1 and load
+   * @returns void
+   */
+  reset: () => void
 }
 
-export interface TableActionItem<T = TableData> extends ActionMenuItem {
-  callback: (data: T) => void
-  show?: ((data: T) => boolean) | Ref<boolean> | ComputedRef<boolean> | boolean
+export interface TableActionItem<T = TableRowData> extends ActionMenuItem {
+  callback: (rowData: T, rowIndex: number) => void
+  show?:
+    | ((rowData: T, rowIndex: number) => boolean)
+    | Ref<boolean>
+    | ComputedRef<boolean>
+    | boolean
 }
 
-export interface TableColumn<T = TableData> {
+export interface TableColumn<T = TableRowData> {
   actions?: TableActions<T>
   /**
    * The alignment the table cell should have
    */
   alignment?: TableCellAlignment
   /**
+   * Class names to wrap your column data in
+   * This field is ignored when a render method is defined
+   */
+  classNames?: string
+  /**
    * The text to display as the column header
    */
-  header: string
+  title: string
   /**
-   * The property value from your table data to use as the cell data
+   * The property key your column data maps to
    */
-  display:
-    | keyof T
-    | ((data: T) => string | number | boolean | null | undefined)
-    | ShallowRef<Component>
+  key: keyof T
+  /**
+   * A render method for formatting the output of your columns data
+   * This may include returning a custom component using the vue h method
+   */
+  render?: (
+    rowData: T,
+    rowIndex: number
+  ) => string | number | boolean | VNodeChild
+  /**
+   * A sorting identifier
+   * Only used on DynamicTable
+   */
+  sort?: string
 }
 
-export type TableActions<T = TableData> = TableActionItem<T>[]
+export type TableActions<T = TableRowData> = TableActionItem<T>[]
 export type TableCellAlignment = "left" | "center" | "right"
-export type TableData = Record<string, any>
-export type TableColumns<T extends TableData = any> = TableColumn<T>[]
-export type TableRowsData = TableData[]
+export type TableRowData = Record<string, any>
+export type TableColumns<T = TableRowData> = TableColumn<T>[]
+export type TableRowsData = TableRowData[]

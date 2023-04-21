@@ -4,12 +4,14 @@ import {
   LocationMarkerIcon,
   UsersIcon,
 } from "@heroicons/vue/solid"
-import User from "@/composables/user"
-import DownloadCell from "@/lib-components/lists/DownloadCell.vue"
-import type { TableColumns, TableActions } from "@/composables/table"
-import { computed, ref, shallowRef } from "vue"
-
-const props = defineProps<{ user: User }>()
+import type {
+  TableColumns,
+  TableActions,
+  DynamicTableOptions,
+  DynamicTableAPI,
+  TableRowData,
+} from "@/composables/table"
+import { computed, h, ref } from "vue"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -31,11 +33,8 @@ const detailListProps = [
   { name: "title", required: true, type: "string" },
   { name: "url", required: true, type: "string" },
 ]
-const downloadCellCopy = `import { DownloadCell } from "@xy-planning-network/trees";`
-const downloadMe = {
-  goHere: "/download-something-but-im-broken-and-now-im-crying-web-is-hard",
-}
-const staticTableCopy = `<StaticTable :table-data="tableData" />`
+
+const staticTableCopy = `<DataTable :table-data="tableData" />`
 
 interface Data {
   this: string
@@ -53,19 +52,31 @@ const staticData = ref<Data[]>([
 ])
 
 const staticTableColumns: TableColumns<Data> = [
-  { header: "This", display: "this" },
+  { title: "This", key: "this" },
   {
-    header: "Does",
-    display: (row) => {
-      return row["does"]
+    title: "Does",
+    key: "does",
+    render: (data) => {
+      return data["does"]
     },
   },
-  { header: "Not", display: "not", alignment: "left" },
-  { header: "Change", display: "change", alignment: "center" },
+  { title: "Not", key: "not", alignment: "left" },
   {
-    header: "Download",
-    display: shallowRef(DownloadCell),
-    alignment: "right",
+    title: "Change",
+    key: "change",
+    alignment: "center",
+    render: (rowData, index) => {
+      return h(
+        "button",
+        {
+          class: "xy-btn",
+          onClick: () => {
+            alert(`${index}:${rowData["this"]}`)
+          },
+        },
+        rowData["change"]
+      )
+    },
   },
 ]
 
@@ -94,27 +105,38 @@ const staticTableActions: TableActions<Data> = [
 const staticTableProps = [
   { name: "tableData", required: true, type: "TableTypes.Static" },
 ]
-const tableData = {
-  currentUser: props.user,
-  columns: [
-    {
-      display: "Title",
-      key: "title",
+const dynamicTableColumns: TableColumns = [
+  {
+    title: "Title",
+    key: "title",
+  },
+  {
+    title: "Type",
+    key: "type",
+  },
+  {
+    title: "Started On",
+    key: "started_on",
+    render: (row) => {
+      return new Date(row.created_at * 1000).toLocaleString()
     },
-    {
-      display: "Type",
-      key: "type",
-    },
-    {
-      display: "Started On",
-      presenter: (row: { created_at: number }): string => {
-        return new Date(row.created_at * 1000).toLocaleString()
-      },
-    },
-  ],
+  },
+]
+
+const dynamicTableOptions: DynamicTableOptions = {
   refreshTrigger: 0,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
 }
+
+const dynamicTableRowClickEvent = (
+  rowData: TableRowData,
+  tableApi: DynamicTableAPI
+) => {
+  alert(JSON.stringify(rowData))
+
+  tableApi.refresh()
+}
+
 const tableCopy = `<Table :table-data="tableData" />`
 const tableProps = [
   { name: "clickable", required: false, type: "boolean" },
@@ -231,7 +253,7 @@ const tableProps = [
             <button class="xy-btn" @click="showAction = !showAction">
               Toggle Speack Action
             </button>
-            <StaticTable
+            <DataTable
               :table-columns="staticTableColumns"
               :table-data="staticData"
               :table-actions="staticTableActions"
@@ -252,24 +274,13 @@ const tableProps = [
             <ClickToCopy :value="tableCopy" />
           </label>
           <div class="mt-1">
-            <Table :table-data="tableData" />
+            <DynamicTable
+              :clickable="true"
+              :table-columns="dynamicTableColumns"
+              :table-options="dynamicTableOptions"
+              @click:row="dynamicTableRowClickEvent"
+            />
             <PropsTable :props="tableProps" />
-          </div>
-        </div>
-      </ComponentLayout>
-
-      <ComponentLayout class="mt-8" title="Table Cells">
-        <template #description>
-          These can be passed to the column's component field for rendering UI
-          in the table cell.
-        </template>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="downloadCellCopy" />
-          </label>
-          <div class="mt-1">
-            <DownloadCell attribute="goHere" :props-data="downloadMe" />
           </div>
         </div>
       </ComponentLayout>
