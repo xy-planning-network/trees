@@ -24,7 +24,7 @@ export interface DynamicTableAPI {
   reset: () => void
 }
 
-export type TableActionItem<T = TableRowData> = ActionMenuItem & {
+export interface TableActionItem<T = TableRowData> extends ActionMenuItem {
   event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
   enable?:
     | ((rowData: T, rowIndex: number) => boolean)

@@ -7,8 +7,6 @@ defineProps<{
 </script>
 <template>
   <a :href="(propsData[attribute] as string)">
-    <DownloadIcon
-      class="h-6 w-6 group-hover:text-gray-500 transition text-right"
-    />
+    <DownloadIcon class="h-6 w-6 group-hover:text-gray-500 transition" />
   </a>
 </template>
