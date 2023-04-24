@@ -4,7 +4,7 @@ import { ActionsDropdown } from "@/lib-components"
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
-import {
+import type {
   DynamicTableAPI,
   DynamicTableOptions,
   TableActions,
@@ -13,12 +13,14 @@ import {
 import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
 import { useTable } from "@/composables/useTable"
+import TableActionButtons from "./TableActionButtons.vue"
 
 const props = withDefaults(
   defineProps<{
     clickable?: boolean
     loader?: boolean
     tableActions?: TableActions<any>
+    tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableOptions: DynamicTableOptions
   }>(),
@@ -26,6 +28,7 @@ const props = withDefaults(
     clickable: false,
     loader: true,
     tableActions: () => [],
+    tableActionsType: "dropdown",
   }
 )
 
@@ -33,6 +36,7 @@ defineEmits<{
   (
     e: "click:row",
     v: (typeof tableData.value)[number],
+    i: number,
     c: typeof publicMethods
   ): void
 }>()
@@ -194,18 +198,14 @@ loadAndRender()
     <div
       class="relative z-0 min-w-full align-middle border-b border-gray-200 shadow sm:rounded-lg overflow-x-auto"
     >
-      <table class="min-w-full">
+      <table class="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
             <th
               v-for="(col, idx) in columns"
               :key="idx"
-              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase border-b border-gray-200 bg-gray-50 leading-4"
-              :class="{
-                'text-left': col.alignment === 'left',
-                'text-right': col.alignment === 'right',
-                'text-center': col.alignment === 'center',
-              }"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+              :class="col.alignment"
             >
               <span v-if="col.title">{{ col.title }}</span>
               <span
@@ -261,27 +261,25 @@ loadAndRender()
             <th
               v-if="hasActions"
               class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
-            >
-              Actions
-            </th>
+            />
           </tr>
         </thead>
 
-        <tbody class="bg-white">
+        <tbody class="bg-white divide-y divide-gray-200">
           <tr
             v-for="(row, rowIdx) in rows"
             :key="rowIdx"
+            class="group"
             :class="{ 'cursor-pointer': clickable }"
-            @click="$emit('click:row', row.rowData, publicMethods)"
+            @click.stop="$emit('click:row', row.rowData, rowIdx, publicMethods)"
           >
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
                 :is="'td'"
                 class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                 :class="{
-                  'text-left': cell.alignment === 'left',
-                  'text-right': cell.alignment === 'right',
-                  'text-center': cell.alignment === 'center',
+                  [cell.alignment]: true,
+                  'group-hover:bg-gray-50': clickable,
                 }"
               >
                 <template v-if="cell.isComponent">
@@ -299,14 +297,20 @@ loadAndRender()
               v-if="hasActions"
               class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
-              <ActionsDropdown :items="row.actions" />
+              <ActionsDropdown
+                v-if="tableActionsType === 'dropdown'"
+                :actions="row.actions"
+              />
+              <template v-else>
+                <TableActionButtons :actions="row.actions" />
+              </template>
             </td>
           </tr>
 
           <tr v-if="!hasContent">
             <td
               :colspan="rows.length"
-              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               No items were found!
             </td>

@@ -14,11 +14,11 @@ const actionsDropdownProps = [
 const currentTab = ref("tab1")
 const showMenuItem = ref(false)
 const menuItems: ActionMenuItem[] = [
-  { label: "This is an action", callback: () => alert("This is an action") },
-  { label: "Do this?", callback: () => alert("Do this?") },
+  { label: "This is an action", event: () => alert("This is an action") },
+  { label: "Do this?", event: () => alert("Do this?") },
   {
     label: "No! Do this.",
-    callback: () => alert("No! Do this."),
+    event: () => alert("No! Do this."),
     show: computed(() => {
       return showMenuItem.value
     }),
@@ -74,7 +74,7 @@ const tabsProps = [
             <ClickToCopy :value="actionsDropdownCopy" />
           </label>
           <div class="mt-1">
-            <ActionsDropdown :items="menuItems" />
+            <ActionsDropdown :actions="menuItems" />
             <PropsTable :props="actionsDropdownProps" />
           </div>
         </div>

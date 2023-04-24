@@ -1,5 +1,4 @@
 // include the type interfaces for Window and GlobalComponents
-/// <reference types="../src/global" />
 /// <reference types="../src/components" />
 
 import { createApp } from "vue"

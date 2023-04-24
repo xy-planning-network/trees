@@ -5,24 +5,24 @@ import { computed, isRef } from "vue"
 import type { ActionMenuItem } from "@/composables/nav"
 
 const props = defineProps<{
-  items: ActionMenuItem[]
+  actions: ActionMenuItem[]
 }>()
 
 const menuItems = computed(() => {
-  return props.items.filter((item) => {
-    if (item.show === undefined) {
+  return props.actions.filter((action) => {
+    if (action.show === undefined) {
       return true
     }
 
-    if (isRef<boolean>(item.show)) {
-      return item.show.value
+    if (isRef<boolean>(action.show)) {
+      return action.show.value
     }
 
-    if (typeof item.show === "boolean") {
-      return item.show
+    if (typeof action.show === "boolean") {
+      return action.show
     }
 
-    return item.show()
+    return action.show()
   })
 })
 </script>
@@ -47,7 +47,7 @@ const menuItems = computed(() => {
         class="z-10 mx-3 origin-top-right absolute right-7 top-0 w-48 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none"
       >
         <div class="py-1">
-          <template v-for="(item, idx) in menuItems" :key="idx">
+          <template v-for="(action, idx) in menuItems" :key="idx">
             <MenuItem v-slot="{ active }: { active: boolean }" as="div">
               <button
                 type="submit"
@@ -55,9 +55,17 @@ const menuItems = computed(() => {
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                   'block w-full text-left px-4 py-2 text-sm font-semibold',
                 ]"
-                @click="item.callback"
+                @click="action.event"
               >
-                {{ item.label }}
+                <span class="relative inline-flex items-center gap-x-1.5">
+                  <component
+                    :is="action.icon"
+                    v-if="action.icon"
+                    class="-ml-0.5 h-4 w-4 text-gray-400"
+                    aria-hidden="true"
+                  />
+                  {{ action.label }}
+                </span>
               </button>
             </MenuItem>
           </template>

@@ -26,7 +26,6 @@ import Home from "./content/Home.vue"
 import Lists from "./content/Lists.vue"
 import Navigation from "./content/Navigation.vue"
 import Overlays from "./content/Overlays.vue"
-import Scratch from "./content/Scratch.vue"
 import Team from "./content/Team.vue"
 import Tools from "./content/Tools.vue"
 import TreeIcon from "./assets/trees-square-icon.svg"
@@ -95,7 +94,6 @@ onMounted(() => {
       <Lists v-if="showing('Lists')" :user="user" />
       <Overlays v-if="showing('Overlays')" />
       <Elements v-if="showing('Elements')" />
-      <Scratch v-if="showing('Scratch')" />
       <Tools v-if="showing('Additional Tools')" />
       <Team v-if="showing('Team')" />
       <button

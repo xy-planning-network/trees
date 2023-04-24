@@ -17,18 +17,9 @@ export interface Pagination {
 }
 
 export interface ActionMenuItem {
+  icon?: RenderFunction
   label: string
-  callback: (...args: any[]) => void
-  show?:
-    | ((...args: any[]) => boolean)
-    | Ref<boolean>
-    | ComputedRef<boolean>
-    | boolean
-}
-
-export interface ActionMenuEmit {
-  id: string
-  label: string
+  event: (...args: any[]) => void
   show?:
     | ((...args: any[]) => boolean)
     | Ref<boolean>

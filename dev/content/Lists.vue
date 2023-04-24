@@ -3,13 +3,13 @@ import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
+  SpeakerphoneIcon,
+  TrashIcon,
 } from "@heroicons/vue/solid"
 import type {
   TableColumns,
   TableActions,
   DynamicTableOptions,
-  DynamicTableAPI,
-  TableRowData,
 } from "@/composables/table"
 import { computed, h, ref } from "vue"
 
@@ -52,52 +52,45 @@ const staticData = ref<Data[]>([
 ])
 
 const staticTableColumns: TableColumns<Data> = [
-  { title: "This", key: "this" },
+  { title: "This", render: "this" },
   {
     title: "Does",
-    key: "does",
     render: (data) => {
       return data["does"]
     },
   },
-  { title: "Not", key: "not", alignment: "left" },
   {
-    title: "Change",
-    key: "change",
-    alignment: "center",
-    render: (rowData, index) => {
-      return h(
-        "button",
-        {
-          class: "xy-btn",
-          onClick: () => {
-            alert(`${index}:${rowData["this"]}`)
-          },
-        },
-        rowData["change"]
-      )
+    alignment: "left",
+    title: "Not",
+    render: (data) => {
+      return h("pre", [h("code", data["not"])])
     },
+  },
+  {
+    alignment: "center",
+    title: "Change",
+    render: "change",
   },
 ]
 
-const showAction = ref(true)
 const staticTableActions: TableActions<Data> = [
   {
-    callback: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
-    label: "Speak",
-    show: showAction,
+    event: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
+    icon: SpeakerphoneIcon,
+    label: "",
   },
   {
-    callback: (d) => {
+    event: (d) => {
       const index = staticData.value.findIndex((i) => {
         return i.this === d.this
       })
 
       staticData.value.splice(index, 1)
     },
-    label: "Remove",
+    icon: TrashIcon,
+    label: "",
     show: computed(() => {
-      return staticData.value.length > 2
+      return staticData.value.length > 1
     }),
   },
 ]
@@ -108,15 +101,14 @@ const staticTableProps = [
 const dynamicTableColumns: TableColumns = [
   {
     title: "Title",
-    key: "title",
+    render: "title",
   },
   {
     title: "Type",
-    key: "type",
+    render: "type",
   },
   {
     title: "Started On",
-    key: "started_on",
     render: (row) => {
       return new Date(row.created_at * 1000).toLocaleString()
     },
@@ -126,15 +118,6 @@ const dynamicTableColumns: TableColumns = [
 const dynamicTableOptions: DynamicTableOptions = {
   refreshTrigger: 0,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
-}
-
-const dynamicTableRowClickEvent = (
-  rowData: TableRowData,
-  tableApi: DynamicTableAPI
-) => {
-  alert(JSON.stringify(rowData))
-
-  tableApi.refresh()
 }
 
 const tableCopy = `<Table :table-data="tableData" />`
@@ -250,13 +233,11 @@ const tableProps = [
             <ClickToCopy :value="staticTableCopy" />
           </label>
           <div class="mt-1">
-            <button class="xy-btn" @click="showAction = !showAction">
-              Toggle Speack Action
-            </button>
             <DataTable
               :table-columns="staticTableColumns"
               :table-data="staticData"
               :table-actions="staticTableActions"
+              table-actions-type="buttons"
             />
             <PropsTable :props="staticTableProps" />
           </div>
@@ -275,10 +256,10 @@ const tableProps = [
           </label>
           <div class="mt-1">
             <DynamicTable
-              :clickable="true"
+              :clickable="false"
               :table-columns="dynamicTableColumns"
               :table-options="dynamicTableOptions"
-              @click:row="dynamicTableRowClickEvent"
+              :table-actions="staticTableActions"
             />
             <PropsTable :props="tableProps" />
           </div>

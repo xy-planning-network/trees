@@ -1,5 +1,10 @@
 import { Ref, computed, isVNode, ref } from "vue"
-import { TableColumns, TableRowsData, TableActions } from "./table"
+import {
+  TableColumns,
+  TableRowsData,
+  TableActions,
+  DynamicTableAPI,
+} from "./table"
 
 const isEmptyCellValue = (v: unknown): boolean => {
   return v === null || v === undefined
@@ -8,7 +13,8 @@ const isEmptyCellValue = (v: unknown): boolean => {
 export const useTable = (
   rowData: TableRowsData | Ref<TableRowsData>,
   cols: TableColumns,
-  acts: TableActions
+  acts: TableActions,
+  exposedAPI?: DynamicTableAPI
 ) => {
   const tableColumn = ref(cols)
   const tableData = ref(rowData)
@@ -20,9 +26,21 @@ export const useTable = (
 
   const columns = computed(() => {
     return tableColumn.value.map((col) => {
+      let alignmentClass = ""
+      switch (col?.alignment || "left") {
+        case "left":
+          alignmentClass = "text-left"
+          break
+        case "right":
+          alignmentClass = "text-right"
+          break
+        case "center":
+          alignmentClass = "text-center"
+          break
+      }
       return {
         ...col,
-        alignment: col?.alignment || "left",
+        alignment: alignmentClass,
       }
     })
   })
@@ -33,7 +51,7 @@ export const useTable = (
         actions: tableActions.value.map((action) => {
           return {
             ...action,
-            callback: () => action.callback(rowData, rowIdx),
+            event: () => action.event(rowData, rowIdx, exposedAPI),
             show:
               typeof action.show === "function"
                 ? action.show(rowData, rowIdx)
@@ -42,13 +60,20 @@ export const useTable = (
         }),
         rowData: rowData,
         cells: columns.value.map((col) => {
-          const val = col.render
-            ? col.render(rowData, rowIdx)
-            : rowData[col.key]
+          const val =
+            typeof col.render === "string"
+              ? rowData[col.render]
+              : col.render(rowData, rowIdx)
+
+          const classNames = col?.classNames || ""
 
           return {
             ...col,
             isComponent: isVNode(val),
+            classNames:
+              typeof classNames === "string"
+                ? classNames
+                : classNames(rowData, rowIdx),
             val: val,
           }
         }),

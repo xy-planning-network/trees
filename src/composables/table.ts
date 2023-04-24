@@ -1,4 +1,4 @@
-import { ComputedRef, Ref, VNodeChild, h } from "vue"
+import { ComputedRef, Ref, VNodeChild } from "vue"
 import { ActionMenuItem } from "@/composables/nav"
 
 export interface DynamicTableOptions {
@@ -24,8 +24,8 @@ export interface DynamicTableAPI {
   reset: () => void
 }
 
-export interface TableActionItem<T = TableRowData> extends ActionMenuItem {
-  callback: (rowData: T, rowIndex: number) => void
+export type TableActionItem<T = TableRowData> = ActionMenuItem & {
+  event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
   show?:
     | ((rowData: T, rowIndex: number) => boolean)
     | Ref<boolean>
@@ -34,6 +34,9 @@ export interface TableActionItem<T = TableRowData> extends ActionMenuItem {
 }
 
 export interface TableColumn<T = TableRowData> {
+  /**
+   * Table actions to make available as an ActionDropdown
+   */
   actions?: TableActions<T>
   /**
    * The alignment the table cell should have
@@ -43,23 +46,18 @@ export interface TableColumn<T = TableRowData> {
    * Class names to wrap your column data in
    * This field is ignored when a render method is defined
    */
-  classNames?: string
+  classNames?: string | ((rowData: T, rowIndex: number) => string)
   /**
    * The text to display as the column header
    */
   title: string
   /**
-   * The property key your column data maps to
-   */
-  key: keyof T
-  /**
    * A render method for formatting the output of your columns data
    * This may include returning a custom component using the vue h method
    */
-  render?: (
-    rowData: T,
-    rowIndex: number
-  ) => string | number | boolean | VNodeChild
+  render:
+    | keyof T
+    | ((rowData: T, rowIndex: number) => string | number | boolean | VNodeChild)
   /**
    * A sorting identifier
    * Only used on DynamicTable

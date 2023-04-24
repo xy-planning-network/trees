@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { useTable } from "@/composables/useTable"
-import { TableActions, TableColumns, TableRowsData } from "@/composables/table"
+import type {
+  TableActions,
+  TableColumns,
+  TableRowsData,
+} from "@/composables/table"
 import { ActionsDropdown } from "@/lib-components"
+import TableActionButtons from "./TableActionButtons.vue"
 
 const props = withDefaults(
   defineProps<{
     tableActions?: TableActions<any>
+    tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableData: TableRowsData
   }>(),
   {
     tableActions: () => [],
+    tableActionsType: "dropdown",
   }
 )
 
@@ -34,11 +41,7 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                   v-for="(col, idx) in columns"
                   :key="idx"
                   class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
-                  :class="{
-                    'text-left': col.alignment === 'left',
-                    'text-right': col.alignment === 'right',
-                    'text-center': col.alignment === 'center',
-                  }"
+                  :class="col.alignment"
                 >
                   {{ col.title }}
                 </th>
@@ -47,9 +50,7 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                 <th
                   v-if="hasActions"
                   class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
-                >
-                  Actions
-                </th>
+                />
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -58,11 +59,7 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                   <component
                     :is="'td'"
                     class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
-                    :class="{
-                      'text-left': cell.alignment === 'left',
-                      'text-right': cell.alignment === 'right',
-                      'text-center': cell.alignment === 'center',
-                    }"
+                    :class="cell.alignment"
                   >
                     <template v-if="cell.isComponent">
                       <component :is="cell.val" />
@@ -79,7 +76,13 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                   v-if="hasActions"
                   class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                 >
-                  <ActionsDropdown :items="row.actions" />
+                  <ActionsDropdown
+                    v-if="tableActionsType === 'dropdown'"
+                    :actions="row.actions"
+                  />
+                  <template v-else>
+                    <TableActionButtons :actions="row.actions" />
+                  </template>
                 </td>
               </tr>
 

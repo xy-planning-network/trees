@@ -2,13 +2,13 @@
 import { DownloadIcon } from "@heroicons/vue/solid"
 defineProps<{
   propsData: Record<string, unknown>
+  attribute: string
 }>()
 </script>
 <template>
-  <a href="#">
+  <a :href="(propsData[attribute] as string)">
     <DownloadIcon
       class="h-6 w-6 group-hover:text-gray-500 transition text-right"
-      text-anchor="end"
     />
   </a>
 </template>
