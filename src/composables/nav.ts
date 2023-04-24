@@ -1,4 +1,4 @@
-import { ComputedRef } from "vue"
+import { ComputedRef, FunctionalComponent } from "vue"
 import { Ref } from "vue"
 import { Component, RenderFunction } from "vue"
 
@@ -17,10 +17,10 @@ export interface Pagination {
 }
 
 export interface ActionMenuItem {
-  icon?: RenderFunction
+  icon?: FunctionalComponent | RenderFunction
   label: string
   event: (...args: any[]) => void
-  show?:
+  enable?:
     | ((...args: any[]) => boolean)
     | Ref<boolean>
     | ComputedRef<boolean>

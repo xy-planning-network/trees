@@ -10,19 +10,19 @@ const props = defineProps<{
 
 const menuItems = computed(() => {
   return props.actions.filter((action) => {
-    if (action.show === undefined) {
+    if (action.enable === undefined) {
       return true
     }
 
-    if (isRef<boolean>(action.show)) {
-      return action.show.value
+    if (isRef<boolean>(action.enable)) {
+      return action.enable.value
     }
 
-    if (typeof action.show === "boolean") {
-      return action.show
+    if (typeof action.enable === "boolean") {
+      return action.enable
     }
 
-    return action.show()
+    return action.enable()
   })
 })
 </script>

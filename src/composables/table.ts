@@ -26,7 +26,7 @@ export interface DynamicTableAPI {
 
 export type TableActionItem<T = TableRowData> = ActionMenuItem & {
   event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
-  show?:
+  enable?:
     | ((rowData: T, rowIndex: number) => boolean)
     | Ref<boolean>
     | ComputedRef<boolean>

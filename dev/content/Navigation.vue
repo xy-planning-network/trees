@@ -19,7 +19,7 @@ const menuItems: ActionMenuItem[] = [
   {
     label: "No! Do this.",
     event: () => alert("No! Do this."),
-    show: computed(() => {
+    enable: computed(() => {
       return showMenuItem.value
     }),
   },

@@ -52,10 +52,10 @@ export const useTable = (
           return {
             ...action,
             event: () => action.event(rowData, rowIdx, exposedAPI),
-            show:
-              typeof action.show === "function"
-                ? action.show(rowData, rowIdx)
-                : action.show,
+            enable:
+              typeof action.enable === "function"
+                ? action.enable(rowData, rowIdx)
+                : action.enable,
           }
         }),
         rowData: rowData,

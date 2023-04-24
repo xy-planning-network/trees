@@ -89,7 +89,7 @@ const staticTableActions: TableActions<Data> = [
     },
     icon: TrashIcon,
     label: "",
-    show: computed(() => {
+    enable: computed(() => {
       return staticData.value.length > 1
     }),
   },
