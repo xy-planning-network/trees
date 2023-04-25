@@ -33,20 +33,57 @@ const props = withDefaults(
 )
 
 defineEmits<{
-  (
-    e: "click:row",
-    v: (typeof tableData.value)[number],
-    i: number,
-    c: typeof publicMethods
-  ): void
+  (e: "click:row", v: any, i: number, c: typeof publicMethods): void
 }>()
 
+const loadAndRender = (): void => {
+  const params = {
+    minDate: dateRange.value.minDate,
+    maxDate: dateRange.value.maxDate,
+    page: pagination.value.page,
+    perPage: pagination.value.perPage,
+    sort: currentSort.value,
+    sortDir: currentSortDirection.value,
+    q: query.value,
+  }
+
+  BaseAPI.get<TrailsRespPaged<unknown>>(
+    props.tableOptions.url,
+    { skipLoader: !props.loader },
+    params
+  ).then(
+    (success) => {
+      pagination.value = {
+        page: success.data.page,
+        perPage: success.data.perPage,
+        totalItems: success.data.totalItems,
+        totalPages: success.data.totalPages,
+      }
+      tableData.value = success.data.items as Record<string, any>[]
+    },
+    () => {
+      useAppFlasher.genericError()
+    }
+  )
+}
+
+const reloadTable = (): void => {
+  pagination.value.page = 1
+  loadAndRender()
+}
+
 const tableData = ref<Record<string, any>[]>([])
+
+const publicMethods: DynamicTableAPI = {
+  refresh: loadAndRender,
+  reset: reloadTable,
+}
 
 const { columns, hasActions, isEmptyCellValue, rows } = useTable(
   tableData,
   toRef(props, "tableColumns"),
-  toRef(props, "tableActions")
+  toRef(props, "tableActions"),
+  publicMethods
 )
 
 const currentSort = ref(
@@ -89,41 +126,6 @@ const handleSort = (selectedSort: string): void => {
 
   loadAndRender()
 }
-const loadAndRender = (): void => {
-  const params = {
-    minDate: dateRange.value.minDate,
-    maxDate: dateRange.value.maxDate,
-    page: pagination.value.page,
-    perPage: pagination.value.perPage,
-    sort: currentSort.value,
-    sortDir: currentSortDirection.value,
-    q: query.value,
-  }
-
-  BaseAPI.get<TrailsRespPaged<unknown>>(
-    props.tableOptions.url,
-    { skipLoader: !props.loader },
-    params
-  ).then(
-    (success) => {
-      pagination.value = {
-        page: success.data.page,
-        perPage: success.data.perPage,
-        totalItems: success.data.totalItems,
-        totalPages: success.data.totalPages,
-      }
-      tableData.value = success.data.items as Record<string, any>[]
-    },
-    () => {
-      useAppFlasher.genericError()
-    }
-  )
-}
-
-const reloadTable = (): void => {
-  pagination.value.page = 1
-  loadAndRender()
-}
 
 const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
@@ -144,11 +146,6 @@ watch(
     reloadTable()
   }
 )
-
-const publicMethods: DynamicTableAPI = {
-  refresh: loadAndRender,
-  reset: reloadTable,
-}
 
 defineExpose(publicMethods)
 

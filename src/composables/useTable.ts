@@ -11,8 +11,16 @@ const isEmptyCellValue = (v: unknown): boolean => {
 }
 
 const tableAPIStub: DynamicTableAPI = {
-  refresh() {},
-  reset() {},
+  refresh() {
+    console.warn(
+      "refresh() was called on a static table, did you mean to use DynamicTable?"
+    )
+  },
+  reset() {
+    console.warn(
+      "reset() was called on a static table, did you mean to use DynamicTable?"
+    )
+  },
 }
 
 export const useTable = (

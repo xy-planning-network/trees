@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, h, ref } from "vue"
 import {
   CalendarIcon,
   LocationMarkerIcon,
@@ -11,7 +12,9 @@ import type {
   TableActions,
   DynamicTableOptions,
 } from "@/composables/table"
-import { computed, h, ref } from "vue"
+import NeedleTag from "./examples/NeedleTags.vue"
+import { conifers } from "../../db.json"
+import { Conifer } from "./types/tree"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -34,97 +37,87 @@ const detailListProps = [
   { name: "url", required: true, type: "string" },
 ]
 
-const staticTableCopy = `<DataTable :table-data="tableData" />`
+const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
 
-interface Data {
-  this: string
-  does: string
-  not: string
-  change: string
-}
-
-const staticData = ref<Data[]>([
-  { this: "Jimothy", does: "says", not: "what", change: "?" },
-  { this: "Timothy", does: "says", not: "how", change: "?" },
-  { this: "Frimothy", does: "says", not: "never", change: "!" },
-  { this: "Limothy", does: "says", not: "can we", change: "?" },
-  { this: "Yimpothy", does: "says", not: "do it", change: "!" },
-])
-
-const staticTableColumns: TableColumns<Data> = [
-  { title: "This", render: "this" },
+const coniferList = ref(conifers.data.items)
+const tableColumns: TableColumns<Conifer> = [
+  { title: "Name", classNames: "font-bold", render: "name" },
   {
-    title: "Does",
-    render: (data) => {
-      return data["does"]
+    alignment: "right",
+    title: "Discovery Date",
+    render: (tree) => {
+      return new Date(tree.discoveryDate).toLocaleDateString("en-us")
     },
   },
   {
-    alignment: "left",
-    title: "Not",
-    render: (data) => {
-      return h("pre", [h("code", data["not"])])
+    title: "Needle Style",
+    render: (tree) => {
+      return h(NeedleTag, { tree: tree, onClickLeaf: announceTree })
     },
-  },
-  {
-    alignment: "center",
-    title: "Change",
-    render: "change",
   },
 ]
 
-const staticTableActions = computed((): TableActions<Data> => {
+const announceTree = (t: Conifer) => {
+  alert(
+    `${t.name} discovered on ${new Date(t.discoveryDate).toLocaleDateString(
+      "en-us"
+    )}`
+  )
+}
+
+const staticTableActions = computed((): TableActions<Conifer> => {
   return [
     {
-      event: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
+      event: announceTree,
       icon: SpeakerphoneIcon,
-      label: "",
+      label: "Speak",
     },
     {
       event: (d) => {
-        const index = staticData.value.findIndex((i) => {
-          return i.this === d.this
+        const index = coniferList.value.findIndex((i) => {
+          return i.id === d.id
         })
 
-        staticData.value.splice(index, 1)
+        coniferList.value.splice(index, 1)
       },
       icon: TrashIcon,
       label: "",
-      disabled: staticData.value.length <= 1,
+      disabled: coniferList.value.length <= 1,
     },
   ]
 })
 
 const staticTableProps = [
-  { name: "tableData", required: true, type: "TableTypes.Static" },
+  { name: "tableActions", required: false, type: "TableActions<T>" },
+  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
+  { name: "tableColumns", required: true, type: "TableColumns<T>" },
+  { name: "tableData", required: true, type: "Record<string, any>" },
 ]
-const dynamicTableColumns: TableColumns = [
+
+const dynamicTableActions: TableActions<Conifer> = [
   {
-    title: "Title",
-    render: "title",
+    label: "Refresh",
+    event: (t, i, table) => table.refresh(),
   },
   {
-    title: "Type",
-    render: "type",
-  },
-  {
-    title: "Started On",
-    render: (row) => {
-      return new Date(row.created_at * 1000).toLocaleString()
-    },
+    label: "Reset",
+    event: (t, i, table) => table.reset(),
   },
 ]
 
 const dynamicTableOptions: DynamicTableOptions = {
   refreshTrigger: 0,
-  url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+  url: "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
 }
 
-const tableCopy = `<Table :table-data="tableData" />`
+const tableCopy = `<DynamicTable :table-columns="tableColumns" :table-options="tableOptions" />`
 const tableProps = [
   { name: "clickable", required: false, type: "boolean" },
   { name: "loader", required: false, type: "boolean" },
-  { name: "tableData", required: true, type: "TableTypes.Dynamic" },
+  { name: "tableActions", required: false, type: "TableActions<T>" },
+  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
+  { name: "tableColumns", required: true, type: "TableColumns<T>" },
+  { name: "tableOptions", required: true, type: "DynamicTableOptions" },
 ]
 </script>
 <template>
@@ -234,8 +227,8 @@ const tableProps = [
           </label>
           <div class="mt-1">
             <DataTable
-              :table-columns="staticTableColumns"
-              :table-data="staticData"
+              :table-columns="tableColumns"
+              :table-data="coniferList"
               :table-actions="staticTableActions"
               table-actions-type="buttons"
             />
@@ -256,10 +249,9 @@ const tableProps = [
           </label>
           <div class="mt-1">
             <DynamicTable
-              :clickable="false"
-              :table-columns="dynamicTableColumns"
+              :table-columns="tableColumns"
               :table-options="dynamicTableOptions"
-              :table-actions="staticTableActions"
+              :table-actions="dynamicTableActions"
             />
             <PropsTable :props="tableProps" />
           </div>

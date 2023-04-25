@@ -3,7 +3,10 @@ const path = require("path")
 const treesTheme = require("./theme")
 
 module.exports = {
-  content: [path.resolve(__dirname, "../src/lib-components/**/*.vue")],
+  content: [
+    path.resolve(__dirname, "../src/lib-components/**/*.vue"),
+    path.resolve(__dirname, "../src/composables/**/*.ts"),
+  ],
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/line-clamp"),

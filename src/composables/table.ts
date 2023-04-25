@@ -32,10 +32,6 @@ export interface TableActionItem<T = TableRowData> extends ActionItem {
 
 export interface TableColumn<T = TableRowData> {
   /**
-   * Table actions to make available as an ActionDropdown
-   */
-  actions?: TableActions<T>
-  /**
    * The alignment the table cell should have
    */
   alignment?: TableCellAlignment
