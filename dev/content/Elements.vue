@@ -124,9 +124,7 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" :css-component="true" title="Typography">
-        <template #description>
-          Text. Who needs it? We need it!
-        </template>
+        <template #description> Text. Who needs it? We need it! </template>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">

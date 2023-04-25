@@ -10,11 +10,16 @@ const isEmptyCellValue = (v: unknown): boolean => {
   return v === null || v === undefined
 }
 
+const tableAPIStub: DynamicTableAPI = {
+  refresh() {},
+  reset() {},
+}
+
 export const useTable = (
   rowData: TableRowsData | Ref<TableRowsData>,
-  cols: TableColumns,
-  acts: TableActions,
-  exposedAPI?: DynamicTableAPI
+  cols: TableColumns | Ref<TableColumns>,
+  acts: TableActions | Ref<TableActions>,
+  exposedAPI: DynamicTableAPI = tableAPIStub
 ) => {
   const tableColumn = ref(cols)
   const tableData = ref(rowData)
@@ -51,11 +56,15 @@ export const useTable = (
         actions: tableActions.value.map((action) => {
           return {
             ...action,
+            disabled:
+              typeof action.disabled === "function"
+                ? action.disabled.apply(undefined, [rowData, rowIdx])
+                : action.disabled,
             event: () => action.event(rowData, rowIdx, exposedAPI),
-            enable:
-              typeof action.enable === "function"
-                ? action.enable(rowData, rowIdx)
-                : action.enable,
+            show:
+              typeof action.show === "function"
+                ? action.show.apply(undefined, [rowData, rowIdx])
+                : action.show,
           }
         }),
         rowData: rowData,
@@ -71,9 +80,9 @@ export const useTable = (
             ...col,
             isComponent: isVNode(val),
             classNames:
-              typeof classNames === "string"
-                ? classNames
-                : classNames(rowData, rowIdx),
+              typeof classNames === "function"
+                ? classNames.apply(undefined, [rowData, rowIdx])
+                : classNames,
             val: val,
           }
         }),

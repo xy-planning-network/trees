@@ -1,43 +1,25 @@
 <script lang="ts" setup>
 import { TableActionItem } from "@/composables"
-import { computed, isRef } from "vue"
+import { useActionItems } from "@/composables/useActionItems"
+import { toRef } from "vue"
 
 const props = withDefaults(
   defineProps<{
     actions?: TableActionItem[]
   }>(),
-  { actions: () => [] }
+  {
+    actions: () => [],
+  }
 )
 
-const actionItems = computed(() => {
-  return props.actions.map((action) => {
-    return {
-      ...action,
-      disabled: (() => {
-        if (action.enable === undefined) {
-          return false
-        }
-
-        if (isRef<boolean>(action.enable)) {
-          return !action.enable.value
-        }
-
-        if (typeof action.enable === "boolean") {
-          return !action.enable
-        }
-
-        return !action.enable()
-      })(),
-    }
-  })
-})
+const { actions, hasActions } = useActionItems(toRef(props, "actions"))
 </script>
 
 <template>
-  <div class="flex items-center space-x-2 justify-end">
+  <div v-if="hasActions" class="flex items-center space-x-2 justify-end">
     <span class="isolate inline-flex rounded-md shadow-sm">
       <button
-        v-for="(action, actionIdx) in actionItems"
+        v-for="(action, actionIdx) in actions"
         :key="actionIdx"
         type="button"
         class="group relative inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:text-gray-400 disabled:cursor-not-allowed"

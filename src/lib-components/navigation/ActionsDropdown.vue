@@ -1,36 +1,26 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { DotsVerticalIcon } from "@heroicons/vue/solid"
-import { computed, isRef } from "vue"
-import type { ActionMenuItem } from "@/composables/nav"
+import type { ActionItem } from "@/composables/nav"
+import { useActionItems } from "@/composables/useActionItems"
+import { toRef } from "vue"
 
-const props = defineProps<{
-  actions: ActionMenuItem[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    actions?: ActionItem[]
+  }>(),
+  {
+    actions: () => [],
+  }
+)
 
-const menuItems = computed(() => {
-  return props.actions.filter((action) => {
-    if (action.enable === undefined) {
-      return true
-    }
-
-    if (isRef<boolean>(action.enable)) {
-      return action.enable.value
-    }
-
-    if (typeof action.enable === "boolean") {
-      return action.enable
-    }
-
-    return action.enable()
-  })
-})
+const { actions, hasActions } = useActionItems(toRef(props, "actions"))
 </script>
 <template>
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
       class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-700 rounded-full hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-      :disabled="menuItems.length === 0"
+      :disabled="!hasActions"
     >
       <span class="sr-only">Open options</span>
       <DotsVerticalIcon class="w-5 h-5" aria-hidden="true" />
@@ -47,13 +37,14 @@ const menuItems = computed(() => {
         class="z-10 mx-3 origin-top-right absolute right-7 top-0 w-48 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none"
       >
         <div class="py-1">
-          <template v-for="(action, idx) in menuItems" :key="idx">
+          <template v-for="(action, idx) in actions" :key="idx">
             <MenuItem v-slot="{ active }: { active: boolean }" as="div">
               <button
                 type="submit"
+                :disabled="action.disabled"
                 :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'block w-full text-left px-4 py-2 text-sm font-semibold',
+                  'block w-full text-left px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed',
                 ]"
                 @click="action.event"
               >

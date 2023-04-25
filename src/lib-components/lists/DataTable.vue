@@ -7,6 +7,7 @@ import type {
 } from "@/composables/table"
 import { ActionsDropdown } from "@/lib-components"
 import TableActionButtons from "./TableActionButtons.vue"
+import { toRef } from "vue"
 
 const props = withDefaults(
   defineProps<{
@@ -22,9 +23,9 @@ const props = withDefaults(
 )
 
 const { columns, hasActions, isEmptyCellValue, rows } = useTable(
-  props.tableData,
-  props.tableColumns,
-  props.tableActions
+  toRef(props, "tableData"),
+  toRef(props, "tableColumns"),
+  toRef(props, "tableActions")
 )
 </script>
 <template>

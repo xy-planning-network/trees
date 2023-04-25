@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import User from "@/composables/user"
-import { ActionMenuItem } from "@/composables/nav"
+import { ActionItem } from "@/composables/nav"
 
 defineProps<{
   user: User
@@ -13,17 +13,20 @@ const actionsDropdownProps = [
 ]
 const currentTab = ref("tab1")
 const showMenuItem = ref(false)
-const menuItems: ActionMenuItem[] = [
-  { label: "This is an action", event: () => alert("This is an action") },
-  { label: "Do this?", event: () => alert("Do this?") },
-  {
-    label: "No! Do this.",
-    event: () => alert("No! Do this."),
-    enable: computed(() => {
-      return showMenuItem.value
-    }),
-  },
-]
+const menuItems = computed((): ActionItem[] => {
+  return [
+    { label: "This is an action", event: () => alert("This is an action") },
+    { label: "Do this?", event: () => alert("Do this?") },
+    {
+      label: "No! Do this.",
+      event: () => alert("No! Do this."),
+      show: () => {
+        return showMenuItem.value
+      },
+    },
+  ]
+})
+
 const pagination = ref({
   page: 1,
   perPage: 10,

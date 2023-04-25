@@ -1,5 +1,5 @@
-import { ComputedRef, Ref, VNodeChild } from "vue"
-import { ActionMenuItem } from "@/composables/nav"
+import { VNodeChild } from "vue"
+import { ActionItem } from "@/composables/nav"
 
 export interface DynamicTableOptions {
   dateSearch?: boolean
@@ -24,13 +24,10 @@ export interface DynamicTableAPI {
   reset: () => void
 }
 
-export interface TableActionItem<T = TableRowData> extends ActionMenuItem {
+export interface TableActionItem<T = TableRowData> extends ActionItem {
+  disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
   event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
-  enable?:
-    | ((rowData: T, rowIndex: number) => boolean)
-    | Ref<boolean>
-    | ComputedRef<boolean>
-    | boolean
+  show?: boolean | ((rowData: T, rowIndex: number) => boolean)
 }
 
 export interface TableColumn<T = TableRowData> {

@@ -1,6 +1,4 @@
-import { ComputedRef, FunctionalComponent } from "vue"
-import { Ref } from "vue"
-import { Component, RenderFunction } from "vue"
+import type { Component, FunctionalComponent, RenderFunction } from "vue"
 
 export interface Item {
   icon?: Component | RenderFunction
@@ -16,13 +14,10 @@ export interface Pagination {
   totalPages: number
 }
 
-export interface ActionMenuItem {
+export interface ActionItem {
+  disabled?: boolean | ((...args: any[]) => boolean)
+  event: (...args: any[]) => void
   icon?: FunctionalComponent | RenderFunction
   label: string
-  event: (...args: any[]) => void
-  enable?:
-    | ((...args: any[]) => boolean)
-    | Ref<boolean>
-    | ComputedRef<boolean>
-    | boolean
+  show?: boolean | ((...args: any[]) => boolean)
 }

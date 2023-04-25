@@ -73,27 +73,27 @@ const staticTableColumns: TableColumns<Data> = [
   },
 ]
 
-const staticTableActions: TableActions<Data> = [
-  {
-    event: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
-    icon: SpeakerphoneIcon,
-    label: "",
-  },
-  {
-    event: (d) => {
-      const index = staticData.value.findIndex((i) => {
-        return i.this === d.this
-      })
-
-      staticData.value.splice(index, 1)
+const staticTableActions = computed((): TableActions<Data> => {
+  return [
+    {
+      event: (d) => alert(`${d.this} ${d.does} ${d.not}${d.change}`),
+      icon: SpeakerphoneIcon,
+      label: "",
     },
-    icon: TrashIcon,
-    label: "",
-    enable: computed(() => {
-      return staticData.value.length > 1
-    }),
-  },
-]
+    {
+      event: (d) => {
+        const index = staticData.value.findIndex((i) => {
+          return i.this === d.this
+        })
+
+        staticData.value.splice(index, 1)
+      },
+      icon: TrashIcon,
+      label: "",
+      disabled: staticData.value.length <= 1,
+    },
+  ]
+})
 
 const staticTableProps = [
   { name: "tableData", required: true, type: "TableTypes.Static" },
