@@ -17,24 +17,16 @@ import TableActionButtons from "./TableActionButtons.vue"
 
 const props = withDefaults(
   defineProps<{
-    clickable?: boolean
-    loader?: boolean
     tableActions?: TableActions<any>
     tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableOptions: DynamicTableOptions
   }>(),
   {
-    clickable: false,
-    loader: true,
     tableActions: () => [],
     tableActionsType: "dropdown",
   }
 )
-
-defineEmits<{
-  (e: "click:row", v: any, i: number, c: typeof publicMethods): void
-}>()
 
 const loadAndRender = (): void => {
   const params = {
@@ -49,7 +41,7 @@ const loadAndRender = (): void => {
 
   BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableOptions.url,
-    { skipLoader: !props.loader },
+    { skipLoader: true },
     params
   ).then(
     (success) => {
@@ -263,21 +255,12 @@ loadAndRender()
         </thead>
 
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr
-            v-for="(row, rowIdx) in rows"
-            :key="rowIdx"
-            class="group"
-            :class="{ 'cursor-pointer': clickable }"
-            @click.stop="$emit('click:row', row.rowData, rowIdx, publicMethods)"
-          >
+          <tr v-for="(row, rowIdx) in rows" :key="rowIdx">
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
                 :is="'td'"
                 class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
-                :class="{
-                  [cell.alignment]: true,
-                  'group-hover:bg-gray-50': clickable,
-                }"
+                :class="cell.alignment"
               >
                 <template v-if="cell.isComponent">
                   <component :is="cell.val" />
