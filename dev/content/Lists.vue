@@ -66,25 +66,28 @@ const announceTree = (t: Conifer) => {
 }
 
 const staticTableActions = computed((): TableActions<Conifer> => {
-  return [
-    {
-      event: announceTree,
-      icon: SpeakerphoneIcon,
-      label: "Speak",
-    },
-    {
-      event: (d) => {
-        const index = coniferList.value.findIndex((i) => {
-          return i.id === d.id
-        })
-
-        coniferList.value.splice(index, 1)
+  return {
+    actions: [
+      {
+        onClick: announceTree,
+        icon: SpeakerphoneIcon,
+        label: "Speak",
       },
-      icon: TrashIcon,
-      label: "",
-      disabled: coniferList.value.length <= 1,
-    },
-  ]
+      {
+        onClick: (d) => {
+          const index = coniferList.value.findIndex((i) => {
+            return i.id === d.id
+          })
+
+          coniferList.value.splice(index, 1)
+        },
+        icon: TrashIcon,
+        label: "",
+        disabled: coniferList.value.length <= 1,
+      },
+    ],
+    type: "buttons",
+  }
 })
 
 const staticTableProps = [
@@ -94,16 +97,20 @@ const staticTableProps = [
   { name: "tableData", required: true, type: "Record<string, any>" },
 ]
 
-const dynamicTableActions: TableActions<Conifer> = [
-  {
-    label: "Refresh",
-    event: (t, i, table) => table.refresh(),
-  },
-  {
-    label: "Reset",
-    event: (t, i, table) => table.reset(),
-  },
-]
+const dynamicTableActions: TableActions<Conifer> = {
+  actions: [
+    {
+      label: "Refresh",
+      onClick: (t, i, table) => table.refresh(),
+    },
+    {
+      label: "Reset",
+      onClick: (t, i, table) => table.reset(),
+      disabled: (t) => t.type === "Scale-leaf",
+    },
+  ],
+  type: "dropdown",
+}
 
 const dynamicTableOptions: DynamicTableOptions = {
   refreshTrigger: 0,
@@ -230,7 +237,6 @@ const tableProps = [
               :table-columns="tableColumns"
               :table-data="coniferList"
               :table-actions="staticTableActions"
-              table-actions-type="buttons"
             />
             <PropsTable :props="staticTableProps" />
           </div>

@@ -46,7 +46,7 @@ const { actions, hasActions } = useActionItems(toRef(props, "actions"))
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                   'block w-full text-left px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed',
                 ]"
-                @click="action.event"
+                @click="action.onClick"
               >
                 <span class="relative inline-flex items-center gap-x-1.5">
                   <component

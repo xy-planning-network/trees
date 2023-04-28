@@ -18,13 +18,11 @@ import TableActionButtons from "./TableActionButtons.vue"
 const props = withDefaults(
   defineProps<{
     tableActions?: TableActions<any>
-    tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableOptions: DynamicTableOptions
   }>(),
   {
-    tableActions: () => [],
-    tableActionsType: "dropdown",
+    tableActions: () => ({ type: "dropdown", actions: [] }),
   }
 )
 
@@ -278,7 +276,7 @@ loadAndRender()
               class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               <ActionsDropdown
-                v-if="tableActionsType === 'dropdown'"
+                v-if="tableActions.type === 'dropdown'"
                 :actions="row.actions"
               />
               <template v-else>

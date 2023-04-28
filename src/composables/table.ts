@@ -25,9 +25,41 @@ export interface DynamicTableAPI {
 }
 
 export interface TableActionItem<T = TableRowData> extends ActionItem {
+  /**
+   * The disabled property determines the value of the disabled attribute on the button
+   * attached to the action.  Allowing the action to stay visible to the user, but keeping the action
+   * disabled from use.
+   *
+   * disabled accepts a boolean value or a function with the table row data as
+   * the first argument and the row index as the second.
+   */
   disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
-  event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
+  /**
+   * onClick is the callback function triggered by the button rendered in the table actions.
+   * @param rowData T
+   * @param rowIndex number
+   * @param tableAPI DynamicTableAPI
+   * @returns void
+   */
+  onClick: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
+  /**
+   * The show property determines whether the action is visible.
+   *
+   * show accepts a boolean value or a function with the table row data as
+   * the first argument and the row index as the second.
+   */
   show?: boolean | ((rowData: T, rowIndex: number) => boolean)
+}
+
+export interface TableActions<T = TableRowData> {
+  /**
+   * an array of TableActionItem definitions
+   */
+  actions: TableActionItem<T>[]
+  /**
+   * type determines what component will render the actions
+   */
+  type: "dropdown" | "buttons"
 }
 
 export interface TableColumn<T = TableRowData> {
@@ -58,7 +90,6 @@ export interface TableColumn<T = TableRowData> {
   sort?: string
 }
 
-export type TableActions<T = TableRowData> = TableActionItem<T>[]
 export type TableCellAlignment = "left" | "center" | "right"
 export type TableRowData = Record<string, any>
 export type TableColumns<T = TableRowData> = TableColumn<T>[]
