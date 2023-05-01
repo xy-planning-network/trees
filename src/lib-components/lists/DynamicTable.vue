@@ -26,6 +26,10 @@ const props = withDefaults(
   }
 )
 
+defineEmits<{
+  (e: "click:row", v: any): void
+}>()
+
 const loadAndRender = (): void => {
   const params = {
     minDate: dateRange.value.minDate,
@@ -253,7 +257,11 @@ loadAndRender()
         </thead>
 
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="(row, rowIdx) in rows" :key="rowIdx">
+          <tr
+            v-for="(row, rowIdx) in rows"
+            :key="rowIdx"
+            @click="$emit('click:row', row.rowData)"
+          >
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
                 :is="'td'"

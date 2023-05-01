@@ -29,7 +29,7 @@ const { actions, hasActions } = useActionItems(toRef(props, "actions"))
           'rounded-r-md': actionIdx === actions.length - 1,
         }"
         :disabled="action.disabled"
-        @click="action.onClick"
+        @click.stop="action.onClick"
       >
         <span class="relative inline-flex items-center gap-x-1.5">
           <component
