@@ -15,11 +15,11 @@ const currentTab = ref("tab1")
 const showMenuItem = ref(false)
 const menuItems = computed((): ActionItem[] => {
   return [
-    { label: "This is an action", event: () => alert("This is an action") },
-    { label: "Do this?", event: () => alert("Do this?") },
+    { label: "This is an action", onClick: () => alert("This is an action") },
+    { label: "Do this?", onClick: () => alert("Do this?") },
     {
       label: "No! Do this.",
-      event: () => alert("No! Do this."),
+      onClick: () => alert("No! Do this."),
       show: () => {
         return showMenuItem.value
       },

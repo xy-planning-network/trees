@@ -18,15 +18,17 @@ import TableActionButtons from "./TableActionButtons.vue"
 const props = withDefaults(
   defineProps<{
     tableActions?: TableActions<any>
-    tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableOptions: DynamicTableOptions
   }>(),
   {
-    tableActions: () => [],
-    tableActionsType: "dropdown",
+    tableActions: () => ({ type: "dropdown", actions: [] }),
   }
 )
+
+defineEmits<{
+  (e: "click:row", v: any): void
+}>()
 
 const loadAndRender = (): void => {
   const params = {
@@ -255,7 +257,11 @@ loadAndRender()
         </thead>
 
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="(row, rowIdx) in rows" :key="rowIdx">
+          <tr
+            v-for="(row, rowIdx) in rows"
+            :key="rowIdx"
+            @click="$emit('click:row', row.rowData)"
+          >
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
                 :is="'td'"
@@ -278,7 +284,7 @@ loadAndRender()
               class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               <ActionsDropdown
-                v-if="tableActionsType === 'dropdown'"
+                v-if="tableActions.type === 'dropdown'"
                 :actions="row.actions"
               />
               <template v-else>

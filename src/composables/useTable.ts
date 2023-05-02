@@ -34,7 +34,7 @@ export const useTable = (
   const tableActions = ref(acts)
 
   const hasActions = computed(() => {
-    return tableActions.value.length > 0
+    return tableActions.value.actions.length > 0
   })
 
   const columns = computed(() => {
@@ -61,14 +61,14 @@ export const useTable = (
   const rows = computed(() => {
     return tableData.value.map((rowData, rowIdx) => {
       return {
-        actions: tableActions.value.map((action) => {
+        actions: tableActions.value.actions.map((action) => {
           return {
             ...action,
             disabled:
               typeof action.disabled === "function"
                 ? action.disabled.apply(undefined, [rowData, rowIdx])
                 : action.disabled,
-            event: () => action.event(rowData, rowIdx, exposedAPI),
+            onClick: () => action.onClick(rowData, rowIdx, exposedAPI),
             show:
               typeof action.show === "function"
                 ? action.show.apply(undefined, [rowData, rowIdx])

@@ -12,13 +12,11 @@ import { toRef } from "vue"
 const props = withDefaults(
   defineProps<{
     tableActions?: TableActions<any>
-    tableActionsType?: "dropdown" | "buttons"
     tableColumns: TableColumns<any>
     tableData: TableRowsData
   }>(),
   {
-    tableActions: () => [],
-    tableActionsType: "dropdown",
+    tableActions: () => ({ type: "dropdown", actions: [] }),
   }
 )
 
@@ -78,7 +76,7 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                   class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
                 >
                   <ActionsDropdown
-                    v-if="tableActionsType === 'dropdown'"
+                    v-if="tableActions.type === 'dropdown'"
                     :actions="row.actions"
                   />
                   <template v-else>

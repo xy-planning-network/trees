@@ -16,7 +16,7 @@ export interface Pagination {
 
 export interface ActionItem {
   disabled?: boolean | ((...args: any[]) => boolean)
-  event: (...args: any[]) => void
+  onClick: (...args: any[]) => void
   icon?: FunctionalComponent | RenderFunction
   label: string
   show?: boolean | ((...args: any[]) => boolean)
