@@ -125,19 +125,11 @@ This is the best option when tree shaking and final bundle size is important to 
 
 ```ts
 // main.ts
-
-// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
-/// <reference types="@xy-planning-network/trees/types/global" />
-
 import Vue, { createApp } from "vue"
-import Mitt from "mitt"
 import App from "./App.vue"
 
 // import your project's main stylesheet
 import "@/main.css"
-
-// initialize mitt on VueBus for Flashes
-window.VueBus = Mitt()
 
 // initialize the app
 const app = createApp(App)
@@ -173,22 +165,15 @@ This example installs all components of Trees globally so you don't need to impo
 
 ```ts
 // main.ts
-
-// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
-/// <reference types="@xy-planning-network/trees/types/global" />
 // include the type interfaces for Trees components installed globally on the Vue instance
 /// <reference types="@xy-planning-network/trees/types/components" />
 
 import Vue, { createApp } from "vue"
-import Mitt from "mitt"
 import Trees from "@xy-planning-network/trees"
 import App from "./App.vue"
 
 // import your project's main stylesheet
 import "@/main.css"
-
-// initialize mitt on VueBus for flashes support
-window.VueBus = Mitt()
 
 // initialize the app
 const app = createApp(App)
@@ -285,19 +270,12 @@ export default {
 ```ts
 // main.ts
 
-// include the type interface for the Window global - includes Window.VueBus and Window.Flashes
-/// <reference types="@xy-planning-network/trees/types/global" />
-
 import Vue, { createApp } from "vue"
-import Mitt from "mitt"
 import App from "./App.vue"
 import TreesFormComponents from "./plugins/trees"
 
 // import your project's main stylesheet
 import "@/main.css"
-
-// initialize mitt on VueBus for event support
-window.VueBus = Mitt()
 
 // initialize the app
 const app = createApp(App)

@@ -1,5 +1,4 @@
 // include the type interfaces for Window and GlobalComponents
-/// <reference types="../src/global" />
 /// <reference types="../src/components" />
 
 import { createApp } from "vue"
@@ -11,7 +10,6 @@ import ClickToCopy from "./helpers/ClickToCopy.vue"
 import ComponentLayout from "./helpers/ComponentLayout.vue"
 import PropsTable from "./helpers/PropsTable.vue"
 import "./main.css"
-import mitt from "mitt"
 import { useAppFlashes } from "@/composables/useFlashes"
 import Highlight from "@point-hub/vue-highlight"
 import "highlight.js/styles/atom-one-dark.css"
@@ -22,7 +20,6 @@ import typescript from "highlight.js/lib/languages/typescript"
 Highlight.registerLanguage("html", html)
 Highlight.registerLanguage("typescript", typescript)
 
-window.VueBus = mitt()
 useAppFlashes().configure({ email: "support@trees.com" })
 
 const app = createApp(Serve)

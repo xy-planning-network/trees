@@ -1,12 +1,20 @@
 <script setup lang="ts">
+import { computed, h, ref } from "vue"
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
+  SpeakerphoneIcon,
+  TrashIcon,
 } from "@heroicons/vue/solid"
-import User from "@/composables/user"
-
-const props = defineProps<{ user: User }>()
+import type {
+  TableColumns,
+  TableActions,
+  DynamicTableOptions,
+} from "@/composables/table"
+import NeedleTag from "./examples/NeedleTags.vue"
+import { conifers } from "../../db.json"
+import { Conifer } from "./types/tree"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -28,56 +36,88 @@ const detailListProps = [
   { name: "title", required: true, type: "string" },
   { name: "url", required: true, type: "string" },
 ]
-const downloadCellCopy = `import { DownloadCell } from "@xy-planning-network/trees";`
-const downloadMe = {
-  goHere: "/download-something-but-im-broken-and-now-im-crying-web-is-hard",
-}
-const staticTableCopy = `<StaticTable :table-data="tableData" />`
-const staticTableData = {
-  currentUser: props.user,
-  columns: [
-    { display: "This", key: "this" },
-    { display: "Does", key: "does" },
-    { display: "Not", key: "not" },
-    { display: "Change", key: "change" },
-  ],
-  items: [
-    { this: "Jimothy", does: "says", not: "what", change: "?" },
-    { this: "Timothy", does: "says", not: "how", change: "?" },
-    { this: "Frimothy", does: "says", not: "never", change: "!" },
-    { this: "Limothy", does: "says", not: "can we", change: "?" },
-    { this: "Yimpothy", does: "says", not: "do it", change: "!" },
-  ],
-}
-const staticTableProps = [
-  { name: "tableData", required: true, type: "TableTypes.Static" },
+
+const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
+
+const coniferList = ref(conifers.data.items)
+const tableColumns: TableColumns<Conifer> = [
+  { title: "Name", classNames: "font-bold", render: "name" },
+  {
+    alignment: "right",
+    title: "Discovery Date",
+    render: (tree) => {
+      return new Date(tree.discoveryDate).toLocaleDateString("en-us")
+    },
+  },
+  {
+    title: "Needle Style",
+    render: (tree) => {
+      return h(NeedleTag, { tree: tree, onClickLeaf: announceTree })
+    },
+  },
 ]
-const tableData = {
-  currentUser: props.user,
-  columns: [
-    {
-      display: "Title",
-      key: "title",
-    },
-    {
-      display: "Type",
-      key: "type",
-    },
-    {
-      display: "Started On",
-      presenter: (row: { created_at: number }): string => {
-        return new Date(row.created_at * 1000).toLocaleString()
-      },
-    },
-  ],
-  refreshTrigger: 0,
-  url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+
+const announceTree = (t: Conifer) => {
+  alert(
+    `${t.name} discovered on ${new Date(t.discoveryDate).toLocaleDateString(
+      "en-us"
+    )}`
+  )
 }
-const tableCopy = `<Table :table-data="tableData" />`
+
+const staticTableActions = computed((): TableActions<Conifer> => {
+  return [
+    {
+      event: announceTree,
+      icon: SpeakerphoneIcon,
+      label: "Speak",
+    },
+    {
+      event: (d) => {
+        const index = coniferList.value.findIndex((i) => {
+          return i.id === d.id
+        })
+
+        coniferList.value.splice(index, 1)
+      },
+      icon: TrashIcon,
+      label: "",
+      disabled: coniferList.value.length <= 1,
+    },
+  ]
+})
+
+const staticTableProps = [
+  { name: "tableActions", required: false, type: "TableActions<T>" },
+  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
+  { name: "tableColumns", required: true, type: "TableColumns<T>" },
+  { name: "tableData", required: true, type: "Record<string, any>" },
+]
+
+const dynamicTableActions: TableActions<Conifer> = [
+  {
+    label: "Refresh",
+    event: (t, i, table) => table.refresh(),
+  },
+  {
+    label: "Reset",
+    event: (t, i, table) => table.reset(),
+  },
+]
+
+const dynamicTableOptions: DynamicTableOptions = {
+  refreshTrigger: 0,
+  url: "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
+}
+
+const tableCopy = `<DynamicTable :table-columns="tableColumns" :table-options="tableOptions" />`
 const tableProps = [
   { name: "clickable", required: false, type: "boolean" },
   { name: "loader", required: false, type: "boolean" },
-  { name: "tableData", required: true, type: "TableTypes.Dynamic" },
+  { name: "tableActions", required: false, type: "TableActions<T>" },
+  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
+  { name: "tableColumns", required: true, type: "TableColumns<T>" },
+  { name: "tableOptions", required: true, type: "DynamicTableOptions" },
 ]
 </script>
 <template>
@@ -186,7 +226,12 @@ const tableProps = [
             <ClickToCopy :value="staticTableCopy" />
           </label>
           <div class="mt-1">
-            <StaticTable :table-data="staticTableData" />
+            <DataTable
+              :table-columns="tableColumns"
+              :table-data="coniferList"
+              :table-actions="staticTableActions"
+              table-actions-type="buttons"
+            />
             <PropsTable :props="staticTableProps" />
           </div>
         </div>
@@ -203,24 +248,12 @@ const tableProps = [
             <ClickToCopy :value="tableCopy" />
           </label>
           <div class="mt-1">
-            <Table :table-data="tableData" />
+            <DynamicTable
+              :table-columns="tableColumns"
+              :table-options="dynamicTableOptions"
+              :table-actions="dynamicTableActions"
+            />
             <PropsTable :props="tableProps" />
-          </div>
-        </div>
-      </ComponentLayout>
-
-      <ComponentLayout class="mt-8" title="Table Cells">
-        <template #description>
-          These can be passed to the column's component field for rendering UI
-          in the table cell.
-        </template>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="downloadCellCopy" />
-          </label>
-          <div class="mt-1">
-            <DownloadCell attribute="goHere" :props-data="downloadMe" />
           </div>
         </div>
       </ComponentLayout>

@@ -1,23 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import User from "@/composables/user"
+import { ActionItem } from "@/composables/nav"
 
 defineProps<{
   user: User
 }>()
 
-const actionsDropdownCopy = `<ActionsDropdown :current-user="currentUser" :items="items" props-data="propsData" />`
+const actionsDropdownCopy = `<ActionsDropdown :items="items" />`
 const actionsDropdownProps = [
-  { name: "currentUser", required: true, type: "User" },
-  { name: "items", required: true, type: "Array<TableTypes.MenuItem>" },
-  { name: "propsData", required: true, type: "any" },
+  { name: "items", required: true, type: "ActionMenuItem[]" },
 ]
 const currentTab = ref("tab1")
-const menuItems = [
-  { label: "This is an action", event: "Navigation.EmitThisEvent1" },
-  { label: "Do this?", event: "Navigation.EmitThisEvent2" },
-  { label: "No! Do this.", event: "Navigation.EmitThisEvent3" },
-]
+const showMenuItem = ref(false)
+const menuItems = computed((): ActionItem[] => {
+  return [
+    { label: "This is an action", event: () => alert("This is an action") },
+    { label: "Do this?", event: () => alert("Do this?") },
+    {
+      label: "No! Do this.",
+      event: () => alert("No! Do this."),
+      show: () => {
+        return showMenuItem.value
+      },
+    },
+  ]
+})
+
 const pagination = ref({
   page: 1,
   perPage: 10,
@@ -68,11 +77,7 @@ const tabsProps = [
             <ClickToCopy :value="actionsDropdownCopy" />
           </label>
           <div class="mt-1">
-            <ActionsDropdown
-              :current-user="user"
-              :items="menuItems"
-              props-data="something"
-            />
+            <ActionsDropdown :actions="menuItems" />
             <PropsTable :props="actionsDropdownProps" />
           </div>
         </div>

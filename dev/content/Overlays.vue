@@ -249,8 +249,8 @@ useAppFlasher.info("Sticky!", true)
       <ComponentLayout class="mt-8" title="Spinner">
         <template #description>
           This is automatically handled in axios if the request takes longer
-          than 200 milliseconds. It can also be shown/hidden using the VueBus.
-          It blocks any user interaction while it's shown.
+          than 200 milliseconds. It blocks any user interaction while it's
+          shown.
         </template>
 
         <div>

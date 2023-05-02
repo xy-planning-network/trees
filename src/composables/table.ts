@@ -1,19 +1,7 @@
-import { Component, ComponentPublicInstance } from "vue"
-import User from "@/composables/user"
+import { VNodeChild } from "vue"
+import { ActionItem } from "@/composables/nav"
 
-export interface Column {
-  display: string
-  class?: string
-  key?: string
-  presenter?(row: any, instance: ComponentPublicInstance): any
-  component?: Component
-  items?: Array<MenuItem>
-  sort?: string
-}
-
-export interface Dynamic {
-  currentUser: User
-  columns: Array<Column>
+export interface DynamicTableOptions {
   dateSearch?: boolean
   defaultSort?: string
   defaultSortDirection?: string
@@ -23,14 +11,55 @@ export interface Dynamic {
   url: string
 }
 
-export interface MenuItem {
-  label: string
-  event: string
-  show?(propsData: any, currentUser: User): boolean
+export interface DynamicTableAPI {
+  /**
+   * Force refresh the table data with the current api params state
+   * @returns void
+   */
+  refresh: () => void
+  /**
+   * Reset the table data back to page 1 and load
+   * @returns void
+   */
+  reset: () => void
 }
 
-export interface Static {
-  currentUser: User
-  columns: Array<Column>
-  items: Record<string, unknown>[]
+export interface TableActionItem<T = TableRowData> extends ActionItem {
+  disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
+  event: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
+  show?: boolean | ((rowData: T, rowIndex: number) => boolean)
 }
+
+export interface TableColumn<T = TableRowData> {
+  /**
+   * The alignment the table cell should have
+   */
+  alignment?: TableCellAlignment
+  /**
+   * Class names to wrap your column data in
+   * This field is ignored when a render method is defined
+   */
+  classNames?: string | ((rowData: T, rowIndex: number) => string)
+  /**
+   * The text to display as the column header
+   */
+  title: string
+  /**
+   * A render method for formatting the output of your columns data
+   * This may include returning a custom component using the vue h method
+   */
+  render:
+    | keyof T
+    | ((rowData: T, rowIndex: number) => string | number | boolean | VNodeChild)
+  /**
+   * A sorting identifier
+   * Only used on DynamicTable
+   */
+  sort?: string
+}
+
+export type TableActions<T = TableRowData> = TableActionItem<T>[]
+export type TableCellAlignment = "left" | "center" | "right"
+export type TableRowData = Record<string, any>
+export type TableColumns<T = TableRowData> = TableColumn<T>[]
+export type TableRowsData = TableRowData[]

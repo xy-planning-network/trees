@@ -18,9 +18,9 @@ import { default as Tooltip } from "./overlays/Tooltip.vue"
 import { default as StackedLayout } from "./layout/StackedLayout.vue"
 import { default as Paginator } from "./navigation/Paginator.vue"
 import { default as Spinner } from "./overlays/Spinner.vue"
-import { default as StaticTable } from "./lists/StaticTable.vue"
+import { default as DataTable } from "./lists/DataTable.vue"
 import { default as Steps } from "./navigation/Steps.vue"
-import { default as Table } from "./lists/Table.vue"
+import { default as DynamicTable } from "./lists/DynamicTable.vue"
 import { default as Tabs } from "./navigation/Tabs.vue"
 import { default as Toggle } from "./forms/Toggle.vue"
 import { default as XYSpinner } from "./indicators/XYSpinner.vue"
@@ -56,9 +56,9 @@ export {
   PopoverPosition, // Type export
   Paginator,
   Spinner,
-  StaticTable,
+  DataTable,
   Steps,
-  Table,
+  DynamicTable,
   Tabs,
   Toggle,
   Tooltip,
@@ -96,9 +96,9 @@ export interface TreesComponents {
   StackedLayout: typeof StackedLayout
   Paginator: typeof Paginator
   Spinner: typeof Spinner
-  StaticTable: typeof StaticTable
+  DataTable: typeof DataTable
+  DynamicTable: typeof DynamicTable
   Steps: typeof Steps
-  Table: typeof Table
   Tabs: typeof Tabs
   Toggle: typeof Toggle
   Tooltip: typeof Tooltip

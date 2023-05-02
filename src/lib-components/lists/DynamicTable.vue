@@ -1,47 +1,96 @@
 <script setup lang="ts">
-import {
-  ComponentPublicInstance,
-  computed,
-  getCurrentInstance,
-  ref,
-  watch,
-} from "vue"
+import { computed, ref, toRef, watch } from "vue"
+import { ActionsDropdown } from "@/lib-components"
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
-import * as TableTypes from "@/composables/table"
+import type {
+  DynamicTableAPI,
+  DynamicTableOptions,
+  TableActions,
+  TableColumns,
+} from "@/composables/table"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
+import { useTable } from "@/composables/useTable"
+import TableActionButtons from "./TableActionButtons.vue"
 
 const props = withDefaults(
   defineProps<{
-    clickable?: boolean
-    loader?: boolean
-    tableData: TableTypes.Dynamic
+    tableActions?: TableActions<any>
+    tableActionsType?: "dropdown" | "buttons"
+    tableColumns: TableColumns<any>
+    tableOptions: DynamicTableOptions
   }>(),
   {
-    clickable: false,
-    loader: true,
+    tableActions: () => [],
+    tableActionsType: "dropdown",
   }
 )
 
-defineEmits<{
-  (e: "handleClick", v: any): void
-}>()
+const loadAndRender = (): void => {
+  const params = {
+    minDate: dateRange.value.minDate,
+    maxDate: dateRange.value.maxDate,
+    page: pagination.value.page,
+    perPage: pagination.value.perPage,
+    sort: currentSort.value,
+    sortDir: currentSortDirection.value,
+    q: query.value,
+  }
+
+  BaseAPI.get<TrailsRespPaged<unknown>>(
+    props.tableOptions.url,
+    { skipLoader: true },
+    params
+  ).then(
+    (success) => {
+      pagination.value = {
+        page: success.data.page,
+        perPage: success.data.perPage,
+        totalItems: success.data.totalItems,
+        totalPages: success.data.totalPages,
+      }
+      tableData.value = success.data.items as Record<string, any>[]
+    },
+    () => {
+      useAppFlasher.genericError()
+    }
+  )
+}
+
+const reloadTable = (): void => {
+  pagination.value.page = 1
+  loadAndRender()
+}
+
+const tableData = ref<Record<string, any>[]>([])
+
+const publicMethods: DynamicTableAPI = {
+  refresh: loadAndRender,
+  reset: reloadTable,
+}
+
+const { columns, hasActions, isEmptyCellValue, rows } = useTable(
+  tableData,
+  toRef(props, "tableColumns"),
+  toRef(props, "tableActions"),
+  publicMethods
+)
 
 const currentSort = ref(
-  props.tableData.defaultSort ? props.tableData.defaultSort : ""
+  props.tableOptions.defaultSort ? props.tableOptions.defaultSort : ""
 )
 const currentSortDirection = ref(
-  props.tableData.defaultSortDirection
-    ? props.tableData.defaultSortDirection
+  props.tableOptions.defaultSortDirection
+    ? props.tableOptions.defaultSortDirection
     : "desc"
 )
 const dateRange = ref({
   minDate: 0,
   maxDate: 0,
 })
-const items = ref<any[]>([])
+
 const pagination = ref({
   page: 1,
   perPage: 10,
@@ -49,27 +98,7 @@ const pagination = ref({
   totalPages: 0,
 })
 const query = ref("")
-const cellValue = (
-  item: Record<string, any>,
-  col: TableTypes.Column
-): string => {
-  if (col.key) {
-    // NOTE(dlk): supports dot notation for nested keys
-    return col.key.split(".").reduce((o, i) => o[i], item as any)
-  }
 
-  if (col.presenter) {
-    // TODO: discuss this pattern.  Current usage can be replaced with modules.
-    // https://v3.vuejs.org/api/composition-api.html#getcurrentinstance
-    const internalInstance = getCurrentInstance()
-    return col.presenter(
-      item,
-      internalInstance?.proxy as ComponentPublicInstance
-    )
-  }
-
-  return ""
-}
 const dateRangeChanged = (newDateRange: {
   minDate: number
   maxDate: number
@@ -89,48 +118,13 @@ const handleSort = (selectedSort: string): void => {
 
   loadAndRender()
 }
-const loadAndRender = (): void => {
-  const params = {
-    minDate: dateRange.value.minDate,
-    maxDate: dateRange.value.maxDate,
-    page: pagination.value.page,
-    perPage: pagination.value.perPage,
-    sort: currentSort.value,
-    sortDir: currentSortDirection.value,
-    q: query.value,
-  }
-
-  BaseAPI.get<TrailsRespPaged<unknown>>(
-    props.tableData.url,
-    { skipLoader: !props.loader },
-    params
-  ).then(
-    (success) => {
-      pagination.value = {
-        page: success.data.page,
-        perPage: success.data.perPage,
-        totalItems: success.data.totalItems,
-        totalPages: success.data.totalPages,
-      }
-      items.value = success.data.items
-    },
-    () => {
-      useAppFlasher.genericError()
-    }
-  )
-}
-
-const reloadTable = (): void => {
-  pagination.value.page = 1
-  loadAndRender()
-}
 
 const hasContent = computed((): boolean => {
-  return items.value.length ? true : false
+  return rows.value.length ? true : false
 })
 
 watch(
-  () => props.tableData.refreshTrigger,
+  () => props.tableOptions.refreshTrigger,
   () => {
     // This lets parent components trigger a refresh of the current page depending on external actions.
     loadAndRender()
@@ -138,12 +132,14 @@ watch(
 )
 
 watch(
-  () => props.tableData.reloadTrigger,
+  () => props.tableOptions.reloadTrigger,
   () => {
     // This lets parent components trigger a reload of page 1 depending on external actions.
     reloadTable()
   }
 )
+
+defineExpose(publicMethods)
 
 // onCreated
 loadAndRender()
@@ -153,7 +149,7 @@ loadAndRender()
     <div
       class="flex flex-col mb-4 space-y-4 lg:space-y-0 lg:flex-row lg:justify-between"
     >
-      <div v-if="tableData.search" class="w-full max-w-lg lg:max-w-xs">
+      <div v-if="tableOptions.search" class="w-full max-w-lg lg:max-w-xs">
         <label for="search" class="sr-only">Search</label>
         <div class="relative">
           <div
@@ -180,7 +176,7 @@ loadAndRender()
           />
         </div>
       </div>
-      <div v-if="tableData.dateSearch" class="w-full max-w-lg lg:max-w-xs">
+      <div v-if="tableOptions.dateSearch" class="w-full max-w-lg lg:max-w-xs">
         <DateRangePicker
           v-model="dateRange"
           @update:model-value="dateRangeChanged"
@@ -191,15 +187,16 @@ loadAndRender()
     <div
       class="relative z-0 min-w-full align-middle border-b border-gray-200 shadow sm:rounded-lg overflow-x-auto"
     >
-      <table class="min-w-full">
+      <table class="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
             <th
-              v-for="(col, idx) in tableData.columns"
+              v-for="(col, idx) in columns"
               :key="idx"
-              class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-900 uppercase border-b border-gray-200 bg-gray-50 leading-4"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+              :class="col.alignment"
             >
-              <span v-if="!!col.display.length">{{ col.display }}</span>
+              <span v-if="col.title">{{ col.title }}</span>
               <span
                 v-if="col.sort"
                 class="cursor-pointer"
@@ -248,38 +245,52 @@ loadAndRender()
                 </svg>
               </span>
             </th>
+
+            <!--Table Actions Header-->
+            <th
+              v-if="hasActions"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+            />
           </tr>
         </thead>
 
-        <tbody class="bg-white">
-          <tr
-            v-for="(item, rowIdx) in items"
-            :key="item.id ? item.id : rowIdx"
-            :class="{ 'cursor-pointer': clickable }"
-            @click="$emit('handleClick', item)"
-          >
-            <td
-              v-for="(col, colIdx) in tableData.columns"
-              :key="rowIdx + '-' + colIdx"
-              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
-              :class="col.class"
-            >
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr v-for="(row, rowIdx) in rows" :key="rowIdx">
+            <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
-                :is="col.component"
-                v-if="col.component"
-                :props-data="item"
-                :current-user="tableData.currentUser"
-                :attribute="col.key"
-                :items="col.items"
-              ></component>
-              <div v-else v-text="cellValue(item, col)"></div>
+                :is="'td'"
+                class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
+                :class="cell.alignment"
+              >
+                <template v-if="cell.isComponent">
+                  <component :is="cell.val" />
+                </template>
+
+                <span v-else :class="cell.classNames">
+                  {{ isEmptyCellValue(cell.val) ? "-" : String(cell.val) }}
+                </span>
+              </component>
+            </template>
+
+            <!--Table Actions Cell-->
+            <td
+              v-if="hasActions"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
+            >
+              <ActionsDropdown
+                v-if="tableActionsType === 'dropdown'"
+                :actions="row.actions"
+              />
+              <template v-else>
+                <TableActionButtons :actions="row.actions" />
+              </template>
             </td>
           </tr>
 
           <tr v-if="!hasContent">
             <td
-              :colspan="tableData.columns.length"
-              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap border-b border-gray-200 leading-5"
+              :colspan="rows.length"
+              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               No items were found!
             </td>

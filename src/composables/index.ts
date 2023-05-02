@@ -9,7 +9,31 @@ import {
 
 import type { UseBaseAPIOptions, UseBaseAPI } from "./useBaseAPI"
 
-export type { UseBaseAPIOptions, UseBaseAPI }
+import type {
+  DynamicTableOptions,
+  DynamicTableAPI,
+  TableActionItem,
+  TableColumn,
+  TableActions,
+  TableCellAlignment,
+  TableRowData,
+  TableColumns,
+  TableRowsData,
+} from "./table"
+
+export type {
+  UseBaseAPIOptions,
+  UseBaseAPI,
+  DynamicTableOptions,
+  DynamicTableAPI,
+  TableActionItem,
+  TableColumn,
+  TableActions,
+  TableCellAlignment,
+  TableRowData,
+  TableColumns,
+  TableRowsData,
+}
 
 export {
   useBaseAPI,
