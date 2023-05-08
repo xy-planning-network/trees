@@ -19,7 +19,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(["update:model-value"])
+const emit = defineEmits(["update:modelValue"])
 
 const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
 
@@ -80,7 +80,7 @@ const isTextType = computed((): boolean => {
     :value="modelValue"
     v-bind="$attrs"
     @input="
-      emit('update:model-value', ($event.target as HTMLInputElement).value)
+      emit('update:modelValue', ($event.target as HTMLInputElement).value)
     "
   />
   <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
