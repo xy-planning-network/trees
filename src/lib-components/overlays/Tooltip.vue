@@ -17,7 +17,7 @@ withDefaults(
 <template>
   <Popover :position="position" :as="as">
     <template #button>
-      <div class="leading-none w-4 h-4">
+      <div class="leading-none w-4 h-4" @mouseover="$event.target.click()" @mouseleave="$event.target.click()">
         <InformationCircleIcon />
         <!--creates a larger clickable surface area 40 x 40-->
         <div

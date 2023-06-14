@@ -30,6 +30,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.65.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          INITIAL_VERSION: 0.6.7
+          DEFAULT_BUMP: patch
+
       - name: Publish to npm
         run: |
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}
