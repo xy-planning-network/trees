@@ -30,13 +30,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.65.0
+      - name: Automated Version Bump
+        id: version-bump
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: "v"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          INITIAL_VERSION: 0.6.7
-          DEFAULT_BUMP: patch
 
       - name: Publish to npm
         run: |
