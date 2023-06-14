@@ -12,12 +12,16 @@ withDefaults(
     position: "auto",
   }
 )
+
+const click = (event: MouseEvent): void => {
+  if (event.target) (event.target as HTMLElement).click()
+}
 </script>
 
 <template>
   <Popover :position="position" :as="as">
     <template #button>
-      <div class="leading-none w-4 h-4" @mouseover="$event.target.click()" @mouseleave="$event.target.click()">
+      <div class="leading-none w-4 h-4" @mouseover="click($event)" @mouseleave="click($event)">
         <InformationCircleIcon />
         <!--creates a larger clickable surface area 40 x 40-->
         <div
