@@ -8,11 +8,11 @@ import type { Placement } from "@floating-ui/vue"
 withDefaults(
   defineProps<{
     as?: string
-    position?: Placement
+    position?: Placement | "auto"
   }>(),
   {
     as: "span",
-    position: undefined,
+    position: "auto",
   }
 )
 

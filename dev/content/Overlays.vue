@@ -68,7 +68,7 @@ const popoverProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: undefined",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
@@ -81,7 +81,7 @@ const tooltipProps = [
   {
     name: "position",
     required: false,
-    type: "PopoverPosition - default: undefined",
+    type: "PopoverPosition - default: auto",
   },
 ]
 
@@ -427,7 +427,7 @@ useAppFlasher.info("Sticky!", true)
               href="https://floating-ui.com/docs/autoplacement"
               >autoPlacement</a
             >
-            middleware It will be used anytime the position prop is undefined.
+            middleware It will be used anytime the position prop is "auto".
           </p>
           <div class="grid gap-4 grid-cols-5">
             <div v-for="index in 5" :key="index">

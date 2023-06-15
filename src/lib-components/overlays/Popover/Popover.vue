@@ -17,11 +17,11 @@ import type { Placement } from "@floating-ui/vue"
 const props = withDefaults(
   defineProps<{
     as?: string
-    position?: Placement
+    position?: Placement | "auto"
   }>(),
   {
     as: "div",
-    position: undefined,
+    position: "auto",
   }
 )
 
@@ -29,16 +29,28 @@ const trigger = ref<HTMLElement | null>(null)
 const wrapper = ref<HTMLElement | null>(null)
 const middleware = computed(() => {
   const middleware = [offset(5), shift()]
-  if (!props.position) {
+  if (props.position === "auto") {
     middleware.push(autoPlacement())
   }
 
   return middleware
 })
 
+/**
+ * floating-ui's placement property does not support a direct "auto"
+ * mode. Passing undefined is expected when auto position is used.
+ */
+const placement = computed(() => {
+  if (props.position === "auto") {
+    return undefined
+  }
+
+  return props.position
+})
+
 const { floatingStyles } = useFloating(trigger, wrapper, {
   middleware: middleware,
-  placement: props.position,
+  placement: placement,
   strategy: "fixed",
   whileElementsMounted: autoUpdate,
 })
