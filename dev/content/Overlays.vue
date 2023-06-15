@@ -2,11 +2,11 @@
 import { ref } from "vue"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
-import { PopoverPosition } from "@/lib-components/overlays/Popover/Popover.vue"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
 import ProseBase from "../helpers/ProseBase.vue"
 import CodeSample from "../helpers/CodeSample.vue"
+import type { Placement } from "@floating-ui/vue"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
 
@@ -44,15 +44,19 @@ const spinner = function (): void {
   }, 15000)
 }
 
-const popoverPositions: PopoverPosition[] = [
-  "top-left",
-  "top-center",
-  "top-right",
-  "bottom-left",
-  "bottom-center",
-  "bottom-right",
-  "left",
+const popoverPositions: Placement[] = [
+  "top",
   "right",
+  "bottom",
+  "left",
+  "top-start",
+  "top-end",
+  "right-start",
+  "right-end",
+  "bottom-start",
+  "bottom-end",
+  "left-start",
+  "left-end",
 ]
 
 const popoverProps = [
@@ -359,7 +363,7 @@ useAppFlasher.info("Sticky!", true)
           </div>
 
           <div class="mt-8 flex justify-center">
-            <Popover>
+            <Popover position="bottom">
               <template #button>
                 <span class="xy-btn">Hi, hello, nice to meet you...</span>
               </template>
@@ -417,11 +421,13 @@ useAppFlasher.info("Sticky!", true)
 
         <div class="mt-8">
           <p class="mb-4">
-            <strong>Auto positioning</strong> favors left to right positioning.
-            i.e. if there appears to be space available to the right of the
-            trigger the tooltip content will flow toward the right. Top and
-            bottom positioning is prioritized by the current viewport, giving
-            preference where more visible space currently exists.
+            <strong>Auto positioning</strong> is managed by floating-ui's
+            <a
+              class="text-xy-blue underline"
+              href="https://floating-ui.com/docs/autoplacement"
+              >autoPlacement</a
+            >
+            middleware It will be used anytime the position prop is "auto".
           </p>
           <div class="grid gap-4 grid-cols-5">
             <div v-for="index in 5" :key="index">
@@ -464,8 +470,8 @@ useAppFlasher.info("Sticky!", true)
             </thead>
             <tbody>
               <tr>
-                <td>Popover/Tooltip</td>
-                <td>z-10</td>
+                <td>Popover/Tooltip/ActionsDropdown</td>
+                <td>z-[5]</td>
               </tr>
               <tr>
                 <td>App Sidebar Mobile Nav</td>

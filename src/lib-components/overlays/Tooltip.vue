@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import Popover, { PopoverPosition } from "./Popover/Popover.vue"
+import Popover from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
 import { ref } from "vue"
+import type { Placement } from "@floating-ui/vue"
 
 // props
 withDefaults(
   defineProps<{
     as?: string
-    position?: PopoverPosition
+    position?: Placement | "auto"
   }>(),
   {
     as: "span",
@@ -20,7 +21,7 @@ const popoverHover = ref(false)
 const popoverTimeout = ref()
 
 // functions
-const closePopover = (close: any): void => {
+const closePopover = (close: () => void): void => {
   popoverHover.value = false
   if (popoverTimeout.value) clearTimeout(popoverTimeout.value)
   popoverTimeout.value = setTimeout(() => {
@@ -36,9 +37,9 @@ const hoverPopover = (e: MouseEvent, open: boolean): void => {
 
 <template>
   <Popover :position="position" :as="as">
-    <template #button="{ open, close }">
+    <template #button="{ open, close }: { open: boolean, close: () => void }">
       <div
-        class="leading-none w-4 h-4"
+        class="leading-none relative w-4 h-4"
         @mouseover="hoverPopover($event, open)"
         @mouseleave="closePopover(close)"
       >
@@ -49,13 +50,15 @@ const hoverPopover = (e: MouseEvent, open: boolean): void => {
         ></div>
       </div>
     </template>
-    <template #default="{ close }">
+    <template #default="{ close }: { close: () => void }">
       <div
-        class="w-full max-w-xs bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
+        class="sm:min-w-max bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
         @mouseover.prevent="popoverHover = true"
         @mouseleave.prevent="closePopover(close)"
       >
-        <slot></slot>
+        <div class="max-w-xs">
+          <slot></slot>
+        </div>
       </div>
     </template>
   </Popover>
