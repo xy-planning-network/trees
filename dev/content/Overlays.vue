@@ -470,8 +470,8 @@ useAppFlasher.info("Sticky!", true)
             </thead>
             <tbody>
               <tr>
-                <td>Popover/Tooltip</td>
-                <td>z-10</td>
+                <td>Popover/Tooltip/ActionsDropdown</td>
+                <td>z-[5]</td>
               </tr>
               <tr>
                 <td>App Sidebar Mobile Nav</td>

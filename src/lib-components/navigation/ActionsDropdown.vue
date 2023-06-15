@@ -43,7 +43,7 @@ const { floatingStyles } = useFloating(trigger, wrapper, {
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transform opacity-0 scale-95"
     >
-      <div ref="wrapper" class="z-10" :style="floatingStyles">
+      <div ref="wrapper" class="z-[5]" :style="floatingStyles">
         <MenuItems
           class="w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none"
         >

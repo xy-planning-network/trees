@@ -50,7 +50,7 @@ const { floatingStyles } = useFloating(trigger, wrapper, {
       <slot name="button" :open="open" :close="close"></slot>
     </HeadlessPopoverButton>
 
-    <div ref="wrapper" class="z-10" :style="floatingStyles">
+    <div ref="wrapper" class="z-[5]" :style="floatingStyles">
       <HeadlessPopoverPanel>
         <slot :open="open" :close="close"></slot>
       </HeadlessPopoverPanel>
