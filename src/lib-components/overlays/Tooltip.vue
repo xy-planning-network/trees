@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import Popover from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
-import { ref } from "vue"
 import type { Placement } from "@floating-ui/vue"
 
 // props
@@ -16,21 +15,21 @@ withDefaults(
   }
 )
 
-// refs
-const popoverHover = ref(false)
-const popoverTimeout = ref()
+// data
+var popoverHover = false
+var popoverTimeout: null | NodeJS.Timeout = null
 
 // functions
 const closePopover = (close: () => void): void => {
-  popoverHover.value = false
-  if (popoverTimeout.value) clearTimeout(popoverTimeout.value)
-  popoverTimeout.value = setTimeout(() => {
-    if (!popoverHover.value) close()
+  popoverHover = false
+  if (popoverTimeout) clearTimeout(popoverTimeout)
+  popoverTimeout = setTimeout(() => {
+    if (!popoverHover) close()
   }, 100)
 }
 
 const hoverPopover = (e: MouseEvent, open: boolean): void => {
-  popoverHover.value = true
+  popoverHover = true
   if (!open && e.target) (e.target as HTMLElement).click()
 }
 </script>
