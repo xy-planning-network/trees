@@ -1,23 +1,47 @@
 <script lang="ts" setup>
-import Popover, { PopoverPosition } from "./Popover/Popover.vue"
+import Popover from "./Popover/Popover.vue"
 import { InformationCircleIcon } from "@heroicons/vue/outline"
+import type { Placement } from "@floating-ui/vue"
 
+// props
 withDefaults(
   defineProps<{
     as?: string
-    position?: PopoverPosition
+    position?: Placement | "auto"
   }>(),
   {
     as: "span",
     position: "auto",
   }
 )
+
+// data
+var popoverHover = false
+var popoverTimeout: null | NodeJS.Timeout = null
+
+// functions
+const closePopover = (close: () => void): void => {
+  popoverHover = false
+  if (popoverTimeout) clearTimeout(popoverTimeout)
+  popoverTimeout = setTimeout(() => {
+    if (!popoverHover) close()
+  }, 100)
+}
+
+const hoverPopover = (e: MouseEvent, open: boolean): void => {
+  popoverHover = true
+  if (!open && e.target) (e.target as HTMLElement).click()
+}
 </script>
 
 <template>
   <Popover :position="position" :as="as">
-    <template #button>
-      <div class="leading-none w-4 h-4">
+    <template #button="{ open, close }: { open: boolean, close: () => void }">
+      <div
+        class="leading-none relative w-4 h-4"
+        @mouseover="hoverPopover($event, open)"
+        @mouseleave="closePopover(close)"
+      >
         <InformationCircleIcon />
         <!--creates a larger clickable surface area 40 x 40-->
         <div
@@ -25,10 +49,16 @@ withDefaults(
         ></div>
       </div>
     </template>
-    <div
-      class="w-full max-w-xs bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
-    >
-      <slot></slot>
-    </div>
+    <template #default="{ close }: { close: () => void }">
+      <div
+        class="sm:min-w-max bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
+        @mouseover.prevent="popoverHover = true"
+        @mouseleave.prevent="closePopover(close)"
+      >
+        <div class="max-w-xs">
+          <slot></slot>
+        </div>
+      </div>
+    </template>
   </Popover>
 </template>

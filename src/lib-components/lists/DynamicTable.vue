@@ -281,7 +281,7 @@ loadAndRender()
             <!--Table Actions Cell-->
             <td
               v-if="hasActions"
-              class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
+              class="px-6 py-2 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               <ActionsDropdown
                 v-if="tableActions.type === 'dropdown'"
