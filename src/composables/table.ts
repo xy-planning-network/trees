@@ -2,6 +2,7 @@ import { VNodeChild } from "vue"
 import { ActionItem } from "@/composables/nav"
 
 export interface DynamicTableOptions {
+  dateSearchMaxRange?: number
   dateSearch?: boolean
   defaultSort?: string
   defaultSortDirection?: string

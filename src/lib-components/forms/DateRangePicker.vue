@@ -11,11 +11,13 @@ const props = withDefaults(
       minDate: number
       maxDate: number
     }
+    allowedRangeInDays?: number
     startDate?: number
     label?: string
     help?: string
   }>(),
   {
+    allowedRangeInDays: 0,
     startDate: 0,
     label: "",
     help: "",
@@ -31,7 +33,7 @@ const updateModelValue = (value: { minDate: number; maxDate: number }) => {
 }
 
 onMounted(() => {
-  flatpickr(`#${uuid}`, {
+  const opts: flatpickr.Options.Options = {
     dateFormat: "m-d-Y",
     mode: "range",
     maxDate: new Date(), // So far, we cannot have options past today for ranges
@@ -51,7 +53,34 @@ onMounted(() => {
         })
       }
     },
-  })
+  }
+
+  if (props.allowedRangeInDays) {
+    // Set the range to a prefilled value given the allowed range
+    const daysAgo = new Date()
+    opts.defaultDate = [
+      daysAgo.setDate(daysAgo.getDate() - props.allowedRangeInDays),
+      new Date(),
+    ]
+
+    // Handle onChange to dynamically adjust maxDate to x days ahead of the selected start date
+    opts.onChange = (selectedDates, _, self) => {
+      if (selectedDates.length === 1) {
+        // Clone date so as to not change selectedDates[0] value
+        var daysAhead = new Date(selectedDates[0].getTime())
+        daysAhead.setDate(daysAhead.getDate() + props.allowedRangeInDays)
+        const now = new Date()
+
+        if (daysAhead > now) {
+          daysAhead = now
+        }
+
+        self.set("maxDate", daysAhead)
+      }
+    }
+  }
+
+  flatpickr(`#${uuid}`, opts)
 })
 </script>
 <template>

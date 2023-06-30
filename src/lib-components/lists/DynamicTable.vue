@@ -181,6 +181,7 @@ loadAndRender()
       <div v-if="tableOptions.dateSearch" class="w-full max-w-lg lg:max-w-xs">
         <DateRangePicker
           v-model="dateRange"
+          :allowed-range-in-days="tableOptions.dateSearchMaxRange"
           @update:model-value="dateRangeChanged"
         />
       </div>
