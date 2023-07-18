@@ -15,6 +15,7 @@ const checkboxProps = [
 const dateRange = ref({ maxDate: 0, minDate: 0 })
 const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
 const dateRangePickerProps = [
+  { name: "maxRange", required: false, type: "number" },
   {
     name: "modelValue",
     required: true,
@@ -325,7 +326,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="dateRangePickerCopy" />
           </label>
           <div class="mt-1">
-            <DateRangePicker v-model="dateRange" />
+            <DateRangePicker v-model="dateRange" :max-range="365" />
             <div class="mt-4"><b>Value:</b> {{ dateRange }}</div>
             <PropsTable :props="dateRangePickerProps" />
           </div>
