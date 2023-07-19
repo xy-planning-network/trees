@@ -55,17 +55,15 @@ onMounted(() => {
     },
   }
 
-  if (props.maxRange) {
-    // Set the range to a prefilled value given the allowed range
-    const daysAgo = new Date()
-    const minDate = daysAgo.setDate(daysAgo.getDate() - props.maxRange)
-    const maxDate = new Date()
-    opts.defaultDate = [minDate, maxDate]
-    updateModelValue({
-      minDate: Math.floor(minDate / 1000),
-      maxDate: Math.floor(maxDate.getTime() / 1000),
-    })
+  // Handle initial values if set
+  if (props.modelValue.minDate != 0 && props.modelValue.maxDate != 0) {
+    opts.defaultDate = [
+      props.modelValue.minDate * 1000,
+      props.modelValue.maxDate * 1000,
+    ]
+  }
 
+  if (props.maxRange) {
     // Handle onChange to dynamically adjust maxDate to x days ahead of the selected start date
     opts.onChange = (selectedDates, _, self) => {
       if (selectedDates.length === 1) {

@@ -67,6 +67,20 @@ const reloadTable = (): void => {
   loadAndRender()
 }
 
+const setDateRange = (): void => {
+  if (dateSearchProps.value.maxRange) {
+    const daysAgo = new Date()
+    const minDate = daysAgo.setDate(
+      daysAgo.getDate() - dateSearchProps.value.maxRange
+    )
+    const maxDate = new Date()
+    dateRange.value = {
+      minDate: Math.floor(minDate / 1000),
+      maxDate: Math.floor(maxDate.getTime() / 1000),
+    }
+  }
+}
+
 const tableData = ref<Record<string, any>[]>([])
 
 const publicMethods: DynamicTableAPI = {
@@ -152,6 +166,7 @@ defineExpose(publicMethods)
 
 // onCreated
 loadAndRender()
+setDateRange()
 </script>
 <template>
   <div>
