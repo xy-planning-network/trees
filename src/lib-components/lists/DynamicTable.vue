@@ -165,8 +165,8 @@ watch(
 defineExpose(publicMethods)
 
 // onCreated
-loadAndRender()
 setDateRange()
+loadAndRender()
 </script>
 <template>
   <div>
