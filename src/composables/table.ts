@@ -1,8 +1,9 @@
 import { VNodeChild } from "vue"
 import { ActionItem } from "@/composables/nav"
+import { DateRangeProps } from "./date"
 
 export interface DynamicTableOptions {
-  dateSearch?: boolean
+  dateSearch?: boolean | DateRangeProps
   defaultSort?: string
   defaultSortDirection?: string
   refreshTrigger: number

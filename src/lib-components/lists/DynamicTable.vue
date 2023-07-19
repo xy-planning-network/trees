@@ -12,6 +12,7 @@ import type {
 } from "@/composables/table"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
+import { DateRangeProps } from "@/composables/date"
 import { useTable } from "@/composables/useTable"
 import TableActionButtons from "./TableActionButtons.vue"
 
@@ -121,6 +122,12 @@ const handleSort = (selectedSort: string): void => {
   loadAndRender()
 }
 
+const dateSearchProps = computed((): DateRangeProps => {
+  if (typeof props.tableOptions.dateSearch === "object")
+    return props.tableOptions.dateSearch
+  return {}
+})
+
 const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
 })
@@ -181,6 +188,7 @@ loadAndRender()
       <div v-if="tableOptions.dateSearch" class="w-full max-w-lg lg:max-w-xs">
         <DateRangePicker
           v-model="dateRange"
+          v-bind="{ ...dateSearchProps }"
           @update:model-value="dateRangeChanged"
         />
       </div>
