@@ -11,10 +11,36 @@ const btnRed = ref<HTMLElement>()
 const btnWhite = ref<HTMLElement>()
 const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
+
+import ColorRow from "../../dev/helpers/ColorRow.vue"
+import colors from "../../config/theme/colors"
+
+const typefaces = {
+  "font-inter": "Inter",
+  "font-display": "Work Sans",
+}
+
+const weights = [
+  "font-normal",
+  "font-medium",
+  "font-semibold",
+  "font-bold",
+  "font-extrabold",
+]
 </script>
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-3xl mx-auto space-y-8">
+      <ComponentLayout :css-component="true" title="Colors">
+        <template #description> </template>
+        <div
+          class="grid grid-cols-[repeat(auto-fit,minmax(8rem,1fr))] gap-x-2 gap-y-8 sm:grid-cols-1"
+        >
+          <ColorRow name="" :colors="colors['xy-blue']" code="xy-blue" />
+          <ColorRow name="" :colors="colors['xy-green']" code="xy-green" />
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout :css-component="true" title="Badges">
         <template #description>
           Badges are used to display tags or categoies categories of
@@ -258,6 +284,44 @@ const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
               posuere cubilia curae; Aliquam erat volutpat. Vestibulum ac purus
               ut dolor efficitur pharetra.
             </p>
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout :css-component="true" title="Fonts">
+        <template #description
+          >There are two fonts available. Inter (font-sans) is the default
+          interface font and should be used for most things. Work Sans
+          (font-display) is useful for headings and more marketing focused
+          content.</template
+        >
+
+        <div class="space-y-10">
+          <div class="space-y-10">
+            <div v-for="weight in weights" :key="weight">
+              <h5 class="text-sm font-semibold text-gray-900">{{ weight }}</h5>
+              <div class="grid grid-cols-2 gap-x-6">
+                <template
+                  v-for="(name, typeface) in typefaces"
+                  :key="`${typeface}-${weight}`"
+                >
+                  <div>
+                    <h5 class="text-sm font-semibold text-gray-900">
+                      {{ name }}
+                    </h5>
+                    <div
+                      v-for="header in 6"
+                      :key="`${typeface}-${header}-${weight}`"
+                      class="mt-1 bg-gray-100"
+                    >
+                      <component :is="`h${header}`" :class="[weight, typeface]"
+                        >Header H{{ header }}</component
+                      >
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
       </ComponentLayout>

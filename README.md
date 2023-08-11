@@ -63,8 +63,8 @@ Additional peer dependecies will be installed by NPM. If you are using NPM < 7 y
 
 ```js
 /* eslint-env node */
-module.exports = {
-  extends: "./node_modules/@xy-planning-network/trees/config/eslint.js",
+export default = {
+  extends: "./node_modules/@xy-planning-network/trees/config/eslint.ts",
 }
 ```
 
@@ -83,6 +83,19 @@ module.exports = {
 ```html
 <head>
   <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
+</head>
+```
+
+**Optionally include Work Sans in html template**
+
+```html
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet"
+  />
 </head>
 ```
 

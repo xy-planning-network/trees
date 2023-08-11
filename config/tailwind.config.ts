@@ -1,15 +1,13 @@
-/* eslint-disable */
-const path = require("path")
-const treesTheme = require("./theme")
+import path from "path"
+import treesTheme from "./theme"
 
-module.exports = {
+export default {
   content: [
     path.resolve(__dirname, "../src/lib-components/**/*.vue"),
     path.resolve(__dirname, "../src/composables/**/*.ts"),
   ],
   plugins: [
     require("@tailwindcss/forms"),
-    require("@tailwindcss/line-clamp"),
     require("@tailwindcss/typography")({
       modifiers: ["sm", "lg", "xl"],
     }),
