@@ -6,7 +6,6 @@ const badgeInfo = ref<HTMLElement>()
 const badgeAlert = ref<HTMLElement>()
 const btnPrimary = ref<HTMLElement>()
 const btnSecondary = ref<HTMLElement>()
-const btnGreen = ref<HTMLElement>()
 const btnRed = ref<HTMLElement>()
 const btnWhite = ref<HTMLElement>()
 const links = ref<HTMLElement>()
@@ -98,17 +97,6 @@ const weights = [
           <div class="mt-1">
             <button ref="btnSecondary" type="button" class="xy-btn-secondary">
               Secondary
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="btnGreen?.outerHTML" />
-          </label>
-          <div class="mt-1">
-            <button ref="btnGreen" type="button" class="xy-btn-green">
-              Green
             </button>
           </div>
         </div>

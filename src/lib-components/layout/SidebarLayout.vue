@@ -137,7 +137,7 @@ const isActive = (url: string): boolean => {
         <div
           class="flex flex-col grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
         >
-          <div class="flex items-center shrink-0 px-4">
+          <div class="flex justify-center shrink-0 px-4">
             <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
           </div>
           <div class="mt-5 grow flex flex-col">

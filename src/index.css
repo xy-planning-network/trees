@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply antialiased;
-  }
-
   /* general body copy */
   body {
     @apply text-base leading-normal text-gray-900;
@@ -65,15 +61,11 @@
 
   /* Button classes */
   .xy-btn {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .xy-btn-secondary {
     @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .xy-btn-green {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-xy-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .xy-btn-red {
@@ -81,7 +73,7 @@
   }
 
   .xy-btn-white {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-semibold rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-semibold rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Header classes */
@@ -127,7 +119,7 @@
 
   /* Link classes */
   .xy-link {
-    @apply font-semibold underline text-xy-blue hover:text-blue-700;
+    @apply font-semibold underline text-xy-blue-600 hover:text-xy-blue-500;
   }
 }
 
