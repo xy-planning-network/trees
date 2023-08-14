@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import ColorRow from "../../dev/helpers/ColorRow.vue"
+import colors from "../../config/theme/colors"
 
 const badgePrimary = ref<HTMLElement>()
 const badgeInfo = ref<HTMLElement>()
@@ -10,9 +12,6 @@ const btnRed = ref<HTMLElement>()
 const btnWhite = ref<HTMLElement>()
 const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
-
-import ColorRow from "../../dev/helpers/ColorRow.vue"
-import colors from "../../config/theme/colors"
 
 const typefaces = {
   "font-inter": "Inter",
