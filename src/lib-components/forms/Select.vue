@@ -29,9 +29,9 @@ const classes = computed((): string => {
   return (
     {
       standard:
-        "mt-1 block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:opacity-70 disabled:cursor-not-allowed",
+        "mt-1 block w-full border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-xy-blue-500 focus:border-xy-blue sm:text-sm disabled:opacity-70 disabled:cursor-not-allowed",
       compressed:
-        "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-600 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm  disabled:opacity-70 disabled:cursor-not-allowed",
+        "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-600 text-gray-900 focus:outline-none focus:ring-xy-blue-500 focus:border-xy-blue focus:z-10 sm:text-sm  disabled:opacity-70 disabled:cursor-not-allowed",
     } as any
   )[props.design]
 })

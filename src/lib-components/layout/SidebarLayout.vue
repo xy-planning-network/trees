@@ -197,7 +197,7 @@ const isActive = (url: string): boolean => {
             <Menu as="div" class="ml-3 relative">
               <div>
                 <MenuButton
-                  class="max-w-xs flex items-center text-sm text-white rounded-full hover:bg-blue-500 hover:text-gray-200 focus:outline-none focus:ring focus:text-white"
+                  class="max-w-xs flex items-center text-sm text-white rounded-full hover:bg-blue-900 hover:text-gray-50 focus:outline-none focus:ring focus:text-white"
                 >
                   <span class="sr-only">Open user menu</span>
                   <CogIcon class="h-8 w-8" fill="currentColor" />
