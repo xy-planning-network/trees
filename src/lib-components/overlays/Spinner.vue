@@ -28,7 +28,7 @@ const fadeOut = (): void => {
       v-if="loading"
       class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-50"
     >
-      <XYSpinner class="w-32 h-32" />
+      <XYSpinner class="w-24 h-24" />
       <div v-show="messages" class="mt-2">
         <transition
           appear
