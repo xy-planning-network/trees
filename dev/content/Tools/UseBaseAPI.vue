@@ -24,7 +24,7 @@ const { result, error, isLoading, isFinished, isAborted, hasFetched, execute, ab
   )
 
 const fetch = (opt: ReqOptions = {}, shouldAbort = false,) => {
-  execute({ query: Date.now() }, opt)
+  execute({ query: Date.now(), filters: ["one", "two", "three"]}, opt)
   .then((response) => {
     // you could do something with this data variable
     // which has a Type of TrailsRespPaged<Conifer>, but the result
