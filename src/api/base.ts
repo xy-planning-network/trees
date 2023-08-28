@@ -1,4 +1,8 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from "axios"
+import axios, {
+  AxiosResponse,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+} from "axios"
 import {
   HTTP_ERR_CANCEL,
   HTTP_ERR,
@@ -14,9 +18,11 @@ import { useAppSpinner } from "@/composables/useSpinner"
  * @param config ReqOptions
  * @returns ReqOptions
  */
-const apiDelayReqIntercept = (config: ReqOptions & AxiosRequestConfig) => {
+const apiDelayReqIntercept = (
+  config: ReqOptions & InternalAxiosRequestConfig
+) => {
   const delay = config.withDelay || 0
-  return new Promise((resolve) => {
+  return new Promise<ReqOptions & InternalAxiosRequestConfig>((resolve) => {
     setTimeout(() => {
       resolve(config)
     }, Math.max(delay, 0))
@@ -25,6 +31,9 @@ const apiDelayReqIntercept = (config: ReqOptions & AxiosRequestConfig) => {
 
 const apiAxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
+  paramsSerializer: {
+    indexes: null, // array indexes format (null - no brackets, false (default) - empty brackets, true - brackets with indexes)
+  },
   responseType: "json",
   withCredentials: true,
 })
