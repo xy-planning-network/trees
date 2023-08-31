@@ -64,13 +64,11 @@ const features = [
     <div
       class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl"
     >
-      <h2
-        class="text-base font-semibold tracking-wider text-blue-600 uppercase"
-      >
+      <h2 class="text-base font-semibold tracking-wider text-xy-blue uppercase">
         Build faster with consistency
       </h2>
       <p
-        class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl"
+        class="mt-2 text-3xl font-extrabold text-gray-900 font-display sm:text-4xl"
       >
         XY Technology UI Kit
       </p>
@@ -82,13 +80,13 @@ const features = [
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div v-for="feature in features" :key="feature.name" class="pt-6">
             <div
-              class="flow-root bg-gray-50 rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
+              class="flow-root bg-gray-50 shadow rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
               @click="update(feature.name)"
             >
               <div class="-mt-6">
                 <div>
                   <span
-                    class="inline-flex items-center justify-center p-3 bg-blue-500 rounded-md shadow-lg"
+                    class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-md shadow-lg"
                   >
                     <component
                       :is="feature.icon"
@@ -111,15 +109,15 @@ const features = [
         </div>
       </div>
 
-      <section class="mt-12 bg-blue-800 rounded-lg">
+      <section class="mt-12 bg-blue-900 rounded-lg">
         <div class="max-w-7xl mx-auto md:grid md:grid-cols-2 md:px-6 lg:px-8">
           <div
-            class="py-12 px-4 sm:px-6 md:flex md:flex-col md:py-16 md:pl-0 md:pr-10 md:border-r md:border-blue-900 lg:pr-16"
+            class="py-12 px-4 sm:px-6 md:flex md:flex-col md:py-16 md:pl-0 md:pr-10 md:border-r md:border-xy-blue-50/50 lg:pr-16"
           >
             <blockquote class="mt-6 md:grow md:flex md:flex-col">
               <div class="relative text-lg font-medium text-white md:grow">
                 <svg
-                  class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-blue-600"
+                  class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-xy-blue-600"
                   fill="currentColor"
                   viewBox="0 0 32 32"
                   aria-hidden="true"
@@ -149,7 +147,7 @@ const features = [
                     <div class="text-base font-medium text-white">
                       Taylor Deardorff
                     </div>
-                    <div class="text-base font-medium text-blue-200">
+                    <div class="text-base font-medium text-xy-blue-50">
                       Product Stuff
                     </div>
                   </div>
@@ -163,7 +161,7 @@ const features = [
             <blockquote class="mt-6 md:grow md:flex md:flex-col">
               <div class="relative text-lg font-medium text-white md:grow">
                 <svg
-                  class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-blue-600"
+                  class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-xy-blue-600"
                   fill="currentColor"
                   viewBox="0 0 32 32"
                 >
@@ -192,7 +190,7 @@ const features = [
                     <div class="text-base font-medium text-white">
                       Jillian Berry
                     </div>
-                    <div class="text-base font-medium text-blue-200">
+                    <div class="text-base font-medium text-xy-blue-50">
                       Design Stuff
                     </div>
                   </div>

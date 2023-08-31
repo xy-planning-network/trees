@@ -137,7 +137,7 @@ const isActive = (url: string): boolean => {
         <div
           class="flex flex-col grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
         >
-          <div class="flex items-center shrink-0 px-4">
+          <div class="flex justify-center shrink-0 px-4">
             <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
           </div>
           <div class="mt-5 grow flex flex-col">
@@ -197,7 +197,7 @@ const isActive = (url: string): boolean => {
             <Menu as="div" class="ml-3 relative">
               <div>
                 <MenuButton
-                  class="max-w-xs flex items-center text-sm text-white rounded-full hover:bg-blue-500 hover:text-gray-200 focus:outline-none focus:ring focus:text-white"
+                  class="max-w-xs flex items-center text-sm text-white rounded-full hover:bg-blue-900 hover:text-gray-50 focus:outline-none focus:ring focus:text-white"
                 >
                   <span class="sr-only">Open user menu</span>
                   <CogIcon class="h-8 w-8" fill="currentColor" />
