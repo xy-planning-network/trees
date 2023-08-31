@@ -9,7 +9,7 @@ declare global {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onBeforeMount, ref } from "vue"
 import {
   CollectionIcon,
   ColorSwatchIcon,
@@ -30,8 +30,14 @@ import Team from "./content/Team.vue"
 import Tools from "./content/Tools.vue"
 import TreeIcon from "./assets/trees-square-icon.svg"
 
+const navKey = "trees-nav-style"
 const currentPage = ref("Home")
-const currentNav = ref("StackedLayout")
+const currentNav = ref(window.localStorage.getItem(navKey) || "StackedLayout")
+const nextNav = computed(() => {
+  return currentNav.value === "StackedLayout"
+    ? "SidebarLayout"
+    : "StackedLayout"
+})
 const navigation = [
   { name: "Home", url: "/trees/?page=Home", icon: HomeIcon },
   { name: "Forms", url: "/trees/?page=Forms", icon: DocumentTextIcon },
@@ -54,7 +60,15 @@ const user = ref({
   name: "Jimothy Bobbitz",
   email: "jimothy@bobbitz.biz",
 })
-const userNavigation = ref([{ name: "Toggle the Nav", url: "/no" }])
+const userNavigation = computed(() => {
+  return [
+    {
+      name: "Toggle the Nav",
+      url: `${window.location.pathname}?page=${currentPage.value}&nav=${nextNav.value}`,
+    },
+  ]
+})
+
 const goTo = function (page: string): void {
   const url = "/trees/?page=" + page
   window.history.pushState({}, "", url)
@@ -69,11 +83,15 @@ const currentPageURL = computed((): string => {
   return "/trees/?page=" + currentPage.value
 })
 
-onMounted(() => {
+onBeforeMount(() => {
   const page = new URLSearchParams(window.location.search).get("page")
   if (page) currentPage.value = page
-  const search = new URLSearchParams(window.location.search).get("currentNav")
-  if (search) currentNav.value = search
+  const search = new URLSearchParams(window.location.search).get("nav")
+  if (search) {
+    currentNav.value = search
+    window.localStorage.setItem(navKey, search)
+    window.location.search = `page=${currentPage.value}`
+  }
 })
 </script>
 
@@ -96,16 +114,6 @@ onMounted(() => {
       <Elements v-if="showing('Elements')" />
       <Tools v-if="showing('Additional Tools')" />
       <Team v-if="showing('Team')" />
-      <button
-        type="button"
-        class="xy-btn"
-        @click="
-          currentNav =
-            currentNav === 'StackedLayout' ? 'SidebarLayout' : 'StackedLayout'
-        "
-      >
-        Swap Dat Nav
-      </button>
 
       <template v-if="currentNav === 'SidebarLayout'" #sidebar-bottom>
         <div class="bg-gray-50 rounded-md p-4 space-y-3">
