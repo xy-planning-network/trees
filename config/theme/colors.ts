@@ -1,5 +1,4 @@
-const colors = require("tailwindcss/colors")
-
+import colors from "tailwindcss/colors"
 export const brandColors = {
   blue: {
     50: "#C9E4F6",
@@ -40,7 +39,8 @@ export const brandColors = {
   },
 }
 
-module.exports = {
+export default {
+  // gray: colors["neutral"], // TODO: (spk) adopt Tailwind - Neutral as the primary gray palette?
   "xy-blue": {
     DEFAULT: brandColors["blue"][600],
     ...brandColors["blue"],
