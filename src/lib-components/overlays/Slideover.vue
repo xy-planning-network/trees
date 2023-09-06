@@ -54,14 +54,14 @@ const close = () => {
               <div
                 class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll"
               >
-                <div class="py-6 px-4 bg-blue-700 sm:px-6">
+                <div class="py-6 px-4 bg-xy-blue-700 sm:px-6">
                   <div class="flex items-center justify-between">
                     <DialogTitle as="h3" class="text-white">
                       {{ header }}
                     </DialogTitle>
                     <div class="ml-3 h-7 flex items-center">
                       <button
-                        class="bg-blue-700 rounded-md text-blue-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        class="bg-xy-blue-600 rounded-md text-gray-50 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                         @click="close()"
                       >
                         <span class="sr-only">Close panel</span>
@@ -70,7 +70,10 @@ const close = () => {
                     </div>
                   </div>
                   <div class="mt-1">
-                    <p class="text-blue-300" v-text="description"></p>
+                    <p
+                      class="text-gray-50 text-base font-medium"
+                      v-text="description"
+                    ></p>
                   </div>
                 </div>
                 <div class="relative flex-1 py-6 px-4 sm:px-6">

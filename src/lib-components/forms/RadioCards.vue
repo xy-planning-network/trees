@@ -117,7 +117,7 @@ const nameAttr = computed(() => {
           class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
           :class="[
             checked ? 'border-transparent' : 'border-gray-300',
-            active ? 'border-blue-500 ring-2 ring-blue-500' : '',
+            active ? 'border-xy-blue ring-2 ring-xy-blue-500' : '',
             disabled ? 'cursor-not-allowed opacity-75' : '',
           ]"
         >
@@ -154,13 +154,13 @@ const nameAttr = computed(() => {
             </div>
           </div>
           <CheckCircleIcon
-            :class="[!checked ? 'invisible' : '', 'h-5 w-5 text-blue-600']"
+            :class="[!checked ? 'invisible' : '', 'h-5 w-5 text-xy-blue']"
             aria-hidden="true"
           />
           <div
             :class="[
               active ? 'border' : 'border-2',
-              checked ? 'border-blue-500' : 'border-transparent',
+              checked ? 'border-xy-blue' : 'border-transparent',
               'absolute -inset-px rounded-lg pointer-events-none',
             ]"
             aria-hidden="true"

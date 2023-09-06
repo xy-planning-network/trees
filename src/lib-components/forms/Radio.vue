@@ -71,7 +71,7 @@ const hasLegend = computed(() => {
               "
               :aria-labelledby="`${uuid}-${index}-label`"
               :checked="modelValue === option.value"
-              class="w-4 h-4 border-gray-600 focus:ring-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
               :disabled="option.disabled === true ? true : undefined"
               :name="uuid"
               type="radio"

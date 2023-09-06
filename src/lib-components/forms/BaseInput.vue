@@ -65,8 +65,8 @@ const isTextType = computed((): boolean => {
         ? [
             'block',
             'shadow-sm',
-            'focus:ring-blue-500',
-            'focus:border-blue-500',
+            'focus:xy-blue-500',
+            'focus:border-xy-blue ',
             'border-gray-600',
             'rounded-md',
             'w-full',
