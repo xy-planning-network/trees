@@ -26,7 +26,7 @@ const fadeOut = (): void => {
   <Portal>
     <div
       v-if="loading"
-      class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-50"
+      class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-60"
     >
       <XYSpinner class="w-32 h-32" />
       <div v-show="messages" class="mt-2">

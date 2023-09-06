@@ -17,7 +17,7 @@ const attrs = useAttrs()
         </p>
         <div class="animate-spin-gear drop-shadow-md">
           <svg
-            class="h-full w-full text-[#51A749]"
+            class="h-full w-full text-xy-green-300"
             viewBox="0 0 129 129"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -74,19 +74,19 @@ const attrs = useAttrs()
               <g id="Group-3-Copy">
                 <polygon
                   id="Fill-1"
-                  class="fill-[#1F6DF4]"
+                  class="fill-xy-blue"
                   points="0.7994 0.3999 11.2214 16.0009 0.7994 31.5999 11.2214 31.5999 16.4004 24.0149 21.1934 31.5999 31.9994 31.5999 21.4254 15.7449 26.0064 9.1719 20.6194 1.3729 16.1554 7.9149 11.2214 0.3999"
                 ></polygon>
                 <polygon
                   id="Fill-2"
-                  class="fill-[#51A749]"
+                  class="fill-xy-green-300"
                   points="41.978 0.3999 36.799 7.6269 32.006 0.3999 21.2 0.3999 31.775 15.5069 27.194 21.7689 32.27 29.1999 52.4 0.3999"
                 ></polygon>
               </g>
             </g>
           </svg>
-          <!-- TODO: (spk) replace with logo mark
-        
+
+          <!-- TODO: (spk) replace with logo mark 
           <svg
             viewBox="0 0 280 280"
             xmlns="http://www.w3.org/2000/svg"
