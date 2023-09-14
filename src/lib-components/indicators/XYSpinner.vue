@@ -15,7 +15,7 @@ const attrs = useAttrs()
         <p class="sr-only">
           <slot>loading</slot>
         </p>
-        <div class="animate-spin-gear drop-shadow-md">
+        <div class="animate-spin-gear drop-shadow-sm">
           <svg
             class="h-full w-full text-xy-green-300"
             viewBox="0 0 129 129"
@@ -57,37 +57,6 @@ const attrs = useAttrs()
           class="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center transform scale-50"
         >
           <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 53 32"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-          >
-            <g
-              id="Page-1"
-              stroke="none"
-              stroke-width="1"
-              fill="none"
-              fill-rule="evenodd"
-            >
-              <g id="Group-3-Copy">
-                <polygon
-                  id="Fill-1"
-                  class="fill-xy-blue"
-                  points="0.7994 0.3999 11.2214 16.0009 0.7994 31.5999 11.2214 31.5999 16.4004 24.0149 21.1934 31.5999 31.9994 31.5999 21.4254 15.7449 26.0064 9.1719 20.6194 1.3729 16.1554 7.9149 11.2214 0.3999"
-                ></polygon>
-                <polygon
-                  id="Fill-2"
-                  class="fill-xy-green-300"
-                  points="41.978 0.3999 36.799 7.6269 32.006 0.3999 21.2 0.3999 31.775 15.5069 27.194 21.7689 32.27 29.1999 52.4 0.3999"
-                ></polygon>
-              </g>
-            </g>
-          </svg>
-
-          <!-- TODO: (spk) replace with logo mark 
-          <svg
             viewBox="0 0 280 280"
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -101,7 +70,6 @@ const attrs = useAttrs()
               d="m267.5,140c0-85-42.5-127.5-127.5-127.5-55.06,0-92.27,17.86-111.66,53.53,28.32,8.48,56.67,16.85,84.98,25.37,27.05,8.14,54.01,16.55,81.06,24.67,5.45,1.64,7.5,4.76,6.63,10.27-.69,4.35-1.04,8.75-1.57,13.13-4.95,40.77-8.32,81.74-12.43,122.61,53.64-13.88,80.49-54.56,80.49-122.08Z"
             />
           </svg>
-          -->
         </div>
       </div>
     </div>

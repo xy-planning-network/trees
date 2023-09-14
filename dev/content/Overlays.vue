@@ -261,10 +261,15 @@ useAppFlasher.info("Sticky!", true)
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="spinnerCopy" />
           </label>
-          <div class="mt-1">
-            <button type="button" class="xy-btn" @click="spinner()">
-              Show Me
-            </button>
+          <div class="space-y-5">
+            <div>
+              <XYSpinner />
+            </div>
+            <div class="mt-1">
+              <button type="button" class="xy-btn" @click="spinner()">
+                Show Me
+              </button>
+            </div>
           </div>
         </div>
       </ComponentLayout>
