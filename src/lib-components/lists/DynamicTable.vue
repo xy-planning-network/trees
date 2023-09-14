@@ -44,7 +44,7 @@ const loadAndRender = (): void => {
 
   BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableOptions.url,
-    { skipLoader: true },
+    { skipLoader: false },
     params
   ).then(
     (success) => {
