@@ -2,6 +2,7 @@
 import {
   default as useBaseAPI,
   useBaseAPIGet,
+  useBaseAPIPatch,
   useBaseAPIPut,
   useBaseAPIPost,
   useBaseAPIDelete,
@@ -38,6 +39,7 @@ export type {
 export {
   useBaseAPI,
   useBaseAPIGet,
+  useBaseAPIPatch,
   useBaseAPIPut,
   useBaseAPIPost,
   useBaseAPIDelete,
