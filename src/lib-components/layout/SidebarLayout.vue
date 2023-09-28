@@ -40,7 +40,7 @@ const isActive = (url: string): boolean => {
       <Dialog
         as="div"
         static
-        class="fixed inset-0 flex z-10 md:hidden"
+        class="fixed inset-0 flex z-10 lg:hidden"
         :open="sidebarOpen"
         @close="sidebarOpen = false"
       >
@@ -131,7 +131,7 @@ const isActive = (url: string): boolean => {
     </TransitionRoot>
 
     <!-- Static sidebar for desktop -->
-    <div class="hidden md:flex md:shrink-0">
+    <div class="hidden lg:flex lg:shrink-0">
       <div class="flex flex-col w-64">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div
@@ -180,7 +180,7 @@ const isActive = (url: string): boolean => {
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <div class="relative z-10 shrink-0 flex h-16 bg-xy-blue shadow">
         <button
-          class="px-4 border-r border-gray-200 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 md:hidden"
+          class="px-4 border-r border-gray-200 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 lg:hidden"
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
@@ -192,7 +192,7 @@ const isActive = (url: string): boolean => {
               <slot name="header"></slot>
             </h1>
           </div>
-          <div class="ml-4 flex items-center md:ml-6">
+          <div class="ml-4 flex items-center lg:ml-6">
             <!-- Profile dropdown -->
             <Menu as="div" class="ml-3 relative">
               <div>
