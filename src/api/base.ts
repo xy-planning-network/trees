@@ -30,7 +30,7 @@ const apiDelayReqIntercept = (
 }
 
 const apiAxiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API_URL || "/api/v1",
+  baseURL: "/api/v1",
   paramsSerializer: {
     indexes: null, // array indexes format (null - no brackets, false (default) - empty brackets, true - brackets with indexes)
   },
@@ -128,6 +128,13 @@ const BaseAPI: HttpClient = {
 }
 
 export default BaseAPI
+
+interface BaseAPIDefaults {
+  baseURL: string
+}
+export const setBaseAPIDefaults = (config: BaseAPIDefaults) => {
+  apiAxiosInstance.defaults = { ...apiAxiosInstance.defaults, ...config }
+}
 
 /**
  * A type guard for checking if a variable is in the shape of a HttpError
