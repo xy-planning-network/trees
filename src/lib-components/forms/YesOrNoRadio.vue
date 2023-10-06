@@ -1,58 +1,60 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
-import { computed, useAttrs } from "vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import { useInputField } from "@/composables/forms"
 
-const props = withDefaults(
+defineOptions({
+  inheritAttrs: false,
+})
+
+withDefaults(
   defineProps<{
     modelValue?: boolean
     help?: string
-    legend?: string
-    name?: string
+    label?: string
   }>(),
   {
     modelValue: undefined,
     help: "",
-    legend: "",
-    name: "",
+    label: "",
   }
 )
+
 const emits = defineEmits(["update:modelValue"])
-const attrs = useAttrs()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
-const hasNameAttr = computed((): boolean => {
-  return typeof props.name === "string" && props.name !== ""
-})
+const { inputID, isDisabled, nameAttr } = useInputField()
+
 const onChange = (e: Event) => {
   emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
 }
 </script>
+
 <template>
   <fieldset
     class="space-y-3"
-    :aria-labelledby="legend ? `${uuid}-legend` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
+    :aria-labelledby="label ? `${inputID}-legend` : undefined"
+    :aria-describedby="help ? `${inputID}-help` : undefined"
   >
-    <div v-if="legend || help" class="space-y-0.5">
-      <InputLabel
-        class="block my-auto"
-        :label="legend"
-        tag="legend"
-      ></InputLabel>
-      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
+    <div v-if="label">
+      <InputLabel class="block my-auto" :label="label" tag="legend" />
+      <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
     </div>
+
     <div>
       <label
-        class="inline-flex items-center"
-        :class="{ 'cursor-not-allowed': $attrs.disabled }"
-        :for="`${hasNameAttr ? name : uuid}-true`"
+        class="inline-flex items-center group"
+        :class="isDisabled && 'cursor-not-allowed'"
+        :for="`${nameAttr}-true`"
       >
         <input
-          :id="`${hasNameAttr ? name : uuid}-true`"
+          :id="`${nameAttr}-true`"
           type="radio"
-          class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :name="hasNameAttr ? name : uuid"
+          :class="[
+            'h-4 w-4',
+            'border-gray-300 text-xy-blue focus:ring-xy-blue-500',
+            'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+            'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+          ]"
+          :name="nameAttr"
           :value="true"
           :checked="modelValue === true"
           v-bind="{
@@ -60,25 +62,24 @@ const onChange = (e: Event) => {
             onChange: onChange,
           }"
         />
-        <InputLabel
-          class="ml-2"
-          :disabled="
-            $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
-          "
-          label="Yes"
-          tag="span"
-        ></InputLabel>
+        <InputLabel class="ml-3" label="Yes" tag="span" />
       </label>
+
       <label
         class="inline-flex items-center ml-6"
-        :class="{ 'cursor-not-allowed': $attrs.disabled }"
-        :for="`${hasNameAttr ? name : uuid}-false`"
+        :class="isDisabled && 'cursor-not-allowed'"
+        :for="`${nameAttr}-false`"
       >
         <input
-          :id="`${hasNameAttr ? name : uuid}-false`"
+          :id="`${nameAttr}-false`"
           type="radio"
-          class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :name="hasNameAttr ? name : uuid"
+          :class="[
+            'h-4 w-4',
+            'border-gray-300 text-xy-blue focus:ring-xy-blue-500',
+            'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+            'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+          ]"
+          :name="nameAttr"
           :value="false"
           :checked="modelValue === false"
           v-bind="{
@@ -86,14 +87,7 @@ const onChange = (e: Event) => {
             onChange: onChange,
           }"
         />
-        <InputLabel
-          class="ml-2"
-          :disabled="
-            $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
-          "
-          label="No"
-          tag="span"
-        ></InputLabel>
+        <InputLabel class="ml-3" label="No" tag="span" />
       </label>
     </div>
   </fieldset>

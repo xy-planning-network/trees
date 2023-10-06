@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { hasSlotContent } from "@/helpers/Slots"
 withDefaults(
   defineProps<{
+    label?: string
     tag?: string
   }>(),
   {
+    label: "",
     tag: "legend",
   }
 )
 </script>
+
 <template>
   <component
     :is="tag"
-    v-if="hasSlotContent($slots.default)"
-    v-bind="{
-      ...$attrs,
-      class: 'text-sm font-semibold leading-snug text-gray-900',
-    }"
+    v-if="label"
+    class="block text-base/6 font-medium text-gray-800"
+    v-bind="$attrs"
   >
-    <slot />
+    {{ label }}
   </component>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { ClipboardCopyIcon } from "@heroicons/vue/outline"
+import { useInputField } from "@/composables/forms"
 
 const props = withDefaults(defineProps<{ value?: string }>(), {
   value: "",
@@ -8,6 +9,8 @@ const props = withDefaults(defineProps<{ value?: string }>(), {
 
 const copied = ref(false)
 const input = ref<HTMLInputElement>()
+
+const { inputID } = useInputField()
 
 const copy = function () {
   if (input.value === undefined) {
@@ -28,6 +31,7 @@ const copy = function () {
     @click="copy"
   />
   <input
+    :id="inputID"
     ref="input"
     style="position: absolute; left: -999em"
     type="text"

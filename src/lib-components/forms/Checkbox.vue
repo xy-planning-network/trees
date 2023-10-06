@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import Uniques from "@/helpers/Uniques"
-import { useAttrs } from "vue"
+import { useInputField } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(
   defineProps<{
@@ -16,18 +19,24 @@ withDefaults(
   }
 )
 const emits = defineEmits(["update:modelValue"])
-const attrs = useAttrs()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const { inputID, isDisabled, isValid } = useInputField()
 </script>
+
 <template>
   <div class="relative flex items-start">
-    <div class="flex items-center h-5">
+    <div class="flex items-center h-6">
       <input
-        :id="uuid"
-        :aria-labelledby="label ? `${uuid}-label` : undefined"
-        :aria-describedby="help ? `${uuid}-help` : undefined"
+        :id="inputID"
+        :aria-labelledby="label ? `${inputID}-label` : undefined"
+        :aria-describedby="help ? `${inputID}-help` : undefined"
         :checked="modelValue"
-        class="focus:ring-xy-blue-500 h-4 w-4 text-xy-blue border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        :class="[
+          'h-4 w-4 rounded',
+          'border-gray-300 text-xy-blue',
+          'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+          'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+          isValid ? 'focus:ring-xy-blue-500' : 'focus:ring-red-700',
+        ]"
         type="checkbox"
         v-bind="{
           onChange: ($event) => {
@@ -39,15 +48,12 @@ const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
     </div>
     <div class="ml-3">
       <InputLabel
-        :id="`${uuid}-label`"
-        class="mt-auto"
-        :disabled="
-          $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
-        "
-        :for="uuid"
+        :id="`${inputID}-label`"
+        :for="inputID"
         :label="label"
+        :class="isDisabled && 'cursor-not-allowed'"
       />
-      <InputHelp :id="`${uuid}-help`" class="-mt-1" :text="help"></InputHelp>
+      <InputHelp :id="`${inputID}-help`" :text="help"></InputHelp>
     </div>
   </div>
 </template>
