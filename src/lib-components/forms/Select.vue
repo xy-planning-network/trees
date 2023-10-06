@@ -28,18 +28,21 @@ const { inputID, isValid } = useInputField()
 
 <template>
   <div>
-    <div class="mb-1">
-      <InputLabel :id="`${inputID}-label`" :for="inputID" :label="label" />
-    </div>
+    <InputLabel
+      :id="`${inputID}-label`"
+      class="mb-2"
+      :for="inputID"
+      :label="label"
+    />
     <select
       :id="inputID"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6 pl-3 pr-10',
-        'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-600 disabled:ring-gray-200 disabled:opacity-100',
+        'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200 disabled:opacity-100',
         isValid
-          ? 'text-gray-800 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500'
+          ? 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500'
           : 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700',
       ]"
       :value="modelValue"
@@ -64,8 +67,6 @@ const { inputID, isValid } = useInputField()
         v-text="option.label"
       />
     </select>
-    <div class="mt-1">
-      <InputHelp :id="`${inputID}-help`" :text="help" />
-    </div>
+    <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
   </div>
 </template>

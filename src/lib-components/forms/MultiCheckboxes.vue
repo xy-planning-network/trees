@@ -52,7 +52,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
 
 <template>
   <fieldset
-    class="space-y-5"
+    class="space-y-4"
     :aria-labelledby="label ? `${inputID}-legend` : undefined"
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >
@@ -63,7 +63,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
 
     <div class="flex">
       <div
-        class="grid gap-y-5"
+        class="grid gap-y-6"
         :class="{
           'sm:grid sm:gap-x-5 sm:space-y-0': columns !== undefined,
           'sm:grid-cols-2': columns === 2,
@@ -75,7 +75,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
           :key="option.value"
           class="flex items-start"
         >
-          <div class="flex items-center h-6">
+          <div class="flex items-center h-5">
             <input
               :id="`${inputID}-${index}`"
               :aria-labelledby="`${inputID}-${index}-label`"

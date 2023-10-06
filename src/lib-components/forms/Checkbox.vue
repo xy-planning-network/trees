@@ -24,7 +24,7 @@ const { inputID, isDisabled, isValid } = useInputField()
 
 <template>
   <div class="relative flex items-start">
-    <div class="flex items-center h-6">
+    <div class="flex items-center h-5">
       <input
         :id="inputID"
         :aria-labelledby="label ? `${inputID}-label` : undefined"

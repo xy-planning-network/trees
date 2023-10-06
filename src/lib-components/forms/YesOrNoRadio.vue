@@ -30,7 +30,7 @@ const onChange = (e: Event) => {
 
 <template>
   <fieldset
-    class="space-y-3"
+    class="space-y-4"
     :aria-labelledby="label ? `${inputID}-legend` : undefined"
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >

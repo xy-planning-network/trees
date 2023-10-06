@@ -394,8 +394,9 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <MultiCheckboxes
               v-model="multiCheckboxSelection"
+              label="Lay it out in a grid"
               :columns="2"
-              help="Set the columns prop to 2, 3, or 4"
+              help="Set the columns prop to 2 or 3"
               :options="options"
             >
               <template #legend>In A Grid Too</template>
@@ -440,7 +441,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <Radio
               v-model="radioSelection"
-              help="Set the columns prop to 2, 3, or 4"
+              label="Lay it out in a grid"
+              help="Set the columns prop to 2 or 3"
               :options="options"
               :columns="2"
               required

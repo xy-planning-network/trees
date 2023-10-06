@@ -51,7 +51,7 @@ const { isDisabled } = useInputField()
       />
     </Switch>
 
-    <div class="ml-3">
+    <div class="ml-3 mt-0.5">
       <SwitchLabel v-if="label">
         <InputLabel
           :label="label"
