@@ -73,7 +73,7 @@ const onChange = (val: RadioCards["modelValue"]) => {
     @update:model-value="onChange"
   >
     <RadioGroupLabel v-if="label" class="block">
-      <FieldsetLegend tag="div" :label="label" />
+      <FieldsetLegend tag="div" :label="label" :required="isRequired" />
     </RadioGroupLabel>
 
     <RadioGroupDescription v-if="help">

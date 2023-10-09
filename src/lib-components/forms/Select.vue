@@ -14,7 +14,7 @@ withDefaults(defineProps<OptionsInput>(), {
 })
 
 const emit = defineEmits(["update:modelValue"])
-const { inputID } = useInputField()
+const { inputID, isRequired } = useInputField()
 </script>
 
 <template>
@@ -24,6 +24,7 @@ const { inputID } = useInputField()
       class="mb-2"
       :for="inputID"
       :label="label"
+      :required="isRequired"
     />
     <select
       :id="inputID"

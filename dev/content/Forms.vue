@@ -202,7 +202,7 @@ const toggleProps = [
                 v-model="inputVals['baseInput']"
                 help="No wrong answers here."
                 type="text"
-                label="What's your life moto?"
+                label="What's your life moto?*"
                 placeholder="It's good to be alive"
                 required
               />
@@ -266,8 +266,15 @@ const toggleProps = [
               :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
               :placeholder="`A placeholder for a ${inputTypeSelected}`"
             />
+
             <div class="mt-4">
-              <b>Value:</b> {{ inputVals[inputTypeSelected] }}
+              <p>
+                <b>Value:</b> {{ inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
+              <p>
+                <b>Type:</b>
+                {{ typeof inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
             </div>
 
             <PropsTable :props="textLikeInputProps" />
@@ -412,6 +419,7 @@ const toggleProps = [
                   value: option.value,
                 }))
               "
+              required
             />
 
             <MultiCheckboxes

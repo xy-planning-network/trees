@@ -21,7 +21,7 @@ const emit = defineEmits<{
   (e: "update:modelValue", modelValue: ModelValue): void
 }>()
 
-const { inputID, isDisabled } = useInputField()
+const { inputID, isDisabled, isRequired } = useInputField()
 
 const onChange = (checked: boolean, val: CheckboxValue) => {
   // TODO: test this undefined scenario
@@ -44,7 +44,11 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >
     <div v-if="label">
-      <FieldsetLegend :id="`${inputID}-legend`" :label="label" />
+      <FieldsetLegend
+        :id="`${inputID}-legend`"
+        :label="label"
+        :required="isRequired"
+      />
       <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
     </div>
 

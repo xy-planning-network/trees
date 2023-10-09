@@ -1,17 +1,59 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField, defaultInputProps } from "@/composables/forms"
+import {
+  useInputField,
+  defaultInputProps,
+  emailPattern,
+  looseToNumber,
+  passwordPattern,
+  phonePattern,
+} from "@/composables/forms"
 import type { TextLikeInput } from "@/composables/forms"
+import { computed } from "vue"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(defineProps<TextLikeInput>(), defaultInputProps)
+const props = withDefaults(defineProps<TextLikeInput>(), defaultInputProps)
 
-defineEmits(["update:modelValue"])
-const { inputID } = useInputField()
+const emit = defineEmits(["update:modelValue"])
+const { inputID, isRequired } = useInputField()
+
+const typeAttributes = computed(() => {
+  switch (props.type) {
+    case "number":
+      return {
+        max: Number.MAX_SAFE_INTEGER,
+        min: Number.MIN_SAFE_INTEGER,
+      }
+    case "email":
+      return {
+        pattern: emailPattern,
+      }
+    case "password":
+      return {
+        pattern: passwordPattern,
+      }
+    case "tel":
+      return {
+        pattern: phonePattern,
+      }
+    default:
+      return {}
+  }
+})
+
+const onInput = (e: Event) => {
+  let val = (e.target as HTMLInputElement).value
+
+  if (props.type === "number") {
+    val = looseToNumber(val)
+  }
+
+  emit("update:modelValue", val)
+}
 </script>
 
 <template>
@@ -21,6 +63,7 @@ const { inputID } = useInputField()
       class="mb-2"
       :for="inputID"
       :label="label"
+      :required="isRequired"
     />
     <input
       :id="inputID"
@@ -37,10 +80,8 @@ const { inputID } = useInputField()
       :placeholder="placeholder"
       :type="type"
       :value="modelValue"
-      v-bind="$attrs"
-      @input="
-        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
-      "
+      v-bind="{ ...typeAttributes, ...$attrs }"
+      @input="onInput"
     />
     <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
   </div>

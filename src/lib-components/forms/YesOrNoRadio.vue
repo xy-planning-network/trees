@@ -11,7 +11,7 @@ defineOptions({
 withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 const emits = defineEmits(["update:modelValue"])
-const { inputID, isDisabled, nameAttr } = useInputField()
+const { inputID, isDisabled, isRequired, nameAttr } = useInputField()
 
 const onChange = (e: Event) => {
   emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
@@ -25,7 +25,12 @@ const onChange = (e: Event) => {
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >
     <div v-if="label">
-      <InputLabel class="block my-auto" :label="label" tag="legend" />
+      <InputLabel
+        class="block my-auto"
+        :label="label"
+        tag="legend"
+        :required="isRequired"
+      />
       <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
     </div>
 

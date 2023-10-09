@@ -112,3 +112,31 @@ export const useInputField = () => {
     nameAttr,
   }
 }
+
+/**
+ * email validation regex pattern
+ * used with input type="email" in the pattern attribute for html5 validation
+ * exported as a raw string to support the escape backslash characters
+ */
+export const emailPattern = String.raw`^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-.]\w+)*$`
+
+/**
+ * password validation regex pattern
+ * used with input type="password" in the pattern attribute for html5 validation
+ * exported as a raw string to support the escape backslash characters
+ */
+export const passwordPattern = String.raw`(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*\(\)_+=\-]).{8,}`
+
+/**
+ * phone number validation regex pattern
+ * used with input type="tel" in the pattern attribute for html5 validation
+ */
+export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
+
+/**
+ * This is used for the .number modifier in v-model
+ */
+export const looseToNumber = (val: any): any => {
+  const n = parseFloat(val)
+  return isNaN(n) ? val : n
+}

@@ -11,7 +11,7 @@ defineOptions({
 withDefaults(defineProps<TextareaInput>(), defaultInputProps)
 
 const emit = defineEmits(["update:modelValue"])
-const { inputID } = useInputField()
+const { inputID, isRequired } = useInputField()
 </script>
 
 <template>
@@ -21,6 +21,7 @@ const { inputID } = useInputField()
       class="mb-2"
       :for="inputID"
       :label="label"
+      :required="isRequired"
     />
     <textarea
       :id="inputID"

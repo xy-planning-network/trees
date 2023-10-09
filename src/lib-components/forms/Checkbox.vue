@@ -11,7 +11,7 @@ defineOptions({
 withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 const emits = defineEmits(["update:modelValue"])
-const { inputID, isDisabled } = useInputField()
+const { inputID, isDisabled, isRequired } = useInputField()
 </script>
 
 <template>
@@ -46,6 +46,7 @@ const { inputID, isDisabled } = useInputField()
         :for="inputID"
         :label="label"
         :class="isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'"
+        :required="isRequired"
       />
       <InputHelp :id="`${inputID}-help`" :text="help"></InputHelp>
     </div>

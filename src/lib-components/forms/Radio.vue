@@ -12,7 +12,7 @@ defineOptions({
 withDefaults(defineProps<OptionsInput & ColumnedInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue"])
-const { inputID, isDisabled } = useInputField()
+const { inputID, isDisabled, isRequired } = useInputField()
 </script>
 
 <template>
@@ -22,7 +22,11 @@ const { inputID, isDisabled } = useInputField()
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >
     <div v-if="label">
-      <FieldsetLegend :id="`${inputID}-legend`" :label="label" />
+      <FieldsetLegend
+        :id="`${inputID}-legend`"
+        :label="label"
+        :required="isRequired"
+      />
       <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
     </div>
 
