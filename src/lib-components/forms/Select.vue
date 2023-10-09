@@ -1,28 +1,17 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { defaultInputProps, useInputField } from "@/composables/forms"
+import type { OptionsInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(
-  defineProps<{
-    label?: string
-    help?: string
-    placeholder?: string
-    options: { label: string; value: string | number }[]
-    modelValue: string | number | undefined
-    error?: string
-  }>(),
-  {
-    label: "",
-    help: "",
-    placeholder: "Select an option",
-    error: "",
-  }
-)
+withDefaults(defineProps<OptionsInput>(), {
+  ...defaultInputProps,
+  placeholder: "Select an option",
+})
 
 const emit = defineEmits(["update:modelValue"])
 const { inputID } = useInputField()
@@ -55,17 +44,12 @@ const { inputID } = useInputField()
       },
     }"
     >
-      <option
-        v-if="placeholder"
-        value=""
-        disabled
-        selected
-        v-text="placeholder"
-      />
+      <option value="" disabled selected v-text="placeholder" />
       <option
         v-for="option in options"
         :key="option.value"
         :value="option.value"
+        :disabled="option.disabled"
         v-text="option.label"
       />
     </select>

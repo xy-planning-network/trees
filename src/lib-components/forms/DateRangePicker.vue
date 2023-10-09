@@ -3,30 +3,25 @@ import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
 import { onMounted } from "vue"
 import BaseInput from "./BaseInput.vue"
-import { useInputField } from "@/composables/forms"
+import { defaultInputProps, useInputField } from "@/composables/forms"
+import type { DateRangeInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: {
-      minDate: number
-      maxDate: number
+const props = withDefaults(defineProps<DateRangeInput>(), {
+  ...defaultInputProps,
+  maxRange: 0,
+  modelValue: () => {
+    return {
+      maxDate: 0,
+      minDate: 0,
     }
-    maxRange?: number
-    startDate?: number
-    label?: string
-    help?: string
-  }>(),
-  {
-    maxRange: 0,
-    startDate: 0,
-    label: "",
-    help: "",
-  }
-)
+  },
+  placeholder: "mm-dd-yyyy range",
+  startDate: 0,
+})
 
 const emits = defineEmits(["update:modelValue"])
 const { inputID } = useInputField()
@@ -94,9 +89,10 @@ onMounted(() => {
 <template>
   <BaseInput
     :id="inputID"
-    type="text"
-    placeholder="mm-dd-yyyy range"
-    :label="label"
+    :error="error"
     :help="help"
+    :label="label"
+    :placeholder="placeholder"
+    type="text"
   />
 </template>

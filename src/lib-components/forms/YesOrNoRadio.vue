@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { BooleanInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(
-  defineProps<{
-    modelValue?: boolean
-    help?: string
-    label?: string
-    error?: string
-  }>(),
-  {
-    modelValue: undefined,
-    help: "",
-    label: "",
-    error: "",
-  }
-)
+withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 const emits = defineEmits(["update:modelValue"])
 const { inputID, isDisabled, nameAttr } = useInputField()

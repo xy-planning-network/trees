@@ -1,25 +1,15 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { BooleanInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(
-  defineProps<{
-    label?: string
-    help?: string
-    modelValue: boolean
-    error?: string
-  }>(),
-  {
-    label: "",
-    help: "",
-    error: "",
-  }
-)
+withDefaults(defineProps<BooleanInput>(), defaultInputProps)
+
 const emits = defineEmits(["update:modelValue"])
 const { inputID, isDisabled } = useInputField()
 </script>
@@ -31,7 +21,7 @@ const { inputID, isDisabled } = useInputField()
         :id="inputID"
         :aria-labelledby="label ? `${inputID}-label` : undefined"
         :aria-describedby="help ? `${inputID}-help` : undefined"
-        :checked="modelValue"
+        :checked="modelValue || undefined"
         :class="[
           'h-4 w-4 rounded text-xy-blue cursor-pointer',
           'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',

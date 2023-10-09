@@ -15,12 +15,11 @@ defineOptions({
 
 withDefaults(
   defineProps<{
-    modelValue?: boolean | undefined
+    modelValue?: boolean
     label?: string
     help?: string
   }>(),
   {
-    modelValue: undefined,
     label: "",
     help: "",
   }

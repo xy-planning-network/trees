@@ -2,7 +2,8 @@
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
@@ -12,25 +13,8 @@ type CheckboxValue = string | number
 type ModelValue = CheckboxValue[]
 
 const props = withDefaults(
-  defineProps<{
-    options: {
-      disabled?: boolean
-      help?: string
-      label: string
-      value: CheckboxValue
-    }[]
-    help?: string
-    label?: string
-    modelValue: ModelValue
-    columns?: 2 | 3
-    error?: string
-  }>(),
-  {
-    help: "",
-    label: "",
-    columns: undefined,
-    error: "",
-  }
+  defineProps<MultiChoiceInput & ColumnedInput>(),
+  defaultInputProps
 )
 
 const emit = defineEmits<{
@@ -40,7 +24,8 @@ const emit = defineEmits<{
 const { inputID, isDisabled } = useInputField()
 
 const onChange = (checked: boolean, val: CheckboxValue) => {
-  let updateModelValue = [...props.modelValue]
+  // TODO: test this undefined scenario
+  let updateModelValue = props.modelValue ? [...props.modelValue] : []
 
   if (checked) {
     updateModelValue.push(val)
@@ -84,7 +69,7 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
               :aria-describedby="
                 option.help ? `${inputID}-${index}-help` : undefined
               "
-              :checked="modelValue.includes(option.value)"
+              :checked="modelValue?.includes(option.value)"
               :disabled="option.disabled"
               :class="[
                 'h-4 w-4 rounded cursor-pointer',

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends InputOption">
 import {
   RadioGroup,
   RadioGroupDescription,
@@ -10,7 +10,12 @@ import { computed, ref } from "vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
-import { useInputField } from "@/composables/forms"
+import { defaultInputProps, useInputField } from "@/composables/forms"
+import type {
+  ColumnedInput,
+  InputOption,
+  OptionsInput,
+} from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
@@ -20,41 +25,19 @@ defineOptions({
  * NOTE (spk) headless UI introduced a "name" prop that includes a hidden field
  * to use the modelValue inside of forms.  It does not however resolve the issue of
  * supporting HTML5 form validation, so we'll add our own hidden radio buttons to support both.
- *
- * The headless technique does include supporting complex modelValues such as objects, which we may
- * need in the future.  We can revist required validation at that time using a singular hidden checkbox.
  */
 
-type ModelValue = string | number
-
-type RadioCard = {
-  disabled?: boolean
-  help?: string
-  label: string
-  sublabel?: string
-  value: ModelValue
+interface RadioCards extends OptionsInput {
+  options: T[]
 }
 
 const props = withDefaults(
-  defineProps<{
-    columns?: 2 | 3
-    help?: string
-    label?: string
-    modelValue?: ModelValue
-    options: RadioCard[]
-    error?: string
-  }>(),
-  {
-    columns: undefined,
-    help: "",
-    label: "",
-    modelValue: undefined,
-    error: "",
-  }
+  defineProps<RadioCards & ColumnedInput>(),
+  defaultInputProps
 )
 
 const emit = defineEmits<{
-  (e: "update:modelValue", modelValue: ModelValue): void
+  (e: "update:modelValue", modelValue: RadioCards["modelValue"]): void
 }>()
 
 const { inputID, isDisabled, isRequired, nameAttr } = useInputField()
@@ -74,7 +57,7 @@ const checkedState = computed(() => {
   return props.modelValue
 })
 
-const onChange = (val: ModelValue) => {
+const onChange = (val: RadioCards["modelValue"]) => {
   internalState.value = val
   invalid.value = false
   emit("update:modelValue", val)
