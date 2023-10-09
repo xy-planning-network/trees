@@ -14,16 +14,18 @@ withDefaults(
     placeholder?: string
     options: { label: string; value: string | number }[]
     modelValue: string | number | undefined
+    error?: string
   }>(),
   {
     label: "",
     help: "",
     placeholder: "Select an option",
+    error: "",
   }
 )
 
 const emit = defineEmits(["update:modelValue"])
-const { inputID, isValid } = useInputField()
+const { inputID } = useInputField()
 </script>
 
 <template>
@@ -41,9 +43,9 @@ const { inputID, isValid } = useInputField()
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6 pl-3 pr-10',
         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200 disabled:opacity-100',
-        isValid
-          ? 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500'
-          : 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700',
+        error
+          ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
+          : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
       :value="modelValue"
       v-bind="{

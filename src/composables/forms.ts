@@ -1,32 +1,28 @@
-import { computed, useAttrs } from "vue"
-
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-const createIdAttribute = (length = 8): string => {
-  let result = ""
-  for (let i = 0; i < length; i++) {
-    result += CHARS.charAt(Math.floor(Math.random() * CHARS.length))
-  }
-  return result
-}
+import { computed, ref, useAttrs } from "vue"
+import Uniques from "@/helpers/Uniques"
 
 export const useInputField = () => {
   const attrs = useAttrs()
 
-  const inputID = computed(() => {
-    return (attrs.id as string) || createIdAttribute()
-  })
+  const hasAttribute = (attribute: string) => {
+    return (
+      attrs[attribute] !== undefined &&
+      attrs[attribute] !== null &&
+      attrs[attribute] !== false &&
+      attrs[attribute] !== 0
+    )
+  }
 
-  const isValid = computed(() => {
-    return attrs.invalid === undefined
+  const inputID = computed(() => {
+    return (attrs.id as string) || Uniques.CreateIdAttribute()
   })
 
   const isDisabled = computed(() => {
-    return attrs.disabled !== undefined
+    return hasAttribute("disabled")
   })
 
   const isRequired = computed(() => {
-    return attrs.required !== undefined
+    return hasAttribute("required")
   })
 
   const nameAttr = computed(() => {
@@ -40,7 +36,6 @@ export const useInputField = () => {
     inputID,
     isDisabled,
     isRequired,
-    isValid,
     nameAttr,
   }
 }

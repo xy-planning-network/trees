@@ -188,12 +188,16 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="inputCopy" />
           </label>
           <div class="mt-1">
-            <BaseInput
-              help="No wrong answers here."
-              type="text"
-              label="What's your life moto?"
-              placeholder="It's good to be alive"
-            />
+            <form @submit.prevent>
+              <BaseInput
+                help="No wrong answers here."
+                type="text"
+                label="What's your life moto?"
+                placeholder="It's good to be alive"
+                required
+              />
+              <button type="submit" class="xy-btn">Submit</button>
+            </form>
           </div>
         </div>
 
@@ -203,10 +207,10 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1">
             <BaseInput
+              class="xy-input-error"
               type="text"
               label="Broken"
               placeholder="An invalid input"
-              invalid
             />
           </div>
         </div>
@@ -282,9 +286,9 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <div class="mt-4">
               <TextArea
                 v-model="textarea"
-                invalid
                 label="How about it (invalid)?"
                 help="In your own words."
+                error="This field has an error."
               />
             </div>
 
@@ -323,13 +327,16 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
             />
 
-            <Checkbox
-              v-model="isChecked"
-              label="Invalid state focus"
-              help="This one must be required..."
-              required
-              invalid
-            />
+            <form @submit.prevent>
+              <Checkbox
+                v-model="isChecked"
+                label="Invalid state focus"
+                help="This one is required."
+                required
+                error="This one has an error"
+              />
+              <button type="submit" class="xy-btn mt-2">Submit</button>
+            </form>
 
             <div class="mt-4"><b>Value:</b> {{ isChecked }}</div>
             <PropsTable :props="checkboxProps" />
@@ -446,14 +453,21 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               :options="options"
               :columns="2"
               required
-            >
-              <template #legend>In A Grid Too</template>
-            </Radio>
+            />
+
+            <form @submit.prevent>
+              <Radio
+                label="Radio's have an error state too"
+                :options="options"
+                error="Sorry, but pick one!"
+                required
+              />
+              <button type="submit" class="xy-btn mt-2">Submit</button>
+            </form>
 
             <div class="">
               <form>
                 <RadioCards
-                  v-model="radioSelection"
                   label="Cards Any One?"
                   help="Just use the RadioCards component."
                   :options="
@@ -562,7 +576,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               :options="options"
               label="Lets make a selection"
               help="Invalid select input"
-              invalid
+              error="Noop!  an error!"
             />
           </div>
 
@@ -602,9 +616,10 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
       <ComponentLayout class="mt-8" title="Toggle">
         <template #description>
-          Just a another toggle for boolean switches. A great UI alternative to
-          checkboxes and boolean value radio button pairs. Currently does not
-          support a label property. Bring your own label.
+          A button based toggle display for managing a boolean value. This
+          component should not be viewed much as an input field for tracking a
+          payload value, but rather as a button that you can take an action
+          against based on it's state.
         </template>
 
         <div>
@@ -617,6 +632,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                 v-model="toggleValue"
                 label="Go on, flip the switch"
                 help="Is your refridgerator running?"
+                required
               />
 
               <Toggle

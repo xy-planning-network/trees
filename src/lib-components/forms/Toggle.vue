@@ -55,7 +55,7 @@ const { isDisabled } = useInputField()
       <SwitchLabel v-if="label">
         <InputLabel
           :label="label"
-          :class="isDisabled && 'cursor-not-allowed'"
+          :class="isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'"
         />
       </SwitchLabel>
 

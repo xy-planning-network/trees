@@ -42,12 +42,14 @@ const props = withDefaults(
     label?: string
     modelValue?: ModelValue
     options: RadioCard[]
+    error?: string
   }>(),
   {
     columns: undefined,
     help: "",
     label: "",
     modelValue: undefined,
+    error: "",
   }
 )
 
@@ -128,6 +130,7 @@ const onChange = (val: ModelValue) => {
             disabled
               ? 'cursor-not-allowed bg-gray-50 border-gray-200 opacity-90'
               : 'cursor-pointer bg-white border-gray-300',
+            error && !disabled ? 'border-red-700' : '',
             checked ? 'border-transparent' : '',
             active ? 'border-xy-blue ring-2 ring-xy-blue-500' : '',
           ]"

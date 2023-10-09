@@ -23,11 +23,13 @@ const props = withDefaults(
     label?: string
     modelValue: ModelValue
     columns?: 2 | 3
+    error?: string
   }>(),
   {
     help: "",
     label: "",
     columns: undefined,
+    error: "",
   }
 )
 
@@ -85,18 +87,21 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
               :checked="modelValue.includes(option.value)"
               :disabled="option.disabled"
               :class="[
-                'h-4 w-4 rounded',
-                'border-gray-300 text-xy-blue focus:ring-xy-blue-500',
+                'h-4 w-4 rounded cursor-pointer',
                 'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
                 'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                error
+                  ? 'border-red-700 focus:ring-red-700'
+                  : 'border-gray-300 focus:ring-xy-blue-500',
               ]"
               type="checkbox"
-              v-bind="{
-              onChange: ($event) => { 
-                onChange(($event.target as HTMLInputElement).checked, option.value)
-              },
-              ...$attrs,
-            }"
+              v-bind="$attrs"
+              @change="
+                onChange(
+                  ($event.target as HTMLInputElement).checked,
+                  option.value
+                )
+              "
             />
           </div>
           <div class="ml-3">
@@ -104,7 +109,11 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
               :id="`${inputID}-${index}-label`"
               :for="`${inputID}-${index}`"
               :label="option.label"
-              :class="(isDisabled || option.disabled) && 'cursor-not-allowed'"
+              :class="
+                isDisabled || option.disabled
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer'
+              "
             />
             <InputHelp :id="`${inputID}-${index}-help`" :text="option.help" />
           </div>

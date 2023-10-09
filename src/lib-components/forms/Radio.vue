@@ -20,15 +20,18 @@ withDefaults(
     label?: string
     modelValue?: string | number
     columns?: 2 | 3
+    error?: string
   }>(),
   {
     help: "",
     label: "",
     modelValue: undefined,
     columns: undefined,
+    error: "",
   }
 )
-const emits = defineEmits(["update:modelValue"])
+
+defineEmits(["update:modelValue"])
 const { inputID, isDisabled } = useInputField()
 </script>
 
@@ -66,21 +69,19 @@ const { inputID, isDisabled } = useInputField()
               :aria-labelledby="`${inputID}-${index}-label`"
               :checked="modelValue === option.value"
               :class="[
-                'h-4 w-4',
-                'border-gray-300 text-xy-blue focus:ring-xy-blue-500',
+                'h-4 w-4 cursor-pointer text-xy-blue',
                 'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
                 'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                error
+                  ? 'border-red-700 focus:ring-red-700'
+                  : 'border-gray-300  focus:ring-xy-blue-500',
               ]"
               :disabled="option.disabled"
               :name="inputID"
               type="radio"
               :value="option.value"
-              v-bind="{
-                onChange: () => {
-                  emits('update:modelValue', option.value)
-                },
-                ...$attrs,
-              }"
+              v-bind="$attrs"
+              @change="$emit('update:modelValue', option.value)"
             />
           </div>
           <div class="ml-3">
@@ -88,7 +89,11 @@ const { inputID, isDisabled } = useInputField()
               :id="`${inputID}-${index}-label`"
               :for="`${inputID}-${index}`"
               :label="option.label"
-              :class="(isDisabled || option.disabled) && 'cursor-not-allowed'"
+              :class="
+                isDisabled || option.disabled
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer'
+              "
             />
 
             <InputHelp :id="`${inputID}-${index}-help`" :text="option.help" />
