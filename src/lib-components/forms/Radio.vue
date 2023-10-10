@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { reactive, ref, toRef } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
@@ -9,10 +10,27 @@ defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(defineProps<OptionsInput & ColumnedInput>(), defaultInputProps)
+const props = withDefaults(
+  defineProps<OptionsInput & ColumnedInput>(),
+  defaultInputProps
+)
 
-defineEmits(["update:modelValue"])
-const { inputID, isDisabled, isRequired } = useInputField()
+defineEmits(["update:modelValue", "update:error"])
+const input = ref<HTMLInputElement | null>(null)
+const {
+  errorState,
+  modelState,
+  inputID,
+  isDisabled,
+  isRequired,
+  onInvalid,
+  validate,
+} = useInputField(input, props)
+
+const onChange = (e: Event, val: string | number) => {
+  modelState.value = val
+  validate(e)
+}
 </script>
 
 <template>
@@ -28,6 +46,10 @@ const { inputID, isDisabled, isRequired } = useInputField()
         :required="isRequired"
       />
       <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
+    </div>
+
+    <div v-if="errorState" class="mt-0.5">
+      <p class="text-sm text-red-700">{{ errorState }}</p>
     </div>
 
     <div class="flex">
@@ -51,12 +73,12 @@ const { inputID, isDisabled, isRequired } = useInputField()
                 option.help ? `${inputID}-${index}-help` : undefined
               "
               :aria-labelledby="`${inputID}-${index}-label`"
-              :checked="modelValue === option.value"
+              :checked="modelState === option.value"
               :class="[
                 'h-4 w-4 cursor-pointer text-xy-blue',
                 'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
                 'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
-                error
+                errorState
                   ? 'border-red-700 focus:ring-red-700'
                   : 'border-gray-300  focus:ring-xy-blue-500',
               ]"
@@ -65,7 +87,8 @@ const { inputID, isDisabled, isRequired } = useInputField()
               type="radio"
               :value="option.value"
               v-bind="$attrs"
-              @change="$emit('update:modelValue', option.value)"
+              @change="onChange($event, option.value)"
+              @invalid="onInvalid"
             />
           </div>
           <div class="ml-3">

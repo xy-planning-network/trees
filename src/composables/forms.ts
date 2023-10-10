@@ -1,5 +1,14 @@
-import { computed, useAttrs } from "vue"
+import {
+  Ref,
+  computed,
+  getCurrentInstance,
+  onMounted,
+  ref,
+  useAttrs,
+  watch,
+} from "vue"
 import Uniques from "@/helpers/Uniques"
+import { debounce } from "@/helpers/Debounce"
 
 export interface Input {
   modelValue?: any
@@ -55,8 +64,9 @@ export interface ColumnedInput {
 
 export const defaultInputProps = {
   error: "",
-  label: "",
   help: "",
+  label: "",
+  modelValue: undefined, // important to prevent unexpected default value of false
   placeholder: "",
 }
 
@@ -74,7 +84,14 @@ export type TextInputType =
   | "url"
   | "week"
 
-export const useInputField = () => {
+export const useInputField = (
+  el?: Ref<HTMLInputElement | HTMLInputElement[] | null>,
+  props?: Input
+) => {
+  const modelState = props ? useLocalModel(props, "modelValue") : ref(undefined)
+  const errorState = props ? useLocalModel(props, "error") : ref(undefined)
+  const targets = el || ref(null)
+
   const attrs = useAttrs()
 
   const hasAttribute = (attribute: string) => {
@@ -104,12 +121,72 @@ export const useInputField = () => {
       : inputID.value
   })
 
+  const onInvalid = (e: Event) => {
+    if (e.type !== "invalid") {
+      return
+    }
+
+    errorState.value = (e.target as HTMLInputElement).validationMessage
+  }
+
+  const validate = (e: Event) => {
+    if (!errorState.value) {
+      return
+    }
+
+    // clear custom validation message from targetInput
+    targetInput?.value?.setCustomValidity("")
+
+    const target = e.target as HTMLInputElement
+    if (!target.checkValidity()) {
+      errorState.value = target.validationMessage
+    } else {
+      errorState.value = ""
+    }
+  }
+
+  const inputValidation = debounce(validate, 350)
+
+  const targetInput = computed(() => {
+    // radios and multicheckboxes have multiple inputs.
+    // we only need to target the first input for setting
+    // custom error messages
+    return Array.isArray(targets.value) ? targets.value[0] : targets.value
+  })
+
+  onMounted(() => {
+    // watch the props.error and set custom validation messages as needed.
+    watch(
+      () => props?.error,
+      () => {
+        targetInput?.value?.setCustomValidity(props?.error || "")
+
+        if (props?.error) {
+          targetInput?.value?.reportValidity()
+        }
+      }
+    )
+
+    // report the initial custom error message
+    if (errorState.value) {
+      targetInput?.value?.setCustomValidity(errorState.value)
+      targetInput?.value?.reportValidity()
+    }
+  })
+
+  // TODO:? when focused, if error - report validity
+
   return {
     attrs,
     inputID,
     isDisabled,
     isRequired,
     nameAttr,
+    modelState,
+    errorState,
+    onInvalid,
+    validate,
+    inputValidation,
   }
 }
 
@@ -139,4 +216,27 @@ export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 export const looseToNumber = (val: any): any => {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
+}
+
+export const useLocalModel = <T extends Record<string, any>, K extends keyof T>(
+  props: T,
+  name: K
+): Ref<T[K]> => {
+  const i = getCurrentInstance()!
+  const proxy = ref<any>(props[name])
+
+  // keep the local value in sync with the prop value
+  watch(
+    () => props[name],
+    (v) => (proxy.value = v)
+  )
+
+  // emit the updated local value to the prop when updated
+  watch(proxy, (v) => {
+    if (v !== props[name]) {
+      i.emit(`update:${String(name)}`, v)
+    }
+  })
+
+  return proxy
 }

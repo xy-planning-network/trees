@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<DateRangeInput>(), {
   startDate: 0,
 })
 
-const emits = defineEmits(["update:modelValue"])
+const emits = defineEmits(["update:modelValue", "update:error"])
 const { inputID } = useInputField()
 
 const updateModelValue = (value: { minDate: number; maxDate: number }) => {
@@ -84,6 +84,8 @@ onMounted(() => {
 
   flatpickr(`#${inputID.value}`, opts)
 })
+
+// TODO: need to emit error?
 </script>
 
 <template>
@@ -94,5 +96,6 @@ onMounted(() => {
     :label="label"
     :placeholder="placeholder"
     type="text"
+    v-bind="$attrs"
   />
 </template>

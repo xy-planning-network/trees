@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import type { InputOption } from "@/composables/forms"
 
 const options: InputOption[] = [
@@ -157,6 +157,24 @@ const toggleProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
+
+const error = ref("This has an error!")
+
+const hasSubmitted = ref(false)
+const checkboxes = ref([])
+const checkboxErr = computed(() => {
+  return hasSubmitted.value && checkboxes.value.length === 0
+    ? "You must select one!"
+    : ""
+})
+const onSubmit = (e: Event) => {
+  if (checkboxErr.value) {
+    console.log("can't submit yet, you've got a custom error...")
+    return
+  }
+
+  console.log("submitting", e.target)
+}
 </script>
 
 <template>
@@ -167,9 +185,7 @@ const toggleProps = [
           <div class="mt-4">
             Generally, all of these inputs will support common html attributes
             such as <code>disabled</code> and <code>required</code> or input
-            specific attributes like <code>rows</code> for textareas. You can
-            even use the <code>class</code> attribute as needed to apply
-            additional classes.
+            specific attributes like <code>rows</code> for textareas.
           </div>
 
           <div class="mt-4">
@@ -178,6 +194,53 @@ const toggleProps = [
             help text.
           </div>
         </template>
+      </ComponentLayout>
+
+      <ComponentLayout
+        class="mt-8"
+        title="Required Fields Validation"
+        :show-badge="false"
+      >
+        <form id="test-form" @submit.prevent="onSubmit">
+          <div class="space-y-8">
+            <BaseInput type="text" label="Name" required />
+            <BaseInput
+              type="email"
+              label="Email"
+              help="Try using a gmail address!"
+              required
+            />
+
+            <Select :options="options" required label="Select an option" />
+
+            <TextArea label="Fill me out!" required />
+
+            <Radio :options="options" required label="Select an option" />
+
+            <DateRangePicker label="Pick a date range!" required />
+
+            <RadioCards
+              label="Cards can be required"
+              :options="options"
+              required
+            />
+
+            <YesOrNoRadio label="Please confim this field" required />
+
+            <MultiCheckboxes
+              v-model="checkboxes"
+              :error="checkboxErr"
+              label="These need a custom message to be required"
+              :options="options"
+            />
+
+            <Checkbox label="Tick this box" required />
+
+            <button type="submit" class="xy-btn" @click="hasSubmitted = true">
+              Submit
+            </button>
+          </div>
+        </form>
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Base Input">
@@ -199,7 +262,6 @@ const toggleProps = [
           <div class="mt-1">
             <form @submit.prevent>
               <BaseInput
-                v-model="inputVals['baseInput']"
                 help="No wrong answers here."
                 type="text"
                 label="What's your life moto?*"
@@ -218,7 +280,6 @@ const toggleProps = [
           <div class="mt-1">
             <BaseInput
               v-model="inputVals['baseInput-broken']"
-              error="This one is borked."
               type="text"
               label="Broken"
               placeholder="An invalid input"
@@ -492,7 +553,7 @@ const toggleProps = [
               <Radio
                 label="Radio's have an error state too"
                 :options="options"
-                error="Sorry, but pick one!"
+                :error="error"
                 required
               />
               <button type="submit" class="xy-btn mt-2">Submit</button>

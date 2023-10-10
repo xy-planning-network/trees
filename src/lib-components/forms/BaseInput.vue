@@ -10,7 +10,7 @@ import {
   phonePattern,
 } from "@/composables/forms"
 import type { TextLikeInput } from "@/composables/forms"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -18,8 +18,16 @@ defineOptions({
 
 const props = withDefaults(defineProps<TextLikeInput>(), defaultInputProps)
 
-const emit = defineEmits(["update:modelValue"])
-const { inputID, isRequired } = useInputField()
+defineEmits(["update:modelValue", "update:error"])
+const input = ref<HTMLInputElement | null>(null)
+const {
+  errorState,
+  modelState,
+  inputID,
+  isRequired,
+  onInvalid,
+  inputValidation,
+} = useInputField(input, props)
 
 const typeAttributes = computed(() => {
   switch (props.type) {
@@ -52,12 +60,14 @@ const onInput = (e: Event) => {
     val = looseToNumber(val)
   }
 
-  emit("update:modelValue", val)
+  modelState.value = val
+
+  inputValidation(e)
 }
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <InputLabel
       :id="`${inputID}-label`"
       class="mb-2"
@@ -73,16 +83,20 @@ const onInput = (e: Event) => {
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
-        error
+        errorState
           ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
       :placeholder="placeholder"
       :type="type"
-      :value="modelValue"
+      :value="modelState"
       v-bind="{ ...typeAttributes, ...$attrs }"
       @input="onInput"
+      @invalid="onInvalid"
     />
     <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
+    <div v-if="errorState" class="mt-0.5">
+      <p class="text-sm text-red-700">{{ errorState }}</p>
+    </div>
   </div>
 </template>
