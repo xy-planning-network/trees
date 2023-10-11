@@ -19,7 +19,7 @@ defineOptions({
 const props = withDefaults(defineProps<TextLikeInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue", "update:error"])
-const input = ref<HTMLInputElement | null>(null)
+const targetInput = ref<HTMLInputElement | null>(null)
 const {
   errorState,
   modelState,
@@ -27,7 +27,7 @@ const {
   isRequired,
   onInvalid,
   inputValidation,
-} = useInputField(input, props)
+} = useInputField({ props, targetInput })
 
 const typeAttributes = computed(() => {
   switch (props.type) {
@@ -67,7 +67,7 @@ const onInput = (e: Event) => {
 </script>
 
 <template>
-  <div class="relative">
+  <div>
     <InputLabel
       :id="`${inputID}-label`"
       class="mb-2"
@@ -77,7 +77,7 @@ const onInput = (e: Event) => {
     />
     <input
       :id="inputID"
-      ref="input"
+      ref="targetInput"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :class="[

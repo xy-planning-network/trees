@@ -3,6 +3,7 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
+import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -11,6 +12,7 @@ defineOptions({
 const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue", "update:error"])
+const targetInput = ref<HTMLInputElement | null>(null)
 const {
   inputID,
   isDisabled,
@@ -19,7 +21,7 @@ const {
   modelState,
   validate,
   onInvalid,
-} = useInputField(undefined, props)
+} = useInputField({ props, targetInput })
 
 const onChange = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).checked
@@ -32,6 +34,7 @@ const onChange = (e: Event) => {
     <div class="flex items-center h-5">
       <input
         :id="inputID"
+        ref="targetInput"
         :aria-labelledby="label ? `${inputID}-label` : undefined"
         :aria-describedby="help ? `${inputID}-help` : undefined"
         :checked="modelState || undefined"

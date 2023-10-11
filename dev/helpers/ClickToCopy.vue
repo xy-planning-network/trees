@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { ClipboardCopyIcon } from "@heroicons/vue/outline"
-import { useInputField } from "@/composables/forms"
+import Uniques from "@/helpers/Uniques"
 
 const props = withDefaults(defineProps<{ value?: string }>(), {
   value: "",
@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{ value?: string }>(), {
 const copied = ref(false)
 const input = ref<HTMLInputElement>()
 
-const { inputID } = useInputField()
+const inputID = Uniques.CreateIdAttribute()
 
 const copy = function () {
   if (input.value === undefined) {

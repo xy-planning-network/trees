@@ -3,6 +3,7 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
+import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -11,6 +12,7 @@ defineOptions({
 const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue", "update:error"])
+const targetInput = ref<HTMLInputElement | null>(null)
 const {
   inputID,
   isDisabled,
@@ -20,7 +22,7 @@ const {
   errorState,
   onInvalid,
   validate,
-} = useInputField(undefined, props)
+} = useInputField({ props, targetInput })
 
 const onChange = (e: Event, val: boolean) => {
   modelState.value = val
@@ -56,6 +58,7 @@ const onChange = (e: Event, val: boolean) => {
       >
         <input
           :id="`${nameAttr}-true`"
+          rel="targetInput"
           type="radio"
           :class="[
             'h-4 w-4 text-xy-blue cursor-pointer',

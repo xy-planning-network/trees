@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import type { InputOption } from "@/composables/forms"
 
 const options: InputOption[] = [
@@ -157,24 +157,6 @@ const toggleProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
-
-const error = ref("This has an error!")
-
-const hasSubmitted = ref(false)
-const checkboxes = ref([])
-const checkboxErr = computed(() => {
-  return hasSubmitted.value && checkboxes.value.length === 0
-    ? "You must select one!"
-    : ""
-})
-const onSubmit = (e: Event) => {
-  if (checkboxErr.value) {
-    console.log("can't submit yet, you've got a custom error...")
-    return
-  }
-
-  console.log("submitting", e.target)
-}
 </script>
 
 <template>
@@ -196,53 +178,6 @@ const onSubmit = (e: Event) => {
         </template>
       </ComponentLayout>
 
-      <ComponentLayout
-        class="mt-8"
-        title="Required Fields Validation"
-        :show-badge="false"
-      >
-        <form id="test-form" @submit.prevent="onSubmit">
-          <div class="space-y-8">
-            <BaseInput type="text" label="Name" required />
-            <BaseInput
-              type="email"
-              label="Email"
-              help="Try using a gmail address!"
-              required
-            />
-
-            <Select :options="options" required label="Select an option" />
-
-            <TextArea label="Fill me out!" required />
-
-            <Radio :options="options" required label="Select an option" />
-
-            <DateRangePicker label="Pick a date range!" required />
-
-            <RadioCards
-              label="Cards can be required"
-              :options="options"
-              required
-            />
-
-            <YesOrNoRadio label="Please confim this field" required />
-
-            <MultiCheckboxes
-              v-model="checkboxes"
-              :error="checkboxErr"
-              label="These need a custom message to be required"
-              :options="options"
-            />
-
-            <Checkbox label="Tick this box" required />
-
-            <button type="submit" class="xy-btn" @click="hasSubmitted = true">
-              Submit
-            </button>
-          </div>
-        </form>
-      </ComponentLayout>
-
       <ComponentLayout class="mt-8" title="Base Input">
         <template #description>
           Covers many of the most common <code>&lt;input&gt;</code> fields with
@@ -260,16 +195,12 @@ const onSubmit = (e: Event) => {
             <ClickToCopy :value="inputCopy" />
           </label>
           <div class="mt-1">
-            <form @submit.prevent>
-              <BaseInput
-                help="No wrong answers here."
-                type="text"
-                label="What's your life moto?*"
-                placeholder="It's good to be alive"
-                required
-              />
-              <button type="submit" class="xy-btn">Submit</button>
-            </form>
+            <BaseInput
+              help="No wrong answers here."
+              type="text"
+              label="What's your life moto?*"
+              placeholder="It's good to be alive"
+            />
           </div>
         </div>
 
@@ -280,6 +211,7 @@ const onSubmit = (e: Event) => {
           <div class="mt-1">
             <BaseInput
               v-model="inputVals['baseInput-broken']"
+              error="This one is borked with a custom error message"
               type="text"
               label="Broken"
               placeholder="An invalid input"
@@ -448,10 +380,14 @@ const onSubmit = (e: Event) => {
             <ClickToCopy :value="dateRangePickerCopy" />
           </label>
           <div class="mt-1">
-            <DateRangePicker
-              v-model="inputVals['dateRangePicker']"
-              :max-range="365"
-            />
+            <form class="space-y-8" @submit.prevent>
+              <DateRangePicker
+                v-model="inputVals['dateRangePicker']"
+                :max-range="365"
+                required
+              />
+              <button class="xy-btn" type="submit">Submit</button>
+            </form>
             <div class="mt-4">
               <b>Value:</b> {{ inputVals["dateRangePicker"] }}
             </div>
@@ -553,7 +489,6 @@ const onSubmit = (e: Event) => {
               <Radio
                 label="Radio's have an error state too"
                 :options="options"
-                :error="error"
                 required
               />
               <button type="submit" class="xy-btn mt-2">Submit</button>
@@ -764,6 +699,65 @@ const onSubmit = (e: Event) => {
             <PropsTable :props="inputHelpProps" />
           </div>
         </div>
+      </ComponentLayout>
+
+      <ComponentLayout
+        class="mt-8"
+        title="Required Fields Validation"
+        :show-badge="false"
+      >
+        <template #description>
+          The default input validation pattern is to use a late validation.
+          Meaning we set the default HTMLInputElement error message when the
+          invalid event fires. The invalid event is fired during the
+          HTMLFormElement submit event. This allows forms to stay error free
+          until it's reported something is wrong. Once an error is present
+          though, we clear it or persist it as input and change events fire. The
+          notable exception is when the custom error prop is used on an input.
+          Because the input has no context for knowing why the error message was
+          sent, the display is set immediately.
+        </template>
+        <form id="test-form" @submit.prevent>
+          <div class="space-y-8">
+            <BaseInput type="text" label="Name" required />
+            <BaseInput
+              type="email"
+              label="Email"
+              help="Try using a gmail address!"
+              required
+            />
+
+            <Select :options="options" required label="Select an option" />
+
+            <TextArea label="Fill me out!" required />
+
+            <Radio :options="options" required label="Select an option" />
+
+            <DateRangePicker label="Pick a date range!" required />
+
+            <RadioCards
+              label="Cards can be required"
+              :columns="2"
+              :options="options"
+              required
+            />
+
+            <YesOrNoRadio label="Please confim this field" required />
+
+            <MultiCheckboxes
+              label="More selections is better"
+              help="Pick at least 1, but no more than 2!"
+              :columns="2"
+              :options="options"
+              :min="1"
+              :max="2"
+            />
+
+            <Checkbox label="You must tick this box" required />
+
+            <button type="submit" class="xy-btn">Submit</button>
+          </div>
+        </form>
       </ComponentLayout>
     </div>
   </div>

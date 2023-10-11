@@ -15,9 +15,9 @@ const props = withDefaults(defineProps<OptionsInput>(), {
 })
 
 defineEmits(["update:modelValue", "update:error"])
-const input = ref<HTMLInputElement | null>(null)
+const targetInput = ref<HTMLInputElement | null>(null)
 const { inputID, isRequired, validate, modelState, errorState, onInvalid } =
-  useInputField(input, props)
+  useInputField({ props, targetInput })
 
 const onChange = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).value
@@ -36,6 +36,7 @@ const onChange = (e: Event) => {
     />
     <select
       :id="inputID"
+      ref="targetInput"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :class="[

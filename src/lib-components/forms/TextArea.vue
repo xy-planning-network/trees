@@ -3,6 +3,7 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { TextareaInput } from "@/composables/forms"
+import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -10,6 +11,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<TextareaInput>(), defaultInputProps)
 defineEmits(["update:modelValue", "update:error"])
+const targetInput = ref<HTMLInputElement | null>(null)
 const {
   inputID,
   isRequired,
@@ -17,7 +19,7 @@ const {
   errorState,
   onInvalid,
   inputValidation,
-} = useInputField(undefined, props)
+} = useInputField({ props, targetInput })
 
 const onInput = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).value
@@ -36,6 +38,7 @@ const onInput = (e: Event) => {
     />
     <textarea
       :id="inputID"
+      ref="targetInput"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :class="[
@@ -45,7 +48,7 @@ const onInput = (e: Event) => {
           ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
-      :value="modelState"
+      :value="modelState || undefined"
       v-bind="$attrs"
       @input="onInput"
       @invalid="onInvalid"

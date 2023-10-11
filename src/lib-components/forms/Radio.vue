@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, toRef } from "vue"
+import { computed, ref } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
@@ -16,7 +16,17 @@ const props = withDefaults(
 )
 
 defineEmits(["update:modelValue", "update:error"])
-const input = ref<HTMLInputElement | null>(null)
+
+const radios = ref<HTMLInputElement[]>([])
+// there are multiple radio buttons that could be the target
+// for validation set to the first input
+const targetInput = computed(() => {
+  if (radios.value.length === 0) {
+    return null
+  }
+
+  return radios.value[0]
+})
 const {
   errorState,
   modelState,
@@ -25,7 +35,7 @@ const {
   isRequired,
   onInvalid,
   validate,
-} = useInputField(input, props)
+} = useInputField({ props, targetInput })
 
 const onChange = (e: Event, val: string | number) => {
   modelState.value = val
@@ -69,6 +79,7 @@ const onChange = (e: Event, val: string | number) => {
           <div class="flex items-center h-5">
             <input
               :id="`${inputID}-${index}`"
+              ref="radios"
               :aria-describedby="
                 option.help ? `${inputID}-${index}-help` : undefined
               "

@@ -4,6 +4,7 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
+import { computed, ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -15,10 +16,14 @@ const props = withDefaults(
 )
 
 defineEmits(["update:modelValue", "update:error"])
-const { inputID, isDisabled, isRequired, modelState, errorState } =
-  useInputField(undefined, props)
+const targetInput = ref<HTMLInputElement | null>(null)
+const { inputID, isDisabled, modelState, errorState, validate } = useInputField(
+  { props, targetInput }
+)
 
-const onChange = (checked: boolean, val: string | number) => {
+const onChange = (e: Event, val: string | number) => {
+  const checked = (e.target as HTMLInputElement).checked
+
   if (!Array.isArray(modelState.value)) {
     modelState.value = []
   }
@@ -28,12 +33,57 @@ const onChange = (checked: boolean, val: string | number) => {
   } else {
     modelState.value.splice(modelState.value.indexOf(val), 1)
   }
+
+  validate(e)
+}
+
+const selectionCount = computed(() => {
+  if (Array.isArray(modelState.value)) {
+    return modelState.value.length
+  }
+
+  return 0
+})
+
+const minCount = computed(() => {
+  return props.min || 0
+})
+
+const maxCount = computed(() => {
+  return (
+    props.max ||
+    props.options.filter((opt) => {
+      return !opt.disabled
+    }).length
+  )
+})
+
+const countError = computed(() => {
+  if (selectionCount.value < minCount.value) {
+    return `Please select ${minCount.value} of these option${
+      minCount.value > 1 ? "s" : ""
+    }.`
+  }
+
+  if (selectionCount.value > maxCount.value) {
+    return `Please select only ${maxCount.value} of these option${
+      maxCount.value > 1 ? "s" : ""
+    }.`
+  }
+
+  return ""
+})
+
+const setValidationError = () => {
+  if (!errorState.value) {
+    errorState.value = countError.value
+  }
 }
 </script>
 
 <template>
   <fieldset
-    class="space-y-4"
+    class="relative space-y-4"
     :aria-labelledby="label ? `${inputID}-legend` : undefined"
     :aria-describedby="help ? `${inputID}-help` : undefined"
   >
@@ -41,7 +91,7 @@ const onChange = (checked: boolean, val: string | number) => {
       <FieldsetLegend
         :id="`${inputID}-legend`"
         :label="label"
-        :required="isRequired"
+        :required="minCount > 0"
       />
       <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
     </div>
@@ -49,6 +99,16 @@ const onChange = (checked: boolean, val: string | number) => {
     <div v-if="errorState" class="mt-0.5">
       <p class="text-sm text-red-700">{{ errorState }}</p>
     </div>
+
+    <input
+      v-if="countError || errorState"
+      ref="targetInput"
+      required
+      class="sr-only top-1 left-1"
+      aria-hidden
+      type="checkbox"
+      @invalid="setValidationError"
+    />
 
     <div class="flex">
       <div
@@ -83,12 +143,7 @@ const onChange = (checked: boolean, val: string | number) => {
               ]"
               type="checkbox"
               v-bind="$attrs"
-              @change="
-                onChange(
-                  ($event.target as HTMLInputElement).checked,
-                  option.value
-                )
-              "
+              @change="onChange($event, option.value)"
             />
           </div>
           <div class="ml-3">

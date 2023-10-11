@@ -4,6 +4,7 @@ import {
   getCurrentInstance,
   onMounted,
   ref,
+  toRef,
   useAttrs,
   watch,
 } from "vue"
@@ -54,6 +55,8 @@ export interface OptionsInput extends Input {
 }
 
 export interface MultiChoiceInput extends Input {
+  max?: number
+  min?: number
   modelValue?: (string | number)[] | null
   options: InputOption[]
 }
@@ -84,43 +87,81 @@ export type TextInputType =
   | "url"
   | "week"
 
-export const useInputField = (
-  el?: Ref<HTMLInputElement | HTMLInputElement[] | null>,
-  props?: Input
-) => {
-  const modelState = props ? useLocalModel(props, "modelValue") : ref(undefined)
-  const errorState = props ? useLocalModel(props, "error") : ref(undefined)
-  const targets = el || ref(null)
+interface UseInputFieldConfig<T extends Input> {
+  props: T
+  targetInput: Ref<HTMLInputElement | null>
+}
 
+/**
+ * useInputField provides a number of computed values, refs, and methods to support
+ * wiring up reactive inputs.
+ *
+ * @param config UseInputFieldConfig
+ */
+export const useInputField = <T extends Input>(
+  config: UseInputFieldConfig<T>
+) => {
+  // The fallthrough attributes received on the component.
+  // This is used to simplify input prop management and let's common HTMLInputElement
+  // attributes be set on the component with the expectation that it will function as though
+  // it was a plain old HTMLInputElement.  ex: required, disabled
   const attrs = useAttrs()
 
-  const hasAttribute = (attribute: string) => {
-    return (
-      attrs[attribute] !== undefined &&
-      attrs[attribute] !== null &&
-      attrs[attribute] !== false &&
-      attrs[attribute] !== 0
-    )
-  }
+  // The errorState allows you to directly mutate the v-model:error, manages the emitter for you.
+  // This state is also used to set the default HTMLInputElement validation message in the onInvalid method.
+  // When the component will support v-model:error it should defineEmit("update:error") in the component.
+  const errorState = useLocalModel(config.props, "error")
 
+  // The modelState allows you to directly mutate the v-model and manages the emitter for you.
+  // When the component will support v-model is should defineEmit("update:modelValue") in the component.
+  const modelState = useLocalModel(config.props, "modelValue")
+
+  // targetInput is the input that will recieve error messages via the setCustomValidity() method.
+  // In most cases the targetInput will be the primary input wrapped in the component template.
+  // In other cases where there are multiple input components (radios, multi-checkboxes) or the input component is
+  // synthetic (radio cards) the targetInput may be a hidden field or the first input in the list.
+  // It's primary purpose is to be the recipient of the browsers focus for setting a validation error.
+  const targetInput = toRef(config.targetInput)
+
+  /**
+   * inputID computes the id attribute for a input
+   * the id attribute should always be unique in the DOM
+   * and when the id attribute is not explicity set a unique value
+   * is created.  This primarily aids in setting accessibility attributes.
+   */
   const inputID = computed(() => {
     return (attrs.id as string) || Uniques.CreateIdAttribute()
   })
 
+  /**
+   * isDisabled determines if the input field has the disabled attribute
+   */
   const isDisabled = computed(() => {
-    return hasAttribute("disabled")
+    return hasAttribute(attrs, "disabled")
   })
 
+  /**
+   * isRequired determines if the input field has the required attribute
+   */
   const isRequired = computed(() => {
-    return hasAttribute("required")
+    return hasAttribute(attrs, "required")
   })
 
+  /**
+   * nameAttr computes the name attribute that should be set on the the input.
+   */
   const nameAttr = computed(() => {
     return typeof attrs.name === "string" && attrs.name !== ""
       ? attrs.name
       : inputID.value
   })
 
+  /**
+   * onInvalid is a simple helper method for setting the default HTMLInputElement
+   * validationMessage. It should typically be used as an invalid callback on HTMLInputElement
+   * to sync the current validation error to the local errorState.
+   * @param e Event
+   */
   const onInvalid = (e: Event) => {
     if (e.type !== "invalid") {
       return
@@ -129,14 +170,28 @@ export const useInputField = (
     errorState.value = (e.target as HTMLInputElement).validationMessage
   }
 
+  /**
+   * validate clears any custom validation messages on the targetInput and
+   * triggers a validation check on the event target.  This will clear validation
+   * errors if the input that triggered this method passes validation.  Otherwise it
+   * will update the errorState with the latest validation error.
+   *
+   * @param e Event
+   */
   const validate = (e: Event) => {
     if (!errorState.value) {
       return
     }
 
-    // clear custom validation message from targetInput
+    // validate should be called during input and change events.
+    // we always clear the custom validation message from the targetInput
+    // since there's no context here for why it was set in the first place
+    // assume it is now valid until presented otherwise
     targetInput?.value?.setCustomValidity("")
 
+    // this target will commonly be the same as targetInput, but not always.
+    // example radio buttons trigger a change event from multiple inputs, but because they share
+    // a name attribute, the browser will assume validation for the set of inputs.
     const target = e.target as HTMLInputElement
     if (!target.checkValidity()) {
       errorState.value = target.validationMessage
@@ -145,36 +200,33 @@ export const useInputField = (
     }
   }
 
+  /**
+   * inputValidation is a debounced version of validate.
+   * it's useful for inputs that are typed by the user to prevent validation
+   * from firing too frequently.
+   */
   const inputValidation = debounce(validate, 350)
 
-  const targetInput = computed(() => {
-    // radios and multicheckboxes have multiple inputs.
-    // we only need to target the first input for setting
-    // custom error messages
-    return Array.isArray(targets.value) ? targets.value[0] : targets.value
-  })
-
   onMounted(() => {
-    // watch the props.error and set custom validation messages as needed.
-    watch(
-      () => props?.error,
-      () => {
-        targetInput?.value?.setCustomValidity(props?.error || "")
-
-        if (props?.error) {
-          targetInput?.value?.reportValidity()
-        }
-      }
-    )
-
-    // report the initial custom error message
+    // if an error state is set onMounted, set and report immediately
     if (errorState.value) {
       targetInput?.value?.setCustomValidity(errorState.value)
       targetInput?.value?.reportValidity()
     }
-  })
 
-  // TODO:? when focused, if error - report validity
+    // watch the errorState to set and report the error on the target input
+    // HTMLInputElements will typicall set the error state using the onInvalid helper
+    // the invalid event is only fired during form submit events and is not a live validation
+    // custom validation messages, should follow a similar pattern when possible by
+    // setting the v-model:error value in a form submit callback.
+    watch(errorState, () => {
+      targetInput?.value?.setCustomValidity(errorState.value || "")
+
+      if (errorState.value) {
+        targetInput?.value?.reportValidity()
+      }
+    })
+  })
 
   return {
     attrs,
@@ -188,6 +240,21 @@ export const useInputField = (
     validate,
     inputValidation,
   }
+}
+
+/**
+ * hasAttribute determines if an HTML attribute value exists.  The conditions are based on
+ * whether or not the attribute will be set on the HTML element.
+ * @param attrs
+ * @param name
+ */
+export const hasAttribute = (attrs: Record<string, unknown>, name: string) => {
+  return (
+    attrs[name] !== undefined &&
+    attrs[name] !== null &&
+    attrs[name] !== false &&
+    attrs[name] !== 0
+  )
 }
 
 /**
@@ -218,6 +285,16 @@ export const looseToNumber = (val: any): any => {
   return isNaN(n) ? val : n
 }
 
+/**
+ * useLocalModel supports a two-way binding between a reactive prop and
+ * a local ref.  It effectively allows you to do prop mutations in a way that
+ * vue considers safe.
+ *
+ * vue/core has a version of this in it's experimental mode called useModel
+ *
+ * @param props component props
+ * @param name component prop name to sync
+ */
 export const useLocalModel = <T extends Record<string, any>, K extends keyof T>(
   props: T,
   name: K

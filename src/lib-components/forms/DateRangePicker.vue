@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
-import { onMounted } from "vue"
-import BaseInput from "./BaseInput.vue"
+import { onMounted, ref } from "vue"
 import { defaultInputProps, useInputField } from "@/composables/forms"
 import type { DateRangeInput } from "@/composables/forms"
 
@@ -23,15 +22,17 @@ const props = withDefaults(defineProps<DateRangeInput>(), {
   startDate: 0,
 })
 
-const emits = defineEmits(["update:modelValue", "update:error"])
-const { inputID } = useInputField()
+const targetInput = ref<HTMLInputElement | null>(null)
+const { errorState, modelState, inputID, isRequired, onInvalid, validate } =
+  useInputField({ props, targetInput })
 
 const updateModelValue = (value: { minDate: number; maxDate: number }) => {
-  emits("update:modelValue", value)
+  modelState.value = value
 }
 
 onMounted(() => {
   const opts: flatpickr.Options.Options = {
+    allowInput: true,
     dateFormat: "m-d-Y",
     mode: "range",
     maxDate: new Date(), // So far, we cannot have options past today for ranges
@@ -84,18 +85,38 @@ onMounted(() => {
 
   flatpickr(`#${inputID.value}`, opts)
 })
-
-// TODO: need to emit error?
 </script>
 
 <template>
-  <BaseInput
-    :id="inputID"
-    :error="error"
-    :help="help"
-    :label="label"
-    :placeholder="placeholder"
-    type="text"
-    v-bind="$attrs"
-  />
+  <div>
+    <InputLabel
+      :id="`${inputID}-label`"
+      class="mb-2"
+      :for="inputID"
+      :label="label"
+      :required="isRequired"
+    />
+    <input
+      :id="inputID"
+      ref="targetInput"
+      :aria-labelledby="label ? `${inputID}-label` : undefined"
+      :aria-describedby="help ? `${inputID}-help` : undefined"
+      :class="[
+        'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
+        'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
+        errorState
+          ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
+          : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
+      ]"
+      :placeholder="placeholder"
+      v-bind="$attrs"
+      type="text"
+      @input="validate"
+      @invalid="onInvalid"
+    />
+    <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
+    <div v-if="errorState" class="mt-0.5">
+      <p class="text-sm text-red-700">{{ errorState }}</p>
+    </div>
+  </div>
 </template>
