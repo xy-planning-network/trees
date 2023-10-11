@@ -187,7 +187,7 @@ const toggleProps = [
             class="xy-link"
             target="_blank"
             >input variations</a
-          >. Errors can be styled with <code>.xy-input-error</code>.
+          >. Errors can be set with the error prop.
         </template>
 
         <div>
