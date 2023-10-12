@@ -29,6 +29,11 @@ const {
   inputValidation,
 } = useInputField({ props, targetInput })
 
+// A wrapper component may need to have direct access
+// to the underlying HTMLInputElement that BaseInput binds to
+// example: GoogleMaps Autocomplete inputs
+defineExpose({ input: targetInput })
+
 const typeAttributes = computed(() => {
   switch (props.type) {
     case "number":
