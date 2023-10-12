@@ -208,12 +208,6 @@ export const useInputField = <T extends Input>(
   const inputValidation = debounce(validate, 350)
 
   onMounted(() => {
-    // if an error state is set onMounted, set and report immediately
-    if (errorState.value) {
-      targetInput?.value?.setCustomValidity(errorState.value)
-      targetInput?.value?.reportValidity()
-    }
-
     // watch the errorState to set and report the error on the target input
     // HTMLInputElements will typicall set the error state using the onInvalid helper
     // the invalid event is only fired during form submit events and is not a live validation
