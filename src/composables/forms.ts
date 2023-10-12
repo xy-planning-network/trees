@@ -213,10 +213,10 @@ export const useInputField = <T extends Input>(
     // the invalid event is only fired during form submit events and is not a live validation
     // custom validation messages, should follow a similar pattern when possible by
     // setting the v-model:error value in a form submit callback.
-    watch(errorState, () => {
-      targetInput?.value?.setCustomValidity(errorState.value || "")
+    watch(errorState, (v) => {
+      targetInput?.value?.setCustomValidity(v || "")
 
-      if (errorState.value) {
+      if (v) {
         targetInput?.value?.reportValidity()
       }
     })
