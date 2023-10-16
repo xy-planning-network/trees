@@ -5,7 +5,7 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -17,9 +17,8 @@ const props = withDefaults(
 )
 
 defineEmits(["update:modelValue", "update:error"])
-const targetInput = ref<HTMLInputElement | null>(null)
 const { aria, inputID, isDisabled, modelState, errorState, validate } =
-  useInputField({ props, targetInput })
+  useInputField(props)
 
 const onChange = (e: Event, val: string | number) => {
   const checked = (e.target as HTMLInputElement).checked
@@ -74,9 +73,12 @@ const countError = computed(() => {
   return ""
 })
 
+const errorInput = ref<HTMLInputElement | null>(null)
 const setValidationError = () => {
   if (!errorState.value) {
     errorState.value = countError.value
+    // ensure the browser tooltip contains our error message
+    errorInput.value?.setCustomValidity(countError.value)
   }
 }
 </script>
@@ -99,9 +101,10 @@ const setValidationError = () => {
 
     <InputError :id="aria.errormessage" :text="errorState" />
 
+    <!--Hidden input for custom validation-->
     <input
-      v-if="countError || errorState"
-      ref="targetInput"
+      v-if="countError"
+      ref="errorInput"
       required
       class="sr-only top-1 left-1"
       aria-hidden

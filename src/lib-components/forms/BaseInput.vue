@@ -19,7 +19,7 @@ defineOptions({
 const props = withDefaults(defineProps<TextLikeInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue", "update:error"])
-const targetInput = ref<HTMLInputElement | null>(null)
+const input = ref<HTMLInputElement | null>(null)
 const {
   errorState,
   modelState,
@@ -27,12 +27,12 @@ const {
   isRequired,
   onInvalid,
   inputValidation,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 // A wrapper component may need to have direct access
 // to the underlying HTMLInputElement that BaseInput binds to
 // example: GoogleMaps Autocomplete inputs
-defineExpose({ input: targetInput })
+defineExpose({ input: input })
 
 const typeAttributes = computed(() => {
   switch (props.type) {
@@ -78,7 +78,7 @@ const onInput = (e: Event) => {
     />
     <input
       :id="inputID"
-      ref="targetInput"
+      ref="input"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :aria-errormessage="errorState ? `${inputID}-error` : undefined"

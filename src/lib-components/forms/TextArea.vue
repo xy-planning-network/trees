@@ -4,7 +4,6 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { TextareaInput } from "@/composables/forms"
-import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -12,7 +11,6 @@ defineOptions({
 
 const props = withDefaults(defineProps<TextareaInput>(), defaultInputProps)
 defineEmits(["update:modelValue", "update:error"])
-const targetInput = ref<HTMLInputElement | null>(null)
 const {
   aria,
   inputID,
@@ -21,7 +19,7 @@ const {
   errorState,
   onInvalid,
   inputValidation,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const onInput = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).value
@@ -40,7 +38,6 @@ const onInput = (e: Event) => {
     />
     <textarea
       :id="inputID"
-      ref="targetInput"
       :aria-labelledby="aria.labelledby"
       :aria-describedby="aria.describedby"
       :aria-errormessage="aria.errormessage"

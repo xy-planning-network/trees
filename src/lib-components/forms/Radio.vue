@@ -3,7 +3,6 @@ import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
-import { computed, ref } from "vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { OptionsInput, ColumnedInput } from "@/composables/forms"
 
@@ -18,16 +17,6 @@ const props = withDefaults(
 
 defineEmits(["update:modelValue", "update:error"])
 
-const radios = ref<HTMLInputElement[]>([])
-// there are multiple radio buttons that could be the target
-// for validation set to the first input
-const targetInput = computed(() => {
-  if (radios.value.length === 0) {
-    return null
-  }
-
-  return radios.value[0]
-})
 const {
   aria,
   errorState,
@@ -37,7 +26,7 @@ const {
   isRequired,
   onInvalid,
   validate,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const onChange = (e: Event, val: string | number) => {
   modelState.value = val
@@ -80,7 +69,6 @@ const onChange = (e: Event, val: string | number) => {
           <div class="flex items-center h-5">
             <input
               :id="`${inputID}-${index}`"
-              ref="radios"
               :aria-describedby="
                 option.help ? `${inputID}-${index}-help` : undefined
               "

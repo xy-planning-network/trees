@@ -71,7 +71,6 @@ const toggleValue = ref(undefined)
 const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
 const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive" />`
-const inputErrorCopy = `<BaseInput type="text" label="Broken" error="This input has an error." />`
 const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" label="Make Some Selections" help="Select all that apply." :options="options" />`
 const radioCopy = `<Radio :options="options" v-model="selected" />`
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
@@ -86,6 +85,7 @@ const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
  */
 const inputLabelProps = [
   { name: "label", required: false, type: "string" },
+  { name: "required", required: false, type: "boolean" },
   { name: "tag", required: false, type: "string" },
 ]
 
@@ -94,8 +94,9 @@ const inputHelpProps = [
   { name: "tag", required: false, type: "string" },
 ]
 
+const inputErrorProps = [{ name: "text", required: false, type: "string" }]
+
 const inputCommonProps = [
-  { name: "error", required: false, type: "string" },
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
   { name: "placeholder", required: false, type: "string" },
@@ -205,21 +206,6 @@ const toggleProps = [
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputErrorCopy" />
-          </label>
-          <div class="mt-1">
-            <BaseInput
-              v-model="inputVals['baseInput-broken']"
-              error="This one is borked with a custom error message"
-              type="text"
-              label="Broken"
-              placeholder="An invalid input"
-            />
-          </div>
-        </div>
-
-        <div>
           <div class="mt-1 space-y-3">
             <BaseInput
               :disabled="true"
@@ -301,15 +287,6 @@ const toggleProps = [
               />
             </div>
 
-            <div class="mt-4">
-              <TextArea
-                v-model="inputVals['textarea']"
-                label="How about it (invalid)?"
-                help="In your own words."
-                error="This field has an error."
-              />
-            </div>
-
             <div class="mt-4"><b>Value:</b> {{ inputVals["textarea"] }}</div>
             <PropsTable :props="textareaInputProps" />
           </div>
@@ -345,17 +322,6 @@ const toggleProps = [
               label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
             />
 
-            <form @submit.prevent>
-              <Checkbox
-                v-model="inputVals['checkbox']"
-                label="Invalid state focus"
-                help="This one is required."
-                required
-                error="This one has an error"
-              />
-              <button type="submit" class="xy-btn mt-2">Submit</button>
-            </form>
-
             <div class="mt-4"><b>Value:</b> {{ inputVals["checkbox"] }}</div>
             <PropsTable :props="booleanInputProps" />
           </div>
@@ -380,14 +346,12 @@ const toggleProps = [
             <ClickToCopy :value="dateRangePickerCopy" />
           </label>
           <div class="mt-1">
-            <form class="space-y-8" @submit.prevent>
-              <DateRangePicker
-                v-model="inputVals['dateRangePicker']"
-                :max-range="365"
-                required
-              />
-              <button class="xy-btn" type="submit">Submit</button>
-            </form>
+            <DateRangePicker
+              v-model="inputVals['dateRangePicker']"
+              :max-range="365"
+              required
+            />
+
             <div class="mt-4">
               <b>Value:</b> {{ inputVals["dateRangePicker"] }}
             </div>
@@ -485,15 +449,6 @@ const toggleProps = [
               required
             />
 
-            <form @submit.prevent>
-              <Radio
-                label="Radio's have an error state too"
-                :options="options"
-                required
-              />
-              <button type="submit" class="xy-btn mt-2">Submit</button>
-            </form>
-
             <div class="">
               <form>
                 <RadioCards
@@ -588,14 +543,6 @@ const toggleProps = [
               help="Disabled select input"
               disabled
             />
-
-            <Select
-              v-model="inputVals['select']"
-              :options="options"
-              label="Lets make a selection"
-              help="Invalid select input"
-              error="Noop!  an error!"
-            />
           </div>
 
           <div class="mt-4"><b>Value:</b> {{ inputVals["select"] }}</div>
@@ -670,7 +617,10 @@ const toggleProps = [
       <ComponentLayout class="mt-8" title="Input Label">
         <template #description>
           For whenever you just need a consistent label for a custom layout. Use
-          the tag property for a custom html element like legend.
+          the tag property for a custom html element like legend. The label will
+          append a (<span class="text-red-500">*</span>) when the required prop
+          is set to true. The component will not render any markup when the
+          label prop is empty.
         </template>
 
         <div>
@@ -678,7 +628,7 @@ const toggleProps = [
             <ClickToCopy :value="inputLabelCopy" />
           </label>
           <div class="mt-1">
-            <InputLabel label="I'm labeling something..." />
+            <InputLabel label="I'm labeling something..." :required="true" />
             <PropsTable :props="inputLabelProps" />
           </div>
         </div>
@@ -687,7 +637,8 @@ const toggleProps = [
       <ComponentLayout class="mt-8" title="Input Help">
         <template #description>
           For whenever you just need a consistent help text component. Use the
-          tag property for a custom html element like legend.
+          tag property for a custom html element like legend. The component will
+          not render any markup when the text prop is empty.
         </template>
 
         <div>
@@ -701,9 +652,23 @@ const toggleProps = [
         </div>
       </ComponentLayout>
 
+      <ComponentLayout class="mt-8" title="Input Error">
+        <template #description>
+          The default error message component used in form inputs. The component
+          will not render any markup when the text prop is empty.
+        </template>
+
+        <div>
+          <div class="mt-1">
+            <InputError text="This field is required" />
+            <PropsTable :props="inputErrorProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
       <ComponentLayout
         class="mt-8"
-        title="Required Fields Validation"
+        title="Field Validation and Error State"
         :show-badge="false"
       >
         <template #description>
@@ -712,10 +677,7 @@ const toggleProps = [
           invalid event fires. The invalid event is fired during the
           HTMLFormElement submit event. This allows forms to stay error free
           until it's reported something is wrong. Once an error is present
-          though, we clear it or persist it as input and change events fire. The
-          notable exception is when the custom error prop is used on an input.
-          Because the input has no context for knowing why the error message was
-          sent, the display is set immediately.
+          though, we clear it or persist it as input and change events fire.
         </template>
         <form id="test-form" @submit.prevent>
           <div class="space-y-8">

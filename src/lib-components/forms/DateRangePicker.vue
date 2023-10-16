@@ -4,7 +4,7 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
-import { onMounted, ref } from "vue"
+import { onMounted } from "vue"
 import { defaultInputProps, useInputField } from "@/composables/forms"
 import type { DateRangeInput } from "@/composables/forms"
 
@@ -25,7 +25,6 @@ const props = withDefaults(defineProps<DateRangeInput>(), {
   startDate: 0,
 })
 
-const targetInput = ref<HTMLInputElement | null>(null)
 const {
   aria,
   errorState,
@@ -34,7 +33,7 @@ const {
   isRequired,
   onInvalid,
   validate,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const updateModelValue = (value: { minDate: number; maxDate: number }) => {
   modelState.value = value
@@ -108,7 +107,6 @@ onMounted(() => {
     />
     <input
       :id="inputID"
-      ref="targetInput"
       :aria-labelledby="aria.labelledby"
       :aria-describedby="aria.describedby"
       :aria-errormessage="aria.errormessage"

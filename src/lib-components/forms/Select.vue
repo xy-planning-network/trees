@@ -4,7 +4,6 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { defaultInputProps, useInputField } from "@/composables/forms"
 import type { OptionsInput } from "@/composables/forms"
-import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -16,7 +15,6 @@ const props = withDefaults(defineProps<OptionsInput>(), {
 })
 
 defineEmits(["update:modelValue", "update:error"])
-const targetInput = ref<HTMLInputElement | null>(null)
 const {
   aria,
   inputID,
@@ -25,7 +23,7 @@ const {
   modelState,
   errorState,
   onInvalid,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const onChange = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).value
@@ -44,7 +42,6 @@ const onChange = (e: Event) => {
     />
     <select
       :id="inputID"
-      ref="targetInput"
       :aria-labelledby="aria.labelledby"
       :aria-describedby="aria.describedby"
       :aria-errormessage="aria.errormessage"

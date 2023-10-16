@@ -1,19 +1,9 @@
-import {
-  Ref,
-  computed,
-  getCurrentInstance,
-  onMounted,
-  ref,
-  toRef,
-  useAttrs,
-  watch,
-} from "vue"
+import { Ref, computed, getCurrentInstance, ref, useAttrs, watch } from "vue"
 import Uniques from "@/helpers/Uniques"
 import { debounce } from "@/helpers/Debounce"
 
 export interface Input {
   modelValue?: any
-  error?: string
   label?: string
   help?: string
   placeholder?: string
@@ -66,7 +56,6 @@ export interface ColumnedInput {
 }
 
 export const defaultInputProps = {
-  error: "",
   help: "",
   label: "",
   modelValue: undefined, // important to prevent unexpected default value of false
@@ -87,41 +76,25 @@ export type TextInputType =
   | "url"
   | "week"
 
-interface UseInputFieldConfig<T extends Input> {
-  props: T
-  targetInput: Ref<HTMLInputElement | null>
-}
-
 /**
  * useInputField provides a number of computed values, refs, and methods to support
  * wiring up reactive inputs.
  *
  * @param config UseInputFieldConfig
  */
-export const useInputField = <T extends Input>(
-  config: UseInputFieldConfig<T>
-) => {
+export const useInputField = <T extends Input>(props: T) => {
   // The fallthrough attributes received on the component.
   // This is used to simplify input prop management and let's common HTMLInputElement
   // attributes be set on the component with the expectation that it will function as though
   // it was a plain old HTMLInputElement.  ex: required, disabled
   const attrs = useAttrs()
 
-  // The errorState allows you to directly mutate the v-model:error, manages the emitter for you.
-  // This state is also used to set the default HTMLInputElement validation message in the onInvalid method.
-  // When the component will support v-model:error it should defineEmit("update:error") in the component.
-  const errorState = useLocalModel(config.props, "error")
+  // The errorState is used to set the default HTMLInputElement validation message in the onInvalid method.
+  const errorState = ref<string>("")
 
   // The modelState allows you to directly mutate the v-model and manages the emitter for you.
   // When the component will support v-model is should defineEmit("update:modelValue") in the component.
-  const modelState = useLocalModel(config.props, "modelValue")
-
-  // targetInput is the input that will recieve error messages via the setCustomValidity() method.
-  // In most cases the targetInput will be the primary input wrapped in the component template.
-  // In other cases where there are multiple input components (radios, multi-checkboxes) or the input component is
-  // synthetic (radio cards) the targetInput may be a hidden field or the first input in the list.
-  // It's primary purpose is to be the recipient of the browsers focus for setting a validation error.
-  const targetInput = toRef(config.targetInput)
+  const modelState = useLocalModel(props, "modelValue")
 
   /**
    * inputID computes the id attribute for a input
@@ -168,16 +141,16 @@ export const useInputField = <T extends Input>(
    */
   const aria = computed(() => {
     return {
-      labelledby: config.props["label"] ? `${inputID.value}-label` : undefined,
-      describedby: config.props["help"] ? `${inputID.value}-help` : undefined,
-      errormessage: errorState ? `${inputID.value}-error` : undefined,
+      labelledby: props.label ? `${inputID.value}-label` : undefined,
+      describedby: props.help ? `${inputID.value}-help` : undefined,
+      errormessage: errorState.value ? `${inputID.value}-error` : undefined,
     }
   })
 
   /**
-   * onInvalid is a simple helper method for setting the default HTMLInputElement
-   * validationMessage. It should typically be used as an invalid callback on HTMLInputElement
-   * to sync the current validation error to the local errorState.
+   * onInvalid is an Event callback for setting the default HTMLInputElement
+   * validationMessage. It should be used as the callback for @invalid on an HTMLInputElement
+   * to set the current validation error to the local errorState.
    * @param e Event
    */
   const onInvalid = (e: Event) => {
@@ -189,10 +162,10 @@ export const useInputField = <T extends Input>(
   }
 
   /**
-   * validate clears any custom validation messages on the targetInput and
-   * triggers a validation check on the event target.  This will clear validation
-   * errors if the input that triggered this method passes validation.  Otherwise it
-   * will update the errorState with the latest validation error.
+   * validate is an event callback to retrigger an inputs checkValidity method.
+   * This is only called when an existing error message exists as the result of an
+   * @invalid event and clears the error message if it passes, otherwise it updates the message
+   * with the current error.
    *
    * @param e Event
    */
@@ -200,12 +173,6 @@ export const useInputField = <T extends Input>(
     if (!errorState.value) {
       return
     }
-
-    // validate should be called during input and change events.
-    // we always clear the custom validation message from the targetInput
-    // since there's no context here for why it was set in the first place
-    // assume it is now valid until presented otherwise
-    targetInput?.value?.setCustomValidity("")
 
     // this target will commonly be the same as targetInput, but not always.
     // example radio buttons trigger a change event from multiple inputs, but because they share
@@ -224,21 +191,6 @@ export const useInputField = <T extends Input>(
    * from firing too frequently.
    */
   const inputValidation = debounce(validate, 350)
-
-  onMounted(() => {
-    // watch the errorState to set and report the error on the target input
-    // HTMLInputElements will typicall set the error state using the onInvalid helper
-    // the invalid event is only fired during form submit events and is not a live validation
-    // custom validation messages, should follow a similar pattern when possible by
-    // setting the v-model:error value in a form submit callback.
-    watch(errorState, (v) => {
-      targetInput?.value?.setCustomValidity(v || "")
-
-      if (v) {
-        targetInput?.value?.reportValidity()
-      }
-    })
-  })
 
   return {
     aria,
@@ -276,13 +228,6 @@ export const hasAttribute = (attrs: Record<string, unknown>, name: string) => {
  * exported as a raw string to support the escape backslash characters
  */
 export const emailPattern = String.raw`^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-.]\w+)*$`
-
-/**
- * password validation regex pattern
- * used with input type="password" in the pattern attribute for html5 validation
- * exported as a raw string to support the escape backslash characters
- */
-export const passwordPattern = String.raw`(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*\(\)_+=\-]).{8,}`
 
 /**
  * phone number validation regex pattern

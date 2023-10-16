@@ -4,7 +4,6 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
-import { ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -13,7 +12,6 @@ defineOptions({
 const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue", "update:error"])
-const targetInput = ref<HTMLInputElement | null>(null)
 const {
   aria,
   inputID,
@@ -23,7 +21,7 @@ const {
   modelState,
   validate,
   onInvalid,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const onChange = (e: Event) => {
   modelState.value = (e.target as HTMLInputElement).checked
@@ -36,7 +34,6 @@ const onChange = (e: Event) => {
     <div class="flex items-center h-5">
       <input
         :id="inputID"
-        ref="targetInput"
         :aria-labelledby="aria.labelledby"
         :aria-describedby="aria.describedby"
         :aria-errormessage="aria.errormessage"

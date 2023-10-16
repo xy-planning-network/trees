@@ -16,7 +16,6 @@ import type {
   InputOption,
   OptionsInput,
 } from "@/composables/forms"
-import { computed, ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -38,26 +37,15 @@ const props = withDefaults(
 )
 
 defineEmits(["update:modelValue", "update:error"])
-const hiddenRadios = ref<HTMLInputElement[]>([])
-// there are multiple radio buttons that could be the target
-// for validation set to the first input
-const targetInput = computed(() => {
-  if (hiddenRadios.value.length === 0) {
-    return null
-  }
-
-  return hiddenRadios.value[0]
-})
 const {
   aria,
-  inputID,
   isDisabled,
   isRequired,
   nameAttr,
   modelState,
   errorState,
   onInvalid,
-} = useInputField({ props, targetInput })
+} = useInputField(props)
 
 const onUpdate = (val: unknown) => {
   if (val) {
@@ -167,7 +155,6 @@ const onUpdate = (val: unknown) => {
 
           <!--TODO: (spk) ideally this would trigger a change event -->
           <input
-            ref="hiddenRadios"
             class="sr-only top-1 left-1"
             aria-hidden="true"
             :checked="checked"
