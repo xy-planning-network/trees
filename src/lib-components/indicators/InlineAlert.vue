@@ -181,10 +181,9 @@ const icon = computed(() => {
         </div>
       </div>
 
-      <div class="ml-auto pl-3">
+      <div v-if="dismissable" class="ml-auto pl-3">
         <div class="-mx-1.5 -my-1.5">
           <button
-            v-if="dismissable"
             class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2"
             :class="display.btnClose"
             type="button"
