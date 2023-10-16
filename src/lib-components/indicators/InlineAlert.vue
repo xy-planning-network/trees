@@ -19,7 +19,7 @@ const props = withDefaults(
     secondaryBtnLink?: string
     secondaryBtnText?: string
     title?: string
-    type: "alert" | "warn" | "info" | "success"
+    kind: "alert" | "warn" | "info" | "success"
   }>(),
   {
     btnLink: "",
@@ -50,10 +50,9 @@ const display = computed(() => {
     btnClose: "",
     contentColor: "",
     iconColor: "",
-    titleColor: "",
   }
 
-  switch (props.type) {
+  switch (props.kind) {
     case "alert":
       display.bgColor = "bg-red-50"
       display.btnAction =
@@ -62,7 +61,6 @@ const display = computed(() => {
         "bg-red-50 text-red-600 hover:bg-red-100 focus:ring-red-600 focus:ring-offset-red-50"
       display.contentColor = "text-red-800"
       display.iconColor = "text-red-400"
-      display.titleColor = "text-red-800"
       break
     case "info":
       display.bgColor = "bg-blue-50"
@@ -72,7 +70,6 @@ const display = computed(() => {
         "bg-blue-50 text-blue-600 hover:bg-blue-100 focus:ring-blue-600 focus:ring-offset-blue-50"
       display.contentColor = "text-blue-800"
       display.iconColor = "text-blue-400"
-      display.titleColor = "text-blue-800"
       break
     case "success":
       display.bgColor = "bg-emerald-50"
@@ -82,7 +79,6 @@ const display = computed(() => {
         "bg-emerald-50 text-emerald-600 hover:bg-emerald-100 focus:ring-emerald-600 focus:ring-offset-emerald-50"
       display.contentColor = "text-emerald-800"
       display.iconColor = "text-emerald-400"
-      display.titleColor = "text-emerald-800"
       break
     case "warn":
       display.bgColor = "bg-amber-50"
@@ -92,7 +88,6 @@ const display = computed(() => {
         "bg-amber-50 text-amber-600 hover:bg-amber-100 focus:ring-amber-600 focus:ring-offset-amber-50"
       display.contentColor = "text-amber-800"
       display.iconColor = "text-amber-400"
-      display.titleColor = "text-amber-800"
       break
   }
 
@@ -101,7 +96,7 @@ const display = computed(() => {
 
 const icon = computed(() => {
   let icon = null
-  switch (props.type) {
+  switch (props.kind) {
     case "alert":
       icon = XCircleIcon
       break
@@ -135,7 +130,7 @@ const icon = computed(() => {
         <h3
           v-if="title"
           class="text-sm leading-snug font-semibold mb-1.5"
-          :class="display.titleColor"
+          :class="display.contentColor"
         >
           {{ title }}
         </h3>

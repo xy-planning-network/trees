@@ -28,21 +28,21 @@ const weights = [
   "font-extrabold",
 ]
 
-const alertTypes = ["alert", "warn", "info", "success"] as const
-const alertOptions: InputOption[] = alertTypes.map((t) => {
+const alertKinds = ["alert", "warn", "info", "success"] as const
+const alertOptions: InputOption[] = alertKinds.map((t) => {
   return { label: `${t.charAt(0).toUpperCase()}${t.slice(1)}`, value: t }
 })
-const alertSelection = ref<(typeof alertTypes)[number]>("alert")
+const alertSelection = ref<(typeof alertKinds)[number]>("alert")
 const alert = (msg: string) => window.alert(msg)
 const alertProps = [
   { name: "btnLink", required: false, type: "string" },
   { name: "btnText", required: false, type: "string" },
   { name: "content", required: true, type: "string | string[]" },
   { name: "dismissable", required: false, type: "boolean" },
+  { name: "kind", required: true, type: "alert | warn | info | success" },
   { name: "secondaryBtnLink", required: false, type: "string" },
   { name: "secondaryBtnText", required: false, type: "string" },
   { name: "title", required: false, type: "string" },
-  { name: "type", required: true, type: "alert | warn | info | success" },
 ]
 </script>
 
@@ -65,15 +65,15 @@ const alertProps = [
         >
 
         <div class="space-y-8">
-          <div v-for="t in alertTypes" :key="t">
+          <div v-for="kind in alertKinds" :key="kind">
             <p class="font-medium text-sm mb-1">
-              {{ `${t.charAt(0).toUpperCase()}${t.slice(1)}` }}
+              {{ `${kind.charAt(0).toUpperCase()}${kind.slice(1)}` }}
             </p>
             <InlineAlert
               ref="alertComponent"
               content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :kind="kind"
               title="Orci eu lobortis elementum"
-              :type="t"
             />
           </div>
 
@@ -87,7 +87,7 @@ const alertProps = [
             <p class="font-medium text-sm mb-1">Simple Content</p>
             <InlineAlert
               content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
-              :type="alertSelection"
+              :kind="alertSelection"
             />
           </div>
 
@@ -98,8 +98,8 @@ const alertProps = [
                 'Arcu cursus euismod quis viverra nibh.',
                 'Cras pulvinar mattis nunc sed blandit.',
               ]"
+              :kind="alertSelection"
               title="Orci eu lobortis elementum"
-              :type="alertSelection"
             />
           </div>
 
@@ -109,9 +109,9 @@ const alertProps = [
               btn-text="Learn More"
               btn-link="https://theuselessweb.com/"
               content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :kind="alertSelection"
               secondary-btn-text="Announce it"
               title="Orci eu lobortis elementum"
-              :type="alertSelection"
               @click:secondary.prevent="alert('Clicked It!')"
             />
           </div>
@@ -125,7 +125,7 @@ const alertProps = [
               :dismissable="true"
               secondary-btn-text="Announce it"
               title="Orci eu lobortis elementum"
-              :type="alertSelection"
+              :kind="alertSelection"
               @click:secondary.prevent="alert('Clicked It!')"
             />
           </div>
