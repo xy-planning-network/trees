@@ -8,6 +8,7 @@ import {
 import { CheckCircleIcon } from "@heroicons/vue/solid"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 import { defaultInputProps, useInputField } from "@/composables/forms"
 import type {
@@ -48,6 +49,7 @@ const targetInput = computed(() => {
   return hiddenRadios.value[0]
 })
 const {
+  aria,
   inputID,
   isDisabled,
   isRequired,
@@ -69,7 +71,7 @@ const onUpdate = (val: unknown) => {
     v-model="modelState"
     :disabled="isDisabled"
     :aria-invalid="errorState ? 'true' : null"
-    :aria-errormessage="errorState ? `error-${inputID}` : null"
+    :aria-errormessage="aria.errormessage"
     @update:model-value="onUpdate"
   >
     <RadioGroupLabel v-if="label" class="block">
@@ -80,9 +82,7 @@ const onUpdate = (val: unknown) => {
       <InputHelp :text="help" />
     </RadioGroupDescription>
 
-    <div v-if="errorState" :id="`error-${inputID}`">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div
       class="mt-4 grid grid-cols-1 gap-y-5 gap-x-4 relative"

@@ -2,6 +2,7 @@
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
 import { computed, ref } from "vue"
@@ -17,9 +18,8 @@ const props = withDefaults(
 
 defineEmits(["update:modelValue", "update:error"])
 const targetInput = ref<HTMLInputElement | null>(null)
-const { inputID, isDisabled, modelState, errorState, validate } = useInputField(
-  { props, targetInput }
-)
+const { aria, inputID, isDisabled, modelState, errorState, validate } =
+  useInputField({ props, targetInput })
 
 const onChange = (e: Event, val: string | number) => {
   const checked = (e.target as HTMLInputElement).checked
@@ -84,21 +84,20 @@ const setValidationError = () => {
 <template>
   <fieldset
     class="relative space-y-4"
-    :aria-labelledby="label ? `${inputID}-legend` : undefined"
-    :aria-describedby="help ? `${inputID}-help` : undefined"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
     <div v-if="label">
       <FieldsetLegend
-        :id="`${inputID}-legend`"
+        :id="aria.labelledby"
         :label="label"
         :required="minCount > 0"
       />
-      <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
 
-    <div v-if="errorState" class="mt-0.5">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <input
       v-if="countError || errorState"

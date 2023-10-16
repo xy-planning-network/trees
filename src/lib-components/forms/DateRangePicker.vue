@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
 import { onMounted, ref } from "vue"
@@ -23,8 +26,15 @@ const props = withDefaults(defineProps<DateRangeInput>(), {
 })
 
 const targetInput = ref<HTMLInputElement | null>(null)
-const { errorState, modelState, inputID, isRequired, onInvalid, validate } =
-  useInputField({ props, targetInput })
+const {
+  aria,
+  errorState,
+  modelState,
+  inputID,
+  isRequired,
+  onInvalid,
+  validate,
+} = useInputField({ props, targetInput })
 
 const updateModelValue = (value: { minDate: number; maxDate: number }) => {
   modelState.value = value
@@ -90,7 +100,7 @@ onMounted(() => {
 <template>
   <div>
     <InputLabel
-      :id="`${inputID}-label`"
+      :id="aria.labelledby"
       class="mb-2"
       :for="inputID"
       :label="label"
@@ -99,8 +109,9 @@ onMounted(() => {
     <input
       :id="inputID"
       ref="targetInput"
-      :aria-labelledby="label ? `${inputID}-label` : undefined"
-      :aria-describedby="help ? `${inputID}-help` : undefined"
+      :aria-labelledby="aria.labelledby"
+      :aria-describedby="aria.describedby"
+      :aria-errormessage="aria.errormessage"
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
@@ -114,9 +125,7 @@ onMounted(() => {
       @input="validate"
       @invalid="onInvalid"
     />
-    <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
-    <div v-if="errorState" class="mt-0.5">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputHelp :id="aria.describedby" class="mt-1" :text="help" />
+    <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
   </div>
 </template>

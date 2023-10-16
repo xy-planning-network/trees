@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
-import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
+import { computed, ref } from "vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { OptionsInput, ColumnedInput } from "@/composables/forms"
 
@@ -28,6 +29,7 @@ const targetInput = computed(() => {
   return radios.value[0]
 })
 const {
+  aria,
   errorState,
   modelState,
   inputID,
@@ -46,21 +48,20 @@ const onChange = (e: Event, val: string | number) => {
 <template>
   <fieldset
     class="space-y-4"
-    :aria-labelledby="label ? `${inputID}-legend` : undefined"
-    :aria-describedby="help ? `${inputID}-help` : undefined"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
     <div v-if="label">
       <FieldsetLegend
-        :id="`${inputID}-legend`"
+        :id="aria.labelledby"
         :label="label"
         :required="isRequired"
       />
-      <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
 
-    <div v-if="errorState" class="mt-0.5">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div class="flex">
       <div

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
 import { ref } from "vue"
@@ -14,6 +15,7 @@ const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
 defineEmits(["update:modelValue", "update:error"])
 const targetInput = ref<HTMLInputElement | null>(null)
 const {
+  aria,
   inputID,
   isDisabled,
   isRequired,
@@ -33,22 +35,22 @@ const onChange = (e: Event, val: boolean) => {
 <template>
   <fieldset
     class="space-y-4"
-    :aria-labelledby="label ? `${inputID}-legend` : undefined"
-    :aria-describedby="help ? `${inputID}-help` : undefined"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
     <div v-if="label">
       <InputLabel
+        :id="aria.labelledby"
         class="block my-auto"
         :label="label"
-        tag="legend"
         :required="isRequired"
+        tag="legend"
       />
-      <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
 
-    <div v-if="errorState" class="mt-0.5">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div>
       <label

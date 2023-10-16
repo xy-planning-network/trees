@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import {
   useInputField,
   defaultInputProps,
@@ -80,6 +81,7 @@ const onInput = (e: Event) => {
       ref="targetInput"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
+      :aria-errormessage="errorState ? `${inputID}-error` : undefined"
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
@@ -95,8 +97,6 @@ const onInput = (e: Event) => {
       @invalid="onInvalid"
     />
     <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
-    <div v-if="errorState" class="mt-0.5">
-      <p class="text-sm text-red-700">{{ errorState }}</p>
-    </div>
+    <InputError :id="`${inputID}-error`" class="mt-0.5" :text="errorState" />
   </div>
 </template>

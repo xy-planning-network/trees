@@ -157,6 +157,24 @@ export const useInputField = <T extends Input>(
   })
 
   /**
+   * aria computes commonly used aria attributes used on form inputs.
+   * labelledby, describedby, and errormessage are set with a value that
+   * should be used as the id attribute for the HTMLElement that fullfills
+   * the aria attributes purpose.
+   *
+   * ex:
+   * <label :id="aria.labelledby">My Input</label>
+   * <input :aria-labelledby="aria.labelledby" />
+   */
+  const aria = computed(() => {
+    return {
+      labelledby: config.props["label"] ? `${inputID.value}-label` : undefined,
+      describedby: config.props["help"] ? `${inputID.value}-help` : undefined,
+      errormessage: errorState ? `${inputID.value}-error` : undefined,
+    }
+  })
+
+  /**
    * onInvalid is a simple helper method for setting the default HTMLInputElement
    * validationMessage. It should typically be used as an invalid callback on HTMLInputElement
    * to sync the current validation error to the local errorState.
@@ -223,6 +241,7 @@ export const useInputField = <T extends Input>(
   })
 
   return {
+    aria,
     attrs,
     inputID,
     isDisabled,
