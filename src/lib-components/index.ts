@@ -8,6 +8,7 @@ import { default as DateFilter } from "./layout/DateFilter.vue"
 import { default as DetailList } from "./lists/DetailList.vue"
 import { default as DownloadCell } from "./lists/DownloadCell.vue"
 import { default as Flash } from "./overlays/Flash.vue"
+import { default as InlineAlert } from "./indicators/InlineAlert.vue"
 import { default as Modal } from "./overlays/Modal.vue"
 import { default as SidebarLayout } from "./layout/SidebarLayout.vue"
 import { default as Popover } from "./overlays/Popover/Popover.vue"
@@ -48,6 +49,7 @@ export {
   DetailList,
   DownloadCell,
   Flash,
+  InlineAlert,
   Modal,
   SidebarLayout,
   Slideover,
