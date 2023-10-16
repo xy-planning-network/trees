@@ -1,6 +1,7 @@
-import { Ref, computed, getCurrentInstance, ref, useAttrs, watch } from "vue"
+import { computed, ref, useAttrs } from "vue"
 import Uniques from "@/helpers/Uniques"
 import { debounce } from "@/helpers/Debounce"
+import { useModel } from "./setupHelpers"
 
 export interface Input {
   modelValue?: any
@@ -94,7 +95,7 @@ export const useInputField = <T extends Input>(props: T) => {
 
   // The modelState allows you to directly mutate the v-model and manages the emitter for you.
   // When the component will support v-model is should defineEmit("update:modelValue") in the component.
-  const modelState = useLocalModel(props, "modelValue")
+  const modelState = useModel(props, "modelValue", { local: true })
 
   /**
    * inputID computes the id attribute for a input
@@ -241,37 +242,4 @@ export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 export const looseToNumber = (val: any): any => {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
-}
-
-/**
- * useLocalModel supports a two-way binding between a reactive prop and
- * a local ref.  It effectively allows you to do prop mutations in a way that
- * vue considers safe.
- *
- * vue/core has a version of this in it's experimental mode called useModel
- *
- * @param props component props
- * @param name component prop name to sync
- */
-export const useLocalModel = <T extends Record<string, any>, K extends keyof T>(
-  props: T,
-  name: K
-): Ref<T[K]> => {
-  const i = getCurrentInstance()!
-  const proxy = ref<any>(props[name])
-
-  // keep the local value in sync with the prop value
-  watch(
-    () => props[name],
-    (v) => (proxy.value = v)
-  )
-
-  // emit the updated local value to the prop when updated
-  watch(proxy, (v) => {
-    if (v !== props[name]) {
-      i.emit(`update:${String(name)}`, v)
-    }
-  })
-
-  return proxy
 }
