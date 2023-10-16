@@ -5,7 +5,7 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
-import { computed, ref, watch } from "vue"
+import { computed, ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
