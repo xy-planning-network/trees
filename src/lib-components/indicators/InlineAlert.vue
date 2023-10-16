@@ -121,7 +121,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <div v-if="visible" class="rounded-lg p-4" :class="[display.bgColor]">
+  <div v-if="visible" class="rounded-lg p-4" :class="display.bgColor">
     <div class="flex">
       <div class="flex-shrink-0">
         <component
@@ -140,7 +140,7 @@ const icon = computed(() => {
           {{ title }}
         </h3>
 
-        <div class="text-sm" :class="[display.contentColor]">
+        <div class="text-sm" :class="display.contentColor">
           <ul
             v-if="Array.isArray(content)"
             role="list"
