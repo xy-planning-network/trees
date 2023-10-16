@@ -6,7 +6,6 @@ import {
   defaultInputProps,
   emailPattern,
   looseToNumber,
-  passwordPattern,
   phonePattern,
 } from "@/composables/forms"
 import type { TextLikeInput } from "@/composables/forms"
@@ -44,10 +43,6 @@ const typeAttributes = computed(() => {
     case "email":
       return {
         pattern: emailPattern,
-      }
-    case "password":
-      return {
-        pattern: passwordPattern,
       }
     case "tel":
       return {
