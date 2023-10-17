@@ -32,17 +32,6 @@
   h6 {
     @apply text-xs leading-4 font-semibold;
   }
-
-  /* Forms: here for backward compatibility.  Use <BaseInput> instead. */
-  [type="text"],
-  [type="email"],
-  [type="password"],
-  [type="number"],
-  [type="search"],
-  [type="tel"],
-  textarea {
-    @apply mt-1 shadow-sm focus:ring-xy-blue-500 focus:border-xy-blue block w-full sm:text-sm border-gray-600 rounded-md;
-  }
 }
 
 @layer components {
@@ -130,10 +119,5 @@
 
   .max-h-screen-1\/2 {
     max-height: 50vh;
-  }
-
-  /* Forms */
-  .xy-input-error {
-    @apply focus:ring-red-700 focus:border-red-700 text-red-900 placeholder-red-700 placeholder-opacity-75 border-red-700;
   }
 }

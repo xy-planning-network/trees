@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
-import { onMounted, useAttrs } from "vue"
+import { onMounted } from "vue"
 import BaseInput from "./BaseInput.vue"
+import { useInputField } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(
   defineProps<{
@@ -25,8 +29,7 @@ const props = withDefaults(
 )
 
 const emits = defineEmits(["update:modelValue"])
-const attrs = useAttrs()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const { inputID } = useInputField()
 
 const updateModelValue = (value: { minDate: number; maxDate: number }) => {
   emits("update:modelValue", value)
@@ -84,15 +87,16 @@ onMounted(() => {
     }
   }
 
-  flatpickr(`#${uuid}`, opts)
+  flatpickr(`#${inputID.value}`, opts)
 })
 </script>
+
 <template>
   <BaseInput
-    :id="uuid"
+    :id="inputID"
     type="text"
     placeholder="mm-dd-yyyy range"
     :label="label"
     :help="help"
-  ></BaseInput>
+  />
 </template>

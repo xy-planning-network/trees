@@ -1,54 +1,56 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useAttrs } from "vue"
+import { useInputField } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
+
 withDefaults(
   defineProps<{
     help?: string
     label?: string
     modelValue?: string | number
+    error?: string
   }>(),
   {
     help: "",
     label: "",
     modelValue: "",
+    error: "",
   }
 )
-const attrs = useAttrs()
+
 const emit = defineEmits(["update:modelValue"])
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+const { inputID } = useInputField()
 </script>
 
 <template>
-  <InputLabel
-    :id="`${uuid}-label`"
-    class="block"
-    :for="uuid"
-    :label="label"
-  ></InputLabel>
-  <textarea
-    :id="uuid"
-    :aria-labelledby="label ? `${uuid}-label` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
-    :class="[
-      'mt-1',
-      'sm:text-sm',
-      'block',
-      'shadow-sm',
-      'focus:ring-xy-blue-500',
-      'focus:border-xy-blue',
-      'border-gray-600',
-      'rounded-md',
-      'w-full',
-      'disabled:opacity-70',
-      'disabled:cursor-not-allowed',
-    ]"
-    :value="modelValue"
-    v-bind="$attrs"
-    @input="
-      emit('update:modelValue', ($event.target as HTMLInputElement).value)
-    "
-  />
-  <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
+  <div>
+    <InputLabel
+      :id="`${inputID}-label`"
+      class="mb-2"
+      :for="inputID"
+      :label="label"
+    />
+    <textarea
+      :id="inputID"
+      :aria-labelledby="label ? `${inputID}-label` : undefined"
+      :aria-describedby="help ? `${inputID}-help` : undefined"
+      :class="[
+        'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
+        'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
+        error
+          ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
+          : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
+      ]"
+      :value="modelValue"
+      v-bind="$attrs"
+      @input="
+        emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
+    />
+    <InputHelp :id="`${inputID}-help`" class="mb-1" :text="help"></InputHelp>
+  </div>
 </template>

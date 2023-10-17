@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
 import {
   RadioGroup,
   RadioGroupDescription,
@@ -7,10 +6,15 @@ import {
   RadioGroupOption,
 } from "@headlessui/vue"
 import { CheckCircleIcon } from "@heroicons/vue/solid"
-import { computed, ref, useAttrs } from "vue"
+import { computed, ref } from "vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
+import { useInputField } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 /*
  * NOTE (spk) headless UI introduced a "name" prop that includes a hidden field
@@ -35,15 +39,17 @@ const props = withDefaults(
   defineProps<{
     columns?: 2 | 3
     help?: string
-    legend?: string
+    label?: string
     modelValue?: ModelValue
     options: RadioCard[]
+    error?: string
   }>(),
   {
     columns: undefined,
     help: "",
-    legend: "",
+    label: "",
     modelValue: undefined,
+    error: "",
   }
 )
 
@@ -51,8 +57,7 @@ const emit = defineEmits<{
   (e: "update:modelValue", modelValue: ModelValue): void
 }>()
 
-const attrs = useAttrs()
-const uuid = Uniques.CreateIdAttribute()
+const { inputID, isDisabled, isRequired, nameAttr } = useInputField()
 
 // tracking internal state separate from modelValue
 // allows v-model to be undefined by the consumer but still supports
@@ -74,27 +79,25 @@ const onChange = (val: ModelValue) => {
   invalid.value = false
   emit("update:modelValue", val)
 }
-
-const nameAttr = computed(() => {
-  return typeof attrs.name === "string" && attrs.name !== "" ? attrs.name : uuid
-})
 </script>
 
 <template>
   <RadioGroup
     :model-value="checkedState"
-    :disabled="typeof attrs.disabled === 'boolean' ? attrs.disabled : false"
+    :disabled="isDisabled"
     :aria-invalid="invalid === true ? 'true' : null"
-    :aria-errormessage="invalid === true ? `error-${uuid}` : null"
+    :aria-errormessage="invalid === true ? `error-${inputID}` : null"
     @update:model-value="onChange"
   >
-    <RadioGroupLabel v-if="legend" class="block">
-      <FieldsetLegend tag="div">{{ legend }}</FieldsetLegend>
+    <RadioGroupLabel v-if="label" class="block">
+      <FieldsetLegend tag="div" :label="label" />
     </RadioGroupLabel>
+
     <RadioGroupDescription v-if="help">
       <InputHelp :text="help" />
     </RadioGroupDescription>
-    <div v-if="invalid === true" :id="`error-${uuid}`" class="sr-only">
+
+    <div v-if="invalid === true" :id="`error-${inputID}`" class="sr-only">
       Please select one of these options.
     </div>
 
@@ -108,17 +111,28 @@ const nameAttr = computed(() => {
       <RadioGroupOption
         v-for="option in options"
         :key="option.value"
-        v-slot="{ active, checked, disabled }"
+        v-slot="{
+          active,
+          checked,
+          disabled,
+        }: {
+          active: boolean,
+          checked: boolean,
+          disabled: boolean,
+        }"
         as="template"
-        :disabled="option?.disabled ? option.disabled : false"
+        :disabled="isDisabled || option.disabled"
         :value="option.value"
       >
         <div
-          class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
+          class="relative border rounded-lg shadow-sm p-4 flex focus:outline-none"
           :class="[
-            checked ? 'border-transparent' : 'border-gray-300',
+            disabled
+              ? 'cursor-not-allowed bg-gray-50 border-gray-200 opacity-90'
+              : 'cursor-pointer bg-white border-gray-300',
+            error && !disabled ? 'border-red-700' : '',
+            checked ? 'border-transparent' : '',
             active ? 'border-xy-blue ring-2 ring-xy-blue-500' : '',
-            disabled ? 'cursor-not-allowed opacity-75' : '',
           ]"
         >
           <div class="flex-1 flex pr-1">
@@ -130,16 +144,18 @@ const nameAttr = computed(() => {
                   :label="option.label"
                 />
               </RadioGroupLabel>
+
               <RadioGroupDescription v-if="option.help" as="div">
                 <InputHelp tag="div" class="mt-auto" :text="option.help" />
               </RadioGroupDescription>
+
               <div
                 v-if="option.sublabel || $slots.sublabel"
                 class="mt-auto mb-0"
               >
                 <RadioGroupDescription
                   as="div"
-                  class="font-semibold leading-snug mt-4 text-gray-900 text-sm"
+                  class="text-sm/5 font-medium mt-4 text-gray-800"
                 >
                   <slot
                     name="sublabel"
@@ -165,12 +181,13 @@ const nameAttr = computed(() => {
             ]"
             aria-hidden="true"
           />
+
           <input
             class="sr-only top-1 left-1"
             aria-hidden="true"
             :checked="checked"
             :name="nameAttr"
-            :required="attrs.required !== undefined && attrs.required !== false"
+            :required="isRequired"
             tabindex="-1"
             type="radio"
             :value="option.value"

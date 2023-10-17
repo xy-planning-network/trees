@@ -14,10 +14,8 @@ withDefaults(
   <component
     :is="tag"
     v-if="text"
-    v-bind="{
-      ...$attrs,
-      class: 'mt-1 text-sm leading-snug font-normal text-gray-700',
-    }"
+    class="text-sm leading-snug font-normal text-gray-600"
+    v-bind="$attrs"
   >
     {{ text }}
   </component>

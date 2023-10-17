@@ -113,7 +113,9 @@ const dynamicTableActions: TableActions<Conifer> = {
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
+  dateSearch: true,
   refreshTrigger: 0,
+  search: true,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
 }
 

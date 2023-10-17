@@ -174,16 +174,13 @@ loadAndRender()
       class="flex flex-col mb-4 space-y-4 lg:space-y-0 lg:flex-row lg:justify-between"
     >
       <div v-if="tableOptions.search" class="w-full max-w-lg lg:max-w-xs">
-        <label for="search" class="sr-only">Search</label>
-        <div class="relative">
+        <label for="table-search" class="sr-only">Search</label>
+        <div class="flex items-center gap-x-2">
           <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            aria-hidden="true"
+            class="shrink-0 aspect-square rounded-full bg-gray-50 text-gray-400 h-10 w-10 flex items-center justify-center pointer-events-none"
           >
-            <svg
-              class="w-5 h-5 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -191,21 +188,47 @@ loadAndRender()
               />
             </svg>
           </div>
-          <input
-            v-model.trim="query"
-            class="pl-10"
-            type="search"
-            placeholder="Search"
-            @change="reloadTable()"
-          />
+          <div class="flex-1">
+            <BaseInput
+              id="table-search"
+              v-model.trim="query"
+              type="search"
+              placeholder="Search"
+              @change="reloadTable()"
+            />
+          </div>
         </div>
       </div>
       <div v-if="tableOptions.dateSearch" class="w-full max-w-lg lg:max-w-xs">
-        <DateRangePicker
-          v-model="dateRange"
-          v-bind="{ ...dateSearchProps }"
-          @update:model-value="dateRangeChanged"
-        />
+        <label for="table-date-range" class="sr-only">Date Range</label>
+        <div class="flex items-center gap-x-2">
+          <div
+            aria-hidden="true"
+            class="shrink-0 aspect-square rounded-full bg-gray-50 text-gray-400 h-10 w-10 flex items-center justify-center pointer-events-none"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <div class="flex-1">
+            <DateRangePicker
+              id="table-date-range"
+              v-model="dateRange"
+              v-bind="{ ...dateSearchProps }"
+              @update:model-value="dateRangeChanged"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
