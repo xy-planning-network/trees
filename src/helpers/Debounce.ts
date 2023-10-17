@@ -1,11 +1,13 @@
-export function debounce(func: () => void, timeout = 500): () => void {
-  let timer: NodeJS.Timer
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (...args: any[]) => {
-    clearTimeout(timer)
+export function debounce(fn: (...args: any[]) => void, wait = 500) {
+  let timer: NodeJS.Timer | null = null
+  return function (...args: any[]) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
     timer = setTimeout(() => {
-      func.apply(args)
-    }, timeout)
+      fn(...args)
+    }, wait)
   }
 }
 

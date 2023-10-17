@@ -1,54 +1,59 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useAttrs } from "vue"
-withDefaults(
-  defineProps<{
-    help?: string
-    label?: string
-    modelValue?: string | number
-  }>(),
-  {
-    help: "",
-    label: "",
-    modelValue: "",
-  }
-)
-const attrs = useAttrs()
-const emit = defineEmits(["update:modelValue"])
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
+import InputError from "./InputError.vue"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { TextareaInput } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
+
+const props = withDefaults(defineProps<TextareaInput>(), defaultInputProps)
+defineEmits(["update:modelValue", "update:error"])
+const {
+  aria,
+  inputID,
+  isRequired,
+  modelState,
+  errorState,
+  onInvalid,
+  inputValidation,
+} = useInputField(props)
+
+const onInput = (e: Event) => {
+  modelState.value = (e.target as HTMLInputElement).value
+  inputValidation(e)
+}
 </script>
 
 <template>
-  <InputLabel
-    :id="`${uuid}-label`"
-    class="block"
-    :for="uuid"
-    :label="label"
-  ></InputLabel>
-  <textarea
-    :id="uuid"
-    :aria-labelledby="label ? `${uuid}-label` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
-    :class="[
-      'mt-1',
-      'sm:text-sm',
-      'block',
-      'shadow-sm',
-      'focus:ring-xy-blue-500',
-      'focus:border-xy-blue',
-      'border-gray-600',
-      'rounded-md',
-      'w-full',
-      'disabled:opacity-70',
-      'disabled:cursor-not-allowed',
-    ]"
-    :value="modelValue"
-    v-bind="$attrs"
-    @input="
-      emit('update:modelValue', ($event.target as HTMLInputElement).value)
-    "
-  />
-  <InputHelp :id="`${uuid}-help`" :text="help"></InputHelp>
+  <div>
+    <InputLabel
+      :id="aria.labelledby"
+      class="mb-2"
+      :for="inputID"
+      :label="label"
+      :required="isRequired"
+    />
+    <textarea
+      :id="inputID"
+      :aria-labelledby="aria.labelledby"
+      :aria-describedby="aria.describedby"
+      :aria-errormessage="aria.errormessage"
+      :class="[
+        'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
+        'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
+        errorState
+          ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
+          : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
+      ]"
+      :value="modelState || undefined"
+      v-bind="$attrs"
+      @input="onInput"
+      @invalid="onInvalid"
+    />
+    <InputHelp :id="aria.describedby" class="mb-1" :text="help"></InputHelp>
+    <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
+  </div>
 </template>

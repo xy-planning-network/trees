@@ -1,75 +1,124 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
-import { computed, useAttrs, useSlots } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
+import { computed, ref } from "vue"
 
-type CheckboxValue = string | number
-type ModelValue = CheckboxValue[]
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(
-  defineProps<{
-    options: {
-      disabled?: boolean
-      help?: string
-      label: string
-      value: CheckboxValue
-    }[]
-    help?: string
-    legend?: string
-    modelValue: ModelValue
-    columns?: 2 | 3 | 4
-  }>(),
-  {
-    help: "",
-    legend: "",
-    columns: undefined,
-  }
+  defineProps<MultiChoiceInput & ColumnedInput>(),
+  defaultInputProps
 )
 
-const emit = defineEmits<{
-  (e: "update:modelValue", modelValue: ModelValue): void
-}>()
-const attrs = useAttrs()
-const slots = useSlots()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
-const hasLegend = computed(() => {
-  return props.legend !== "" || slots.legend !== undefined
-})
-const onChange = (checked: boolean, val: CheckboxValue) => {
-  let updateModelValue = [...props.modelValue]
+defineEmits(["update:modelValue", "update:error"])
+const { aria, inputID, isDisabled, modelState, errorState, validate } =
+  useInputField(props)
 
-  if (checked) {
-    updateModelValue.push(val)
-  } else {
-    updateModelValue.splice(updateModelValue.indexOf(val), 1)
+const onChange = (e: Event, val: string | number) => {
+  const checked = (e.target as HTMLInputElement).checked
+
+  if (!Array.isArray(modelState.value)) {
+    modelState.value = []
   }
 
-  emit("update:modelValue", updateModelValue)
+  if (checked) {
+    modelState.value.push(val)
+  } else {
+    modelState.value.splice(modelState.value.indexOf(val), 1)
+  }
+
+  validate(e)
+}
+
+const selectionCount = computed(() => {
+  if (Array.isArray(modelState.value)) {
+    return modelState.value.length
+  }
+
+  return 0
+})
+
+const minCount = computed(() => {
+  return props.min || 0
+})
+
+const maxCount = computed(() => {
+  return (
+    props.max ||
+    props.options.filter((opt) => {
+      return !opt.disabled
+    }).length
+  )
+})
+
+const countError = computed(() => {
+  if (selectionCount.value < minCount.value) {
+    return `Please select ${minCount.value} of these option${
+      minCount.value > 1 ? "s" : ""
+    }.`
+  }
+
+  if (selectionCount.value > maxCount.value) {
+    return `Please select only ${maxCount.value} of these option${
+      maxCount.value > 1 ? "s" : ""
+    }.`
+  }
+
+  return ""
+})
+
+const errorInput = ref<HTMLInputElement | null>(null)
+const setValidationError = () => {
+  if (!errorState.value) {
+    errorState.value = countError.value
+    // ensure the browser tooltip contains our error message
+    errorInput.value?.setCustomValidity(countError.value)
+  }
 }
 </script>
+
 <template>
   <fieldset
-    class="space-y-5"
-    :aria-labelledby="hasLegend ? `${uuid}-legend` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
+    class="relative space-y-4"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
-    <div v-if="hasLegend || help" class="space-y-0.5">
-      <FieldsetLegend :id="`${uuid}-legend`">
-        <div v-if="legend">{{ legend }}</div>
-        <slot v-if="$slots.legend" name="legend"></slot>
-      </FieldsetLegend>
-      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
+    <div v-if="label">
+      <FieldsetLegend
+        :id="aria.labelledby"
+        :label="label"
+        :required="minCount > 0"
+      />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
+
+    <InputError :id="aria.errormessage" :text="errorState" />
+
+    <!--Hidden input for custom validation-->
+    <input
+      v-if="countError"
+      ref="errorInput"
+      required
+      class="sr-only top-1 left-1"
+      aria-hidden
+      type="checkbox"
+      @invalid="setValidationError"
+    />
+
     <div class="flex">
       <div
-        class="grid gap-4"
+        class="grid gap-y-6"
         :class="{
-          'sm:grid sm:gap-y-4 sm:gap-x-5 sm:space-y-0': columns !== undefined,
+          'sm:grid sm:gap-x-5 sm:space-y-0': columns !== undefined,
           'sm:grid-cols-2': columns === 2,
           'sm:grid-cols-3': columns === 3,
-          'sm:grid-cols-4': columns === 4,
         }"
       >
         <div
@@ -79,42 +128,38 @@ const onChange = (checked: boolean, val: CheckboxValue) => {
         >
           <div class="flex items-center h-5">
             <input
-              :id="`${uuid}-${index}`"
-              :aria-labelledby="`${uuid}-${index}-label`"
+              :id="`${inputID}-${index}`"
+              :aria-labelledby="`${inputID}-${index}-label`"
               :aria-describedby="
-                option?.help && option.help
-                  ? `${uuid}-${index}-help`
-                  : undefined
+                option.help ? `${inputID}-${index}-help` : undefined
               "
-              :checked="modelValue.includes(option.value)"
-              :disabled="option.disabled === true ? true : undefined"
-              class="focus:ring-xy-blue-500 h-4 w-4 text-xy-blue border-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              :checked="modelValue?.includes(option.value)"
+              :disabled="option.disabled"
+              :class="[
+                'h-4 w-4 rounded cursor-pointer',
+                'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+                'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                errorState
+                  ? 'border-red-700 focus:ring-red-700'
+                  : 'border-gray-300 focus:ring-xy-blue-500',
+              ]"
               type="checkbox"
-              v-bind="{
-              onChange: ($event) => { 
-                onChange(($event.target as HTMLInputElement).checked, option.value)
-              },
-              ...$attrs,
-            }"
+              v-bind="$attrs"
+              @change="onChange($event, option.value)"
             />
           </div>
           <div class="ml-3">
             <InputLabel
-              :id="`${uuid}-${index}-label`"
-              class="mt-auto"
-              :disabled="
-                ($attrs.hasOwnProperty('disabled') &&
-                  $attrs.disabled !== false) ||
-                option.disabled === true
-              "
-              :for="`${uuid}-${index}`"
+              :id="`${inputID}-${index}-label`"
+              :for="`${inputID}-${index}`"
               :label="option.label"
+              :class="
+                isDisabled || option.disabled
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer'
+              "
             />
-            <InputHelp
-              :id="`${uuid}-${index}-help`"
-              class="-mt-1"
-              :text="option.help"
-            />
+            <InputHelp :id="`${inputID}-${index}-help`" :text="option.help" />
           </div>
         </div>
       </div>

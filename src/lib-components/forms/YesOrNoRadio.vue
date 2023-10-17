@@ -1,99 +1,106 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
-import { computed, useAttrs } from "vue"
+import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { BooleanInput } from "@/composables/forms"
 
-const props = withDefaults(
-  defineProps<{
-    modelValue?: boolean
-    help?: string
-    legend?: string
-    name?: string
-  }>(),
-  {
-    modelValue: undefined,
-    help: "",
-    legend: "",
-    name: "",
-  }
-)
-const emits = defineEmits(["update:modelValue"])
-const attrs = useAttrs()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
-const hasNameAttr = computed((): boolean => {
-  return typeof props.name === "string" && props.name !== ""
+defineOptions({
+  inheritAttrs: false,
 })
-const onChange = (e: Event) => {
-  emits("update:modelValue", (e.target as HTMLInputElement).value === "true")
+
+const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
+
+defineEmits(["update:modelValue", "update:error"])
+const {
+  aria,
+  isDisabled,
+  isRequired,
+  nameAttr,
+  modelState,
+  errorState,
+  onInvalid,
+  validate,
+} = useInputField(props)
+
+const onChange = (e: Event, val: boolean) => {
+  modelState.value = val
+  validate(e)
 }
 </script>
+
 <template>
   <fieldset
-    class="space-y-3"
-    :aria-labelledby="legend ? `${uuid}-legend` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
+    class="space-y-4"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
-    <div v-if="legend || help" class="space-y-0.5">
-      <InputLabel
+    <div v-if="label">
+      <FieldsetLegend
+        :id="aria.labelledby"
         class="block my-auto"
-        :label="legend"
+        :label="label"
+        :required="isRequired"
         tag="legend"
-      ></InputLabel>
-      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
+      />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
+
+    <InputError :id="aria.errormessage" :text="errorState" />
+
     <div>
       <label
-        class="inline-flex items-center"
-        :class="{ 'cursor-not-allowed': $attrs.disabled }"
-        :for="`${hasNameAttr ? name : uuid}-true`"
+        class="inline-flex items-center group"
+        :class="isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'"
+        :for="`${nameAttr}-true`"
       >
         <input
-          :id="`${hasNameAttr ? name : uuid}-true`"
+          :id="`${nameAttr}-true`"
           type="radio"
-          class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :name="hasNameAttr ? name : uuid"
+          :class="[
+            'h-4 w-4 text-xy-blue cursor-pointer',
+            'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+            'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+            errorState
+              ? 'border-red-700 focus:ring-red-700'
+              : 'border-gray-300  focus:ring-xy-blue-500',
+          ]"
+          :name="nameAttr"
           :value="true"
-          :checked="modelValue === true"
-          v-bind="{
-            ...$attrs,
-            onChange: onChange,
-          }"
+          :checked="modelState === true"
+          v-bind="$attrs"
+          @change="onChange($event, true)"
+          @invalid="onInvalid"
         />
-        <InputLabel
-          class="ml-2"
-          :disabled="
-            $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
-          "
-          label="Yes"
-          tag="span"
-        ></InputLabel>
+        <InputLabel class="ml-3" label="Yes" tag="span" />
       </label>
+
       <label
         class="inline-flex items-center ml-6"
-        :class="{ 'cursor-not-allowed': $attrs.disabled }"
-        :for="`${hasNameAttr ? name : uuid}-false`"
+        :class="isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'"
+        :for="`${nameAttr}-false`"
       >
         <input
-          :id="`${hasNameAttr ? name : uuid}-false`"
+          :id="`${nameAttr}-false`"
           type="radio"
-          class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-          :name="hasNameAttr ? name : uuid"
+          :class="[
+            'h-4 w-4 text-xy-blue cursor-pointer',
+            'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+            'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+            errorState
+              ? 'border-red-700 focus:ring-red-700'
+              : 'border-gray-300  focus:ring-xy-blue-500',
+          ]"
+          :name="nameAttr"
           :value="false"
-          :checked="modelValue === false"
-          v-bind="{
-            ...$attrs,
-            onChange: onChange,
-          }"
+          :checked="modelState === false"
+          v-bind="$attrs"
+          @change="onChange($event, false)"
+          @invalid="onInvalid"
         />
-        <InputLabel
-          class="ml-2"
-          :disabled="
-            $attrs.hasOwnProperty('disabled') && $attrs.disabled !== false
-          "
-          label="No"
-          tag="span"
-        ></InputLabel>
+        <InputLabel class="ml-3" label="No" tag="span" />
       </label>
     </div>
   </fieldset>

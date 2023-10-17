@@ -8,6 +8,7 @@ import { default as DateFilter } from "./layout/DateFilter.vue"
 import { default as DetailList } from "./lists/DetailList.vue"
 import { default as DownloadCell } from "./lists/DownloadCell.vue"
 import { default as Flash } from "./overlays/Flash.vue"
+import { default as InlineAlert } from "./indicators/InlineAlert.vue"
 import { default as Modal } from "./overlays/Modal.vue"
 import { default as SidebarLayout } from "./layout/SidebarLayout.vue"
 import { default as Popover } from "./overlays/Popover/Popover.vue"
@@ -29,6 +30,7 @@ import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
+import { default as InputError } from "./forms/InputError.vue"
 import { default as InputHelp } from "./forms/InputHelp.vue"
 import { default as InputLabel } from "./forms/InputLabel.vue"
 import { default as FieldsetLegend } from "./forms/FieldsetLegend.vue"
@@ -47,6 +49,7 @@ export {
   DetailList,
   DownloadCell,
   Flash,
+  InlineAlert,
   Modal,
   SidebarLayout,
   Slideover,
@@ -65,6 +68,7 @@ export {
   BaseInput,
   Checkbox,
   DateRangePicker,
+  InputError,
   InputHelp,
   InputLabel,
   FieldsetLegend,
@@ -105,6 +109,7 @@ export interface TreesComponents {
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
   DateRangePicker: typeof DateRangePicker
+  InputError: typeof InputError
   InputHelp: typeof InputHelp
   InputLabel: typeof InputLabel
   FieldsetLegend: typeof FieldsetLegend

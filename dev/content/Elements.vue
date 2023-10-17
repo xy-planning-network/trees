@@ -2,6 +2,8 @@
 import { ref } from "vue"
 import ColorRow from "../../dev/helpers/ColorRow.vue"
 import colors from "../../config/theme/colors"
+import PropsTable from "../../dev/helpers/PropsTable.vue"
+import { InputOption } from "@/composables/forms"
 
 const badgePrimary = ref<HTMLElement>()
 const badgeInfo = ref<HTMLElement>()
@@ -25,17 +27,110 @@ const weights = [
   "font-bold",
   "font-extrabold",
 ]
+
+const alertKinds = ["alert", "warn", "info", "success"] as const
+const alertOptions: InputOption[] = alertKinds.map((t) => {
+  return { label: `${t.charAt(0).toUpperCase()}${t.slice(1)}`, value: t }
+})
+const alertSelection = ref<(typeof alertKinds)[number]>("alert")
+const alert = (msg: string) => window.alert(msg)
+const alertProps = [
+  { name: "btnLink", required: false, type: "string" },
+  { name: "btnText", required: false, type: "string" },
+  { name: "content", required: true, type: "string | string[]" },
+  { name: "dismissable", required: false, type: "boolean" },
+  { name: "kind", required: true, type: "alert | warn | info | success" },
+  { name: "secondaryBtnLink", required: false, type: "string" },
+  { name: "secondaryBtnText", required: false, type: "string" },
+  { name: "title", required: false, type: "string" },
+]
 </script>
+
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto space-y-8">
       <ComponentLayout :css-component="true" title="Colors">
-        <template #description> </template>
         <div
           class="grid grid-cols-[repeat(auto-fit,minmax(8rem,1fr))] gap-x-2 gap-y-8 sm:grid-cols-1"
         >
           <ColorRow name="" :colors="colors['xy-blue']" code="xy-blue" />
           <ColorRow name="" :colors="colors['xy-green']" code="xy-green" />
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout :css-component="false" title="Alerts">
+        <template #description
+          >Sometimes you need to get their attention and sometimes they need
+          some direction. Alerts, we got em.</template
+        >
+
+        <div class="space-y-8">
+          <div v-for="kind in alertKinds" :key="kind">
+            <p class="font-medium text-sm mb-1">
+              {{ `${kind.charAt(0).toUpperCase()}${kind.slice(1)}` }}
+            </p>
+            <InlineAlert
+              ref="alertComponent"
+              content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :kind="kind"
+              title="Orci eu lobortis elementum"
+            />
+          </div>
+
+          <Select
+            v-model="alertSelection"
+            label="Alert Type"
+            :options="alertOptions"
+          />
+
+          <div>
+            <p class="font-medium text-sm mb-1">Simple Content</p>
+            <InlineAlert
+              content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :kind="alertSelection"
+            />
+          </div>
+
+          <div>
+            <p class="font-medium text-sm mb-1">List Content</p>
+            <InlineAlert
+              :content="[
+                'Arcu cursus euismod quis viverra nibh.',
+                'Cras pulvinar mattis nunc sed blandit.',
+              ]"
+              :kind="alertSelection"
+              title="Orci eu lobortis elementum"
+            />
+          </div>
+
+          <div>
+            <p class="font-medium text-sm mb-1">With Actions</p>
+            <InlineAlert
+              btn-text="Learn More"
+              btn-link="https://theuselessweb.com/"
+              content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :kind="alertSelection"
+              secondary-btn-text="Announce it"
+              title="Orci eu lobortis elementum"
+              @click:secondary.prevent="alert('Clicked It!')"
+            />
+          </div>
+
+          <div>
+            <p class="font-medium text-sm mb-1">Dismissable</p>
+            <InlineAlert
+              btn-text="Learn More"
+              btn-link="https://theuselessweb.com/"
+              content="Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit."
+              :dismissable="true"
+              secondary-btn-text="Announce it"
+              title="Orci eu lobortis elementum"
+              :kind="alertSelection"
+              @click:secondary.prevent="alert('Clicked It!')"
+            />
+          </div>
+
+          <PropsTable :props="alertProps" />
         </div>
       </ComponentLayout>
 

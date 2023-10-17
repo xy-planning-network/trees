@@ -15,6 +15,15 @@ import type {
   TrailsResp,
   TrailsRespPaged,
 } from "@/api/client"
+import {
+  emailPattern,
+  looseToNumber,
+  phonePattern,
+  useInputField,
+} from "@/composables/forms"
+import { useModel } from "@/composables/setupHelpers"
+import { debounce as debounceFn, debounceLeading } from "@/helpers/Debounce"
+import { throttle as throttleFn } from "@/helpers/Throttle"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -51,3 +60,12 @@ export type {
   TrailsResp,
   TrailsRespPaged,
 }
+
+// Forms exports
+export { emailPattern, looseToNumber, phonePattern, useInputField }
+
+// Setup helpers
+export { useModel }
+
+// Utilities exports
+export { debounceFn, debounceLeading, throttleFn }

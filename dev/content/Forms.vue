@@ -1,76 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import type { InputOption } from "@/composables/forms"
 
-const commonProps = [
-  { name: "label", required: false, type: "string" },
-  { name: "help", required: false, type: "string" },
-]
-const isChecked = ref(true)
-const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
-const checkboxProps = [
-  { name: "emphasis", required: false, type: "boolean" },
-  { name: "label", required: false, type: "string" },
-  { name: "modelValue", required: true, type: "boolean" },
-]
-const dateRange = ref({ maxDate: 0, minDate: 0 })
-const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
-const dateRangePickerProps = [
-  { name: "maxRange", required: false, type: "number" },
-  {
-    name: "modelValue",
-    required: true,
-    type: "{ minDate: number; maxDate: number; }",
-  },
-  { name: "startDate", required: false, type: "number" },
-  ...commonProps,
-]
-const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive"/>`
-const inputErrorCopy = `<BaseInput type="text" placeholder="Broken" class="xy-input-error" />`
-const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" legend="Make Some Selections" help="Select all that apply." :options="options" />`
-const multiCheckboxProps = [
-  {
-    name: "options",
-    required: true,
-    type: "Array<{ disabled?: boolean, help?: string; label: string; value: number | string }>",
-  },
-  { name: "modelValue", required: true, type: "string" },
-  { name: "legend", required: false, type: "string" },
-]
-const multiCheckboxSelection = ref(["val2", 4])
-const radioCopy = `<Radio :options="options" v-model="selected" />`
-const radioProps = [
-  {
-    name: "options",
-    required: true,
-    type: "Array<{ disabled?: boolean, help?: string, label: string; value: number | string }>",
-  },
-  { name: "modelValue", required: true, type: "string" },
-  { name: "help", required: false, type: "string" },
-  { name: "legend", required: false, type: "string" },
-]
-const radioSelection = ref<string | number>("val1")
-const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
-const selectProps = [
-  { name: "design", required: false, type: "string" },
-  {
-    name: "options",
-    required: true,
-    type: "Array<{ label: string; value: string | number }>",
-  },
-  { name: "placeholder", required: false, type: "string" },
-  { name: "modelValue", required: true, type: "string" },
-  ...commonProps,
-]
-const options = [
+const options: InputOption[] = [
   {
     label: "You could select this",
     help: "It's really quite nice.",
-    value: "val1",
+    value: "One",
+    disabled: false,
   },
   {
     label: "This is an option",
     help: "Ah, indeed it is an option.",
-    value: "val2",
+    value: "Two",
   },
   {
     label: "Feeling good about this one?",
@@ -85,72 +27,139 @@ const options = [
   },
 ]
 
-const selected = ref("")
+// test generic options and sublabel slot availability
+const radioCardOptions = options.map((opt) => {
+  return {
+    ...opt,
+    sublabel: typeof opt.value === "string" ? opt.value : `$${opt.value}.00`,
+    onSale: typeof opt.value === "string" ? false : true,
+  }
+})
 
-const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
-const yesOrNoRadioSelection = ref(undefined)
-const yesOrNoRadioProps = [
-  { name: "help", required: false, type: "string" },
-  { name: "legend", required: false, type: "string" },
-  { name: "name", required: false, type: "string" },
-  { name: "modelValue", required: false, type: "boolean" },
-]
-
-const textarea = ref("")
-const textareaProps = [
-  { name: "modelValue", required: false, type: "string" },
-  ...commonProps,
-]
-const textareaCopy = `<TextArea v-model="textarea" />`
-
-const baseInputProps = [
-  { name: "type", required: true, type: "string" },
-  { name: "modelValue", required: false, type: "string | number" },
-  ...commonProps,
-]
-
-const inputTypes = [
-  "color",
+const textLikeInputs = [
   "date",
   "datetime-local",
   "email",
-  "file",
-  "hidden",
   "month",
   "number",
   "password",
-  "range",
   "search",
   "tel",
   "text",
   "time",
   "url",
   "week",
-].map((type: string) => {
+] as const
+
+const inputTypes: InputOption[] = textLikeInputs.map((type) => {
   return {
     label: type,
     value: type,
   }
 })
 
-const inputTypeSelected = ref("text")
-const customInputTypeVal = ref("")
+/**
+ * v-models
+ */
+const inputTypeSelected = ref<(typeof textLikeInputs)[number]>("text")
+const inputVals = ref<Record<string, any>>({})
+const toggleValue = ref(undefined)
 
+/**
+ * Copy Help
+ */
+const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
+const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
+const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive" />`
+const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" label="Make Some Selections" help="Select all that apply." :options="options" />`
+const radioCopy = `<Radio :options="options" v-model="selected" />`
+const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
+const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
+const textareaCopy = `<TextArea v-model="textarea" />`
 const inputLabelCopy = `<InputLabel label="I'm labeling something..." />`
+const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
+const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
+
+/**
+ * Props
+ */
 const inputLabelProps = [
   { name: "label", required: false, type: "string" },
+  { name: "required", required: false, type: "boolean" },
   { name: "tag", required: false, type: "string" },
 ]
 
-const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
 const inputHelpProps = [
   { name: "text", required: false, type: "string" },
   { name: "tag", required: false, type: "string" },
 ]
-const toggleValue = ref(false)
-const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
-const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
+
+const inputErrorProps = [{ name: "text", required: false, type: "string" }]
+
+const inputCommonProps = [
+  { name: "label", required: false, type: "string" },
+  { name: "help", required: false, type: "string" },
+  { name: "placeholder", required: false, type: "string" },
+]
+
+const inputOptionsProp = {
+  name: "options",
+  required: true,
+  type: `{
+    disabled?: boolean
+    help?: string
+    label: string
+    sublabel?: string
+    value: string | number
+  }[]`,
+}
+
+const booleanInputProps = [
+  { name: "modelValue", required: false, type: "boolean | null" },
+  ...inputCommonProps,
+]
+
+const dateRangeInputProps = [
+  {
+    name: "modelValue",
+    required: false,
+    type: `{minDate: number, maxDate: number}`,
+  },
+  { name: "maxRange", required: false, type: "number" },
+  { name: "startDate", required: false, type: "number" },
+  ...inputCommonProps,
+]
+
+const textLikeInputProps = [
+  { name: "type", required: true, type: textLikeInputs.join(" | ") },
+  { name: "modelValue", required: false, type: "string | number | null" },
+  ...inputCommonProps,
+]
+
+const textareaInputProps = [
+  { name: "modelValue", required: false, type: "string | number | null" },
+  ...inputCommonProps,
+]
+
+const optionsInputProps = [
+  inputOptionsProp,
+  { name: "modelValue", required: false, type: "string | number | null" },
+  ...inputCommonProps,
+]
+
+const multichoiceInputProps = [
+  inputOptionsProp,
+  { name: "modelValue", required: false, type: "(string | number)[] | null" },
+  ...inputCommonProps,
+]
+
+const toggleProps = [
+  { name: "modelValue", required: false, type: "boolean" },
+  { name: "label", required: false, type: "string" },
+  { name: "help", required: false, type: "string" },
+]
 </script>
+
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
@@ -159,9 +168,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <div class="mt-4">
             Generally, all of these inputs will support common html attributes
             such as <code>disabled</code> and <code>required</code> or input
-            specific attributes like <code>rows</code> for textareas. You can
-            even use the <code>class</code> attribute as needed to apply
-            additional classes.
+            specific attributes like <code>rows</code> for textareas.
           </div>
 
           <div class="mt-4">
@@ -181,7 +188,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             class="xy-link"
             target="_blank"
             >input variations</a
-          >. Errors can be styled with <code>.xy-input-error</code>.
+          >.
         </template>
 
         <div>
@@ -192,32 +199,33 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <BaseInput
               help="No wrong answers here."
               type="text"
-              label="What's your life moto?"
+              label="What's your life moto?*"
               placeholder="It's good to be alive"
-            ></BaseInput>
+            />
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputErrorCopy" />
-          </label>
-          <div class="mt-1">
-            <BaseInput
-              type="text"
-              label="Broken"
-              class="xy-input-error"
-            ></BaseInput>
-          </div>
-        </div>
-
-        <div>
-          <div class="mt-1">
+          <div class="mt-1 space-y-3">
             <BaseInput
               :disabled="true"
               type="text"
-              label="Disabled"
-            ></BaseInput>
+              label="Disabled without placeholder"
+            />
+
+            <BaseInput
+              :disabled="true"
+              type="text"
+              label="Disabled with placeholder"
+              placeholder="A disabled input"
+            />
+
+            <BaseInput
+              model-value="A disabled input with a value"
+              :disabled="true"
+              type="text"
+              label="Disabled with value"
+            />
           </div>
         </div>
 
@@ -231,14 +239,24 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               class="mb-8"
             />
             <BaseInput
-              v-model="customInputTypeVal"
+              v-model="inputVals[`baseInput-${inputTypeSelected}`]"
               :help="`Some help text for a ${inputTypeSelected}`"
               :type="inputTypeSelected"
               :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
               :placeholder="`A placeholder for a ${inputTypeSelected}`"
-            ></BaseInput>
-            <div class="mt-4"><b>Value:</b> {{ customInputTypeVal }}</div>
-            <PropsTable :props="baseInputProps" />
+            />
+
+            <div class="mt-4">
+              <p>
+                <b>Value:</b> {{ inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
+              <p>
+                <b>Type:</b>
+                {{ typeof inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
+            </div>
+
+            <PropsTable :props="textLikeInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -254,21 +272,23 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1">
             <TextArea
-              v-model="textarea"
-              label="How about it (disabled)?"
+              v-model="inputVals['textarea']"
+              label="How about it?"
               help="In your own words."
+              placeholder="Don't be shy now..."
             />
 
             <div class="mt-4">
               <TextArea
-                v-model="textarea"
+                v-model="inputVals['textarea']"
                 :disabled="true"
                 label="How about it (disabled)?"
                 help="In your own words."
               />
             </div>
-            <div class="mt-4"><b>Value:</b> {{ textarea }}</div>
-            <PropsTable :props="textareaProps" />
+
+            <div class="mt-4"><b>Value:</b> {{ inputVals["textarea"] }}</div>
+            <PropsTable :props="textareaInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -285,25 +305,25 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <Checkbox
-              v-model="isChecked"
+              v-model="inputVals['checkbox']"
               label="I'm here to party!"
               help="Get notified when the party starts."
             />
 
             <Checkbox
-              v-model="isChecked"
+              v-model="inputVals['checkbox']"
               :disabled="true"
               label="I'm here to party! (disabled)"
               help="Get notified when the party starts."
             />
 
             <Checkbox
-              v-model="isChecked"
+              v-model="inputVals['checkbox']"
               label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
             />
 
-            <div class="mt-4"><b>Value:</b> {{ isChecked }}</div>
-            <PropsTable :props="checkboxProps" />
+            <div class="mt-4"><b>Value:</b> {{ inputVals["checkbox"] }}</div>
+            <PropsTable :props="booleanInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -326,9 +346,16 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="dateRangePickerCopy" />
           </label>
           <div class="mt-1">
-            <DateRangePicker v-model="dateRange" :max-range="365" />
-            <div class="mt-4"><b>Value:</b> {{ dateRange }}</div>
-            <PropsTable :props="dateRangePickerProps" />
+            <DateRangePicker
+              v-model="inputVals['dateRangePicker']"
+              :max-range="365"
+              required
+            />
+
+            <div class="mt-4">
+              <b>Value:</b> {{ inputVals["dateRangePicker"] }}
+            </div>
+            <PropsTable :props="dateRangeInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -344,8 +371,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <MultiCheckboxes
-              v-model="multiCheckboxSelection"
-              legend="Make Basic Selections"
+              v-model="inputVals['multiCheckboxes']"
+              label="Make Basic Selections"
               :options="
                 options.map((option) => ({
                   disabled: option.disabled,
@@ -353,27 +380,31 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
                   value: option.value,
                 }))
               "
+              required
             />
 
             <MultiCheckboxes
-              v-model="multiCheckboxSelection"
-              legend="Make Complex Selections"
+              v-model="inputVals['multiCheckboxes']"
+              label="Make Complex Selections"
               help="Select all that apply."
               :options="options"
               disabled
             />
 
             <MultiCheckboxes
-              v-model="multiCheckboxSelection"
+              v-model="inputVals['multiCheckboxes']"
+              label="Lay it out in a grid"
               :columns="2"
-              help="Set the columns prop to 2, 3, or 4"
+              help="Set the columns prop to 2 or 3"
               :options="options"
             >
               <template #legend>In A Grid Too</template>
             </MultiCheckboxes>
 
-            <div class="mt-2"><b>Value:</b> {{ multiCheckboxSelection }}</div>
-            <PropsTable :props="multiCheckboxProps" />
+            <div class="mt-2">
+              <b>Value:</b> {{ inputVals["multiCheckboxes"] }}
+            </div>
+            <PropsTable :props="multichoiceInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -390,8 +421,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1 space-y-8">
             <Radio
-              v-model="radioSelection"
-              legend="Make Basic Choice"
+              v-model="inputVals['radio']"
+              label="Make Basic Choice"
               :options="
                 options.map((option) => ({
                   disabled: option.disabled,
@@ -402,40 +433,30 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             />
 
             <Radio
-              v-model="radioSelection"
-              legend="Make Complex Choice"
+              v-model="inputVals['radio']"
+              label="Make Complex Choice"
               help="Only one - I know it's hard!"
               :options="options"
               disabled
             />
 
             <Radio
-              v-model="radioSelection"
-              help="Set the columns prop to 2, 3, or 4"
+              v-model="inputVals['radio']"
+              label="Lay it out in a grid"
+              help="Set the columns prop to 2 or 3"
               :options="options"
               :columns="2"
               required
-            >
-              <template #legend>In A Grid Too</template>
-            </Radio>
+            />
 
             <div class="">
               <form>
                 <RadioCards
-                  v-model="radioSelection"
-                  legend="Cards Any One?"
+                  v-model="inputVals['radio']"
+                  label="Cards Any One?"
                   help="Just use the RadioCards component."
-                  :options="
-                    options.map((option) => ({
-                      disabled: option.disabled,
-                      help: option.help,
-                      label: option.label,
-                      value: option.value,
-                      sublabel: '$499/mo',
-                    }))
-                  "
+                  :options="radioCardOptions"
                   :columns="2"
-                  name="my_input"
                   required
                 />
                 <input type="hidden" name="page" value="Forms" />
@@ -445,22 +466,18 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
 
             <div class="">
               <RadioCards
-                v-model="radioSelection"
+                v-model="inputVals['radio']"
                 :disabled="true"
-                legend="Need a complex sublabel on your cards?"
+                label="Need a complex sublabel on your cards?"
                 help="The sublabel display is supported by both options.sublabel and a named slot #sublabel."
-                :options="
-                  options.map((option) => ({
-                    disabled: option.disabled,
-                    help: option.help,
-                    label: option.label,
-                    value: option.value,
-                  }))
-                "
+                :options="radioCardOptions"
                 :columns="2"
               >
-                <template #sublabel="{ option, checked }">
-                  {{ option.value }}:{{ checked }}
+                <template #sublabel="{ option }">
+                  {{ option.sublabel }}
+                  <span v-if="option.onSale" class="text-green-700">
+                    On Sale!
+                  </span>
                 </template>
               </RadioCards>
             </div>
@@ -484,8 +501,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
               </ul>
             </div>
 
-            <div class="mt-4"><b>Value:</b> {{ radioSelection }}</div>
-            <PropsTable :props="radioProps" />
+            <div class="mt-4"><b>Value:</b> {{ inputVals["radio"] }}</div>
+            <PropsTable :props="optionsInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -512,15 +529,24 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           <label class="block text-sm font-medium text-gray-700">
             <ClickToCopy :value="selectCopy" />
           </label>
-          <div class="mt-1">
+          <div class="space-y-6">
             <Select
-              v-model="selected"
+              v-model="inputVals['select']"
               :options="options"
-              placeholder="Lets make a selection"
+              label="Lets make a selection"
             />
-            <div class="mt-4"><b>Value:</b> {{ selected }}</div>
-            <PropsTable :props="selectProps" />
+
+            <Select
+              v-model="inputVals['select']"
+              :options="options"
+              label="Lets make a selection"
+              help="Disabled select input"
+              disabled
+            />
           </div>
+
+          <div class="mt-4"><b>Value:</b> {{ inputVals["select"] }}</div>
+          <PropsTable :props="optionsInputProps" />
         </div>
       </ComponentLayout>
 
@@ -536,28 +562,31 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
           </label>
           <div class="mt-1">
             <YesOrNoRadio
-              v-model="yesOrNoRadioSelection"
-              legend="Is this thing on?"
+              v-model="inputVals['yesOrNoRadio']"
+              label="Is this thing on?"
               help="Only one way to find out."
             ></YesOrNoRadio>
             <div class="mt-2">
               <YesOrNoRadio
-                v-model="yesOrNoRadioSelection"
-                legend="Is this thing on? (disabled)"
+                v-model="inputVals['yesOrNoRadio']"
+                label="Is this thing on? (disabled)"
                 disabled
               ></YesOrNoRadio>
             </div>
-            <div class="mt-4"><b>Value:</b> {{ yesOrNoRadioSelection }}</div>
-            <PropsTable :props="yesOrNoRadioProps" />
+            <div class="mt-4">
+              <b>Value:</b> {{ inputVals["yesOrNoRadio"] }}
+            </div>
+            <PropsTable :props="optionsInputProps" />
           </div>
         </div>
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Toggle">
         <template #description>
-          Just a another toggle for boolean switches. A great UI alternative to
-          checkboxes and boolean value radio button pairs. Currently does not
-          support a label property. Bring your own label.
+          A button based toggle display for managing a boolean value. This
+          component should not be viewed much as an input field for tracking a
+          payload value, but rather as a button that you can take an action
+          against based on it's state.
         </template>
 
         <div>
@@ -565,7 +594,20 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="toggleCopy" />
           </label>
           <div class="mt-1">
-            <Toggle v-model="toggleValue"></Toggle>
+            <div class="space-y-6 mb-4">
+              <Toggle
+                v-model="toggleValue"
+                label="Go on, flip the switch"
+                help="Is your refridgerator running?"
+                required
+              />
+
+              <Toggle
+                v-model="toggleValue"
+                label="Go on, try and flip the switch"
+                disabled
+              />
+            </div>
             <div class="mt-4"><b>Value:</b> {{ toggleValue }}</div>
             <PropsTable :props="toggleProps" />
           </div>
@@ -575,7 +617,10 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       <ComponentLayout class="mt-8" title="Input Label">
         <template #description>
           For whenever you just need a consistent label for a custom layout. Use
-          the tag property for a custom html element like legend.
+          the tag property for a custom html element like legend. The label will
+          append a (<span class="text-red-500">*</span>) when the required prop
+          is set to true. The component will not render any markup when the
+          label prop is empty.
         </template>
 
         <div>
@@ -583,7 +628,7 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <ClickToCopy :value="inputLabelCopy" />
           </label>
           <div class="mt-1">
-            <InputLabel label="I'm labeling something..." />
+            <InputLabel label="I'm labeling something..." :required="true" />
             <PropsTable :props="inputLabelProps" />
           </div>
         </div>
@@ -592,7 +637,8 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
       <ComponentLayout class="mt-8" title="Input Help">
         <template #description>
           For whenever you just need a consistent help text component. Use the
-          tag property for a custom html element like legend.
+          tag property for a custom html element like legend. The component will
+          not render any markup when the text prop is empty.
         </template>
 
         <div>
@@ -604,6 +650,76 @@ const toggleProps = [{ name: "modelValue", required: true, type: "string" }]
             <PropsTable :props="inputHelpProps" />
           </div>
         </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Input Error">
+        <template #description>
+          The default error message component used in form inputs. The component
+          will not render any markup when the text prop is empty.
+        </template>
+
+        <div>
+          <div class="mt-1">
+            <InputError text="This field is required" />
+            <PropsTable :props="inputErrorProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout
+        class="mt-8"
+        title="Field Validation and Error State"
+        :show-badge="false"
+      >
+        <template #description>
+          The default input validation pattern is to use a late validation.
+          Meaning we set the default HTMLInputElement error message when the
+          invalid event fires. The invalid event is fired during the
+          HTMLFormElement submit event. This allows forms to stay error free
+          until it's reported something is wrong. Once an error is present
+          though, we clear it or persist it as input and change events fire.
+        </template>
+        <form id="test-form" @submit.prevent>
+          <div class="space-y-8">
+            <BaseInput type="text" label="Name" required />
+            <BaseInput
+              type="email"
+              label="Email"
+              help="Try using a gmail address!"
+              required
+            />
+
+            <Select :options="options" required label="Select an option" />
+
+            <TextArea label="Fill me out!" required />
+
+            <Radio :options="options" required label="Select an option" />
+
+            <DateRangePicker label="Pick a date range!" required />
+
+            <RadioCards
+              label="Cards can be required"
+              :columns="2"
+              :options="options"
+              required
+            />
+
+            <YesOrNoRadio label="Please confim this field" required />
+
+            <MultiCheckboxes
+              label="More selections is better"
+              help="Pick at least 1, but no more than 2!"
+              :columns="2"
+              :options="options"
+              :min="1"
+              :max="2"
+            />
+
+            <Checkbox label="You must tick this box" required />
+
+            <button type="submit" class="xy-btn">Submit</button>
+          </div>
+        </form>
       </ComponentLayout>
     </div>
   </div>

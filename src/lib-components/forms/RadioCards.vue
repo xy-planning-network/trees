@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
+<script setup lang="ts" generic="T extends InputOption">
 import {
   RadioGroup,
   RadioGroupDescription,
@@ -7,96 +6,71 @@ import {
   RadioGroupOption,
 } from "@headlessui/vue"
 import { CheckCircleIcon } from "@heroicons/vue/solid"
-import { computed, ref, useAttrs } from "vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
+import { defaultInputProps, useInputField } from "@/composables/forms"
+import type {
+  ColumnedInput,
+  InputOption,
+  OptionsInput,
+} from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 /*
  * NOTE (spk) headless UI introduced a "name" prop that includes a hidden field
  * to use the modelValue inside of forms.  It does not however resolve the issue of
  * supporting HTML5 form validation, so we'll add our own hidden radio buttons to support both.
- *
- * The headless technique does include supporting complex modelValues such as objects, which we may
- * need in the future.  We can revist required validation at that time using a singular hidden checkbox.
  */
 
-type ModelValue = string | number
-
-type RadioCard = {
-  disabled?: boolean
-  help?: string
-  label: string
-  sublabel?: string
-  value: ModelValue
+interface RadioCards extends OptionsInput {
+  options: T[]
 }
 
 const props = withDefaults(
-  defineProps<{
-    columns?: 2 | 3
-    help?: string
-    legend?: string
-    modelValue?: ModelValue
-    options: RadioCard[]
-  }>(),
-  {
-    columns: undefined,
-    help: "",
-    legend: "",
-    modelValue: undefined,
-  }
+  defineProps<RadioCards & ColumnedInput>(),
+  defaultInputProps
 )
 
-const emit = defineEmits<{
-  (e: "update:modelValue", modelValue: ModelValue): void
-}>()
+defineEmits(["update:modelValue", "update:error"])
+const {
+  aria,
+  isDisabled,
+  isRequired,
+  nameAttr,
+  modelState,
+  errorState,
+  onInvalid,
+} = useInputField(props)
 
-const attrs = useAttrs()
-const uuid = Uniques.CreateIdAttribute()
-
-// tracking internal state separate from modelValue
-// allows v-model to be undefined by the consumer but still supports
-// the display requirements of the component.
-// this is usful when the component is used inside a form element and
-// tracking v-model isn't required.
-const internalState = ref()
-const invalid = ref<boolean>()
-const checkedState = computed(() => {
-  if (props.modelValue === undefined) {
-    return internalState.value
+const onUpdate = (val: unknown) => {
+  if (val) {
+    errorState.value = ""
   }
-
-  return props.modelValue
-})
-
-const onChange = (val: ModelValue) => {
-  internalState.value = val
-  invalid.value = false
-  emit("update:modelValue", val)
 }
-
-const nameAttr = computed(() => {
-  return typeof attrs.name === "string" && attrs.name !== "" ? attrs.name : uuid
-})
 </script>
 
 <template>
   <RadioGroup
-    :model-value="checkedState"
-    :disabled="typeof attrs.disabled === 'boolean' ? attrs.disabled : false"
-    :aria-invalid="invalid === true ? 'true' : null"
-    :aria-errormessage="invalid === true ? `error-${uuid}` : null"
-    @update:model-value="onChange"
+    v-model="modelState"
+    :disabled="isDisabled"
+    :aria-invalid="errorState ? 'true' : null"
+    :aria-errormessage="aria.errormessage"
+    @update:model-value="onUpdate"
   >
-    <RadioGroupLabel v-if="legend" class="block">
-      <FieldsetLegend tag="div">{{ legend }}</FieldsetLegend>
+    <RadioGroupLabel v-if="label" class="block">
+      <FieldsetLegend tag="div" :label="label" :required="isRequired" />
     </RadioGroupLabel>
+
     <RadioGroupDescription v-if="help">
       <InputHelp :text="help" />
     </RadioGroupDescription>
-    <div v-if="invalid === true" :id="`error-${uuid}`" class="sr-only">
-      Please select one of these options.
-    </div>
+
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div
       class="mt-4 grid grid-cols-1 gap-y-5 gap-x-4 relative"
@@ -108,17 +82,28 @@ const nameAttr = computed(() => {
       <RadioGroupOption
         v-for="option in options"
         :key="option.value"
-        v-slot="{ active, checked, disabled }"
+        v-slot="{
+          active,
+          checked,
+          disabled,
+        }: {
+          active: boolean,
+          checked: boolean,
+          disabled: boolean,
+        }"
         as="template"
-        :disabled="option?.disabled ? option.disabled : false"
+        :disabled="isDisabled || option.disabled"
         :value="option.value"
       >
         <div
-          class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
+          class="relative border rounded-lg shadow-sm p-4 flex focus:outline-none"
           :class="[
-            checked ? 'border-transparent' : 'border-gray-300',
+            disabled
+              ? 'cursor-not-allowed bg-gray-50 border-gray-200 opacity-90'
+              : 'cursor-pointer bg-white border-gray-300',
+            errorState && !disabled ? 'border-red-700' : '',
+            checked ? 'border-transparent' : '',
             active ? 'border-xy-blue ring-2 ring-xy-blue-500' : '',
-            disabled ? 'cursor-not-allowed opacity-75' : '',
           ]"
         >
           <div class="flex-1 flex pr-1">
@@ -130,16 +115,18 @@ const nameAttr = computed(() => {
                   :label="option.label"
                 />
               </RadioGroupLabel>
+
               <RadioGroupDescription v-if="option.help" as="div">
                 <InputHelp tag="div" class="mt-auto" :text="option.help" />
               </RadioGroupDescription>
+
               <div
                 v-if="option.sublabel || $slots.sublabel"
                 class="mt-auto mb-0"
               >
                 <RadioGroupDescription
                   as="div"
-                  class="font-semibold leading-snug mt-4 text-gray-900 text-sm"
+                  class="text-sm/5 font-medium mt-4 text-gray-800"
                 >
                   <slot
                     name="sublabel"
@@ -165,16 +152,18 @@ const nameAttr = computed(() => {
             ]"
             aria-hidden="true"
           />
+
+          <!--TODO: (spk) ideally this would trigger a change event -->
           <input
             class="sr-only top-1 left-1"
             aria-hidden="true"
             :checked="checked"
             :name="nameAttr"
-            :required="attrs.required !== undefined && attrs.required !== false"
+            :required="isRequired"
             tabindex="-1"
             type="radio"
             :value="option.value"
-            @invalid="invalid = true"
+            @invalid="onInvalid"
           />
         </div>
       </RadioGroupOption>

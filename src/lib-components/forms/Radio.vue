@@ -1,59 +1,64 @@
 <script setup lang="ts">
-import Uniques from "@/helpers/Uniques"
-import { computed, useAttrs, useSlots } from "vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
-import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { OptionsInput, ColumnedInput } from "@/composables/forms"
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(
-  defineProps<{
-    options: {
-      disabled?: boolean
-      help?: string
-      label: string
-      value: string | number
-    }[]
-    help?: string
-    legend?: string
-    modelValue?: string | number
-    columns?: 2 | 3 | 4
-  }>(),
-  {
-    help: "",
-    legend: "",
-    modelValue: undefined,
-    columns: undefined,
-  }
+  defineProps<OptionsInput & ColumnedInput>(),
+  defaultInputProps
 )
-const emits = defineEmits(["update:modelValue"])
-const attrs = useAttrs()
-const slots = useSlots()
-const uuid = (attrs.id as string) || Uniques.CreateIdAttribute()
-const hasLegend = computed(() => {
-  return props.legend !== "" || slots.legend !== undefined
-})
+
+defineEmits(["update:modelValue", "update:error"])
+
+const {
+  aria,
+  errorState,
+  modelState,
+  inputID,
+  isDisabled,
+  isRequired,
+  onInvalid,
+  validate,
+} = useInputField(props)
+
+const onChange = (e: Event, val: string | number) => {
+  modelState.value = val
+  validate(e)
+}
 </script>
+
 <template>
   <fieldset
-    class="space-y-5"
-    :aria-labelledby="hasLegend ? `${uuid}-legend` : undefined"
-    :aria-describedby="help ? `${uuid}-help` : undefined"
+    class="space-y-4"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
-    <div v-if="hasLegend || help" class="space-y-0.5">
-      <FieldsetLegend :id="`${uuid}-legend`">
-        <div v-if="legend">{{ legend }}</div>
-        <slot v-if="$slots.legend" name="legend"></slot>
-      </FieldsetLegend>
-      <InputHelp :id="`${uuid}-help`" tag="p" :text="help" />
+    <div v-if="label">
+      <FieldsetLegend
+        :id="aria.labelledby"
+        :label="label"
+        :required="isRequired"
+      />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
+
+    <InputError :id="aria.errormessage" :text="errorState" />
+
     <div class="flex">
       <div
-        class="grid gap-4"
+        class="grid gap-y-6"
         :class="{
-          'sm:grid sm:gap-y-4 sm:gap-x-5 sm:space-y-0': columns !== undefined,
+          'sm:grid sm:gap-x-5 sm:space-y-0': columns !== undefined,
           'sm:grid-cols-2': columns === 2,
           'sm:grid-cols-3': columns === 3,
-          'sm:grid-cols-4': columns === 4,
         }"
       >
         <div
@@ -63,44 +68,41 @@ const hasLegend = computed(() => {
         >
           <div class="flex items-center h-5">
             <input
-              :id="`${uuid}-${index}`"
+              :id="`${inputID}-${index}`"
               :aria-describedby="
-                option?.help && option.help
-                  ? `${uuid}-${index}-help`
-                  : undefined
+                option.help ? `${inputID}-${index}-help` : undefined
               "
-              :aria-labelledby="`${uuid}-${index}-label`"
-              :checked="modelValue === option.value"
-              class="w-4 h-4 border-gray-600 focus:ring-xy-blue-500 text-xy-blue disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="option.disabled === true ? true : undefined"
-              :name="uuid"
+              :aria-labelledby="`${inputID}-${index}-label`"
+              :checked="modelState === option.value"
+              :class="[
+                'h-4 w-4 cursor-pointer text-xy-blue',
+                'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+                'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                errorState
+                  ? 'border-red-700 focus:ring-red-700'
+                  : 'border-gray-300  focus:ring-xy-blue-500',
+              ]"
+              :disabled="option.disabled"
+              :name="inputID"
               type="radio"
               :value="option.value"
-              v-bind="{
-                onChange: () => {
-                  emits('update:modelValue', option.value)
-                },
-                ...$attrs,
-              }"
+              v-bind="$attrs"
+              @change="onChange($event, option.value)"
+              @invalid="onInvalid"
             />
           </div>
           <div class="ml-3">
             <InputLabel
-              :id="`${uuid}-${index}-label`"
-              class="mt-auto"
-              :disabled="
-                ($attrs.hasOwnProperty('disabled') &&
-                  $attrs.disabled !== false) ||
-                option.disabled === true
-              "
-              :for="`${uuid}-${index}`"
+              :id="`${inputID}-${index}-label`"
+              :for="`${inputID}-${index}`"
               :label="option.label"
+              :class="
+                isDisabled || option.disabled
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer'
+              "
             />
-            <InputHelp
-              :id="`${uuid}-${index}-help`"
-              class="-mt-1"
-              :text="option.help"
-            />
+            <InputHelp :id="`${inputID}-${index}-help`" :text="option.help" />
           </div>
         </div>
       </div>
