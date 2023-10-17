@@ -2,34 +2,14 @@
 import FieldsetLegend from "./FieldsetLegend.vue"
 import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
-import { useInputField } from "@/composables/forms"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { OptionsInput, ColumnedInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(
-  defineProps<{
-    options: {
-      disabled?: boolean
-      help?: string
-      label: string
-      value: string | number
-    }[]
-    help?: string
-    label?: string
-    modelValue?: string | number
-    columns?: 2 | 3
-    error?: string
-  }>(),
-  {
-    help: "",
-    label: "",
-    modelValue: undefined,
-    columns: undefined,
-    error: "",
-  }
-)
+withDefaults(defineProps<OptionsInput & ColumnedInput>(), defaultInputProps)
 
 defineEmits(["update:modelValue"])
 const { inputID, isDisabled } = useInputField()
@@ -95,7 +75,6 @@ const { inputID, isDisabled } = useInputField()
                   : 'cursor-pointer'
               "
             />
-
             <InputHelp :id="`${inputID}-${index}-help`" :text="option.help" />
           </div>
         </div>

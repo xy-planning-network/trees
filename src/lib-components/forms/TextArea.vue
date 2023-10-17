@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { useInputField, defaultInputProps } from "@/composables/forms"
+import type { TextareaInput } from "@/composables/forms"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(
-  defineProps<{
-    help?: string
-    label?: string
-    modelValue?: string | number
-    error?: string
-  }>(),
-  {
-    help: "",
-    label: "",
-    modelValue: "",
-    error: "",
-  }
-)
+withDefaults(defineProps<TextareaInput>(), defaultInputProps)
 
 const emit = defineEmits(["update:modelValue"])
 const { inputID } = useInputField()
@@ -45,7 +33,7 @@ const { inputID } = useInputField()
           ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
-      :value="modelValue"
+      :value="modelValue || undefined"
       v-bind="$attrs"
       @input="
         emit('update:modelValue', ($event.target as HTMLInputElement).value)

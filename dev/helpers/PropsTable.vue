@@ -35,7 +35,10 @@ defineProps<{
         <tr v-for="prop in props" :key="prop.name">
           <td class="p-2 text-sm text-gray-700" v-text="prop.name"></td>
           <td class="p-2 text-sm text-gray-700" v-text="prop.required"></td>
-          <td class="p-2 text-sm text-gray-700" v-text="prop.type"></td>
+          <td
+            class="p-2 text-sm text-gray-700 whitespace-pre-wrap"
+            v-text="prop.type"
+          ></td>
         </tr>
       </tbody>
     </table>
