@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
@@ -37,7 +38,7 @@ const onChange = (e: Event, val: boolean) => {
     :aria-errormessage="aria.errormessage"
   >
     <div v-if="label">
-      <InputLabel
+      <FieldsetLegend
         :id="aria.labelledby"
         class="block my-auto"
         :label="label"
