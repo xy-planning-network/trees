@@ -7,7 +7,8 @@ import {
 } from "@headlessui/vue"
 import InputLabel from "@/lib-components/forms/InputLabel.vue"
 import InputHelp from "@/lib-components/forms/InputHelp.vue"
-import { useInputField } from "@/composables/forms"
+import { hasAttribute } from "@/composables/forms"
+import { computed, useAttrs } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -26,7 +27,10 @@ withDefaults(
 )
 
 const emits = defineEmits(["update:modelValue"])
-const { isDisabled } = useInputField()
+const attrs = useAttrs()
+const isDisabled = computed(() => {
+  return hasAttribute(attrs, "disabled")
+})
 </script>
 <template>
   <SwitchGroup as="div" class="flex items-start">

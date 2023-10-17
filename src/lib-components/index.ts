@@ -29,6 +29,7 @@ import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
+import { default as InputError } from "./forms/InputError.vue"
 import { default as InputHelp } from "./forms/InputHelp.vue"
 import { default as InputLabel } from "./forms/InputLabel.vue"
 import { default as FieldsetLegend } from "./forms/FieldsetLegend.vue"
@@ -65,6 +66,7 @@ export {
   BaseInput,
   Checkbox,
   DateRangePicker,
+  InputError,
   InputHelp,
   InputLabel,
   FieldsetLegend,
@@ -105,6 +107,7 @@ export interface TreesComponents {
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
   DateRangePicker: typeof DateRangePicker
+  InputError: typeof InputError
   InputHelp: typeof InputHelp
   InputLabel: typeof InputLabel
   FieldsetLegend: typeof FieldsetLegend

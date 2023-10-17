@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import FieldsetLegend from "./FieldsetLegend.vue"
-import InputHelp from "./InputHelp.vue"
 import InputLabel from "./InputLabel.vue"
+import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { OptionsInput, ColumnedInput } from "@/composables/forms"
 
@@ -9,22 +10,47 @@ defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(defineProps<OptionsInput & ColumnedInput>(), defaultInputProps)
+const props = withDefaults(
+  defineProps<OptionsInput & ColumnedInput>(),
+  defaultInputProps
+)
 
-defineEmits(["update:modelValue"])
-const { inputID, isDisabled } = useInputField()
+defineEmits(["update:modelValue", "update:error"])
+
+const {
+  aria,
+  errorState,
+  modelState,
+  inputID,
+  isDisabled,
+  isRequired,
+  onInvalid,
+  validate,
+} = useInputField(props)
+
+const onChange = (e: Event, val: string | number) => {
+  modelState.value = val
+  validate(e)
+}
 </script>
 
 <template>
   <fieldset
     class="space-y-4"
-    :aria-labelledby="label ? `${inputID}-legend` : undefined"
-    :aria-describedby="help ? `${inputID}-help` : undefined"
+    :aria-labelledby="aria.labelledby"
+    :aria-describedby="aria.describedby"
+    :aria-errormessage="aria.errormessage"
   >
     <div v-if="label">
-      <FieldsetLegend :id="`${inputID}-legend`" :label="label" />
-      <InputHelp v-if="help" :id="`${inputID}-help`" tag="p" :text="help" />
+      <FieldsetLegend
+        :id="aria.labelledby"
+        :label="label"
+        :required="isRequired"
+      />
+      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
     </div>
+
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div class="flex">
       <div
@@ -47,12 +73,12 @@ const { inputID, isDisabled } = useInputField()
                 option.help ? `${inputID}-${index}-help` : undefined
               "
               :aria-labelledby="`${inputID}-${index}-label`"
-              :checked="modelValue === option.value"
+              :checked="modelState === option.value"
               :class="[
                 'h-4 w-4 cursor-pointer text-xy-blue',
                 'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
                 'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
-                error
+                errorState
                   ? 'border-red-700 focus:ring-red-700'
                   : 'border-gray-300  focus:ring-xy-blue-500',
               ]"
@@ -61,7 +87,8 @@ const { inputID, isDisabled } = useInputField()
               type="radio"
               :value="option.value"
               v-bind="$attrs"
-              @change="$emit('update:modelValue', option.value)"
+              @change="onChange($event, option.value)"
+              @invalid="onInvalid"
             />
           </div>
           <div class="ml-3">

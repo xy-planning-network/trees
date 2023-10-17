@@ -71,7 +71,6 @@ const toggleValue = ref(undefined)
 const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
 const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive" />`
-const inputErrorCopy = `<BaseInput type="text" label="Broken" error="This input has an error." />`
 const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" label="Make Some Selections" help="Select all that apply." :options="options" />`
 const radioCopy = `<Radio :options="options" v-model="selected" />`
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
@@ -86,6 +85,7 @@ const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
  */
 const inputLabelProps = [
   { name: "label", required: false, type: "string" },
+  { name: "required", required: false, type: "boolean" },
   { name: "tag", required: false, type: "string" },
 ]
 
@@ -94,8 +94,9 @@ const inputHelpProps = [
   { name: "tag", required: false, type: "string" },
 ]
 
+const inputErrorProps = [{ name: "text", required: false, type: "string" }]
+
 const inputCommonProps = [
-  { name: "error", required: false, type: "string" },
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
   { name: "placeholder", required: false, type: "string" },
@@ -167,9 +168,7 @@ const toggleProps = [
           <div class="mt-4">
             Generally, all of these inputs will support common html attributes
             such as <code>disabled</code> and <code>required</code> or input
-            specific attributes like <code>rows</code> for textareas. You can
-            even use the <code>class</code> attribute as needed to apply
-            additional classes.
+            specific attributes like <code>rows</code> for textareas.
           </div>
 
           <div class="mt-4">
@@ -189,7 +188,7 @@ const toggleProps = [
             class="xy-link"
             target="_blank"
             >input variations</a
-          >. Errors can be styled with <code>.xy-input-error</code>.
+          >.
         </template>
 
         <div>
@@ -197,31 +196,11 @@ const toggleProps = [
             <ClickToCopy :value="inputCopy" />
           </label>
           <div class="mt-1">
-            <form @submit.prevent>
-              <BaseInput
-                v-model="inputVals['baseInput']"
-                help="No wrong answers here."
-                type="text"
-                label="What's your life moto?"
-                placeholder="It's good to be alive"
-                required
-              />
-              <button type="submit" class="xy-btn">Submit</button>
-            </form>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="inputErrorCopy" />
-          </label>
-          <div class="mt-1">
             <BaseInput
-              v-model="inputVals['baseInput-broken']"
-              error="This one is borked."
+              help="No wrong answers here."
               type="text"
-              label="Broken"
-              placeholder="An invalid input"
+              label="What's your life moto?*"
+              placeholder="It's good to be alive"
             />
           </div>
         </div>
@@ -266,8 +245,15 @@ const toggleProps = [
               :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
               :placeholder="`A placeholder for a ${inputTypeSelected}`"
             />
+
             <div class="mt-4">
-              <b>Value:</b> {{ inputVals[inputTypeSelected] }}
+              <p>
+                <b>Value:</b> {{ inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
+              <p>
+                <b>Type:</b>
+                {{ typeof inputVals[`baseInput-${inputTypeSelected}`] }}
+              </p>
             </div>
 
             <PropsTable :props="textLikeInputProps" />
@@ -298,15 +284,6 @@ const toggleProps = [
                 :disabled="true"
                 label="How about it (disabled)?"
                 help="In your own words."
-              />
-            </div>
-
-            <div class="mt-4">
-              <TextArea
-                v-model="inputVals['textarea']"
-                label="How about it (invalid)?"
-                help="In your own words."
-                error="This field has an error."
               />
             </div>
 
@@ -345,17 +322,6 @@ const toggleProps = [
               label="I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party! I'm here to party!"
             />
 
-            <form @submit.prevent>
-              <Checkbox
-                v-model="inputVals['checkbox']"
-                label="Invalid state focus"
-                help="This one is required."
-                required
-                error="This one has an error"
-              />
-              <button type="submit" class="xy-btn mt-2">Submit</button>
-            </form>
-
             <div class="mt-4"><b>Value:</b> {{ inputVals["checkbox"] }}</div>
             <PropsTable :props="booleanInputProps" />
           </div>
@@ -383,7 +349,9 @@ const toggleProps = [
             <DateRangePicker
               v-model="inputVals['dateRangePicker']"
               :max-range="365"
+              required
             />
+
             <div class="mt-4">
               <b>Value:</b> {{ inputVals["dateRangePicker"] }}
             </div>
@@ -412,6 +380,7 @@ const toggleProps = [
                   value: option.value,
                 }))
               "
+              required
             />
 
             <MultiCheckboxes
@@ -479,16 +448,6 @@ const toggleProps = [
               :columns="2"
               required
             />
-
-            <form @submit.prevent>
-              <Radio
-                label="Radio's have an error state too"
-                :options="options"
-                error="Sorry, but pick one!"
-                required
-              />
-              <button type="submit" class="xy-btn mt-2">Submit</button>
-            </form>
 
             <div class="">
               <form>
@@ -584,14 +543,6 @@ const toggleProps = [
               help="Disabled select input"
               disabled
             />
-
-            <Select
-              v-model="inputVals['select']"
-              :options="options"
-              label="Lets make a selection"
-              help="Invalid select input"
-              error="Noop!  an error!"
-            />
           </div>
 
           <div class="mt-4"><b>Value:</b> {{ inputVals["select"] }}</div>
@@ -666,7 +617,10 @@ const toggleProps = [
       <ComponentLayout class="mt-8" title="Input Label">
         <template #description>
           For whenever you just need a consistent label for a custom layout. Use
-          the tag property for a custom html element like legend.
+          the tag property for a custom html element like legend. The label will
+          append a (<span class="text-red-500">*</span>) when the required prop
+          is set to true. The component will not render any markup when the
+          label prop is empty.
         </template>
 
         <div>
@@ -674,7 +628,7 @@ const toggleProps = [
             <ClickToCopy :value="inputLabelCopy" />
           </label>
           <div class="mt-1">
-            <InputLabel label="I'm labeling something..." />
+            <InputLabel label="I'm labeling something..." :required="true" />
             <PropsTable :props="inputLabelProps" />
           </div>
         </div>
@@ -683,7 +637,8 @@ const toggleProps = [
       <ComponentLayout class="mt-8" title="Input Help">
         <template #description>
           For whenever you just need a consistent help text component. Use the
-          tag property for a custom html element like legend.
+          tag property for a custom html element like legend. The component will
+          not render any markup when the text prop is empty.
         </template>
 
         <div>
@@ -695,6 +650,76 @@ const toggleProps = [
             <PropsTable :props="inputHelpProps" />
           </div>
         </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Input Error">
+        <template #description>
+          The default error message component used in form inputs. The component
+          will not render any markup when the text prop is empty.
+        </template>
+
+        <div>
+          <div class="mt-1">
+            <InputError text="This field is required" />
+            <PropsTable :props="inputErrorProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout
+        class="mt-8"
+        title="Field Validation and Error State"
+        :show-badge="false"
+      >
+        <template #description>
+          The default input validation pattern is to use a late validation.
+          Meaning we set the default HTMLInputElement error message when the
+          invalid event fires. The invalid event is fired during the
+          HTMLFormElement submit event. This allows forms to stay error free
+          until it's reported something is wrong. Once an error is present
+          though, we clear it or persist it as input and change events fire.
+        </template>
+        <form id="test-form" @submit.prevent>
+          <div class="space-y-8">
+            <BaseInput type="text" label="Name" required />
+            <BaseInput
+              type="email"
+              label="Email"
+              help="Try using a gmail address!"
+              required
+            />
+
+            <Select :options="options" required label="Select an option" />
+
+            <TextArea label="Fill me out!" required />
+
+            <Radio :options="options" required label="Select an option" />
+
+            <DateRangePicker label="Pick a date range!" required />
+
+            <RadioCards
+              label="Cards can be required"
+              :columns="2"
+              :options="options"
+              required
+            />
+
+            <YesOrNoRadio label="Please confim this field" required />
+
+            <MultiCheckboxes
+              label="More selections is better"
+              help="Pick at least 1, but no more than 2!"
+              :columns="2"
+              :options="options"
+              :min="1"
+              :max="2"
+            />
+
+            <Checkbox label="You must tick this box" required />
+
+            <button type="submit" class="xy-btn">Submit</button>
+          </div>
+        </form>
       </ComponentLayout>
     </div>
   </div>

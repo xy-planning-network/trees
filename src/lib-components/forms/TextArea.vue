@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
 import type { TextareaInput } from "@/composables/forms"
 
@@ -8,37 +9,51 @@ defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(defineProps<TextareaInput>(), defaultInputProps)
+const props = withDefaults(defineProps<TextareaInput>(), defaultInputProps)
+defineEmits(["update:modelValue", "update:error"])
+const {
+  aria,
+  inputID,
+  isRequired,
+  modelState,
+  errorState,
+  onInvalid,
+  inputValidation,
+} = useInputField(props)
 
-const emit = defineEmits(["update:modelValue"])
-const { inputID } = useInputField()
+const onInput = (e: Event) => {
+  modelState.value = (e.target as HTMLInputElement).value
+  inputValidation(e)
+}
 </script>
 
 <template>
   <div>
     <InputLabel
-      :id="`${inputID}-label`"
+      :id="aria.labelledby"
       class="mb-2"
       :for="inputID"
       :label="label"
+      :required="isRequired"
     />
     <textarea
       :id="inputID"
-      :aria-labelledby="label ? `${inputID}-label` : undefined"
-      :aria-describedby="help ? `${inputID}-help` : undefined"
+      :aria-labelledby="aria.labelledby"
+      :aria-describedby="aria.describedby"
+      :aria-errormessage="aria.errormessage"
       :class="[
         'block w-full rounded-md border-0 py-2 shadow-sm ring-1 ring-inset focus:ring-2 sm:text-sm sm:leading-6',
         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
-        error
+        errorState
           ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
-      :value="modelValue || undefined"
+      :value="modelState || undefined"
       v-bind="$attrs"
-      @input="
-        emit('update:modelValue', ($event.target as HTMLInputElement).value)
-      "
+      @input="onInput"
+      @invalid="onInvalid"
     />
-    <InputHelp :id="`${inputID}-help`" class="mb-1" :text="help"></InputHelp>
+    <InputHelp :id="aria.describedby" class="mb-1" :text="help"></InputHelp>
+    <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
   </div>
 </template>

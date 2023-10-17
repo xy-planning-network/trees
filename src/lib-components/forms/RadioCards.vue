@@ -6,9 +6,9 @@ import {
   RadioGroupOption,
 } from "@headlessui/vue"
 import { CheckCircleIcon } from "@heroicons/vue/solid"
-import { computed, ref } from "vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
+import InputError from "./InputError.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
 import { defaultInputProps, useInputField } from "@/composables/forms"
 import type {
@@ -36,53 +36,41 @@ const props = withDefaults(
   defaultInputProps
 )
 
-const emit = defineEmits<{
-  (e: "update:modelValue", modelValue: RadioCards["modelValue"]): void
-}>()
+defineEmits(["update:modelValue", "update:error"])
+const {
+  aria,
+  isDisabled,
+  isRequired,
+  nameAttr,
+  modelState,
+  errorState,
+  onInvalid,
+} = useInputField(props)
 
-const { inputID, isDisabled, isRequired, nameAttr } = useInputField()
-
-// tracking internal state separate from modelValue
-// allows v-model to be undefined by the consumer but still supports
-// the display requirements of the component.
-// this is usful when the component is used inside a form element and
-// tracking v-model isn't required.
-const internalState = ref()
-const invalid = ref<boolean>()
-const checkedState = computed(() => {
-  if (props.modelValue === undefined) {
-    return internalState.value
+const onUpdate = (val: unknown) => {
+  if (val) {
+    errorState.value = ""
   }
-
-  return props.modelValue
-})
-
-const onChange = (val: RadioCards["modelValue"]) => {
-  internalState.value = val
-  invalid.value = false
-  emit("update:modelValue", val)
 }
 </script>
 
 <template>
   <RadioGroup
-    :model-value="checkedState"
+    v-model="modelState"
     :disabled="isDisabled"
-    :aria-invalid="invalid === true ? 'true' : null"
-    :aria-errormessage="invalid === true ? `error-${inputID}` : null"
-    @update:model-value="onChange"
+    :aria-invalid="errorState ? 'true' : null"
+    :aria-errormessage="aria.errormessage"
+    @update:model-value="onUpdate"
   >
     <RadioGroupLabel v-if="label" class="block">
-      <FieldsetLegend tag="div" :label="label" />
+      <FieldsetLegend tag="div" :label="label" :required="isRequired" />
     </RadioGroupLabel>
 
     <RadioGroupDescription v-if="help">
       <InputHelp :text="help" />
     </RadioGroupDescription>
 
-    <div v-if="invalid === true" :id="`error-${inputID}`" class="sr-only">
-      Please select one of these options.
-    </div>
+    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div
       class="mt-4 grid grid-cols-1 gap-y-5 gap-x-4 relative"
@@ -113,7 +101,7 @@ const onChange = (val: RadioCards["modelValue"]) => {
             disabled
               ? 'cursor-not-allowed bg-gray-50 border-gray-200 opacity-90'
               : 'cursor-pointer bg-white border-gray-300',
-            error && !disabled ? 'border-red-700' : '',
+            errorState && !disabled ? 'border-red-700' : '',
             checked ? 'border-transparent' : '',
             active ? 'border-xy-blue ring-2 ring-xy-blue-500' : '',
           ]"
@@ -165,6 +153,7 @@ const onChange = (val: RadioCards["modelValue"]) => {
             aria-hidden="true"
           />
 
+          <!--TODO: (spk) ideally this would trigger a change event -->
           <input
             class="sr-only top-1 left-1"
             aria-hidden="true"
@@ -174,7 +163,7 @@ const onChange = (val: RadioCards["modelValue"]) => {
             tabindex="-1"
             type="radio"
             :value="option.value"
-            @invalid="invalid = true"
+            @invalid="onInvalid"
           />
         </div>
       </RadioGroupOption>
