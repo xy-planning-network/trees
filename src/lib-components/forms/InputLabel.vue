@@ -38,6 +38,6 @@ const labelDisplay = computed((): string => {
     v-bind="$attrs"
   >
     {{ labelDisplay }}
-    <span v-if="props.required" class="text-red-700/80">*</span>
+    <span v-if="props.required" class="text-red-700/80" aria-hidden>*</span>
   </component>
 </template>
