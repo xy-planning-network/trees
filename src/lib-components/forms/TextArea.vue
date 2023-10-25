@@ -48,12 +48,13 @@ const onInput = (e: Event) => {
           ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700'
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
+      :placeholder="placeholder"
       :value="modelState || undefined"
       v-bind="$attrs"
       @input="onInput"
       @invalid="onInvalid"
     />
-    <InputHelp :id="aria.describedby" class="mb-1" :text="help"></InputHelp>
+    <InputHelp :id="aria.describedby" class="mt-1" :text="help" />
     <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
   </div>
 </template>
