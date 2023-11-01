@@ -237,9 +237,13 @@ export const emailPattern = String.raw`^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-
 export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 
 /**
- * This is used for the .number modifier in v-model
+ * looseToNumber attempts to parse a value into a type number
+ * when parsing fails it returns null.
+ *
+ * This is primarly used to coerce string values from <input type="number">
+ * into numbers.
  */
-export const looseToNumber = (val: any): any => {
+export const looseToNumber = (val: any): number | null => {
   const n = parseFloat(val)
-  return isNaN(n) ? val : n
+  return isNaN(n) ? null : n
 }

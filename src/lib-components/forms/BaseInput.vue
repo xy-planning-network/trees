@@ -57,11 +57,7 @@ const typeAttributes = computed(() => {
 const onInput = (e: Event) => {
   let val = (e.target as HTMLInputElement).value
 
-  if (props.type === "number") {
-    val = looseToNumber(val)
-  }
-
-  modelState.value = val
+  modelState.value = props.type === "number" ? looseToNumber(val) : val
 
   inputValidation(e)
 }
