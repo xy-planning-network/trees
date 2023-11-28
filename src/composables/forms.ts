@@ -241,9 +241,12 @@ export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
  * when parsing fails it returns null.
  *
  * This is primarly used to coerce string values from <input type="number">
- * into numbers.
+ * into a value with a type of number.
  */
 export const looseToNumber = (val: any): number | null => {
-  const n = parseFloat(val)
+  let n = parseFloat(val)
+  if (isNaN(n)) {
+    n = parseFloat(val.replace(/[^\d.-]/g, ""))
+  }
   return isNaN(n) ? null : n
 }

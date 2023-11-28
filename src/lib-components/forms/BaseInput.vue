@@ -61,6 +61,13 @@ const onInput = (e: Event) => {
 
   inputValidation(e)
 }
+
+const onKeypress = (e: KeyboardEvent) => {
+  const regex = /[-.0-9e]+/
+  if (props.type === "number" && !e.key.match(regex)) {
+    e.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -91,6 +98,7 @@ const onInput = (e: Event) => {
       v-bind="{ ...typeAttributes, ...$attrs }"
       @input="onInput"
       @invalid="onInvalid"
+      @keypress="onKeypress"
     />
     <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />
     <InputError :id="`${inputID}-error`" class="mt-0.5" :text="errorState" />
