@@ -51,6 +51,12 @@ import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"
 export type { FlashMessage, FlashType, FlashStore, Flasher }
 export { useFlashes, useAppFlashes, useAppFlasher }
 
+// navigation
+import type { UseTabHistoryOpts } from "./nav"
+export type { UseTabHistoryOpts }
+import { useTabHistory } from "./nav"
+export { useTabHistory }
+
 // spinner
 import { useSpinnerDisplay, useAppSpinner } from "./useSpinner"
 export { useSpinnerDisplay, useAppSpinner }
