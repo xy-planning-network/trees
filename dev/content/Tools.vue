@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseAPI from "./Tools/BaseAPI.vue"
 import UseBaseAPI from "./Tools/UseBaseAPI.vue"
+import UseUrlSearchParams from "./Tools/UseUrlSearchParams.vue"
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import UseBaseAPI from "./Tools/UseBaseAPI.vue"
     <div class="max-w-3xl mx-auto space-y-8">
       <BaseAPI />
       <UseBaseAPI />
+      <UseUrlSearchParams />
     </div>
   </div>
 </template>

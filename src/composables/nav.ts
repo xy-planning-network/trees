@@ -4,6 +4,7 @@ import {
   MaybeRef,
   RenderFunction,
   ref,
+  toRaw,
   watch,
 } from "vue"
 
@@ -47,23 +48,20 @@ export interface UseTabHistoryOpts {
 }
 
 /**
- * useTabNav
+ * useTabHistory
  *
  * Example Usage:
  *
- * const {activeTab, tabs} = useTabNav({
- *    tabs: [{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]
- *    useHistory: true,
- * })
+ * const {activeTab, tabs} = useTabHistory([{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]})
  *
  * <Tabs v-model="activeTab" :tabs="tabs" />
  *
  * <div v-if="activeTab === 'tab-1'">Tab 1 Content</div>
  * <div v-if="activeTab === 'tab-2'">Tab 2 Content</div>
  *
- * @param opts UseUrlTabParamOpts
+ * @param opts UseTabHistoryOpts
+ * @return {activeTab: Ref<string>, tabs: Ref<{labe: string, value: string}[]>}
  */
-
 export const useTabHistory = (
   initialTabs: MaybeRef<
     {
@@ -111,4 +109,124 @@ export const useTabHistory = (
     activeTab,
     tabs,
   }
+}
+
+/**
+ * URLParamValue is the set of value types that are
+ * currently spec'd to be parsed into a query string.
+ */
+export type URLParamValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | string[]
+  | number[]
+
+/**
+ * URLParams generic serves as a type constraint ensuring that
+ * the search params record used only contains fields that are
+ * currently spec'd to be parsed into a query string. See: URLParamValue
+ *
+ * Example:
+ *
+ * interface SearchParams {
+ *    // All Good!
+ *    q: string
+ *    count: number
+ *    isActive: boolean
+ *    terms: string[]
+ *    bucketOfNumbers: number[]
+ *
+ *    // Nope!
+ *    nested: {
+ *        qTwo: string
+ *    }
+ * }
+ */
+export type URLParams<T> = {
+  [P in keyof T]: T[P] extends URLParamValue ? T[P] : never
+}
+
+/**
+ * useUrlSearchParams accepts an initial set of search query params
+ * in the shape of Record<string, URLParamValue> and tracks the values
+ * of each param on window.location.search.
+ *
+ * This is a one-way sync where non-nullish, non-falsey values are popped
+ * onto window.location.search as they are mutated.  The initial values are not read
+ * from an existing query string on window.location.search as each values
+ * type cannot be inferred safely.
+ *
+ * This composable ignores query params that may already exist on window.location.search
+ * leaving the intact as much as possible, since it's not possible to determine where they
+ * came from or what function they may serve.
+ *
+ * The return value is a ref of the initial set of params.
+ *
+ * Example Usage:
+ * interface SearchParams {
+ *    q: string
+ *    isActive: boolean
+ * }
+ *
+ * // NOTE: initial params values should come from the
+ * // server in the form of a page prop. Though some
+ * // exceptions may exist.
+ * const props = defineProps<{
+ *    initialParams: SearchParams
+ * }>
+ *
+ * const searchParams = useUrlSearchParams(props.initialParam)
+ *
+ * <BaseInput v-model="searchParams.q" label="Search" type="search" />
+ * <Checkbox v-model="searchParams.isActive" label="Is Active" />
+ *
+ *  When q = "jimothy bobbitz" and isActive = false
+ * /path?q=jimothy+bobbitz
+ *
+ * When q = "jimothy bobbitz" and isActive = true
+ * /path?q=jimothy+bobbitz&isActive=true
+ *
+ * * When q = "" and isActive = false
+ * /path
+ *
+ * @param initial any Record<string, URLParamValue> like interface
+ * @return Ref<T>
+ */
+export const useUrlSearchParams = <T>(initial: URLParams<T>) => {
+  const searchParams = ref(initial)
+
+  watch(
+    searchParams,
+    (p) => {
+      const params = new URLSearchParams(window.location.search)
+
+      for (const key in p) {
+        const val = p[key]
+        params.delete(key)
+
+        if (val == "" || val == false || val == null || val == undefined) {
+          continue
+        } else if (Array.isArray(val)) {
+          val.forEach((val) => params.append(key, val.toString()))
+        } else {
+          params.set(key, val.toString())
+        }
+      }
+
+      const queryString =
+        params.toString() !== "" ? `?${params.toString()}` : ""
+
+      window.history.replaceState(
+        toRaw(p),
+        document.title,
+        `${window.location.pathname}${queryString}`
+      )
+    },
+    { deep: true }
+  )
+
+  return searchParams
 }

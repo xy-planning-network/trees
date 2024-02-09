@@ -2,6 +2,8 @@
 import { computed, ref } from "vue"
 import User from "@/composables/user"
 import { ActionItem, useTabHistory } from "@/composables/nav"
+import ProseBase from "../helpers/ProseBase.vue"
+import CodeSample from "../helpers/CodeSample.vue"
 
 defineProps<{
   user: User
@@ -107,8 +109,8 @@ const tabsProps = [
       <ComponentLayout class="mt-8" title="Tabs">
         <template #description>
           These are used to display different groups of content. It turns into a
-          select on mobile. When combined with the `useTabHistory` composable,
-          the activeTab will be synced with window.location.search params.
+          select on mobile. When combined with the useTabHistory composable, the
+          activeTab will be synced with window.location.search params.
         </template>
 
         <div>
@@ -129,6 +131,35 @@ const tabsProps = [
                 Tab 1 Content
               </span>
               <span v-else class="xy-badge-blue"> Tab 2 Content </span>
+            </div>
+
+            <div class="my-10">
+              <ProseBase>
+                <h4>Example Usage with useTabHistory</h4>
+                <p>
+                  Note: if you don't wish to track the tab state on the url,
+                  just pass your ref and tabs directly to the component.
+                </p>
+                <h5>Script Setup</h5>
+                <!-- prettier-ignore -->
+                <CodeSample>{{`
+<script setup lang="ts">
+const {activeTab, tabs} = useTabHistory(
+    [{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]
+})
+</script>
+`}}</CodeSample>
+
+                <h5>Template</h5>
+                <!-- prettier-ignore -->
+                <CodeSample language="html">{{`
+<template>
+    <Tabs v-model="activeTab" :tabs="tabs" />
+    <div v-if="activeTab === 'tab-1'">Tab 1 Content</div>
+    <div v-if="activeTab === 'tab-2'">Tab 2 Content</div>
+</template>
+`}}</CodeSample>
+              </ProseBase>
             </div>
             <PropsTable :props="tabsProps" />
           </div>
