@@ -2,6 +2,7 @@ import {
   Component,
   FunctionalComponent,
   MaybeRef,
+  Ref,
   RenderFunction,
   ref,
   toRaw,
@@ -48,19 +49,49 @@ export interface UseTabHistoryOpts {
 }
 
 /**
+ * UseTabHistory is a convenience composable for adding history
+ * support to tab based navigation.
+ */
+export interface UseTabHistory {
+  /**
+   * activeTab is a ref of currently visible tab.
+   * The value typically should be one of tabs[number].value.
+   */
+  activeTab: Ref<string>
+  /**
+   * isActiveTab is a helper method for determining if a string value
+   * is the currently active tab.  This is useful in templates where
+   * content is conditionally displayed based on the activeTab.
+   *
+   * @param tab string typically should be one of tabs[number].value.
+   * @return boolean
+   */
+  isActiveTab: (tab: string) => boolean
+  /**
+   * tabs is the Ref of initialized tabs.
+   */
+  tabs: Ref<
+    {
+      label: string
+      value: string
+    }[]
+  >
+}
+
+/**
  * useTabHistory
  *
  * Example Usage:
  *
- * const {activeTab, tabs} = useTabHistory([{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]})
+ * const {activeTab, isActiveTab, tabs} = useTabHistory([{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]})
  *
  * <Tabs v-model="activeTab" :tabs="tabs" />
  *
- * <div v-if="activeTab === 'tab-1'">Tab 1 Content</div>
- * <div v-if="activeTab === 'tab-2'">Tab 2 Content</div>
+ * <div v-if="isActiveTab('tab-1')">Tab 1 Content</div>
+ * <div v-if="isActiveTab('tab-2')">Tab 2 Content</div>
  *
  * @param opts UseTabHistoryOpts
- * @return {activeTab: Ref<string>, tabs: Ref<{labe: string, value: string}[]>}
+ * @return UseTabHistory
  */
 export const useTabHistory = (
   initialTabs: MaybeRef<
@@ -70,7 +101,7 @@ export const useTabHistory = (
     }[]
   >,
   opts?: UseTabHistoryOpts
-) => {
+): UseTabHistory => {
   const tabs = ref(initialTabs)
   const config = {
     initial: tabs?.value[0]?.value || "",
@@ -79,8 +110,12 @@ export const useTabHistory = (
   }
   const activeTab = ref(config.initial)
 
-  const isTab = (tab: string) => {
+  const isValidTab = (tab: string) => {
     return tabs.value.find((t) => t.value === tab) ? true : false
+  }
+
+  const isActiveTab = (tab: string) => {
+    return activeTab.value === tab
   }
 
   // Kick off history tracking by applying the existing value
@@ -88,7 +123,7 @@ export const useTabHistory = (
   const params = new URLSearchParams(window.location.search)
   const initialParam = params.get(config.paramName)
 
-  if (initialParam && isTab(initialParam)) {
+  if (initialParam && isValidTab(initialParam)) {
     activeTab.value = initialParam
   }
 
@@ -107,6 +142,7 @@ export const useTabHistory = (
 
   return {
     activeTab,
+    isActiveTab,
     tabs,
   }
 }

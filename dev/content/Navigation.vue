@@ -43,7 +43,7 @@ const paginatorProps = [
   },
 ]
 
-const { activeTab, tabs } = useTabHistory([
+const { activeTab, isActiveTab, tabs } = useTabHistory([
   { label: "Tab 1", value: "tab1" },
   { label: "Tab 2", value: "tab2" },
 ])
@@ -127,10 +127,12 @@ const tabsProps = [
               :tabs="tabs"
             />
             <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
-              <span v-if="activeTab === 'tab1'" class="xy-badge-yellow">
+              <span v-if="isActiveTab('tab1')" class="xy-badge-yellow">
                 Tab 1 Content
               </span>
-              <span v-else class="xy-badge-blue"> Tab 2 Content </span>
+              <span v-if="isActiveTab('tab2')" class="xy-badge-blue">
+                Tab 2 Content
+              </span>
             </div>
 
             <div class="my-10">
@@ -144,7 +146,7 @@ const tabsProps = [
                 <!-- prettier-ignore -->
                 <CodeSample>{{`
 <script setup lang="ts">
-const {activeTab, tabs} = useTabHistory(
+const {activeTab, isActiveTab, tabs} = useTabHistory(
     [{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]
 })
 </script>
@@ -155,8 +157,8 @@ const {activeTab, tabs} = useTabHistory(
                 <CodeSample language="html">{{`
 <template>
     <Tabs v-model="activeTab" :tabs="tabs" />
-    <div v-if="activeTab === 'tab-1'">Tab 1 Content</div>
-    <div v-if="activeTab === 'tab-2'">Tab 2 Content</div>
+    <div v-if="isActiveTab('tab-1')">Tab 1 Content</div>
+    <div v-if="isActiveTab('tab-2')">Tab 2 Content</div>
 </template>
 `}}</CodeSample>
               </ProseBase>
