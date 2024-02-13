@@ -145,21 +145,21 @@ const tabsProps = [
                 <h5>Script Setup</h5>
                 <!-- prettier-ignore -->
                 <CodeSample>{{`
-<script setup lang="ts">
+<script setup lang="ts"&gt;
 const {activeTab, isActiveTab, tabs} = useTabHistory(
     [{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]
 })
-</script>
+</script&gt;
 `}}</CodeSample>
 
                 <h5>Template</h5>
                 <!-- prettier-ignore -->
                 <CodeSample language="html">{{`
-<template>
+<template&gt;
     <Tabs v-model="activeTab" :tabs="tabs" />
     <div v-if="isActiveTab('tab-1')">Tab 1 Content</div>
     <div v-if="isActiveTab('tab-2')">Tab 2 Content</div>
-</template>
+</template&gt;
 `}}</CodeSample>
               </ProseBase>
             </div>

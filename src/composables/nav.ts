@@ -105,8 +105,7 @@ export const useTabHistory = (
   const tabs = ref(initialTabs)
   const config = {
     initial: tabs?.value[0]?.value || "",
-    paramName: "tab",
-    ...opts,
+    paramName: opts?.paramName || "tab",
   }
   const activeTab = ref(config.initial)
 
@@ -205,6 +204,7 @@ export type URLParams<T> = {
  * interface SearchParams {
  *    q: string
  *    isActive: boolean
+ *    attributes: string[]
  * }
  *
  * // NOTE: initial params values should come from the
@@ -218,15 +218,18 @@ export type URLParams<T> = {
  *
  * <BaseInput v-model="searchParams.q" label="Search" type="search" />
  * <Checkbox v-model="searchParams.isActive" label="Is Active" />
+ * <MultiCheckboxes v-model="searchParams.attributes" label="Attributes" :options="attrOpts" />
  *
- *  When q = "jimothy bobbitz" and isActive = false
- * /path?q=jimothy+bobbitz
- *
- * When q = "jimothy bobbitz" and isActive = true
- * /path?q=jimothy+bobbitz&isActive=true
- *
- * * When q = "" and isActive = false
+ * When initialized as {q: "", isActive: false, attributes: []}
+ * the query string is not immediately updated.  Updates
+ * begin once the Ref is mutated.
  * /path
+ *
+ * When mutated to {q: "jimothy bobbitz", isActive: true, attributes: ['att-1', 'att-3']}
+ * /path?q=jimothy+bobbitz&isActive=true&attributes=att-1&attributes=att-3
+ *
+ * When mutated later back to {q: "", isActive: false, attributes: []}
+ * /path?q=&isActive=false
  *
  * @param initial any Record<string, URLParamValue> like interface
  * @return Ref<T>
@@ -238,18 +241,26 @@ export const useUrlSearchParams = <T>(initial: URLParams<T>) => {
     searchParams,
     (p) => {
       const params = new URLSearchParams(window.location.search)
-
       for (const key in p) {
         const val = p[key]
+
+        // remove the current key(s) to avoid doubling up on existing values
         params.delete(key)
 
-        if (val == "" || val == false || val == null || val == undefined) {
+        // avoid setting nullish values
+        if (val == null || val == undefined) {
           continue
-        } else if (Array.isArray(val)) {
-          val.forEach((val) => params.append(key, val.toString()))
-        } else {
-          params.set(key, val.toString())
         }
+
+        // append array types as multiple key:value pairs
+        if (Array.isArray(val)) {
+          val.forEach((val) => {
+            params.append(key, val.toString())
+          })
+          continue
+        }
+
+        params.set(key, val.toString())
       }
 
       const queryString =
