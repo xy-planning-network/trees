@@ -244,19 +244,26 @@ export const useUrlSearchParams = <T>(initial: URLParams<T>) => {
       for (const key in p) {
         const val = p[key]
 
-        // remove the current key(s) to avoid doubling up on existing values
-        params.delete(key)
-
         // avoid setting nullish values
         if (val == null || val == undefined) {
+          params.delete(key)
           continue
         }
 
         // append array types as multiple key:value pairs
         if (Array.isArray(val)) {
+          // remove the current key(s) to avoid doubling up on existing values
+          params.delete(key)
+
           val.forEach((val) => {
             params.append(key, val.toString())
           })
+          continue
+        }
+
+        // avoid setting falsey (zero) values until a truthy value was previously set
+        // otherwise all zero-valued keys will be populated with every mutation
+        if (!params.has(key) && !val) {
           continue
         }
 
