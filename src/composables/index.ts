@@ -51,6 +51,12 @@ import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"
 export type { FlashMessage, FlashType, FlashStore, Flasher }
 export { useFlashes, useAppFlashes, useAppFlasher }
 
+// navigation
+import type { URLParams, URLParamValue, UseTabHistoryOpts } from "./nav"
+export type { URLParams, URLParamValue, UseTabHistoryOpts }
+import { useUrlSearchParams, useTabHistory } from "./nav"
+export { useUrlSearchParams, useTabHistory }
+
 // spinner
 import { useSpinnerDisplay, useAppSpinner } from "./useSpinner"
 export { useSpinnerDisplay, useAppSpinner }
