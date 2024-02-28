@@ -77,6 +77,25 @@ export type TextInputType =
   | "url"
   | "week"
 
+export const textFields: Record<TextInputType, true> = {
+  date: true,
+  "datetime-local": true,
+  email: true,
+  month: true,
+  number: true,
+  password: true,
+  search: true,
+  tel: true,
+  text: true,
+  time: true,
+  url: true,
+  week: true,
+}
+
+export const isTextField = (type: string): boolean => {
+  return textFields[type as TextInputType] || false
+}
+
 /**
  * useInputField provides a number of computed values, refs, and methods to support
  * wiring up reactive inputs.
@@ -242,4 +261,53 @@ export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 export const looseToNumber = (val: any): any => {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
+}
+
+export interface Fieldset {
+  title?: string
+  description?: string
+  fields?: Field[]
+}
+
+export type FieldTypes =
+  | "checkbox"
+  | "date-range"
+  | "multi-checkbox"
+  | "radio"
+  | "radio-cards"
+  | "select"
+  | "textarea"
+  // TODO: (spk) not supported yet.  at minimum needs internal model-value binding.
+  // | "toggle"
+  | "yes-no-radio"
+  | TextInputType
+
+// TODO: (spk) need to define these explicitly
+export type Field = (
+  | BooleanInput
+  | DateRangeInput
+  | MultiChoiceInput
+  | OptionsInput
+  | TextareaInput
+  | TextLikeInput
+) & {
+  type: FieldTypes
+  name: string
+
+  span?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full"
+  start?: boolean
+
+  // additional HTML input attributes
+  autocomplete?: string | boolean // TODO: (spk) confirm type
+  disabled?: boolean
+  min?: number
+  max?: number
+  pattern?: string
+  required?: boolean
+}
+
+export type Fields = Array<Fieldset | Field>
+
+export const isFormSection = (section: unknown): section is Fieldset => {
+  return Object.prototype.hasOwnProperty.call(section, "title")
 }

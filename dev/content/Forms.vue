@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import type { InputOption } from "@/composables/forms"
+import type { Field, Fields, InputOption } from "@/composables/forms"
+import DynamicForm from "@/lib-components/forms/DynamicForm.vue"
 
 const options: InputOption[] = [
   {
@@ -158,11 +159,228 @@ const toggleProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
+
+const fields: Fields = [
+  {
+    title: "Text Like Inputs",
+    description: "Check out all of these BaseInput options...",
+  },
+  {
+    type: "date",
+    name: "date",
+    modelValue: "",
+    required: false,
+    placeholder: "date",
+    label: "date",
+    help: "Gimme some help",
+    span: "md",
+  },
+  {
+    type: "datetime-local",
+    name: "datetime-local",
+    modelValue: "",
+    required: false,
+    placeholder: "datetime-local",
+    label: "datetime-local",
+    help: "Gimme some help",
+    span: "md",
+  },
+  {
+    type: "email",
+    name: "email",
+    modelValue: "test@example.com",
+    required: false,
+    placeholder: "email",
+    label: "email",
+    help: "Gimme some help",
+    span: "md",
+    start: true,
+  },
+  {
+    type: "month",
+    name: "month",
+    modelValue: "",
+    required: false,
+    placeholder: "month",
+    label: "month",
+    help: "Gimme some help",
+  },
+  {
+    type: "number",
+    name: "number",
+    modelValue: 100,
+    required: false,
+    placeholder: "number",
+    label: "number",
+    help: "Gimme some help",
+  },
+  {
+    type: "password",
+    name: "password",
+    modelValue: "",
+    required: false,
+    placeholder: "password",
+    label: "password",
+    help: "Gimme some help",
+  },
+  {
+    type: "search",
+    name: "search",
+    modelValue: "",
+    required: false,
+    placeholder: "search",
+    label: "search",
+    help: "Gimme some help",
+  },
+  {
+    type: "tel",
+    name: "tel",
+    modelValue: "",
+    required: false,
+    placeholder: "tel",
+    label: "tel",
+    help: "Gimme some help",
+  },
+  {
+    type: "text",
+    name: "text",
+    modelValue: "",
+    required: false,
+    placeholder: "text",
+    label: "text",
+    help: "Gimme some help",
+  },
+  {
+    type: "time",
+    name: "time",
+    modelValue: "",
+    required: false,
+    placeholder: "time",
+    label: "time",
+    help: "Gimme some help",
+  },
+  {
+    type: "url",
+    name: "url",
+    modelValue: "",
+    required: false,
+    placeholder: "url",
+    label: "url",
+    help: "Gimme some help",
+  },
+  {
+    type: "week",
+    name: "week",
+    modelValue: "",
+    required: false,
+    placeholder: "week",
+    label: "week",
+    help: "Gimme some help",
+  },
+  {
+    title: "Extended Input Types",
+    description: "But that's not all...",
+  },
+  {
+    type: "date-range",
+    name: "date-range",
+    modelValue: {
+      minDate: 0,
+      maxDate: 0,
+    },
+    required: false,
+    placeholder: "date-range",
+    label: "date-range",
+    help: "Gimme some help",
+  },
+  {
+    type: "checkbox",
+    name: "checkbox",
+    modelValue: false,
+    required: false,
+    placeholder: "checkbox",
+    label: "checkbox",
+    help: "Gimme some help",
+  },
+  // TODO: (spk) this isn't actually type safe as modelValue can overla with a different input type
+  {
+    type: "multi-checkbox",
+    name: "multi-checkbox",
+    modelValue: [],
+    required: false,
+    placeholder: "multi-checkbox",
+    label: "multi-checkbox",
+    help: "Gimme some help",
+    options: options,
+  },
+  {
+    type: "radio",
+    name: "radio",
+    modelValue: "",
+    required: false,
+    placeholder: "radio",
+    label: "radio",
+    help: "Gimme some help",
+    options: options,
+  },
+  {
+    type: "radio-cards",
+    name: "radio-cards",
+    modelValue: "",
+    required: false,
+    placeholder: "radio-cards",
+    label: "radio-card",
+    help: "Gimme some help",
+    options: options,
+  },
+  {
+    type: "select",
+    name: "select",
+    modelValue: "",
+    required: false,
+    placeholder: "select",
+    label: "select",
+    help: "Gimme some help",
+    options: options,
+  },
+  {
+    type: "textarea",
+    name: "textarea",
+    modelValue: "",
+    required: false,
+    placeholder: "textarea",
+    label: "textarea",
+    help: "Gimme some help",
+  },
+  /*
+  {
+    type: "toggle",
+    name: "toggle",
+    modelValue:false,
+    placeholder: "toggle",
+    label: "toggle",
+    help: "Gimme some help",
+  },
+  */
+  {
+    type: "yes-no-radio",
+    name: "yes-no-radio",
+    modelValue: undefined,
+    required: false,
+    placeholder: "yes-no-radio",
+    label: "yes-no-radio",
+    help: "Gimme some help",
+  },
+]
 </script>
 
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-3xl mx-auto space-y-8">
+      <ComponentLayout title="Dynamic Forms" :show-badge="false">
+        <DynamicForm action="/" :columns="1" :fields="fields" method="POST" />
+      </ComponentLayout>
+
       <ComponentLayout title="Input HTML Attributes" :show-badge="false">
         <template #description>
           <div class="mt-4">

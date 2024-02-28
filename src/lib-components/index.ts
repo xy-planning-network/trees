@@ -40,6 +40,7 @@ import { default as RadioCards } from "./forms/RadioCards.vue"
 import { default as Select } from "./forms/Select.vue"
 import { default as TextArea } from "./forms/TextArea.vue"
 import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
+import { default as DynamicForm } from "./forms/DynamicForm.vue"
 
 export {
   ActionsDropdown,
@@ -119,5 +120,6 @@ export interface TreesComponents {
   Select: typeof Select
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio
+  DynamicForm: typeof DynamicForm
   XYSpinner: typeof XYSpinner
 }
