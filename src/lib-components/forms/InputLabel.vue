@@ -35,7 +35,6 @@ const labelDisplay = computed((): string => {
     :is="tag"
     v-if="labelDisplay"
     class="block text-sm leading-snug font-medium text-gray-800"
-    v-bind="$attrs"
   >
     {{ labelDisplay }}
     <span v-if="props.required" class="text-red-700/80" aria-hidden>*</span>

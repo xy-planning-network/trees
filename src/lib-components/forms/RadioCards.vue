@@ -47,7 +47,9 @@ const {
   onInvalid,
 } = useInputField(props)
 
-const onUpdate = (val: unknown) => {
+const onUpdate = (val: any) => {
+  modelState.value = val
+
   if (val) {
     errorState.value = ""
   }
@@ -55,8 +57,9 @@ const onUpdate = (val: unknown) => {
 </script>
 
 <template>
+  <!--NOTE: (spk) RadioGroup model-value has expanded types.  Assert as "any" to avoid compiler errors as we know the value will be constrainted to Options<T>-->
   <RadioGroup
-    v-model="modelState"
+    :model-value="modelState as any"
     :disabled="isDisabled"
     :aria-invalid="errorState ? 'true' : null"
     :aria-errormessage="aria.errormessage"

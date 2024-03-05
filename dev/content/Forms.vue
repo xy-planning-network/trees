@@ -158,11 +158,72 @@ const toggleProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
+
+const combobox = ref("")
+const multiSelect = ref([])
 </script>
 
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-3xl mx-auto space-y-8">
+      <form class="space-y-5">
+        <MultiSelect
+          v-model="multiSelect"
+          :options="options"
+          label="MultiSelect"
+          help="Help me out here please..."
+          name="multi-inputs"
+          placeholder="Please select one of these."
+          required
+        />
+
+        <MultiSelect
+          v-model="multiSelect"
+          :options="options"
+          disabled
+          label="MultiSelect"
+          help="Help me out here please..."
+          name="multi-inputs"
+          placeholder="Please select one of these."
+          required
+        />
+
+        <div>{{ multiSelect }}</div>
+
+        <div>
+          <Combobox
+            v-model="combobox"
+            label="Combobox"
+            help="Help me out here please..."
+            name="some-input"
+            :options="options"
+            placeholder="Please select one of these."
+            required
+          />
+        </div>
+
+        <div>
+          <Combobox
+            v-model="combobox"
+            label="Combobox"
+            help="Help me out here please..."
+            name="some-input"
+            disabled
+            :options="options"
+            placeholder="Please select one of these."
+            required
+          />
+        </div>
+
+        <div>
+          {{ combobox }}
+        </div>
+
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+
       <ComponentLayout title="Input HTML Attributes" :show-badge="false">
         <template #description>
           <div class="mt-4">

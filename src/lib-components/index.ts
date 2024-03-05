@@ -29,12 +29,14 @@ import { default as XYSpinner } from "./indicators/XYSpinner.vue"
 // Form components
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
+import { default as Combobox } from "./forms/Combobox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
 import { default as InputError } from "./forms/InputError.vue"
 import { default as InputHelp } from "./forms/InputHelp.vue"
 import { default as InputLabel } from "./forms/InputLabel.vue"
 import { default as FieldsetLegend } from "./forms/FieldsetLegend.vue"
 import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
+import { default as MultiSelect } from "./forms/MultiSelect.vue"
 import { default as Radio } from "./forms/Radio.vue"
 import { default as RadioCards } from "./forms/RadioCards.vue"
 import { default as Select } from "./forms/Select.vue"
@@ -67,12 +69,14 @@ export {
   Tooltip,
   BaseInput,
   Checkbox,
+  Combobox,
   DateRangePicker,
   InputError,
   InputHelp,
   InputLabel,
   FieldsetLegend,
   MultiCheckboxes,
+  MultiSelect,
   Radio,
   RadioCards,
   Select,
@@ -108,12 +112,14 @@ export interface TreesComponents {
   Tooltip: typeof Tooltip
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
+  Combobox: typeof Combobox
   DateRangePicker: typeof DateRangePicker
   InputError: typeof InputError
   InputHelp: typeof InputHelp
   InputLabel: typeof InputLabel
   FieldsetLegend: typeof FieldsetLegend
   MultiCheckboxes: typeof MultiCheckboxes
+  MultiSelect: typeof MultiSelect
   Radio: typeof Radio
   RadioCards: typeof RadioCards
   Select: typeof Select
