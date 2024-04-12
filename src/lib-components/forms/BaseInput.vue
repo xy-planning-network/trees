@@ -8,6 +8,7 @@ import {
   emailPattern,
   looseToNumber,
   phonePattern,
+  toDatetimeLocal,
 } from "@/composables/forms"
 import type { TextLikeInput } from "@/composables/forms"
 import { computed, ref } from "vue"
@@ -57,14 +58,28 @@ const typeAttributes = computed(() => {
 const onInput = (e: Event) => {
   let val = (e.target as HTMLInputElement).value
 
-  if (props.type === "number") {
-    val = looseToNumber(val)
+  switch (props.type) {
+    case "datetime-local":
+      val = val ? new Date(val).toISOString() : val
+      break
+    case "number":
+      val = looseToNumber(val)
+      break
   }
 
   modelState.value = val
 
   inputValidation(e)
 }
+
+const inputValue = computed(() => {
+  switch (props.type) {
+    case "datetime-local":
+      return toDatetimeLocal(modelState.value)
+    default:
+      return modelState.value
+  }
+})
 </script>
 
 <template>
@@ -91,7 +106,7 @@ const onInput = (e: Event) => {
       ]"
       :placeholder="placeholder"
       :type="type"
-      :value="modelState"
+      :value="inputValue"
       v-bind="{ ...typeAttributes, ...$attrs }"
       @input="onInput"
       @invalid="onInvalid"
