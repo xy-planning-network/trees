@@ -15,7 +15,6 @@ import type {
   TrailsResp,
   TrailsRespPaged,
 } from "@/api/client"
-import type * as InputTypes from "@/composables/forms"
 import {
   emailPattern,
   looseToNumber,
@@ -64,7 +63,7 @@ export type {
 }
 
 // Forms exports
-export type { InputTypes }
+export type * from "@/composables/forms"
 export {
   emailPattern,
   looseToNumber,
