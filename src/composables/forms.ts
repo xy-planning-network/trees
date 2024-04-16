@@ -31,6 +31,10 @@ export interface DateRangeInput extends Input {
   startDate?: number
 }
 
+export interface DateTimeInput extends Input {
+  modelValue?: string | null
+}
+
 export interface TextLikeInput extends Input {
   modelValue?: string | number | null
   type: TextInputType
@@ -63,19 +67,21 @@ export const defaultInputProps = {
   placeholder: "",
 }
 
-export type TextInputType =
-  | "date"
-  | "datetime-local"
-  | "email"
-  | "month"
-  | "number"
-  | "password"
-  | "search"
-  | "tel"
-  | "text"
-  | "time"
-  | "url"
-  | "week"
+export const textInputTypes = [
+  "date",
+  "email",
+  "month",
+  "number",
+  "password",
+  "search",
+  "tel",
+  "text",
+  "time",
+  "url",
+  "week",
+] as const
+
+export type TextInputType = (typeof textInputTypes)[number]
 
 /**
  * useInputField provides a number of computed values, refs, and methods to support
@@ -242,4 +248,21 @@ export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 export const looseToNumber = (val: any): any => {
   const n = parseFloat(val)
   return isNaN(n) ? val : n
+}
+
+/**
+ * converts an RFC 3339 string to a datetime-local input value string
+ * used with BaseInput<type=datetime-local> as a v-model modifier
+ * @param dt RFC 3339 date string
+ * @returns string
+ */
+export const toDatetimeLocal = (dt: any): string => {
+  if (typeof dt !== "string" || dt === "") {
+    return ""
+  }
+
+  const date = new Date(dt)
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+
+  return date.toISOString().slice(0, 16)
 }

@@ -15,10 +15,12 @@ import type {
   TrailsResp,
   TrailsRespPaged,
 } from "@/api/client"
+import type * as InputTypes from "@/composables/forms"
 import {
   emailPattern,
   looseToNumber,
   phonePattern,
+  textInputTypes,
   useInputField,
 } from "@/composables/forms"
 import { useModel } from "@/composables/setupHelpers"
@@ -62,7 +64,14 @@ export type {
 }
 
 // Forms exports
-export { emailPattern, looseToNumber, phonePattern, useInputField }
+export type { InputTypes }
+export {
+  emailPattern,
+  looseToNumber,
+  phonePattern,
+  textInputTypes,
+  useInputField,
+}
 
 // Setup helpers
 export { useModel }
