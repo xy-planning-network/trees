@@ -19,6 +19,7 @@ import {
   emailPattern,
   looseToNumber,
   phonePattern,
+  textInputTypes,
   useInputField,
 } from "@/composables/forms"
 import { useModel } from "@/composables/setupHelpers"
@@ -62,7 +63,14 @@ export type {
 }
 
 // Forms exports
-export { emailPattern, looseToNumber, phonePattern, useInputField }
+export type * from "@/composables/forms"
+export {
+  emailPattern,
+  looseToNumber,
+  phonePattern,
+  textInputTypes,
+  useInputField,
+}
 
 // Setup helpers
 export { useModel }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import type { InputOption } from "@/composables/forms"
+import { InputOption, TextInputType, textInputTypes } from "@/composables/forms"
 
 const options: InputOption[] = [
   {
@@ -36,22 +36,7 @@ const radioCardOptions = options.map((opt) => {
   }
 })
 
-const textLikeInputs = [
-  "date",
-  "datetime-local",
-  "email",
-  "month",
-  "number",
-  "password",
-  "search",
-  "tel",
-  "text",
-  "time",
-  "url",
-  "week",
-] as const
-
-const inputTypes: InputOption[] = textLikeInputs.map((type) => {
+const inputTypes: InputOption[] = textInputTypes.map((type) => {
   return {
     label: type,
     value: type,
@@ -61,15 +46,16 @@ const inputTypes: InputOption[] = textLikeInputs.map((type) => {
 /**
  * v-models
  */
-const inputTypeSelected = ref<(typeof textLikeInputs)[number]>("text")
+const inputTypeSelected = ref<TextInputType>("text")
 const inputVals = ref<Record<string, any>>({})
 const toggleValue = ref(undefined)
-
+const dateTimeInput = ref<string>("2015-08-01T15:30:00.000Z")
 /**
  * Copy Help
  */
 const checkboxCopy = `<Checkbox label="I'm here to party!" help="Get notified when the party starts." v-model="checked" />`
 const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
+const dateTimeCopy = `<DateTime v-model="dateTime" label="Select a date and time" help="Use your local timezone!" />`
 const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive" />`
 const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" label="Make Some Selections" help="Select all that apply." :options="options" />`
 const radioCopy = `<Radio :options="options" v-model="selected" />`
@@ -130,8 +116,17 @@ const dateRangeInputProps = [
   ...inputCommonProps,
 ]
 
+const dateTimeInputProps = [
+  {
+    name: "modelValue",
+    required: false,
+    type: `string`,
+  },
+  ...inputCommonProps,
+]
+
 const textLikeInputProps = [
-  { name: "type", required: true, type: textLikeInputs.join(" | ") },
+  { name: "type", required: true, type: textInputTypes.join(" | ") },
   { name: "modelValue", required: false, type: "string | number | null" },
   ...inputCommonProps,
 ]
@@ -356,6 +351,38 @@ const toggleProps = [
               <b>Value:</b> {{ inputVals["dateRangePicker"] }}
             </div>
             <PropsTable :props="dateRangeInputProps" />
+          </div>
+        </div>
+      </ComponentLayout>
+
+      <ComponentLayout class="mt-8" title="Date Time Input">
+        <template #description>
+          The DateTime input wraps the HTML datetime-local type input and
+          handles the v-model mutations necessary to adhere to the RFC 3339 date
+          format. Like BaseInput, this component will forward attributes like
+          disabled, max, min, required, and step.
+        </template>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="dateTimeCopy" />
+          </label>
+          <div class="mt-1">
+            <DateTime v-model="inputVals['dateTimeLocal']" required />
+
+            <div class="mt-4">
+              <b>Value:</b> {{ inputVals["dateTimeLocal"] }}
+            </div>
+
+            <div class="mt-4">
+              <DateTime
+                v-model="dateTimeInput"
+                label="Was this adjusted to your browsers timezone?"
+                help="Initialized with 2015-08-01T15:30:00.000Z"
+                disabled
+              />
+            </div>
+            <PropsTable :props="dateTimeInputProps" />
           </div>
         </div>
       </ComponentLayout>
@@ -696,6 +723,8 @@ const toggleProps = [
             <Radio :options="options" required label="Select an option" />
 
             <DateRangePicker label="Pick a date range!" required />
+
+            <DateTime label="Pick a date and time local to you!" required />
 
             <RadioCards
               label="Cards can be required"
