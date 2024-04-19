@@ -10,6 +10,7 @@ import {
 import type {
   TableColumns,
   TableActions,
+  TableRowData,
   DynamicTableOptions,
 } from "@/composables/table"
 import NeedleTag from "./examples/NeedleTags.vue"
@@ -113,10 +114,15 @@ const dynamicTableActions: TableActions<Conifer> = {
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
+  clickable: true,
   dateSearch: true,
   refreshTrigger: 0,
   search: true,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",
+}
+
+const handleDynamicTableOnClick = (e: TableRowData) => {
+  window.alert("You clicked: " + e.name)
 }
 
 const tableCopy = `<DynamicTable :table-columns="tableColumns" :table-options="tableOptions" />`
@@ -260,6 +266,7 @@ const tableProps = [
               :table-columns="tableColumns"
               :table-options="dynamicTableOptions"
               :table-actions="dynamicTableActions"
+              @click:row="handleDynamicTableOnClick"
             />
             <PropsTable :props="tableProps" />
           </div>
