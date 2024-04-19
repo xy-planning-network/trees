@@ -306,6 +306,9 @@ loadAndRender()
           <tr
             v-for="(row, rowIdx) in rows"
             :key="rowIdx"
+            :class="{
+              'hover:bg-gray-50 cursor-pointer': tableOptions.clickable,
+            }"
             @click="$emit('click:row', row.rowData)"
           >
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">

@@ -3,6 +3,7 @@ import { ActionItem } from "@/composables/nav"
 import { DateRangeProps } from "./date"
 
 export interface DynamicTableOptions {
+  clickable?: boolean
   dateSearch?: boolean | DateRangeProps
   defaultSort?: string
   defaultSortDirection?: string
