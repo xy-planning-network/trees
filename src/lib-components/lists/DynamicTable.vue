@@ -244,54 +244,56 @@ loadAndRender()
               class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
               :class="col.alignment"
             >
-              <span v-if="col.title">{{ col.title }}</span>
-              <span
-                v-if="col.sort"
-                class="cursor-pointer"
-                @click.prevent="handleSort(col.sort as string)"
-              >
-                <svg
-                  v-if="currentSort !== col.sort"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  class="h-5 inline"
+              <div class="flex items-center gap-2">
+                <span v-if="col.title">{{ col.title }}</span>
+                <span
+                  v-if="col.sort"
+                  class="cursor-pointer"
+                  @click.prevent="handleSort(col.sort as string)"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
-                <svg
-                  v-else-if="currentSortDirection == 'desc'"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  class="h-5 inline"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  class="h-5 inline"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                  <svg
+                    v-if="currentSort !== col.sort"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="h-5 inline"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                  <svg
+                    v-else-if="currentSortDirection == 'desc'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-5 inline"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-5 inline"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </div>
             </th>
 
             <!--Table Actions Header-->
@@ -306,6 +308,7 @@ loadAndRender()
           <tr
             v-for="(row, rowIdx) in rows"
             :key="rowIdx"
+            class="even:bg-gray-50"
             @click="$emit('click:row', row.rowData)"
           >
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
@@ -341,7 +344,7 @@ loadAndRender()
 
           <tr v-if="!hasContent">
             <td
-              :colspan="rows.length"
+              :colspan="columns.length + (hasActions ? 1 : 0)"
               class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               No items were found!
