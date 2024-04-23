@@ -236,21 +236,23 @@ loadAndRender()
       class="relative z-0 min-w-full align-middle border-b border-gray-200 shadow sm:rounded-lg overflow-x-auto"
     >
       <table class="min-w-full divide-y divide-gray-200">
-        <thead>
+        <thead class="bg-gray-100">
           <tr>
             <th
               v-for="(col, idx) in columns"
               :key="idx"
-              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase leading-4"
               :class="col.alignment"
             >
-              <div class="inline-flex items-center gap-2">
+              <div
+                class="inline-flex items-center gap-2"
+                :class="{ 'cursor-pointer': col.sort }"
+                @click.prevent="
+                  col.sort ? handleSort(col.sort as string) : undefined
+                "
+              >
                 <span v-if="col.title">{{ col.title }}</span>
-                <span
-                  v-if="col.sort"
-                  class="cursor-pointer"
-                  @click.prevent="handleSort(col.sort as string)"
-                >
+                <span v-if="col.sort">
                   <svg
                     v-if="currentSort !== col.sort"
                     xmlns="http://www.w3.org/2000/svg"
@@ -299,7 +301,7 @@ loadAndRender()
             <!--Table Actions Header-->
             <th
               v-if="hasActions"
-              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
+              class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase leading-4"
             />
           </tr>
         </thead>
