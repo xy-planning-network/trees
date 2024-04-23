@@ -244,7 +244,7 @@ loadAndRender()
               class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase bg-gray-50 leading-4"
               :class="col.alignment"
             >
-              <div class="flex items-center gap-2">
+              <div class="inline-flex items-center gap-2">
                 <span v-if="col.title">{{ col.title }}</span>
                 <span
                   v-if="col.sort"
