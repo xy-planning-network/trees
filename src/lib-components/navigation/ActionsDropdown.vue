@@ -29,7 +29,7 @@ const { floatingStyles } = useFloating(trigger, wrapper, {
   <Menu as="div" class="relative flex justify-end items-center">
     <MenuButton
       ref="trigger"
-      class="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-700 rounded-full hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="w-8 h-8 inline-flex items-center justify-center text-gray-700 rounded-full hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
       :disabled="!hasActions"
     >
       <span class="sr-only">Open options</span>
