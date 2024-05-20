@@ -22,6 +22,7 @@ const modalProps = [
   { name: "modelValue", required: true, type: "boolean" },
   { name: "submitText", required: false, type: "string" },
   { name: "title", required: true, type: "string" },
+  { name: "wide", required: false, type: "boolean" },
 ]
 const open = ref(false)
 const spinnerCopy = `useAppSpinner.show(); window.setTimeout(() => { useAppSpinner.hide(); }, 3000);`

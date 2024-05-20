@@ -13,12 +13,14 @@ withDefaults(
     destructive?: boolean
     disabled?: boolean
     modelValue: boolean
+    wide?: boolean
     submitText?: string
     title?: string
   }>(),
   {
     destructive: false,
     disabled: false,
+    wide: false,
     submitText: "",
     title: "",
   }
@@ -79,7 +81,8 @@ const updateModelValue = (value: boolean) => {
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full"
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full"
+            :class="wide ? 'sm:max-w-6xl' : 'sm:max-w-2xl'"
           >
             <div class="block absolute top-0 right-0 pt-4 pr-4">
               <button
