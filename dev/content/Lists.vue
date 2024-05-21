@@ -12,6 +12,7 @@ import type {
   TableActions,
   DynamicTableOptions,
 } from "@/composables/table"
+import { DetailListConfig } from "@/composables/list"
 import NeedleTag from "./examples/NeedleTags.vue"
 import { conifers } from "../../db.json"
 import { Conifer } from "./types/tree"
@@ -29,13 +30,19 @@ const cardsProps = [
     type: "{ primary: string; secondary: string }",
   },
 ]
-const detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`
+const detailListCopy = `<DetailList :config="detailListConfig"></DetailList>`
 const detailListProps = [
-  { name: "refreshTrigger", required: false, type: "number" },
-  { name: "reloadTrigger", required: false, type: "number" },
-  { name: "title", required: true, type: "string" },
   { name: "url", required: true, type: "string" },
+  { name: "alwaysHideNav", required: false, type: "boolean" },
+  { name: "dateSearch", required: false, type: "boolean | DateRangeProps " },
+  { name: "defaultSort", required: false, type: "string" },
+  { name: "defaultSortDir", required: false, type: "SortDir" },
+  { name: "perPage", required: false, type: "number" },
 ]
+const detailListConfig: DetailListConfig = {
+  url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+  dateSearch: true,
+}
 
 const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
 
@@ -162,10 +169,7 @@ const tableProps = [
             <ClickToCopy :value="detailListCopy" />
           </label>
           <div class="mt-1">
-            <DetailList
-              title="Things"
-              url="https://my-json-server.typicode.com/xy-planning-network/trees/things"
-            >
+            <DetailList :config="detailListConfig">
               <template #default="{ item }">
                 <div class="block cursor-pointer hover:bg-gray-50">
                   <div class="px-4 py-4 sm:px-6">
