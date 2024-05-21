@@ -2,21 +2,34 @@ import { DateRangeProps } from "./date"
 
 export interface DetailListConfig {
   /**
-   * date turns on the date-range filter input
-   */
-  dateSearch?: boolean | DateRangeProps
-
-  defaultSort?: string
-  defaultSortDir?: SortDir
-
-  /**
    * alwaysHideNav disables navigation components from displaying whatsoever.
    * This makes the List as a "single-page" limiting the number of results via perPage.
    */
   alwaysHideNav?: boolean
 
+  /**
+   * date turns on the date-range filter input
+   */
+  dateSearch?: boolean | DateRangeProps
+
+  /**
+   * defaultSort overrides the default field to sort items on.
+   */
+  defaultSort?: string
+
+  /**
+   * defaultSortDir overrides the default order to sort items with.
+   */
+  defaultSortDir?: SortDir
+
+  /**
+   * perPage overrides the default number of items per page to retrieve.
+   */
   perPage?: number
 
+  /**
+   * url is the endpoint to retrieve list data from
+   */
   url: string
 }
 
