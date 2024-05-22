@@ -23,7 +23,6 @@ import type {
 } from "./table"
 
 import type {
-  DetailListConfig,
   DetailListAPI,
   SortDir,
 } from "./list"
@@ -31,7 +30,6 @@ import type {
 export type {
   UseBaseAPIOptions,
   UseBaseAPI,
-  DetailListConfig,
   DetailListAPI,
   DynamicTableOptions,
   DynamicTableAPI,

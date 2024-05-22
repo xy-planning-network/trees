@@ -12,7 +12,6 @@ import type {
   TableActions,
   DynamicTableOptions,
 } from "@/composables/table"
-import { DetailListConfig } from "@/composables/list"
 import NeedleTag from "./examples/NeedleTags.vue"
 import { conifers } from "../../db.json"
 import { Conifer } from "./types/tree"
@@ -33,17 +32,13 @@ const cardsProps = [
 const detailListCopy = `<DetailList :config="detailListConfig"></DetailList>`
 const detailListProps = [
   { name: "url", required: true, type: "string" },
-  { name: "alwaysHideNav", required: false, type: "boolean" },
-  { name: "dateSearch", required: false, type: "boolean | DateRangeProps " },
+  { name: "borderless", required: false, type: "boolean" },
   { name: "defaultSort", required: false, type: "string" },
   { name: "defaultSortDir", required: false, type: "SortDir" },
+  { name: "disableDate", required: false, type: "boolean" },
+  { name: "disableNavigation", required: false, type: "boolean" },
   { name: "perPage", required: false, type: "number" },
 ]
-const detailListConfig: DetailListConfig = {
-  url: "https://my-json-server.typicode.com/xy-planning-network/trees/things",
-  dateSearch: true,
-}
-
 const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
 
 const coniferList = ref(conifers.data.items)
@@ -169,7 +164,9 @@ const tableProps = [
             <ClickToCopy :value="detailListCopy" />
           </label>
           <div class="mt-1">
-            <DetailList :config="detailListConfig">
+            <DetailList
+              url="https://my-json-server.typicode.com/xy-planning-network/trees/things"
+            >
               <template #default="{ item }">
                 <div class="block cursor-pointer hover:bg-gray-50">
                   <div class="px-4 py-4 sm:px-6">
