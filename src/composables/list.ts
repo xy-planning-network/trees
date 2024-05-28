@@ -5,7 +5,7 @@ export interface DetailListAPI {
    */
   refresh: () => void
   /**
-   * Reset the table data back to page 1 and load
+   * Reset the list data back to page 1 and load
    * @returns void
    */
   reset: () => void
