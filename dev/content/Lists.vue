@@ -29,14 +29,16 @@ const cardsProps = [
     type: "{ primary: string; secondary: string }",
   },
 ]
-const detailListCopy = `<DetailList title="Things" url="/things"></DetailList>`
+const detailListCopy = `<DetailList url="things"></DetailList>`
 const detailListProps = [
-  { name: "refreshTrigger", required: false, type: "number" },
-  { name: "reloadTrigger", required: false, type: "number" },
-  { name: "title", required: true, type: "string" },
   { name: "url", required: true, type: "string" },
+  { name: "borderless", required: false, type: "boolean" },
+  { name: "defaultSort", required: false, type: "string" },
+  { name: "defaultSortDir", required: false, type: "SortDir" },
+  { name: "disableDate", required: false, type: "boolean" },
+  { name: "disableNavigation", required: false, type: "boolean" },
+  { name: "perPage", required: false, type: "number" },
 ]
-
 const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
 
 const coniferList = ref(conifers.data.items)
@@ -163,7 +165,6 @@ const tableProps = [
           </label>
           <div class="mt-1">
             <DetailList
-              title="Things"
               url="https://my-json-server.typicode.com/xy-planning-network/trees/things"
             >
               <template #default="{ item }">

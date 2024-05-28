@@ -22,11 +22,18 @@ import type {
   TableRowsData,
 } from "./table"
 
+import type {
+  DetailListAPI,
+  SortDir,
+} from "./list"
+
 export type {
   UseBaseAPIOptions,
   UseBaseAPI,
+  DetailListAPI,
   DynamicTableOptions,
   DynamicTableAPI,
+  SortDir,
   TableActionItem,
   TableColumn,
   TableActions,

@@ -1,20 +1,58 @@
 <script setup lang="ts">
+import { computed, ref, watch } from "vue"
 import { useAppFlasher } from "@/composables"
-import { ref, watch } from "vue"
+import { SortDir, DetailListAPI } from "@/composables/list"
 import BaseAPI from "../../api/base"
 import DateFilter from "../layout/DateFilter.vue"
 import Paginator from "../navigation/Paginator.vue"
 
 const props = withDefaults(
   defineProps<{
-    refreshTrigger?: number
-    reloadTrigger?: number
-    title: string
+    /**
+     * borderless removes the default border styling applied around list items.
+     * This is useful when filters or pagination navigation components show,
+     * but less helpful when this component is dialed back in functionality.
+     */
+    borderless?: boolean
+
+    /**
+     * defaultSort overrides the default field to sort items on.
+     */
+    defaultSort?: string
+
+    /**
+     * defaultSortDir overrides the default order to sort items with.
+     */
+    defaultSortDir?: SortDir
+
+    /**
+     * disableDate turns off the date-range filter input.
+     */
+    disableDate?: boolean
+
+    /**
+     * disableNavigation hides navigation components from displaying.
+     * This makes the List as a "single-page" limiting the number of results via perPage.
+     */
+    disableNavigation?: boolean
+
+    /**
+     * perPage overrides the default number of items per page to retrieve.
+     */
+    perPage?: number
+
+    /**
+     * url is the endpoint to retrieve list data from
+     */
     url: string
   }>(),
   {
-    refreshTrigger: 0,
-    reloadTrigger: 0,
+    borderless: false,
+    disableNavigation: false,
+    disableDate: false,
+    defaultSort: "created_at",
+    defaultSortDir: "desc",
+    perPage: 10,
   }
 )
 
@@ -22,24 +60,31 @@ const dateRange = ref<{ minDate: number; maxDate: number }>({
   minDate: 0,
   maxDate: 0,
 })
-const hasContent = ref(true)
+
 const items = ref<any[]>([])
+
 const pagination = ref({
   page: 1,
-  perPage: 10,
+  perPage: props.perPage,
   totalItems: 0,
   totalPages: 0,
 })
-const sortDir = ref("DESC")
 
-const loadAndRender = (checkForContent: boolean): void => {
-  const params = {
+const sort = ref(props.defaultSort)
+const sortDir = ref(props.defaultSortDir)
+
+const loadAndRender = (): void => {
+  const params: Record<string, unknown> = {
+    maxDate: dateRange.value.maxDate,
+    minDate: dateRange.value.minDate,
     page: pagination.value.page,
     perPage: pagination.value.perPage,
+    q: "",
+    sort: sort.value,
     sortDir: sortDir.value,
   }
 
-  BaseAPI.get(props.url, {}, Object.assign(params, dateRange.value)).then(
+  BaseAPI.get(props.url, {}, params).then(
     (success: any) => {
       pagination.value = {
         page: success.data.page,
@@ -48,7 +93,6 @@ const loadAndRender = (checkForContent: boolean): void => {
         totalPages: success.data.totalPages,
       }
       items.value = success.data.items
-      if (checkForContent) hasContent.value = items.value.length != 0
     },
     () => {
       useAppFlasher.genericError()
@@ -56,39 +100,51 @@ const loadAndRender = (checkForContent: boolean): void => {
   )
 }
 
-watch([sortDir, dateRange], () => {
-  loadAndRender(false)
+const hasContent = computed((): boolean => {
+  return items.value.length ? true : false
 })
 
-watch(
-  () => props.refreshTrigger,
-  () => {
-    loadAndRender(false)
-  }
-)
+const filtersAreConfigured = computed(() => {
+  return !props.disableDate
+})
 
-watch(
-  () => props.reloadTrigger,
-  () => {
-    // This lets parent components trigger a refresh of the current page depending on external actions.
-    pagination.value.page = 1
-    loadAndRender(true)
-  }
-)
+const showPaginator = computed(() => {
+  return !props.disableNavigation && hasContent
+})
 
-loadAndRender(true)
+const reset = (): void => {
+  pagination.value.page = 1
+  loadAndRender()
+}
+
+const publicMethods: DetailListAPI = {
+  refresh: loadAndRender,
+  reset: reset,
+}
+
+watch([sortDir, dateRange], () => {
+  loadAndRender()
+})
+
+defineExpose(publicMethods)
+loadAndRender()
 </script>
 <template>
-  <div>
-    <DateFilter
-      :date-range="dateRange"
-      :sort-dir="sortDir"
-      :title="title"
-      @sort-dir-changed="sortDir = $event"
-      @date-range-changed="dateRange = $event"
-    />
+  <div :class="{ 'mt-4 space-y-2': filtersAreConfigured }">
+    <div v-if="!disableDate" class="flex">
+      <DateFilter
+        :date-range="dateRange"
+        :sort-dir="sortDir"
+        @sort-dir-changed="sortDir = $event"
+        @date-range-changed="dateRange = $event"
+      />
+    </div>
 
-    <div v-if="hasContent" class="shadow overflow-hidden sm:rounded-md border">
+    <div
+      v-if="hasContent"
+      class="overflow-hidden"
+      :class="{ 'shadow sm:rounded-md border': !borderless }"
+    >
       <ul>
         <li
           v-for="(item, idx) in items"
@@ -100,12 +156,12 @@ loadAndRender(true)
       </ul>
     </div>
 
-    <slot v-else name="empty"></slot>
+    <slot v-else name="empty"> No items were found! </slot>
 
     <Paginator
-      v-if="hasContent"
+      v-if="showPaginator"
       v-model="pagination"
-      @update:model-value="loadAndRender(false)"
+      @update:model-value="loadAndRender()"
     />
   </div>
 </template>
