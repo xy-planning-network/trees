@@ -112,7 +112,7 @@ const showPaginator = computed(() => {
   return !props.disableNavigation && hasContent
 })
 
-const reloadTable = (): void => {
+const reset = (): void => {
   pagination.value.page = 1
   loadAndRender()
 }
