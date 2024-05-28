@@ -29,7 +29,7 @@ const cardsProps = [
     type: "{ primary: string; secondary: string }",
   },
 ]
-const detailListCopy = `<DetailList :config="detailListConfig"></DetailList>`
+const detailListCopy = `<DetailList url="things"></DetailList>`
 const detailListProps = [
   { name: "url", required: true, type: "string" },
   { name: "borderless", required: false, type: "boolean" },
