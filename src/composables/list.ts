@@ -1,6 +1,6 @@
 export interface DetailListAPI {
   /**
-   * Force refresh the table data with the current api params state
+   * Force refresh the list data with the current api params state
    * @returns void
    */
   refresh: () => void
