@@ -119,7 +119,7 @@ const reset = (): void => {
 
 const publicMethods: DetailListAPI = {
   refresh: loadAndRender,
-  reset: reloadTable,
+  reset: reset,
 }
 
 watch([sortDir, dateRange], () => {
