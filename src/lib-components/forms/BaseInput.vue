@@ -61,6 +61,10 @@ const onInput = (e: Event) => {
     val = looseToNumber(val)
   }
 
+  if (typeof val === "string") {
+    val = val.trim()
+  }
+
   modelState.value = val
 
   inputValidation(e)

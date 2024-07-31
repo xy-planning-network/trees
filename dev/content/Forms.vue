@@ -183,7 +183,10 @@ const toggleProps = [
             class="xy-link"
             target="_blank"
             >input variations</a
-          >.
+          >. When the type attibute is set to 'number' the value returned will
+          be a number making v-model.number modifiers unnecessary. Likewise, the
+          `trim()` method is applies to all string values making the
+          v-model.trim modifier unnecessary.
         </template>
 
         <div>
@@ -258,7 +261,9 @@ const toggleProps = [
 
       <ComponentLayout class="mt-8" title="Textarea">
         <template #description>
-          A common and consistent textarea input.
+          A common and consistent textarea input. Return values are
+          automatically trimed with the `trim()` method and the v-model.trim
+          modifier is unnecessary.
         </template>
 
         <div>
@@ -538,18 +543,11 @@ const toggleProps = [
         <template #description>
           Similar to checkboxes, these are wrapped in a vue component given
           their nested structure so that we are consistent across all projects.
-          <br /><br />Note that the
-          <a
-            class="xy-link"
-            href="https://v3.vuejs.org/guide/forms.html#value-bindings"
-            >Value Bindings</a
-          >
-          section of the Vue docs states that binding values for selects are
-          usually static strings. Use the <b>v-model.number </b>
-          <a class="xy-link" href="https://v3.vuejs.org/guide/forms.html#number"
-            >modifier</a
-          >
-          if you need the binding to be typecast as a number.
+          <br /><br />When the options set use number types as their values, the
+          return value of the input will also be a number making v-model.number
+          usage unnecessary. <br /><br />As a best practice avoid mixing string
+          and number type values in the options and note that mixed types that
+          resolve to the same string value, ex: '3' and 3 are not supported.
         </template>
 
         <div>
