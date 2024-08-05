@@ -26,8 +26,17 @@ const {
 } = useInputField(props)
 
 const onChange = (e: Event) => {
-  modelState.value = (e.target as HTMLInputElement).value
-  validate(e)
+  // NOTE(spk): The selectedIndex references the list of options in tree order
+  // https://html.spec.whatwg.org/multipage/form-elements.html#dom-select-selectedindex
+  const selectedIndex = (e.target as HTMLSelectElement).selectedIndex
+
+  // NOTE(spk): we disable the 0 index option in the list, so there's
+  // no expectation it will trigger a change event.  Likewise, dynamic updates to
+  // a modelValue prop in a parent do not trigger the change event.
+  if (selectedIndex > 0) {
+    modelState.value = props.options[selectedIndex - 1].value
+    validate(e)
+  }
 }
 </script>
 

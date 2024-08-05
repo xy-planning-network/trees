@@ -22,7 +22,7 @@ const {
 } = useInputField(props)
 
 const onInput = (e: Event) => {
-  modelState.value = (e.target as HTMLInputElement).value
+  modelState.value = (e.target as HTMLInputElement).value.trim()
   inputValidation(e)
 }
 </script>
