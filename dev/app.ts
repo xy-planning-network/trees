@@ -1,25 +1,27 @@
 import { createApp } from "vue"
-import Serve from "./app.vue"
-// To register individual components where they are used (serve.vue) instead of using the
-// library as a whole, comment/remove this import and it's corresponding "app.use" call
-import Trees from "@/entry"
+import Trees, {
+  setBaseAPIDefaults,
+  useAppFlashes,
+  type TreesComponents,
+} from "@/entry"
 import ClickToCopy from "./components/ClickToCopy.vue"
 import ComponentLayout from "./components/ComponentLayout.vue"
 import PropsTable from "./components/PropsTable.vue"
+import Serve from "./app.vue"
 import "./main.css"
-import { setBaseAPIDefaults } from "@/api/base"
-import { useAppFlashes } from "@/composables/useFlashes"
 
-setBaseAPIDefaults({ baseURL: "/" })
-useAppFlashes().configure({ email: "support@trees.com" })
-
-declare module "@vue/runtime-core" {
-  interface GlobalComponents {
+// NOTE(spk): This declaration has changed.
+// See: https://github.com/vuejs/language-tools/wiki/Global-Component-Types
+declare module "vue" {
+  interface GlobalComponents extends TreesComponents {
     ClickToCopy: typeof ClickToCopy
     ComponentLayout: typeof ComponentLayout
     PropsTable: typeof PropsTable
   }
 }
+
+setBaseAPIDefaults({ baseURL: "/" })
+useAppFlashes().configure({ email: "support@trees.com" })
 
 const app = createApp(Serve)
 app.use(Trees)

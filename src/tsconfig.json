@@ -1,8 +1,19 @@
 {
   "extends": "../tsconfig",
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": true,
-    "outDir": "../types"
+    "outDir": "../types",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   },
-  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.tsx", "./**/*.vue"]
+  "include": [
+    "./**/*.ts",
+    "./**/*.d.ts",
+    "./**/*.tsx",
+    "./**/*.vue"
+  ]
 }
