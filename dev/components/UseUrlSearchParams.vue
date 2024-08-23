@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUrlSearchParams } from "@/composables";
-import CodeSample from "../../helpers/CodeSample.vue"
-import ProseBase from "../../helpers/ProseBase.vue"
+import CodeSample from "./CodeSample.vue"
+import ProseBase from "./ProseBase.vue"
 
 interface SearchParams {
   q: string

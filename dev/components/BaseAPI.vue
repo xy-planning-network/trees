@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import CodeSample from "../../helpers/CodeSample.vue";
-import ProseBase from "../../helpers/ProseBase.vue"
+import CodeSample from "./CodeSample.vue";
+import ProseBase from "./ProseBase.vue"
 </script>
 
 <template>

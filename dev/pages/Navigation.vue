@@ -2,8 +2,8 @@
 import { computed, ref } from "vue"
 import User from "@/composables/user"
 import { ActionItem, useTabHistory } from "@/composables/nav"
-import ProseBase from "../helpers/ProseBase.vue"
-import CodeSample from "../helpers/CodeSample.vue"
+import ProseBase from "../components/ProseBase.vue"
+import CodeSample from "../components/CodeSample.vue"
 
 defineProps<{
   user: User

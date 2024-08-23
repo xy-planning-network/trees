@@ -4,8 +4,8 @@ import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
-import ProseBase from "../helpers/ProseBase.vue"
-import CodeSample from "../helpers/CodeSample.vue"
+import ProseBase from "../components/ProseBase.vue"
+import CodeSample from "../components/CodeSample.vue"
 import type { Placement } from "@floating-ui/vue"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`

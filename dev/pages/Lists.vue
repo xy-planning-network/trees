@@ -12,9 +12,9 @@ import type {
   TableActions,
   DynamicTableOptions,
 } from "@/composables/table"
-import NeedleTag from "./examples/NeedleTags.vue"
+import NeedleTag from "../components/NeedleTags.vue"
 import { conifers } from "../../db.json"
-import { Conifer } from "./types/tree"
+import { Conifer } from "../domain/tree"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },

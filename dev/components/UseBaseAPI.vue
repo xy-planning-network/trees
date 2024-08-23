@@ -2,10 +2,10 @@
 import { isHttpError } from "@/api/base"
 import { ReqOptions, TrailsRespPaged } from "@/api/client"
 import { computed } from "vue"
-import useBaseAPI from "../../../src/composables/useBaseAPI"
-import { debounceLeading } from "../../../src/helpers/Debounce"
-import CodeSample from "../../helpers/CodeSample.vue"
-import ProseBase from "../../helpers/ProseBase.vue"
+import useBaseAPI from "../../src/composables/useBaseAPI"
+import { debounceLeading } from "../../src/helpers/Debounce"
+import CodeSample from "./CodeSample.vue"
+import ProseBase from "./ProseBase.vue"
 
 interface Conifer {
   id: number 

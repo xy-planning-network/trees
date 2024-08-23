@@ -1,14 +1,22 @@
 // include the type interfaces for Window and GlobalComponents
 /// <reference types="../src/components" />
 
+declare global {
+  interface Window {
+    Prism: {
+      highlightAll: () => void
+    }
+  }
+}
+
 import { createApp } from "vue"
-import Serve from "./serve.vue"
+import Serve from "./app.vue"
 // To register individual components where they are used (serve.vue) instead of using the
 // library as a whole, comment/remove this import and it's corresponding "app.use" call
 import Trees from "@/entry"
-import ClickToCopy from "./helpers/ClickToCopy.vue"
-import ComponentLayout from "./helpers/ComponentLayout.vue"
-import PropsTable from "./helpers/PropsTable.vue"
+import ClickToCopy from "./components/ClickToCopy.vue"
+import ComponentLayout from "./components/ComponentLayout.vue"
+import PropsTable from "./components/PropsTable.vue"
 import "./main.css"
 import { setBaseAPIDefaults } from "@/api/base"
 import { useAppFlashes } from "@/composables/useFlashes"
