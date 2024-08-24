@@ -1,20 +1,20 @@
 #### Example Usage
 
-```vue
+```html
 <script setup lang="ts">
-interface SearchParams {
-  q: string
-  isActive: boolean
-  attributes: string[]
-}
+  interface SearchParams {
+    q: string
+    isActive: boolean
+    attributes: string[]
+  }
 
-// If you're attempting to hydrate fields with a request that contains search params.
-// Parse the params on the server and send them as a page prop to your search component.
-const props = defineProps<{
-  initialParams: SearchParams
-}>
+  // If you're attempting to hydrate fields with a request that contains search params.
+  // Parse the params on the server and send them as a page prop to your search component.
+  const props = defineProps<{
+    initialParams: SearchParams
+  }>
 
-const searchParams = useUrlSearchParams(props.initialParam)
+  const searchParams = useUrlSearchParams(props.initialParam)
 </script>
 
 <template>
