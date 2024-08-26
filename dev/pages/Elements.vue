@@ -16,11 +16,26 @@ const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
 
 const typefaces = {
-  "font-inter": "Inter",
+  "font-sans": "Open Sans",
   "font-display": "Work Sans",
 }
 
+// NOTE(spk): explicitly written out so that tailwind doesn't prune the values
+const fontSizes = [
+  "text-xs",
+  "text-sm",
+  "text-base",
+  "text-lg",
+  "text-xl",
+  "text-2xl",
+  "text-3xl",
+  "text-4xl",
+  "text-5xl",
+  "text-6xl",
+]
+
 const weights = [
+  "font-light",
   "font-normal",
   "font-medium",
   "font-semibold",
@@ -377,36 +392,46 @@ const alertProps = [
 
       <ComponentLayout :css-component="true" title="Fonts">
         <template #description
-          >There are two fonts available. Inter (font-sans) is the default
+          >There are two fonts available. Open Sans (font-sans) is the default
           interface font and should be used for most things. Work Sans
-          (font-display) is useful for headings and more marketing focused
-          content.</template
+          (font-display) is useful for small interface features like buttons and
+          stand-out title and headings. Think of it as the brand typeface, but
+          use it sparingly as Open Sans is a better general use typeface for
+          interfaces.</template
         >
 
         <div class="space-y-10">
-          <div class="space-y-10">
-            <div v-for="weight in weights" :key="weight">
-              <h5 class="text-sm font-semibold text-gray-900">{{ weight }}</h5>
-              <div class="grid grid-cols-2 gap-x-6">
-                <template
-                  v-for="(name, typeface) in typefaces"
-                  :key="`${typeface}-${weight}`"
-                >
-                  <div>
-                    <h5 class="text-sm font-semibold text-gray-900">
-                      {{ name }}
-                    </h5>
-                    <div
-                      v-for="header in 6"
-                      :key="`${typeface}-${header}-${weight}`"
-                      class="mt-1 bg-gray-100"
-                    >
-                      <component :is="`h${header}`" :class="[weight, typeface]"
-                        >Header H{{ header }}</component
-                      >
-                    </div>
+          <div
+            v-for="(name, typeface) in typefaces"
+            :key="typeface"
+            class="space-y-10"
+          >
+            <div>
+              <h5 class="text-lg font-semibold text-gray-900 mb-2">
+                {{ name }} Font Sizes
+              </h5>
+
+              <div class="space-y-5">
+                <div v-for="size in fontSizes" :key="`${typeface}-${size}`">
+                  <div class="text-sm text-gray-700">{{ size }}</div>
+                  <div :class="[size, typeface, 'font-normal bg-gray-100']">
+                    The quick brown fox jumps over the lazy dog.
                   </div>
-                </template>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="text-lg font-semibold text-gray-900 mb-2">
+                {{ name }} Font Weights
+              </h5>
+              <div class="space-y-5">
+                <div v-for="weight in weights" :key="`${typeface}-${weight}`">
+                  <div class="text-sm text-gray-700">{{ weight }}</div>
+                  <div :class="[weight, typeface, 'text-xl bg-gray-100']">
+                    The quick brown fox jumps over the lazy dog.
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -21,6 +21,7 @@ module.exports = {
       animation: treesTheme.animation,
       colors: treesTheme.colors,
       fontFamily: treesTheme.fontFamily,
+      fontWeight: treesTheme.fontWeight,
       typography: (theme) => {
         return {
           DEFAULT: {
