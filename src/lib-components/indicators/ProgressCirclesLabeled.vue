@@ -88,12 +88,12 @@ const layoutSteps = computed(() => {
                 'text-sm font-bold': true,
                 'text-gray-800': step.status === 'complete',
                 'text-xy-blue': step.status === 'current',
-                'text-gray-500': step.status === 'incomplete',
+                'text-gray-600': step.status === 'incomplete',
                 'mt-2': !step.description,
               }"
               >{{ step.name }}</span
             >
-            <span v-if="step.description" class="text-sm text-gray-500">{{
+            <span v-if="step.description" class="text-sm text-gray-600">{{
               step.description
             }}</span>
           </span>

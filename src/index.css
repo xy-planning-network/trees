@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply antialiased;
+    font-optical-sizing: auto;
+  }
+
   /* general body copy */
   body {
-    @apply text-base leading-normal text-gray-900;
+    @apply text-base leading-normal text-gray-800; /* NOTE(spk): expecting this to eventually hold the xy-black value */
   }
 
   /* Headers */

@@ -53,7 +53,7 @@ const layoutSteps = computed(() => {
           <div
             :class="[
               'h-0.5 w-full',
-              step.status === 'complete' ? 'bg-xy-blue' : 'bg-gray-200',
+              step.status === 'complete' ? 'bg-xy-blue' : 'bg-gray-300',
             ]"
           />
         </div>
