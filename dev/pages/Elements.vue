@@ -55,6 +55,11 @@ const alertProps = [
         >
           <ColorRow name="" :colors="colors['xy-blue']" code="xy-blue" />
           <ColorRow name="" :colors="colors['xy-green']" code="xy-green" />
+          <ColorRow
+            name=""
+            :colors="colors['xy-neutral']"
+            code="xy-neutral/gray"
+          />
         </div>
       </ComponentLayout>
 
