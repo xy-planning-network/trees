@@ -3,7 +3,6 @@ import "prismjs"
 import "prismjs/components/prism-typescript"
 import "prismjs/components/prism-markup"
 import "prismjs/components/prism-markup-templating"
-import "prismjs/themes/prism-tomorrow.min.css"
 import Trees, {
   setBaseAPIDefaults,
   useAppFlashes,

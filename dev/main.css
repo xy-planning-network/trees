@@ -1,1 +1,10 @@
+@import "prismjs/themes/prism-tomorrow.min.css";
 @import "../src/index.css";
+
+/* NOTE(spk): override the styles added by import "prismjs/themes/prism-tomorrow.min.css" */
+@layer base {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    @apply text-sm leading-relaxed;
+  }
+}
