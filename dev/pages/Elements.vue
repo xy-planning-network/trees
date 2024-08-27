@@ -403,6 +403,14 @@ const alertProps = [
           </div>
         </div>
       </ComponentLayout>
+
+      <ComponentLayout :css-component="true" title="Rounded">
+        <template #description>
+          An experimental border-radius utility for matching rounded corners
+          with the brand design language.
+        </template>
+        <Rounded />
+      </ComponentLayout>
     </div>
   </div>
 </template>

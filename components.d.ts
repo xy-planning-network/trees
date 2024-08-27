@@ -10,6 +10,7 @@ declare module 'vue' {
     BaseAPIDocs: typeof import('./dev/docs/BaseAPIDocs.md')['default']
     ButtonDocs: typeof import('./dev/docs/ButtonDocs.md')['default']
     FlashDocs: typeof import('./dev/docs/FlashDocs.md')['default']
+    Rounded: typeof import('./dev/docs/Rounded.md')['default']
     StackingContextDocs: typeof import('./dev/docs/StackingContextDocs.md')['default']
     UseBaseAPIDocs: typeof import('./dev/docs/UseBaseAPIDocs.md')['default']
     UseTabHistoryDocs: typeof import('./dev/docs/UseTabHistoryDocs.md')['default']

@@ -19,6 +19,7 @@ module.exports = {
     },
     extend: {
       animation: treesTheme.animation,
+      borderRadius: treesTheme.borderRadius,
       colors: treesTheme.colors,
       fontFamily: treesTheme.fontFamily,
       fontWeight: treesTheme.fontWeight,
