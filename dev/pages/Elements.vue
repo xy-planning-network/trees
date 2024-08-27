@@ -9,10 +9,6 @@ const badgePrimary = ref<HTMLElement>()
 const badgeInfo = ref<HTMLElement>()
 const badgeSuccess = ref<HTMLElement>()
 const badgeAlert = ref<HTMLElement>()
-const btnPrimary = ref<HTMLElement>()
-const btnSecondary = ref<HTMLElement>()
-const btnRed = ref<HTMLElement>()
-const btnWhite = ref<HTMLElement>()
 const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
 
@@ -203,47 +199,7 @@ const alertProps = [
           Buttons are the best. Clickable. What's not to love.
         </template>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="btnPrimary?.outerHTML" />
-          </label>
-          <div class="mt-1">
-            <button ref="btnPrimary" type="button" class="xy-btn">
-              Primary
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="btnSecondary?.outerHTML" />
-          </label>
-          <div class="mt-1">
-            <button ref="btnSecondary" type="button" class="xy-btn-secondary">
-              Secondary
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="btnRed?.outerHTML" />
-          </label>
-          <div class="mt-1">
-            <button ref="btnRed" type="button" class="xy-btn-red">Red</button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="btnWhite?.outerHTML" />
-          </label>
-          <div class="mt-1">
-            <button ref="btnWhite" type="button" class="xy-btn-white">
-              White
-            </button>
-          </div>
-        </div>
+        <ButtonDocs />
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" :css-component="true" title="Links">

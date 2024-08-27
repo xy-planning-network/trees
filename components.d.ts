@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BaseAPIDocs: typeof import('./dev/docs/BaseAPIDocs.md')['default']
+    ButtonDocs: typeof import('./dev/docs/ButtonDocs.md')['default']
     FlashDocs: typeof import('./dev/docs/FlashDocs.md')['default']
     StackingContextDocs: typeof import('./dev/docs/StackingContextDocs.md')['default']
     UseBaseAPIDocs: typeof import('./dev/docs/UseBaseAPIDocs.md')['default']

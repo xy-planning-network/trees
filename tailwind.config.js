@@ -2,5 +2,5 @@
 const baseConfig = require("./config/tailwind.config")
 module.exports = {
   ...baseConfig,
-  content: [...baseConfig.content, "./dev/**/*.vue"],
+  content: [...baseConfig.content, "./dev/**/*.vue", "./dev/docs/**/*.md"],
 }

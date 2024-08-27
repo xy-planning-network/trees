@@ -121,7 +121,7 @@ const updateModelValue = (value: boolean) => {
               <button
                 ref="cancelButtonRef"
                 type="button"
-                class="xy-btn-white mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                class="xy-btn-neutral mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 @click="updateModelValue(false)"
               >
                 Cancel

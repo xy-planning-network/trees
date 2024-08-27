@@ -26,15 +26,17 @@ module.exports = {
         return {
           DEFAULT: {
             css: {
-              color: theme("colors.gray.900"),
+              color: theme("colors.neutral.800"),
               a: {
-                color: theme("colors.xy-blue.DEFAULT"),
+                textDecoration: "none",
+                borderBottom: `2px solid ${theme("colors.xy-blue.DEFAULT")}`,
                 "&:hover": {
-                  color: theme("colors.blue.700"),
+                  color: theme("colors.xy-blue.DEFAULT"),
+                  borderBottomColor: theme("colors.transparent"),
                 },
               },
               "h2, h3, h4": {
-                color: theme("colors.gray.900"),
+                color: theme("colors.neutral.800"),
               },
             },
           },
