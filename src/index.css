@@ -42,15 +42,20 @@
 @layer components {
   /* Badge classes - TODO: handle anchor tag class cases and generic wrapper cases */
   .xy-badge {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800;
   }
 
   .xy-badge-blue {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800;
+  }
+
+  .xy-badge-green {
+    /* NOTE(spk): currently does not meet contrast ratio requirements */
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-xy-green-50/40 text-xy-green-900;
   }
 
   .xy-badge-yellow {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800;
   }
 
   /* Button classes */

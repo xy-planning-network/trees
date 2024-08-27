@@ -7,6 +7,7 @@ import { InputOption } from "@/composables/forms"
 
 const badgePrimary = ref<HTMLElement>()
 const badgeInfo = ref<HTMLElement>()
+const badgeSuccess = ref<HTMLElement>()
 const badgeAlert = ref<HTMLElement>()
 const btnPrimary = ref<HTMLElement>()
 const btnSecondary = ref<HTMLElement>()
@@ -175,6 +176,15 @@ const alertProps = [
           </label>
           <div class="mt-1">
             <span ref="badgeInfo" class="xy-badge-blue">Info</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="badgeSuccess?.outerHTML" />
+          </label>
+          <div class="mt-1">
+            <span ref="badgeSuccess" class="xy-badge-green">Most Popular</span>
           </div>
         </div>
 
