@@ -66,14 +66,14 @@ const onUpdate = (val: unknown) => {
       <FieldsetLegend tag="div" :label="label" :required="isRequired" />
     </RadioGroupLabel>
 
-    <RadioGroupDescription v-if="help">
+    <RadioGroupDescription v-if="help" class="mt-1">
       <InputHelp :text="help" />
     </RadioGroupDescription>
 
-    <InputError :id="aria.errormessage" :text="errorState" />
+    <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
 
     <div
-      class="mt-4 grid grid-cols-1 gap-y-5 gap-x-4 relative"
+      class="mt-6 grid grid-cols-1 gap-y-5 gap-x-4 relative"
       :class="{
         'sm:grid-cols-2': columns === 2,
         'sm:grid-cols-3': columns === 3,
@@ -87,9 +87,9 @@ const onUpdate = (val: unknown) => {
           checked,
           disabled,
         }: {
-          active: boolean,
-          checked: boolean,
-          disabled: boolean,
+          active: boolean
+          checked: boolean
+          disabled: boolean
         }"
         as="template"
         :disabled="isDisabled || option.disabled"
