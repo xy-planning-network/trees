@@ -7,10 +7,12 @@ import {
   TableIcon,
   UserGroupIcon,
   HomeIcon,
+  StatusOnlineIcon,
 } from "@heroicons/vue/outline"
 
 import Elements from "./Elements.vue"
 import Forms from "./Forms.vue"
+import Indicators from "./Indicators.vue"
 import Lists from "./Lists.vue"
 import Navigation from "./Navigation.vue"
 import Overlays from "./Overlays.vue"
@@ -57,6 +59,13 @@ export const pages = [
     icon: CollectionIcon,
     url: `${import.meta.env.BASE_URL}?page=Overlays`,
     component: Overlays,
+  },
+  {
+    name: "Indicators",
+    description: "What is happening?  What step am I on?",
+    icon: StatusOnlineIcon,
+    url: `${import.meta.env.BASE_URL}?page=Indicators`,
+    component: Indicators,
   },
   {
     name: "Elements",
