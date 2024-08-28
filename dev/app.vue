@@ -13,7 +13,7 @@ const appLayout = (() => {
     window.localStorage.setItem(key, layout)
   }
 
-  return window.localStorage.getItem(key) || "SidebarLayout"
+  return window.localStorage.getItem(key) || "StackedLayout"
 })()
 
 /**

@@ -62,84 +62,82 @@ const tabsProps = [
 ]
 </script>
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
-      <ComponentLayout title="Actions Dropdown">
-        <template #description>
-          This is an accessible component that handles a dropdown menu to take
-          further actions. It emits an event to the bus so that they can be
-          handled by a parent or sibling component.
-        </template>
+  <div class="docs-page-wrapper">
+    <ComponentLayout title="Actions Dropdown">
+      <template #description>
+        This is an accessible component that handles a dropdown menu to take
+        further actions. It emits an event to the bus so that they can be
+        handled by a parent or sibling component.
+      </template>
 
-        <div>
-          <label
-            class="relative flex justify-end items-center mr-1 text-sm font-medium text-gray-700"
-          >
-            <ClickToCopy :value="actionsDropdownCopy" />
-          </label>
-          <div class="mt-1">
-            <ActionsDropdown :actions="menuItems" />
-            <PropsTable :props="actionsDropdownProps" />
-          </div>
+      <div>
+        <label
+          class="relative flex justify-end items-center mr-1 text-sm font-medium text-gray-700"
+        >
+          <ClickToCopy :value="actionsDropdownCopy" />
+        </label>
+        <div class="mt-1">
+          <ActionsDropdown :actions="menuItems" />
+          <PropsTable :props="actionsDropdownProps" />
         </div>
-      </ComponentLayout>
+      </div>
+    </ComponentLayout>
 
-      <ComponentLayout class="mt-8" title="Paginator">
-        <template #description>
-          This is used to create page numbers based on our server side paging
-          implementation underneath a list of data.
-        </template>
+    <ComponentLayout title="Paginator">
+      <template #description>
+        This is used to create page numbers based on our server side paging
+        implementation underneath a list of data.
+      </template>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="paginatorCopy" />
-          </label>
-          <div class="mt-1">
-            <p class="text-center font-bold mt-2 mb-8">
-              Current Page: {{ pagination.page }}
-            </p>
-            <Paginator v-model="pagination" />
-            <PropsTable :props="paginatorProps" />
-          </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="paginatorCopy" />
+        </label>
+        <div class="mt-1">
+          <p class="text-center font-bold mt-2 mb-8">
+            Current Page: {{ pagination.page }}
+          </p>
+          <Paginator v-model="pagination" />
+          <PropsTable :props="paginatorProps" />
         </div>
-      </ComponentLayout>
+      </div>
+    </ComponentLayout>
 
-      <ComponentLayout class="mt-8" title="Tabs">
-        <template #description>
-          These are used to display different groups of content. It turns into a
-          select on mobile. When combined with the useTabHistory composable, the
-          activeTab will be synced with window.location.search params.
-        </template>
+    <ComponentLayout title="Tabs">
+      <template #description>
+        These are used to display different groups of content. It turns into a
+        select on mobile. When combined with the useTabHistory composable, the
+        activeTab will be synced with window.location.search params.
+      </template>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700">
-            <ClickToCopy :value="tabsCopy" />
-          </label>
-          <div class="mt-1">
-            <div class="my-6">
-              <Toggle v-model="tabsPillDesign" label="Use Pill Design" />
-            </div>
-            <Tabs
-              v-model="activeTab"
-              :pill-design="tabsPillDesign"
-              :tabs="tabs"
-            />
-            <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
-              <span v-if="isActiveTab('tab1')" class="xy-badge-yellow">
-                Tab 1 Content
-              </span>
-              <span v-if="isActiveTab('tab2')" class="xy-badge-blue">
-                Tab 2 Content
-              </span>
-            </div>
-
-            <div class="my-10">
-              <UseTabHistoryDocs />
-            </div>
-            <PropsTable :props="tabsProps" />
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="tabsCopy" />
+        </label>
+        <div class="mt-1">
+          <div class="my-6">
+            <Toggle v-model="tabsPillDesign" label="Use Pill Design" />
           </div>
+          <Tabs
+            v-model="activeTab"
+            :pill-design="tabsPillDesign"
+            :tabs="tabs"
+          />
+          <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
+            <span v-if="isActiveTab('tab1')" class="xy-badge-yellow">
+              Tab 1 Content
+            </span>
+            <span v-if="isActiveTab('tab2')" class="xy-badge-blue">
+              Tab 2 Content
+            </span>
+          </div>
+
+          <div class="my-10">
+            <UseTabHistoryDocs />
+          </div>
+          <PropsTable :props="tabsProps" />
         </div>
-      </ComponentLayout>
-    </div>
+      </div>
+    </ComponentLayout>
   </div>
 </template>

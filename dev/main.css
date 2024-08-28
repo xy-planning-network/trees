@@ -8,3 +8,9 @@
     @apply text-sm leading-relaxed;
   }
 }
+
+@layer components {
+  .docs-page-wrapper {
+    @apply max-w-5xl mx-auto space-y-16;
+  }
+}
