@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import ColorRow from "../../dev/helpers/ColorRow.vue"
+import ColorRow from "../components/ColorRow.vue"
 import colors from "../../config/theme/colors"
-import PropsTable from "../../dev/helpers/PropsTable.vue"
+import PropsTable from "../components/PropsTable.vue"
 import { InputOption } from "@/composables/forms"
 
 const badgePrimary = ref<HTMLElement>()

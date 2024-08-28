@@ -2,8 +2,6 @@
 import { computed, ref } from "vue"
 import User from "@/composables/user"
 import { ActionItem, useTabHistory } from "@/composables/nav"
-import ProseBase from "../helpers/ProseBase.vue"
-import CodeSample from "../helpers/CodeSample.vue"
 
 defineProps<{
   user: User
@@ -136,32 +134,7 @@ const tabsProps = [
             </div>
 
             <div class="my-10">
-              <ProseBase>
-                <h4>Example Usage with useTabHistory</h4>
-                <p>
-                  Note: if you don't wish to track the tab state on the url,
-                  just pass your ref and tabs directly to the component.
-                </p>
-                <h5>Script Setup</h5>
-                <!-- prettier-ignore -->
-                <CodeSample>{{`
-<script setup lang="ts"&gt;
-const {activeTab, isActiveTab, tabs} = useTabHistory(
-    [{label: "Tab One", value: "tab-1"}, {label: "Tab Two", value: "tab-2"}]
-})
-</script&gt;
-`}}</CodeSample>
-
-                <h5>Template</h5>
-                <!-- prettier-ignore -->
-                <CodeSample language="html">{{`
-<template&gt;
-    <Tabs v-model="activeTab" :tabs="tabs" />
-    <div v-if="isActiveTab('tab-1')">Tab 1 Content</div>
-    <div v-if="isActiveTab('tab-2')">Tab 2 Content</div>
-</template&gt;
-`}}</CodeSample>
-              </ProseBase>
+              <UseTabHistoryDocs />
             </div>
             <PropsTable :props="tabsProps" />
           </div>

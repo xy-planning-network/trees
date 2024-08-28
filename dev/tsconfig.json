@@ -1,4 +1,22 @@
 {
   "extends": "../tsconfig",
-  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.tsx", "./**/*.vue"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "./*": [
+        "./*"
+      ],
+      "@/*": [
+        "../src/*"
+      ]
+    }
+  },
+  "include": [
+    "./**/*.md",
+    "./**/*.ts",
+    "./**/*.d.ts",
+    "./**/*.tsx",
+    "./**/*.vue",
+    "../components.d.ts",
+  ]
 }

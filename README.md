@@ -246,7 +246,7 @@ import {
  * should provide code completiong support in your editor - milage may vary
  * provides proper type checking on the components declared props
  */
-declare module "@vue/runtime-core" {
+declare module "vue" {
   interface GlobalComponents {
     BaseInput: typeof BaseInput
     Checkbox: typeof Checkbox
