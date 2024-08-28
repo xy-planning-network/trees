@@ -46,7 +46,7 @@ const layoutSteps = computed(() => {
       <li
         v-for="(step, index) in layoutSteps"
         :key="index"
-        :class="[index !== layoutSteps.length - 1 ? 'pb-10' : '', 'relative']"
+        :class="[index !== layoutSteps.length - 1 ? 'pb-6' : '', 'relative']"
       >
         <!--NOTE: vertical connecting bar-->
         <div

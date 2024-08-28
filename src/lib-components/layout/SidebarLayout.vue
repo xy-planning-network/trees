@@ -90,32 +90,36 @@ const isActive = (url: string): boolean => {
               <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
             </div>
             <div class="mt-5 flex flex-col flex-1 h-0 overflow-y-auto">
-              <nav class="flex-1 px-2 space-y-1">
-                <a
-                  v-for="item in navigation"
-                  :key="item.name"
-                  :href="item.url"
-                  :class="[
-                    isActive(item.url)
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                    'group flex items-center px-2 py-2 text-base font-semibold rounded-md',
-                  ]"
-                  :target="item.openInTab ? '_blank' : '_self'"
-                >
-                  <component
-                    :is="item.icon"
-                    :class="[
-                      isActive(item.url)
-                        ? 'text-gray-600'
-                        : 'text-gray-500 group-hover:text-gray-600',
-                      'mr-4 h-6 w-6',
-                    ]"
-                    aria-hidden="true"
-                  />
-                  {{ item.name }}
-                </a>
-              </nav>
+              <div class="flex-1 px-2">
+                <slot name="sidebar-nav">
+                  <nav class="space-y-1">
+                    <a
+                      v-for="item in navigation"
+                      :key="item.name"
+                      :href="item.url"
+                      :class="[
+                        isActive(item.url)
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
+                        'group flex items-center px-2 py-2 text-base font-semibold rounded-md',
+                      ]"
+                      :target="item.openInTab ? '_blank' : '_self'"
+                    >
+                      <component
+                        :is="item.icon"
+                        :class="[
+                          isActive(item.url)
+                            ? 'text-gray-600'
+                            : 'text-gray-500 group-hover:text-gray-600',
+                          'mr-4 h-6 w-6',
+                        ]"
+                        aria-hidden="true"
+                      />
+                      {{ item.name }}
+                    </a>
+                  </nav>
+                </slot>
+              </div>
               <div v-if="$slots['sidebar-bottom']" class="mt-auto">
                 <div class="mt-6 px-2">
                   <slot name="sidebar-bottom" />
@@ -141,32 +145,36 @@ const isActive = (url: string): boolean => {
             <img class="w-auto h-12" :src="iconUrl" alt="Logo" />
           </div>
           <div class="mt-5 grow flex flex-col">
-            <nav class="flex-1 px-2 bg-white space-y-1">
-              <a
-                v-for="item in navigation"
-                :key="item.name"
-                :href="item.url"
-                :class="[
-                  isActive(item.url)
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900',
-                  'group flex items-center px-2 py-2 text-sm font-semibold rounded-md',
-                ]"
-                :target="item.openInTab ? '_blank' : '_self'"
-              >
-                <component
-                  :is="item.icon"
-                  :class="[
-                    isActive(item.url)
-                      ? 'text-gray-600'
-                      : 'text-gray-400 group-hover:text-gray-600',
-                    'mr-3 h-6 w-6',
-                  ]"
-                  aria-hidden="true"
-                />
-                {{ item.name }}
-              </a>
-            </nav>
+            <div class="flex-1 px-2 bg-white">
+              <slot name="sidebar-nav">
+                <nav class="space-y-1">
+                  <a
+                    v-for="item in navigation"
+                    :key="item.name"
+                    :href="item.url"
+                    :class="[
+                      isActive(item.url)
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900',
+                      'group flex items-center px-2 py-2 text-sm font-semibold rounded-md',
+                    ]"
+                    :target="item.openInTab ? '_blank' : '_self'"
+                  >
+                    <component
+                      :is="item.icon"
+                      :class="[
+                        isActive(item.url)
+                          ? 'text-gray-600'
+                          : 'text-gray-400 group-hover:text-gray-600',
+                        'mr-3 h-6 w-6',
+                      ]"
+                      aria-hidden="true"
+                    />
+                    {{ item.name }}
+                  </a>
+                </nav>
+              </slot>
+            </div>
 
             <div v-if="$slots['sidebar-bottom']" class="mt-atuo">
               <div class="mt-6 px-2">

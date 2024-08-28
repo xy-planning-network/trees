@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { homePage, pages } from "./pages"
-import TreeIcon from "./assets/trees-square-icon.svg"
 import { user } from "./domain/user"
+import { ref } from "vue"
 
 /**
  * determine the app layout on load
@@ -55,6 +55,27 @@ const userNavigation = (() => {
     },
   ]
 })()
+
+/**
+ * App Sidebar Nav Slot Demo
+ */
+const showProgress = ref(false)
+const currentStep = ref(2)
+const steps = [
+  { name: "Sign Up" },
+  {
+    name: "Verify Email",
+  },
+  {
+    name: "Set Up Profile",
+  },
+  {
+    name: "Choose a Plan",
+  },
+  {
+    name: "Review and Submit",
+  },
+]
 </script>
 
 <template>
@@ -75,21 +96,30 @@ const userNavigation = (() => {
         </div>
       </div>
 
-      <template v-if="appLayout === 'SidebarLayout'" #sidebar-bottom>
-        <div class="bg-gray-50 rounded-md p-4 space-y-3">
-          <div class="flex space-x-2 items-center">
-            <div class="h-14 w-14">
-              <img :src="TreeIcon" />
-            </div>
-            <h5 class="h5 leading-tight flex-1">
-              Thought Experiment Of The Day
-            </h5>
-          </div>
-          <p class="text-sm font-medium italic">
-            If a tree falls in a forest and no one is around to hear it, does it
-            make a sound?
-          </p>
+      <template
+        v-if="appLayout === 'SidebarLayout' && showProgress"
+        #sidebar-nav
+      >
+        <div class="flex justify-center px-2 py-6">
+          <ProgressCirclesLabeled :current="currentStep" :steps="steps" />
         </div>
+      </template>
+
+      <template v-if="appLayout === 'SidebarLayout'" #sidebar-bottom>
+        <button
+          v-if="!showProgress"
+          class="xy-btn w-full"
+          @click="showProgress = true"
+        >
+          Show Progress
+        </button>
+        <button
+          v-if="showProgress"
+          class="xy-btn w-full"
+          @click="showProgress = false"
+        >
+          Show Navigation
+        </button>
       </template>
     </component>
   </div>
