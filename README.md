@@ -47,10 +47,10 @@ Trees is our attempt at unifying the frontend code we've written to power a smal
 
 ## Install
 
-Install trees and mitt into an existing Vue project - assumes npm version >= 7
+Install trees into an existing Vue project - assumes npm version >= 7
 
 ```sh
-npm i @xy-planning-network/trees mitt
+npm i @xy-planning-network/trees
 ```
 
 Additional peer dependecies will be installed by NPM. If you are using NPM < 7 you may need to explicitly install peer dependencies.
