@@ -116,7 +116,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <div v-if="visible" class="rounded-lg p-4" :class="display.bgColor">
+  <div v-if="visible" class="rounded-xy p-4" :class="display.bgColor">
     <div class="flex">
       <div class="flex-shrink-0">
         <component
@@ -152,7 +152,7 @@ const icon = computed(() => {
           >
             <div v-if="btnText">
               <a
-                class="inline-flex rounded-md px-2 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
+                class="inline-flex rounded-3xl px-2.5 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                 :class="display.btnAction"
                 :href="btnLink"
                 :role="btnLink ? 'link' : 'button'"
@@ -163,7 +163,7 @@ const icon = computed(() => {
             </div>
             <div v-if="secondaryBtnText">
               <a
-                class="inline-flex rounded-md px-2 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
+                class="inline-flex rounded-3xl px-2.5 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                 :class="display.btnAction"
                 :href="secondaryBtnLink"
                 :role="secondaryBtnLink ? 'link' : 'button'"

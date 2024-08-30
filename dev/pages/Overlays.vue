@@ -138,28 +138,28 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
         <div class="flex flex-col space-y-3">
           <button
             type="button"
-            class="xy-btn-white"
+            class="xy-btn"
             @click="useAppFlasher.genericError()"
           >
             Generic Error with default email
           </button>
           <button
             type="button"
-            class="xy-btn-white"
+            class="xy-btn"
             @click="useAppFlasher.genericError('help@trees.com')"
           >
             Show Generic with custom email
           </button>
           <button
             type="button"
-            class="xy-btn-white"
+            class="xy-btn"
             @click="useAppFlasher.success('Hooray!')"
           >
             Flash Success
           </button>
           <button
             type="button"
-            class="xy-btn-white"
+            class="xy-btn"
             @click="useAppFlasher.info('Sticky!', true)"
           >
             Flash Persistent

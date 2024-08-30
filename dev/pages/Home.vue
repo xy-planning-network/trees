@@ -29,7 +29,7 @@ const features = computed(() => {
           <div v-for="feature in features" :key="feature.name" class="pt-6">
             <a
               :href="feature.url"
-              class="flow-root bg-gray-50 shadow rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
+              class="flow-root bg-white shadow rounded-lg px-6 pb-8 cursor-pointer"
             >
               <div class="-mt-6">
                 <div>

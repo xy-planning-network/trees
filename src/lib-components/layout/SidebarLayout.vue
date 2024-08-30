@@ -35,7 +35,7 @@ const isActive = (url: string): boolean => {
 }
 </script>
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-100">
+  <div class="h-screen flex overflow-hidden bg-gray-50">
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog
         as="div"
@@ -99,7 +99,7 @@ const isActive = (url: string): boolean => {
                     isActive(item.url)
                       ? 'bg-gray-100 text-gray-900'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
-                    'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+                    'group flex items-center px-2 py-2 text-base font-semibold rounded-md',
                   ]"
                   :target="item.openInTab ? '_blank' : '_self'"
                 >
@@ -149,8 +149,8 @@ const isActive = (url: string): boolean => {
                 :class="[
                   isActive(item.url)
                     ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                    : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900',
+                  'group flex items-center px-2 py-2 text-sm font-semibold rounded-md',
                 ]"
                 :target="item.openInTab ? '_blank' : '_self'"
               >
@@ -159,7 +159,7 @@ const isActive = (url: string): boolean => {
                   :class="[
                     isActive(item.url)
                       ? 'text-gray-600'
-                      : 'text-gray-500 group-hover:text-gray-600',
+                      : 'text-gray-400 group-hover:text-gray-600',
                     'mr-3 h-6 w-6',
                   ]"
                   aria-hidden="true"

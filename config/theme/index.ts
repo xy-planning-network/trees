@@ -1,9 +1,12 @@
 import animation from "./animation"
 import colors from "./colors"
-import fontFamily from "./fontFamily"
+import { borderRadius } from "./layout"
+import { fontFamily, fontWeight } from "./typography"
 
 export default {
   animation,
+  borderRadius,
   colors,
   fontFamily,
+  fontWeight,
 }

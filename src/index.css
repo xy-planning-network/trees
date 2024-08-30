@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply antialiased;
+    font-optical-sizing: auto;
+  }
+
   /* general body copy */
   body {
-    @apply text-base leading-normal text-gray-900;
+    @apply text-base leading-normal text-gray-800; /* NOTE(spk): expecting this to eventually hold the xy-black value */
   }
 
   /* Headers */
@@ -37,32 +42,122 @@
 @layer components {
   /* Badge classes - TODO: handle anchor tag class cases and generic wrapper cases */
   .xy-badge {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800;
   }
 
   .xy-badge-blue {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800;
+  }
+
+  .xy-badge-green {
+    /* NOTE(spk): currently does not meet contrast ratio requirements */
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-xy-green-50/40 text-xy-green-900;
   }
 
   .xy-badge-yellow {
-    @apply inline-flex justify-center items-center px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800;
+    @apply inline-flex justify-center items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800;
   }
 
-  /* Button classes */
+  /*
+    Button classes
+
+    NOTE(spk): prefer rounded-3xl to rounded-full to support line wrapping in buttons.
+    NOTE(spk): prefer a consistent focus ring color for tracking - best practice.
+    NOTE(spk): using opacity in disabled states fails contrast accessibility standards (revisit).
+  */
+  .xy-btn-sm {
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-sm text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-xy-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
   .xy-btn {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-sm text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-xy-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-lg {
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-sm text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-xy-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  /* NOTE(spk): including .xy-btn-red alias for backwards compatibility */
+  .xy-btn-danger-sm,
+  .xy-btn-red-sm {
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-sm text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-500;
+  }
+
+  .xy-btn-danger,
+  .xy-btn-red {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-sm text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-500;
+  }
+
+  .xy-btn-danger-lg,
+  .xy-btn-red-lg {
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-sm text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-500;
+  }
+
+  .xy-btn-neutral-sm {
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-neutral {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-neutral-lg {
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  /* NOTE(spk): always consider the relative box-sizing between buttons with solid backgrounds and full borders vs secondary styles as they will commonly be laid out next to each other */
+  /* NOTE(spk): there's no way to round a ring or outline in a focus state without rounding the entire button.  Avoid this as it causes odd shapes on the bottom border and using content hacks aren't worth the trouble */
+  .xy-btn-secondary-sm {
+    @apply inline-flex justify-center items-center py-1.5 border-b-2 border-b-xy-blue-600 text-xs font-display font-semibold shadow-none text-neutral-800 hover:text-xy-blue-600 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-blue-600 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
   }
 
   .xy-btn-secondary {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md shadow-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center py-2 border-b-2 border-b-xy-blue-600 text-sm font-display font-semibold shadow-none text-neutral-800 hover:text-xy-blue-600 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-blue-600 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
   }
 
-  .xy-btn-red {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-xs md:text-sm font-semibold rounded-md shadow-md text-red-700 bg-red-100 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  .xy-btn-secondary-lg {
+    @apply inline-flex justify-center items-center py-2.5 border-b-2 border-b-xy-blue-600 text-base font-display font-semibold shadow-none text-neutral-800 hover:text-xy-blue-600 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-blue-600 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
   }
 
+  .xy-btn-accent-sm {
+    @apply inline-flex justify-center items-center py-1.5 border-b-2 border-b-xy-green text-xs font-display font-semibold shadow-none text-neutral-800 hover:text-xy-green-900 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-green disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-accent {
+    @apply inline-flex justify-center items-center py-2 border-b-2 border-b-xy-green text-sm font-display font-semibold shadow-none text-neutral-800 hover:text-xy-green-900 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-green disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-accent-lg {
+    @apply inline-flex justify-center items-center py-2.5 border-b-2 border-b-xy-green text-base font-display font-semibold shadow-none text-neutral-800 hover:text-xy-green-900 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-xy-green disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-accent-inverse-sm {
+    @apply inline-flex justify-center items-center py-1.5 border-b-2 border-b-xy-green text-xs font-display font-semibold shadow-none text-white hover:text-xy-green hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-white disabled:border-b-xy-green disabled:opacity-75 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-accent-inverse {
+    @apply inline-flex justify-center items-center py-2 border-b-2 border-b-xy-green text-sm font-display font-semibold shadow-none text-white hover:text-xy-green hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-white disabled:border-b-xy-green disabled:opacity-75 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-accent-inverse-lg {
+    @apply inline-flex justify-center items-center py-2.5 border-b-2 border-b-xy-green text-base font-display font-semibold shadow-none text-white hover:text-xy-green hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-white disabled:border-b-xy-green disabled:opacity-75 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-secondary-danger-sm {
+    @apply inline-flex justify-center items-center py-1.5 border-b-2 border-b-red-700 text-xs font-display font-semibold shadow-none text-neutral-800 hover:text-red-700 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-red-700 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-secondary-danger {
+    @apply inline-flex justify-center items-center py-2 border-b-2 border-b-red-700 text-sm font-display font-semibold shadow-none text-neutral-800 hover:text-red-700 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-red-700 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  .xy-btn-secondary-danger-lg {
+    @apply inline-flex justify-center items-center py-2.5 border-b-2 border-b-red-700 text-base font-display font-semibold shadow-none text-neutral-800 hover:text-red-700 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-red-700 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
+  }
+
+  /* Deprecated */
   .xy-btn-white {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-md text-sm font-semibold rounded-md text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-sm text-sm font-semibold rounded-3xl text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Header classes */
@@ -108,7 +203,7 @@
 
   /* Link classes */
   .xy-link {
-    @apply font-semibold underline text-xy-blue-600 hover:text-xy-blue-500;
+    @apply font-medium border-b-2 border-b-xy-blue hover:border-b-transparent hover:text-xy-blue;
   }
 }
 

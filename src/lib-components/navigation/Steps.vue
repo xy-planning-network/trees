@@ -65,7 +65,7 @@ const previous = (): void => {
       <span v-if="!hidePrevious" class="inline-flex rounded-md shadow-sm">
         <button
           type="button"
-          class="xy-btn-white"
+          class="xy-btn-secondary"
           @click="previous"
           v-text="previousText"
         ></button>
