@@ -94,15 +94,15 @@
   }
 
   .xy-btn-neutral-sm {
-    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-transparent hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-transparent disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
   }
 
   .xy-btn-neutral {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-transparent hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-transparent disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
   }
 
   .xy-btn-neutral-lg {
-    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-neutral-100 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-transparent hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-transparent disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
   }
 
   /* NOTE(spk): always consider the relative box-sizing between buttons with solid backgrounds and full borders vs secondary styles as they will commonly be laid out next to each other */
