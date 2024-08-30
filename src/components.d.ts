@@ -6,7 +6,7 @@ import { TreesComponents } from "@/lib-components"
  * import GlobalComponents from "@xy-planning-network/trees/types/components"
  * in the project.
  */
-declare module "@vue/runtime-core" {
+declare module "vue" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface GlobalComponents extends TreesComponents {}
 }

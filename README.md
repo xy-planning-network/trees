@@ -47,10 +47,10 @@ Trees is our attempt at unifying the frontend code we've written to power a smal
 
 ## Install
 
-Install trees and mitt into an existing Vue project - assumes npm version >= 7
+Install trees into an existing Vue project - assumes npm version >= 7
 
 ```sh
-npm i @xy-planning-network/trees mitt
+npm i @xy-planning-network/trees
 ```
 
 Additional peer dependecies will be installed by NPM. If you are using NPM < 7 you may need to explicitly install peer dependencies.
@@ -78,22 +78,14 @@ module.exports = {
 
 ### Fonts
 
-**Include Inter Var in html template**
-
-```html
-<head>
-  <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
-</head>
-```
-
-**Optionally include Work Sans in html template**
+**Include Font Families in html template**
 
 ```html
 <head>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Work+Sans:ital,wght@0,300..800;1,300..800&display=swap"
     rel="stylesheet"
   />
 </head>
@@ -246,7 +238,7 @@ import {
  * should provide code completiong support in your editor - milage may vary
  * provides proper type checking on the components declared props
  */
-declare module "@vue/runtime-core" {
+declare module "vue" {
   interface GlobalComponents {
     BaseInput: typeof BaseInput
     Checkbox: typeof Checkbox

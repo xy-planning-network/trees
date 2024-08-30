@@ -1,3 +1,5 @@
+import twColors from "tailwindcss/colors"
+
 export const brandColors = {
   blue: {
     50: "#C9E4F6",
@@ -24,7 +26,9 @@ export const brandColors = {
     900: "#307D41",
   },
   neutral: {
-    // holding on usage for potential palette update
+    // NOTE(spk): This is the official xy-neutral color pallete, but we're holding on usage.
+    // The color gradients are problematic with existing designs.
+    // The color weights 100-300 need a shift to the right by introducing a new 100 weight.
     50: "#FAF9F8",
     100: "#E7E6E5",
     200: "#C9C8C7",
@@ -39,6 +43,9 @@ export const brandColors = {
 }
 
 export default {
+  // NOTE(spk): The gray color pallete is currently in heavy rotation
+  // replace with tailwind/neutral while we phase it out.
+  gray: twColors.neutral,
   "xy-blue": {
     DEFAULT: brandColors["blue"][600],
     ...brandColors["blue"],
@@ -50,6 +57,8 @@ export default {
     DEFAULT: brandColors["green"][200],
     ...brandColors["green"],
   },
+  // NOTE(spk): while xy-neutral is updated we'll work with tailwind/neutral in its place.
+  "xy-neutral": twColors.neutral,
   "xy-black": {
     DEFAULT: brandColors["neutral"][800],
   },

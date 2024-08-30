@@ -25,6 +25,8 @@ import { default as DynamicTable } from "./lists/DynamicTable.vue"
 import { default as Tabs } from "./navigation/Tabs.vue"
 import { default as Toggle } from "./forms/Toggle.vue"
 import { default as XYSpinner } from "./indicators/XYSpinner.vue"
+import { default as ProgressCircles } from "./indicators/ProgressCircles.vue"
+import { default as ProgressCirclesLabeled } from "./indicators/ProgressCirclesLabeled.vue"
 
 // Form components
 import { default as BaseInput } from "./forms/BaseInput.vue"
@@ -81,6 +83,8 @@ export {
   TextArea,
   YesOrNoRadio,
   XYSpinner,
+  ProgressCircles,
+  ProgressCirclesLabeled,
 }
 
 /**
@@ -123,4 +127,6 @@ export interface TreesComponents {
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio
   XYSpinner: typeof XYSpinner
+  ProgressCircles: typeof ProgressCircles
+  ProgressCirclesLabeled: typeof ProgressCirclesLabeled
 }

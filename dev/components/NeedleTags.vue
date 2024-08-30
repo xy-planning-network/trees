@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Conifer } from "../types/tree"
+import type { Conifer } from "../domain/tree"
 
 defineProps<{
   tree: Conifer

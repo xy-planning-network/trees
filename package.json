@@ -21,7 +21,7 @@
     "*.vue"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.docs.config.ts",
     "build": "npm run lint && vue-tsc -p src --emitDeclarationOnly && vite build && npm run copy:types && tsc-alias -p src/tsconfig.json",
     "build:docs": "vue-tsc -p dev --noEmit && vite build --config vite.docs.config.ts",
     "copy:types": "copyfiles -f ./src/*.d.ts ./types",
@@ -34,7 +34,6 @@
     "typecheck:docs": "vue-tsc -p dev --noEmit"
   },
   "devDependencies": {
-    "@point-hub/vue-highlight": "^0.1.4",
     "@rushstack/eslint-patch": "^1.2.0",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.7",
@@ -46,11 +45,14 @@
     "copyfiles": "^2.4.1",
     "eslint": "^8.42.0",
     "eslint-plugin-vue": "^9.14.1",
+    "markdown-it-prism": "^2.3.0",
     "postcss": "^8.4.21",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.3.3",
     "tsc-alias": "^1.8.5",
     "typescript": "~5.4.5",
+    "unplugin-vue-components": "^0.27.4",
+    "unplugin-vue-markdown": "^0.25.2",
     "vite": "^4.3.9",
     "vue-tsc": "^2.0.29"
   },

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import { useAppFlasher } from "@/composables/useFlashes"
 import { CheckIcon } from "@heroicons/vue/outline"
 import { ExclamationIcon } from "@heroicons/vue/outline"
-import { useAppFlasher } from "@/composables/useFlashes"
 import { useAppSpinner } from "@/composables"
-import ProseBase from "../helpers/ProseBase.vue"
-import CodeSample from "../helpers/CodeSample.vue"
 import type { Placement } from "@floating-ui/vue"
 
 const contentModalCopy = `<ContentModal v-model="open" :content="content" :title="title"></ContentModal>`
@@ -135,88 +133,38 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           can deploy flashes from anywhere with the useAppFlashes composable.
         </template>
 
-        <ProseBase>
-          <div class="mt-1 space-y-2">
-            <div>
-              <h4>Flash generic error using configured email address:</h4>
-              <CodeSample>{{
-                `
-/* Import and do this anytime, best before createApp() or inside a root app level component */
-import {useAppFlashes} from "@xy-planning-network/trees"
-useAppFlashes().configure({email: "support@trees.com"})
+        <FlashDocs />
 
-/* use as needed.  imports of useAppFlasher throughout the app will produce the same result */
-useAppFlashes().flasher.genericError()
-              `
-              }}</CodeSample>
-              <button
-                type="button"
-                class="xy-btn"
-                @click="useAppFlasher.genericError()"
-              >
-                Show Me
-              </button>
-            </div>
-            <div>
-              <h4>
-                useAppFlasher is the default export as is what you need most of
-                the time.
-              </h4>
-              <CodeSample>{{
-                `
-import useAppFlasher from "@xy-planning-network/trees"
-              `
-              }}</CodeSample>
-
-              <h4>Flash generic error with custom email address:</h4>
-              <CodeSample>{{
-                `
-useAppFlasher.genericError("help@trees.com")
-              `
-              }}</CodeSample>
-              <button
-                type="button"
-                class="xy-btn"
-                @click="useAppFlasher.genericError('help@trees.com')"
-              >
-                Show Me
-              </button>
-            </div>
-            <div>
-              <h4>Flash (error, info, success, warning):</h4>
-              <CodeSample>{{
-                `
-useAppFlasher.error("Hooray!")
-useAppFlasher.info("Hooray!")
-useAppFlasher.success("Hooray!")
-useAppFlasher.warning("Hooray!")
-              `
-              }}</CodeSample>
-              <button
-                type="button"
-                class="xy-btn"
-                @click="useAppFlasher.success('Hooray!')"
-              >
-                Flash Success
-              </button>
-            </div>
-            <div>
-              <h4>Flash persistent info:</h4>
-              <CodeSample>{{
-                `
-useAppFlasher.info("Sticky!", true)
-              `
-              }}</CodeSample>
-              <button
-                type="button"
-                class="xy-btn"
-                @click="useAppFlasher.info('Sticky!', true)"
-              >
-                Flash Persistent
-              </button>
-            </div>
-          </div>
-        </ProseBase>
+        <div class="flex flex-col space-y-3">
+          <button
+            type="button"
+            class="xy-btn"
+            @click="useAppFlasher.genericError()"
+          >
+            Generic Error with default email
+          </button>
+          <button
+            type="button"
+            class="xy-btn"
+            @click="useAppFlasher.genericError('help@trees.com')"
+          >
+            Show Generic with custom email
+          </button>
+          <button
+            type="button"
+            class="xy-btn"
+            @click="useAppFlasher.success('Hooray!')"
+          >
+            Flash Success
+          </button>
+          <button
+            type="button"
+            class="xy-btn"
+            @click="useAppFlasher.info('Sticky!', true)"
+          >
+            Flash Persistent
+          </button>
+        </div>
       </ComponentLayout>
 
       <ComponentLayout class="mt-8" title="Modal">
@@ -465,74 +413,7 @@ useAppFlasher.info("Sticky!", true)
           consumers when necessary.
         </template>
 
-        <ProseBase>
-          <h4>Tailwind CSS z-index Values</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Component</th>
-                <th>z-index</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Popover/Tooltip/ActionsDropdown</td>
-                <td>z-[5]</td>
-              </tr>
-              <tr>
-                <td>App Sidebar Mobile Nav</td>
-                <td>z-10</td>
-              </tr>
-              <tr>
-                <td>Slideover</td>
-                <td>z-20</td>
-              </tr>
-              <tr>
-                <td>Modal</td>
-                <td>z-30</td>
-              </tr>
-              <tr>
-                <td>Spinner</td>
-                <td>z-40</td>
-              </tr>
-              <tr>
-                <td>Flash</td>
-                <td>z-45</td>
-              </tr>
-              <tr>
-                <td>Unused (preserved for consumers)</td>
-                <td>z-50</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h4>Climbing Above The Rest</h4>
-          <p>
-            In the event that you need to establish a z-index level above any of
-            the overlay components, you'll need to wrap your component in the
-            HeadlessUI/Vue <code>&lt;Portal /&gt;</code> component. This
-            convenience component is not documented by HeadlessUI, but is
-            effectively a wrapper around the Vue Teleport component. It
-            maintains a single container before the closing body tag and
-            teleports all Portal markup to that location ensuring the same
-            stacking context between those DOM elements.
-          </p>
-          <CodeSample language="html"
-            >{{ `
-            <script lang="ts" setup>
-              import { Portal } from "@headlessui/vue"
-            </script>
-
-            <template>
-              <Portal>
-                <div class="fixed top-0 left-0 right-0 bottom-0 z-50">
-                  <h1>Head and shoulders above the rest!</h1>
-                </div>
-              </Portal>
-            </template>
-            ` }}</CodeSample
-          >
-        </ProseBase>
+        <StackingContextDocs />
       </ComponentLayout>
     </div>
   </div>

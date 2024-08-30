@@ -1,66 +1,14 @@
 <script setup lang="ts">
-import {
-  CollectionIcon,
-  ColorSwatchIcon,
-  DocumentTextIcon,
-  LocationMarkerIcon,
-  PencilAltIcon,
-  TableIcon,
-  UserGroupIcon,
-} from "@heroicons/vue/outline"
+import { computed } from "vue"
+import { pages } from "../pages"
 
-const emit = defineEmits<{
-  (e: "update", val: string): void
-}>()
-
-const update = function (value: string) {
-  emit("update", value)
-}
-
-const features = [
-  {
-    name: "Forms",
-    icon: DocumentTextIcon,
-    description:
-      "Forms are the bread and butter of any application. Get with it and check this shit out.",
-  },
-  {
-    name: "Navigation",
-    icon: LocationMarkerIcon,
-    description:
-      "Let's move around. Change some things. You're looking at this and now you're looking at that.",
-  },
-  {
-    name: "Lists",
-    icon: TableIcon,
-    description:
-      "Do you even know what a list looks like? We've got some examples to dandy.",
-  },
-  {
-    name: "Overlays",
-    icon: CollectionIcon,
-    description: "Take it over. Emit to the bus. Get it right. Get it tight.",
-  },
-  {
-    name: "Elements",
-    icon: ColorSwatchIcon,
-    description: "Elements are elemental. Check them out. CSS only.",
-  },
-  {
-    name: "Additional Tools",
-    icon: PencilAltIcon,
-    description: "Sometimes you need more than just UI elements.",
-  },
-  {
-    name: "Team",
-    icon: UserGroupIcon,
-    description:
-      "Our team once built something that helped the company, and we've been grateful ever since.",
-  },
-]
+const features = computed(() => {
+  return pages.filter((p) => p.name != "Home")
+})
 </script>
+
 <template>
-  <div class="relative bg-white py-16 sm:py-24 lg:py-32">
+  <div class="relative">
     <div
       class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl"
     >
@@ -79,9 +27,9 @@ const features = [
       <div class="mt-12">
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div v-for="feature in features" :key="feature.name" class="pt-6">
-            <div
-              class="flow-root bg-gray-50 shadow rounded-lg px-6 pb-8 cursor-pointer hover:bg-gray-100"
-              @click="update(feature.name)"
+            <a
+              :href="feature.url"
+              class="flow-root bg-white shadow rounded-lg px-6 pb-8 cursor-pointer"
             >
               <div class="-mt-6">
                 <div>
@@ -104,7 +52,7 @@ const features = [
                   v-text="feature.description"
                 ></p>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

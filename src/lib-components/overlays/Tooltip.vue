@@ -36,7 +36,7 @@ const hoverPopover = (e: MouseEvent, open: boolean): void => {
 
 <template>
   <Popover :position="position" :as="as">
-    <template #button="{ open, close }: { open: boolean, close: () => void }">
+    <template #button="{ open, close }: { open: boolean; close: () => void }">
       <div
         class="leading-none relative w-4 h-4"
         @mouseover="hoverPopover($event, open)"
@@ -51,7 +51,7 @@ const hoverPopover = (e: MouseEvent, open: boolean): void => {
     </template>
     <template #default="{ close }: { close: () => void }">
       <div
-        class="sm:min-w-max bg-white rounded-md px-3 py-2 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
+        class="sm:min-w-max bg-white rounded-xy px-3.5 py-2.5 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
         @mouseover.prevent="popoverHover = true"
         @mouseleave.prevent="closePopover(close)"
       >

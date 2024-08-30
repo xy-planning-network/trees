@@ -14,7 +14,7 @@ defineProps<{
     <div
       v-for="(card, idx) in cards"
       :key="idx"
-      class="bg-white overflow-hidden shadow rounded-lg"
+      class="bg-white overflow-hidden shadow rounded-xy"
     >
       <div class="px-4 py-5 sm:p-6 text-center">
         <dl>

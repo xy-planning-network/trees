@@ -1,18 +1,6 @@
-<script lang="ts" setup>
-import CodeSample from "../../helpers/CodeSample.vue";
-import ProseBase from "../../helpers/ProseBase.vue"
-</script>
+#### The HttpClient Interface
 
-<template>
-  <ComponentLayout :show-badge="false" title="BaseAPI">
-    <template #description>
-      Need an HTTP client? Don't worry we've got you covered. BaseAPI offers an
-      easy to understand API for making http requests.
-    </template>
-
-    <ProseBase>
-        <h4>The HttpClient Interface</h4>
-        <CodeSample>{{`
+```ts
 /**
  * HttpPromise
  * The successfully resolved interface of an http client request.
@@ -73,19 +61,20 @@ export interface HttpClient {
    */
   put<T>(path: string, data?: ReqPayload, opts?: ReqOptions): HttpPromise<T>
 }
-        `}}</CodeSample>
-      
-        <h4>Example Usage</h4>
-        <CodeSample>{{`
+```
+
+#### Example Usage
+
+```ts
 import {
-    BaseAPI,
-    HttpError,
-    isHttpError,
-    TrailsRespPaged
+  BaseAPI,
+  HttpError,
+  isHttpError,
+  TrailsRespPaged,
 } from "@xy-planning-network/trees"
 
 interface Conifer {
-  id: number 
+  id: number
   name: number
   type: string
   leaf: {
@@ -96,31 +85,37 @@ interface Conifer {
 
 // make the api call to your endpoint
 // Note: BaseAPI supports a generic type for the expected response shape
-BaseAPI.get<TrailsRespPaged<Conifer>>("https://my-json-server.typicode.com/xy-planning-network/trees/things", {withDelay: 500}, {query: Date.now()})
-    .then((result) => {
-        // result will be inferred as the shape declared in the generic TrailsRespPaged<Conifer>
-        const {page, totalPages, items} = result
-        console.log(page, totalPages)
-        
-        // tree will be inferred as Confier
-        items.forEach((tree) => {
-            console.log(tree.name)
-        })
-    })
-    .catch((err: HttpError | Error) => {
-        // use the isHttpError type guard to handle http errors
-        if(isHttpError(err)) {
-            // handle http error
-            console.log(err.status)
-        } else {
-          // handle unexpected error  
-        }
-    })
-        `}}</CodeSample>
+BaseAPI.get<TrailsRespPaged<Conifer>>(
+  "https://my-json-server.typicode.com/xy-planning-network/trees/things",
+  { withDelay: 500 },
+  { query: Date.now() }
+)
+  .then((result) => {
+    // result will be inferred as the shape declared in the generic TrailsRespPaged<Conifer>
+    const { page, totalPages, items } = result
+    console.log(page, totalPages)
 
-        <h4>Working with Trails</h4>
-        <p>Trees offers up a number of convenient interfaces for annotating your expected API responses with TypeScript.</p>
-        <CodeSample>{{`
+    // tree will be inferred as Confier
+    items.forEach((tree) => {
+      console.log(tree.name)
+    })
+  })
+  .catch((err: HttpError | Error) => {
+    // use the isHttpError type guard to handle http errors
+    if (isHttpError(err)) {
+      // handle http error
+      console.log(err.status)
+    } else {
+      // handle unexpected error
+    }
+  })
+```
+
+#### Working with Trails
+
+Trees offers up a number of convenient interfaces for annotating your expected API responses with TypeScript.
+
+```ts
 /**
  * TrailsPromise
  * The successfully resolved interface of an http client request returned by @xy-planning-network/Trails.
@@ -212,7 +207,4 @@ export interface TrailsRespPaged<T = any> {
     totalPages: number
   }
 }
-        `}}</CodeSample>
-    </ProseBase>
-  </ComponentLayout>
-</template>
+```

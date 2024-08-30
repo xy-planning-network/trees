@@ -34,7 +34,7 @@ const labelDisplay = computed((): string => {
   <component
     :is="tag"
     v-if="label"
-    class="block text-base leading-snug font-medium text-gray-800"
+    class="block text-sm leading-6 font-semibold text-gray-800"
     v-bind="$attrs"
   >
     {{ labelDisplay }}
