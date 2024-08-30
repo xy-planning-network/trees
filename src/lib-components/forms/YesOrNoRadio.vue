@@ -32,7 +32,7 @@ const onChange = (e: Event, val: boolean) => {
 
 <template>
   <fieldset
-    class="space-y-4"
+    class="space-y-6"
     :aria-labelledby="aria.labelledby"
     :aria-describedby="aria.describedby"
     :aria-errormessage="aria.errormessage"
@@ -45,10 +45,15 @@ const onChange = (e: Event, val: boolean) => {
         :required="isRequired"
         tag="legend"
       />
-      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
+      <InputHelp
+        v-if="help"
+        :id="aria.describedby"
+        class="mt-1"
+        tag="p"
+        :text="help"
+      />
+      <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
     </div>
-
-    <InputError :id="aria.errormessage" :text="errorState" />
 
     <div>
       <label

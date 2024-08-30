@@ -85,7 +85,7 @@ const setValidationError = () => {
 
 <template>
   <fieldset
-    class="relative space-y-4"
+    class="relative space-y-6"
     :aria-labelledby="aria.labelledby"
     :aria-describedby="aria.describedby"
     :aria-errormessage="aria.errormessage"
@@ -96,10 +96,15 @@ const setValidationError = () => {
         :label="label"
         :required="minCount > 0"
       />
-      <InputHelp v-if="help" :id="aria.describedby" tag="p" :text="help" />
+      <InputHelp
+        v-if="help"
+        :id="aria.describedby"
+        class="mt-1"
+        tag="p"
+        :text="help"
+      />
+      <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
     </div>
-
-    <InputError :id="aria.errormessage" :text="errorState" />
 
     <!--Hidden input for custom validation-->
     <input
@@ -114,9 +119,9 @@ const setValidationError = () => {
 
     <div class="flex">
       <div
-        class="grid gap-y-6"
+        class="grid gap-y-5"
         :class="{
-          'sm:grid sm:gap-x-5 sm:space-y-0': columns !== undefined,
+          'sm:grid sm:gap-x-10': columns !== undefined,
           'sm:grid-cols-2': columns === 2,
           'sm:grid-cols-3': columns === 3,
         }"
