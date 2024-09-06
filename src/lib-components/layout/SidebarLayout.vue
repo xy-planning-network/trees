@@ -196,7 +196,9 @@ const isActive = (url: string): boolean => {
         </button>
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
-            <h1 class="flex items-center text-2xl text-white">
+            <h1
+              class="flex items-center text-base leading-snug sm:text-2xl text-white"
+            >
               <slot name="header"></slot>
             </h1>
           </div>
