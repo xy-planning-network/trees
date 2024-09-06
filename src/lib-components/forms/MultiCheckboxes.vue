@@ -58,16 +58,22 @@ const maxCount = computed(() => {
 })
 
 const countError = computed(() => {
-  if (selectionCount.value < minCount.value) {
-    return `Please select ${minCount.value} of these option${
-      minCount.value > 1 ? "s" : ""
-    }.`
+  // min not reached, no max is set
+  if (selectionCount.value < minCount.value && !props.max) {
+    return `Please select at least ${minCount.value} of these options.`
   }
 
-  if (selectionCount.value > maxCount.value) {
-    return `Please select only ${maxCount.value} of these option${
-      maxCount.value > 1 ? "s" : ""
-    }.`
+  // max is reached, no min set
+  if (selectionCount.value > maxCount.value && !props.min) {
+    return `Please limit your selection to ${maxCount.value} of these options.`
+  }
+
+  // min and max are both set and out of range
+  if (
+    selectionCount.value < minCount.value ||
+    selectionCount.value > maxCount.value
+  ) {
+    return `Please select between ${minCount.value} and ${maxCount.value} of these options.`
   }
 
   return ""

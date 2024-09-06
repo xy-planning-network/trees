@@ -728,7 +728,21 @@ const toggleProps = [
           <YesOrNoRadio label="Please confim this field" required />
 
           <MultiCheckboxes
-            label="More selections is better"
+            label="Minimum selection of 1"
+            :columns="2"
+            :options="options"
+            :min="1"
+          />
+
+          <MultiCheckboxes
+            label="Maximum selection of 2"
+            :columns="2"
+            :options="options"
+            :max="2"
+          />
+
+          <MultiCheckboxes
+            label="Somewhere in between"
             help="Pick at least 1, but no more than 2!"
             :columns="2"
             :options="options"

@@ -6,9 +6,9 @@ import prism from "markdown-it-prism"
 import vue from "@vitejs/plugin-vue"
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => {
+export default defineConfig(() => {
   return {
-    base: command === "serve" ? "/trees/" : "/",
+    base: "/trees/",
     build: {
       outDir: resolve(__dirname, "trees"),
     },

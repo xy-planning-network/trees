@@ -52,7 +52,7 @@ const layoutSteps = computed(() => {
         <div
           v-if="index !== layoutSteps.length - 1"
           :class="[
-            'absolute left-4 top-4 -ml-px mt-0.5 h-full w-0.5',
+            'absolute left-3 top-3 -ml-px mt-0.5 h-full w-0.5',
             step.status === 'complete' ? 'bg-xy-blue' : 'bg-gray-300',
           ]"
           aria-hidden="true"
@@ -64,7 +64,7 @@ const layoutSteps = computed(() => {
           <span class="flex h-9 items-center">
             <span
               :class="{
-                'relative z-10 flex h-8 w-8 items-center justify-center rounded-full': true,
+                'relative z-10 flex h-6 w-6 items-center justify-center rounded-full': true,
                 'bg-xy-blue ': step.status === 'complete',
                 'border-2 border-xy-blue bg-white': step.status === 'current',
                 'border-2 border-gray-300 bg-white':
@@ -73,7 +73,7 @@ const layoutSteps = computed(() => {
             >
               <CheckIcon
                 v-if="step.status === 'complete'"
-                class="h-5 w-5 text-white"
+                class="h-4 w-4 text-white"
                 aria-hidden="true"
               />
               <span
