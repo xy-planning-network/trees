@@ -112,17 +112,6 @@ const setValidationError = () => {
       <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
     </div>
 
-    <!--Hidden input for custom validation-->
-    <input
-      v-if="countError"
-      ref="errorInput"
-      required
-      class="sr-only top-1 left-1"
-      aria-hidden
-      type="checkbox"
-      @invalid="setValidationError"
-    />
-
     <div class="flex">
       <div
         class="grid gap-y-5"
@@ -175,5 +164,15 @@ const setValidationError = () => {
         </div>
       </div>
     </div>
+    <!--Hidden input for custom validation-->
+    <input
+      v-if="countError"
+      ref="errorInput"
+      required
+      class="sr-only top-1 left-1"
+      aria-hidden
+      type="checkbox"
+      @invalid="setValidationError"
+    />
   </fieldset>
 </template>
