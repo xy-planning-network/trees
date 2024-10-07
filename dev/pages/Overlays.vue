@@ -11,6 +11,7 @@ const contentModalCopy = `<ContentModal v-model="open" :content="content" :title
 const contentModalOpen = ref(false)
 const contentModalProps = [
   { name: "modelValue", required: true, type: "boolean" },
+  { name: "btnText", required: false, type: "string" },
   { name: "title", required: false, type: "string" },
 ]
 const modalCopy = `<Modal v-model="open" :destructive="false" submit-text="Save" title="Create New Thing" @submit="created()"></Modal>`
