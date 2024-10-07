@@ -45,33 +45,30 @@ const selectionCount = computed(() => {
 })
 
 const minCount = computed(() => {
-  return props.min || 0
+  return props.min || null
 })
 
 const maxCount = computed(() => {
-  return (
-    props.max ||
-    props.options.filter((opt) => {
-      return !opt.disabled
-    }).length
-  )
+  return props.max || null
 })
 
 const countError = computed(() => {
   // min not reached, no max is set
-  if (selectionCount.value < minCount.value && !props.max) {
+  if (minCount.value !== null && selectionCount.value < minCount.value) {
     return `Please select at least ${minCount.value} of these options.`
   }
 
   // max is reached, no min set
-  if (selectionCount.value > maxCount.value && !props.min) {
+  if (maxCount.value !== null && selectionCount.value > maxCount.value) {
     return `Please limit your selection to ${maxCount.value} of these options.`
   }
 
-  // min and max are both set and out of range
+  // min and max are both set and at least on of them is out of range
   if (
-    selectionCount.value < minCount.value ||
-    selectionCount.value > maxCount.value
+    minCount.value !== null &&
+    maxCount.value !== null &&
+    (selectionCount.value < minCount.value ||
+      selectionCount.value > maxCount.value)
   ) {
     return `Please select between ${minCount.value} and ${maxCount.value} of these options.`
   }
@@ -100,7 +97,7 @@ const setValidationError = () => {
       <FieldsetLegend
         :id="aria.labelledby"
         :label="label"
-        :required="minCount > 0"
+        :required="minCount ? true : false"
       />
       <InputHelp
         v-if="help"
