@@ -10,9 +10,11 @@ import {
 withDefaults(
   defineProps<{
     modelValue: boolean
+    btnText?: string
     title?: string
   }>(),
   {
+    btnText: "Go back",
     title: "",
   }
 )
@@ -84,7 +86,7 @@ const updateModelValue = (value: boolean) => {
                 class="inline-flex justify-center w-full xy-btn"
                 @click="updateModelValue(false)"
               >
-                Go back
+                {{ btnText }}
               </button>
             </div>
           </div>

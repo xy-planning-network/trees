@@ -2,6 +2,7 @@
 import { homePage, pages } from "./pages"
 import { user } from "./domain/user"
 import { ref } from "vue"
+import logo from "./assets/xypn-logo-mark.png?url"
 
 /**
  * determine the app layout on load
@@ -84,7 +85,7 @@ const steps = [
       :is="appLayout"
       :active-url="currentPageURL"
       :current-user="user"
-      icon-url="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+      :icon-url="logo"
       :navigation="[homePage, ...pages]"
       :user-navigation="userNavigation"
     >
