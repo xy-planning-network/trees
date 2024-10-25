@@ -1,7 +1,5 @@
-import { computed, ref, useAttrs } from "vue"
-import Uniques from "@/helpers/Uniques"
+import { computed, ref, useAttrs, useId } from "vue"
 import { debounce } from "@/helpers/Debounce"
-import { useModel } from "./setupHelpers"
 
 export interface Input {
   modelValue?: any
@@ -63,8 +61,24 @@ export interface ColumnedInput {
 export const defaultInputProps = {
   help: "",
   label: "",
-  modelValue: undefined, // important to prevent unexpected default value of false
+  modelValue: undefined,
   placeholder: "",
+}
+
+/**
+ * Form inputs follow an option v-model pattern to allow input field usage
+ * where tracking the input binding directly is not necessary.
+ *
+ * ex: a required checkbox as a confirmation for submitting a form.
+ *
+ * NOTE(spk): we prevent unexpected default v-model values of a
+ * literal 'false' due to an unset v-model prop.
+ *
+ * see: https://github.com/vuejs/vue/issues/4792#issuecomment-275396426
+ */
+export const defaultModelOpts = {
+  default: undefined,
+  required: false,
 }
 
 export const textInputTypes = [
@@ -99,18 +113,15 @@ export const useInputField = <T extends Input>(props: T) => {
   // The errorState is used to set the default HTMLInputElement validation message in the onInvalid method.
   const errorState = ref<string>("")
 
-  // The modelState allows you to directly mutate the v-model and manages the emitter for you.
-  // When the component will support v-model is should defineEmit("update:modelValue") in the component.
-  const modelState = useModel(props, "modelValue", { local: true })
-
   /**
    * inputID computes the id attribute for a input
    * the id attribute should always be unique in the DOM
    * and when the id attribute is not explicity set a unique value
    * is created.  This primarily aids in setting accessibility attributes.
    */
+  const defaultIDAttr = useId()
   const inputID = computed(() => {
-    return (attrs.id as string) || Uniques.CreateIdAttribute()
+    return (attrs.id as string) || defaultIDAttr
   })
 
   /**
@@ -206,7 +217,6 @@ export const useInputField = <T extends Input>(props: T) => {
     isDisabled,
     isRequired,
     nameAttr,
-    modelState,
     errorState,
     onInvalid,
     validate,

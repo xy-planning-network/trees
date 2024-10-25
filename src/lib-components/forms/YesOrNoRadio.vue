@@ -3,7 +3,11 @@ import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
-import { useInputField, defaultInputProps } from "@/composables/forms"
+import {
+  useInputField,
+  defaultInputProps,
+  defaultModelOpts,
+} from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
 
 defineOptions({
@@ -11,23 +15,17 @@ defineOptions({
 })
 
 const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
+const modelState = defineModel<BooleanInput["modelValue"]>(defaultModelOpts)
 
-defineEmits(["update:modelValue", "update:error"])
 const {
   aria,
   isDisabled,
   isRequired,
   nameAttr,
-  modelState,
   errorState,
   onInvalid,
   validate,
 } = useInputField(props)
-
-const onChange = (e: Event, val: boolean) => {
-  modelState.value = val
-  validate(e)
-}
 </script>
 
 <template>
@@ -63,6 +61,7 @@ const onChange = (e: Event, val: boolean) => {
       >
         <input
           :id="`${nameAttr}-true`"
+          v-model="modelState"
           type="radio"
           :class="[
             'h-4 w-4 text-xy-blue cursor-pointer',
@@ -74,9 +73,8 @@ const onChange = (e: Event, val: boolean) => {
           ]"
           :name="nameAttr"
           :value="true"
-          :checked="modelState === true"
           v-bind="$attrs"
-          @change="onChange($event, true)"
+          @change="validate"
           @invalid="onInvalid"
         />
         <InputLabel class="ml-3" label="Yes" tag="span" />
@@ -89,6 +87,7 @@ const onChange = (e: Event, val: boolean) => {
       >
         <input
           :id="`${nameAttr}-false`"
+          v-model="modelState"
           type="radio"
           :class="[
             'h-4 w-4 text-xy-blue cursor-pointer',
@@ -100,9 +99,8 @@ const onChange = (e: Event, val: boolean) => {
           ]"
           :name="nameAttr"
           :value="false"
-          :checked="modelState === false"
           v-bind="$attrs"
-          @change="onChange($event, false)"
+          @change="validate"
           @invalid="onInvalid"
         />
         <InputLabel class="ml-3" label="No" tag="span" />

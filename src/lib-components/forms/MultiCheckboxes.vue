@@ -4,8 +4,12 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import { useInputField, defaultInputProps } from "@/composables/forms"
-import type { MultiChoiceInput, ColumnedInput } from "@/composables/forms"
-import { computed, ref } from "vue"
+import {
+  MultiChoiceInput,
+  ColumnedInput,
+  defaultModelOpts,
+} from "@/composables/forms"
+import { computed, useTemplateRef } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -16,33 +20,25 @@ const props = withDefaults(
   defaultInputProps
 )
 
-defineEmits(["update:modelValue", "update:error"])
-const { aria, inputID, isDisabled, modelState, errorState, validate } =
-  useInputField(props)
+const modelState = defineModel<MultiChoiceInput["modelValue"]>({
+  ...defaultModelOpts,
+  // NOTE(spk): Vue handling of explicit null props values vs undefined props values
+  // means we can't rely on the the "default" param of defineModel here.  Ensuring the
+  // getter returns an array type allows for a consistent checkbox v-model binding similar to
+  // the example in the official Vue docs.
+  //
+  // When a parent component passes a null v-model the parent ref stays null until a mutation occurs
+  // this is consistent with current input components.
+  get: (v) => {
+    if (!Array.isArray(v)) {
+      return []
+    }
 
-const onChange = (e: Event, val: string | number) => {
-  const checked = (e.target as HTMLInputElement).checked
-
-  if (!Array.isArray(modelState.value)) {
-    modelState.value = []
-  }
-
-  if (checked) {
-    modelState.value.push(val)
-  } else {
-    modelState.value.splice(modelState.value.indexOf(val), 1)
-  }
-
-  validate(e)
-}
-
-const selectionCount = computed(() => {
-  if (Array.isArray(modelState.value)) {
-    return modelState.value.length
-  }
-
-  return 0
+    return v
+  },
 })
+
+const { aria, inputID, isDisabled, errorState, validate } = useInputField(props)
 
 const minCount = computed(() => {
   return props.min || null
@@ -53,13 +49,15 @@ const maxCount = computed(() => {
 })
 
 const countError = computed(() => {
+  const count = modelState.value?.length || 0
+
   // min not reached, no max is set
-  if (minCount.value !== null && selectionCount.value < minCount.value) {
+  if (minCount.value !== null && count < minCount.value) {
     return `Please select at least ${minCount.value} of these options.`
   }
 
   // max is reached, no min set
-  if (maxCount.value !== null && selectionCount.value > maxCount.value) {
+  if (maxCount.value !== null && count > maxCount.value) {
     return `Please limit your selection to ${maxCount.value} of these options.`
   }
 
@@ -67,8 +65,7 @@ const countError = computed(() => {
   if (
     minCount.value !== null &&
     maxCount.value !== null &&
-    (selectionCount.value < minCount.value ||
-      selectionCount.value > maxCount.value)
+    (count < minCount.value || count > maxCount.value)
   ) {
     return `Please select between ${minCount.value} and ${maxCount.value} of these options.`
   }
@@ -76,12 +73,12 @@ const countError = computed(() => {
   return ""
 })
 
-const errorInput = ref<HTMLInputElement | null>(null)
+const errorInputRef = useTemplateRef("errorInput")
 const setValidationError = () => {
   if (!errorState.value) {
     errorState.value = countError.value
     // ensure the browser tooltip contains our error message
-    errorInput.value?.setCustomValidity(countError.value)
+    errorInputRef.value?.setCustomValidity(countError.value)
   }
 }
 </script>
@@ -126,11 +123,11 @@ const setValidationError = () => {
           <div class="flex items-center h-5">
             <input
               :id="`${inputID}-${index}`"
+              v-model="modelState"
               :aria-labelledby="`${inputID}-${index}-label`"
               :aria-describedby="
                 option.help ? `${inputID}-${index}-help` : undefined
               "
-              :checked="modelValue?.includes(option.value)"
               :disabled="option.disabled"
               :class="[
                 'h-4 w-4 rounded cursor-pointer',
@@ -141,8 +138,9 @@ const setValidationError = () => {
                   : 'border-gray-300 focus:ring-xy-blue-500',
               ]"
               type="checkbox"
+              :value="option.value"
               v-bind="$attrs"
-              @change="onChange($event, option.value)"
+              @change="validate"
             />
           </div>
           <div class="ml-3">

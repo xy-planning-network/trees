@@ -6,36 +6,27 @@ import {
   useInputField,
   defaultInputProps,
   toDatetimeLocal,
+  defaultModelOpts,
 } from "@/composables/forms"
 import type { DateTimeInput } from "@/composables/forms"
-import { computed, ref } from "vue"
 
 defineOptions({
   inheritAttrs: false,
 })
 
 const props = withDefaults(defineProps<DateTimeInput>(), defaultInputProps)
+const modelState = defineModel<DateTimeInput["modelValue"]>({
+  ...defaultModelOpts,
+  get: (v) => {
+    return v ? toDatetimeLocal(v) : v
+  },
+  set: (v) => {
+    return v ? new Date(v).toISOString() : v
+  },
+})
 
-defineEmits(["update:modelValue", "update:error"])
-const input = ref<HTMLInputElement | null>(null)
-const {
-  errorState,
-  modelState,
-  inputID,
-  isRequired,
-  onInvalid,
-  inputValidation,
-} = useInputField(props)
-
-const inputValue = computed(() => toDatetimeLocal(modelState.value))
-
-const onInput = (e: Event) => {
-  let val = (e.target as HTMLInputElement).value
-
-  modelState.value = val ? new Date(val).toISOString() : val
-
-  inputValidation(e)
-}
+const { errorState, inputID, isRequired, onInvalid, inputValidation } =
+  useInputField(props)
 </script>
 
 <template>
@@ -49,7 +40,7 @@ const onInput = (e: Event) => {
     />
     <input
       :id="inputID"
-      ref="input"
+      v-model="modelState"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
       :aria-errormessage="errorState ? `${inputID}-error` : undefined"
@@ -62,9 +53,8 @@ const onInput = (e: Event) => {
       ]"
       :placeholder="placeholder"
       type="datetime-local"
-      :value="inputValue"
       v-bind="$attrs"
-      @input="onInput"
+      @input="inputValidation"
       @invalid="onInvalid"
     />
     <InputHelp :id="`${inputID}-help`" class="mt-1" :text="help" />

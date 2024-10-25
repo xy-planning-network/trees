@@ -3,7 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { DotsVerticalIcon } from "@heroicons/vue/solid"
 import type { ActionItem } from "@/composables/nav"
 import { useActionItems } from "@/composables/useActionItems"
-import { ref, toRef } from "vue"
+import { toRef, useTemplateRef } from "vue"
 import { useFloating, autoUpdate } from "@floating-ui/vue"
 
 const props = withDefaults(
@@ -17,9 +17,11 @@ const props = withDefaults(
 
 const { actions, hasActions } = useActionItems(toRef(props, "actions"))
 
-const trigger = ref<HTMLElement | null>(null)
-const wrapper = ref<HTMLElement | null>(null)
-const { floatingStyles } = useFloating(trigger, wrapper, {
+// NOTE(spk): explicitly typing as useTemplateRef is unable to infer the template type.
+// https://vuejs.org/guide/typescript/composition-api.html#typing-template-refs
+const triggerRef = useTemplateRef<InstanceType<typeof MenuButton>>("trigger")
+const wrapperRef = useTemplateRef<HTMLElement | null>("wrapper")
+const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
   placement: "bottom-end",
   strategy: "fixed",
   whileElementsMounted: autoUpdate,

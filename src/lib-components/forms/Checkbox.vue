@@ -2,7 +2,11 @@
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
-import { useInputField, defaultInputProps } from "@/composables/forms"
+import {
+  useInputField,
+  defaultInputProps,
+  defaultModelOpts,
+} from "@/composables/forms"
 import type { BooleanInput } from "@/composables/forms"
 
 defineOptions({
@@ -10,23 +14,17 @@ defineOptions({
 })
 
 const props = withDefaults(defineProps<BooleanInput>(), defaultInputProps)
+const modelState = defineModel<BooleanInput["modelValue"]>(defaultModelOpts)
 
-defineEmits(["update:modelValue", "update:error"])
 const {
   aria,
   inputID,
   isDisabled,
   isRequired,
   errorState,
-  modelState,
   validate,
   onInvalid,
 } = useInputField(props)
-
-const onChange = (e: Event) => {
-  modelState.value = (e.target as HTMLInputElement).checked
-  validate(e)
-}
 </script>
 
 <template>
@@ -34,6 +32,7 @@ const onChange = (e: Event) => {
     <div class="flex items-center h-5">
       <input
         :id="inputID"
+        v-model="modelState"
         :aria-labelledby="aria.labelledby"
         :aria-describedby="aria.describedby"
         :aria-errormessage="aria.errormessage"
@@ -48,7 +47,7 @@ const onChange = (e: Event) => {
         ]"
         type="checkbox"
         v-bind="$attrs"
-        @change="onChange"
+        @change="validate"
         @invalid="onInvalid"
       />
     </div>

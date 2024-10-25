@@ -3,7 +3,11 @@ import FieldsetLegend from "./FieldsetLegend.vue"
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
-import { useInputField, defaultInputProps } from "@/composables/forms"
+import {
+  useInputField,
+  defaultInputProps,
+  defaultModelOpts,
+} from "@/composables/forms"
 import type { OptionsInput, ColumnedInput } from "@/composables/forms"
 
 defineOptions({
@@ -14,24 +18,17 @@ const props = withDefaults(
   defineProps<OptionsInput & ColumnedInput>(),
   defaultInputProps
 )
-
-defineEmits(["update:modelValue", "update:error"])
+const modelState = defineModel<OptionsInput["modelValue"]>(defaultModelOpts)
 
 const {
   aria,
   errorState,
-  modelState,
   inputID,
   isDisabled,
   isRequired,
   onInvalid,
   validate,
 } = useInputField(props)
-
-const onChange = (e: Event, val: string | number) => {
-  modelState.value = val
-  validate(e)
-}
 </script>
 
 <template>
@@ -74,11 +71,11 @@ const onChange = (e: Event, val: string | number) => {
           <div class="flex items-center h-5">
             <input
               :id="`${inputID}-${index}`"
+              v-model="modelState"
               :aria-describedby="
                 option.help ? `${inputID}-${index}-help` : undefined
               "
               :aria-labelledby="`${inputID}-${index}-label`"
-              :checked="modelState === option.value"
               :class="[
                 'h-4 w-4 cursor-pointer text-xy-blue',
                 'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
@@ -92,7 +89,7 @@ const onChange = (e: Event, val: string | number) => {
               type="radio"
               :value="option.value"
               v-bind="$attrs"
-              @change="onChange($event, option.value)"
+              @change="validate"
               @invalid="onInvalid"
             />
           </div>

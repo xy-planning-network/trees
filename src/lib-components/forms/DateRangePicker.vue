@@ -5,7 +5,11 @@ import InputError from "./InputError.vue"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
 import { onMounted } from "vue"
-import { defaultInputProps, useInputField } from "@/composables/forms"
+import {
+  defaultInputProps,
+  defaultModelOpts,
+  useInputField,
+} from "@/composables/forms"
 import type { DateRangeInput } from "@/composables/forms"
 
 defineOptions({
@@ -15,27 +19,18 @@ defineOptions({
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
   maxRange: 0,
-  modelValue: () => {
-    return {
-      maxDate: 0,
-      minDate: 0,
-    }
-  },
   placeholder: "mm-dd-yyyy range",
   startDate: 0,
 })
+const modelState = defineModel<DateRangeInput["modelValue"]>({
+  ...defaultModelOpts,
+  default: { maxDate: 0, minDate: 0 },
+})
 
-const {
-  aria,
-  errorState,
-  modelState,
-  inputID,
-  isRequired,
-  onInvalid,
-  validate,
-} = useInputField(props)
+const { aria, errorState, inputID, isRequired, onInvalid, validate } =
+  useInputField(props)
 
-const updateModelValue = (value: { minDate: number; maxDate: number }) => {
+const updateModelState = (value: { minDate: number; maxDate: number }) => {
   modelState.value = value
 }
 
@@ -48,14 +43,14 @@ onMounted(() => {
     minDate: props.startDate,
     onClose: (selectedDates) => {
       if (selectedDates.length === 2) {
-        updateModelValue({
+        updateModelState({
           minDate: selectedDates[0].setUTCHours(0, 0, 0, 0) / 1000,
           maxDate: Math.floor(
             selectedDates[1].setUTCHours(23, 59, 59, 999) / 1000
           ),
         })
       } else if (selectedDates.length === 0) {
-        updateModelValue({
+        updateModelState({
           minDate: 0,
           maxDate: 0,
         })
@@ -64,10 +59,14 @@ onMounted(() => {
   }
 
   // Handle initial values if set
-  if (props.modelValue.minDate != 0 && props.modelValue.maxDate != 0) {
+  if (
+    modelState.value && // NOTE(spk): even with a "default" value this may be a literal null
+    modelState.value.minDate != 0 &&
+    modelState.value.maxDate != 0
+  ) {
     opts.defaultDate = [
-      props.modelValue.minDate * 1000,
-      props.modelValue.maxDate * 1000,
+      modelState.value.minDate * 1000,
+      modelState.value.maxDate * 1000,
     ]
   }
 

@@ -105,7 +105,14 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           <button type="button" class="xy-btn" @click="contentModalOpen = true">
             Show Me
           </button>
-          <ContentModal v-model="contentModalOpen" title="Good Job!">
+          <ContentModal
+            v-model="contentModalOpen"
+            title="Good Job!"
+            @close="$log('ContentModal close event triggered!')"
+            @update:model-value="
+              $log(`v-model update event for ContentModal: ${$event}`)
+            "
+          >
             <template #icon>
               <div
                 class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
@@ -181,7 +188,11 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             :destructive="true"
             submit-text="Remove"
             title="Remove Thing"
+            @close="$log('Modal close event triggered!')"
             @submit="open = false"
+            @update:model-value="
+              $log(`v-model update event for Modal: ${$event}`)
+            "
           >
             <div class="mt-6">
               <p>If you move forward, things are gonna get gone!</p>
@@ -234,6 +245,10 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             v-model="slideoverOpen"
             header="Slideover Header"
             description="A very helpful slideover description"
+            @close="$log('Slideover close event triggered!')"
+            @update:model-value="
+              $log(`v-model update event for Slideover: ${$event}`)
+            "
           >
             <div class="prose">
               <p>

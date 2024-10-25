@@ -12,6 +12,7 @@ import ClickToCopy from "./components/ClickToCopy.vue"
 import ComponentLayout from "./components/ComponentLayout.vue"
 import DocsDemo from "./components/DocsDemo.vue"
 import PropsTable from "./components/PropsTable.vue"
+import LogPlugin from "./log"
 import Serve from "./app.vue"
 import "./main.css"
 
@@ -31,6 +32,7 @@ useAppFlashes().configure({ email: "support@trees.com" })
 
 const app = createApp(Serve)
 app.use(Trees)
+app.use(LogPlugin)
 app.component("ClickToCopy", ClickToCopy)
 app.component("ComponentLayout", ComponentLayout)
 app.component("DocsDemo", DocsDemo)

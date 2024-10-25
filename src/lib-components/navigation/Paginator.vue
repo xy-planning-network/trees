@@ -2,27 +2,24 @@
 import { Pagination } from "@/composables/nav"
 import { computed } from "vue"
 
-const props = defineProps<{
-  modelValue: Pagination
-}>()
-
-const emit = defineEmits<{
-  (e: "update:modelValue", pagination: Pagination): void
-}>()
+const pagination = defineModel<Pagination>({ required: true })
 
 const changePage = (page: number): void => {
-  emit("update:modelValue", {
-    ...props.modelValue,
+  // NOTE(spk): reminder that defineModel does not change the one-way data flow philosphy of Vue.js
+  // replace the entire object to ensure the event is emitted.  Directly mutating a single prop will
+  // simply be a
+  pagination.value = {
+    ...pagination.value,
     page: page,
-  })
+  }
 }
 
 const pageShortcuts = computed((): number[] => {
   const shortcuts: number[] = []
 
   // If total pages is less than or equal to 4, just return 1, 2, 3, 4
-  if (props.modelValue.totalPages <= 4) {
-    for (let i = 0; i < props.modelValue.totalPages; i++) {
+  if (pagination.value.totalPages <= 4) {
+    for (let i = 0; i < pagination.value.totalPages; i++) {
       shortcuts.push(i + 1)
     }
     return shortcuts
@@ -30,10 +27,10 @@ const pageShortcuts = computed((): number[] => {
 
   // If there are more than 3 pages left, show these
   // e.g. [4, 5, 6, 7] when there are 8 total pages and the current page is 4
-  const pagesLeft: number = props.modelValue.totalPages - props.modelValue.page
+  const pagesLeft: number = pagination.value.totalPages - pagination.value.page
   if (pagesLeft >= 3) {
     for (let i = 0; i < 4; i++) {
-      shortcuts.push(props.modelValue.page + i)
+      shortcuts.push(pagination.value.page + i)
     }
     return shortcuts
   }
@@ -41,7 +38,7 @@ const pageShortcuts = computed((): number[] => {
   // If there are less than 3 pages left, count backwards from the last page
   // e.g. [5, 6, 7, 8] when on page 5, 6, 7, and 8 and there are 8 total pages
   for (let i = 0; i < 4; i++) {
-    shortcuts.unshift(props.modelValue.totalPages - i)
+    shortcuts.unshift(pagination.value.totalPages - i)
   }
   return shortcuts
 })
@@ -53,11 +50,11 @@ const pageShortcuts = computed((): number[] => {
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
         :class="
-          modelValue.page == 1
+          pagination.page == 1
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
-        @click.prevent="changePage(modelValue.page - 1)"
+        @click.prevent="changePage(pagination.page - 1)"
       >
         <svg class="mr-3 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -77,7 +74,7 @@ const pageShortcuts = computed((): number[] => {
         href="#"
         class="-mt-px border-t-2 pt-4 px-4 inline-flex items-center text-sm leading-5 font-medium"
         :class="
-          modelValue.page === i
+          pagination.page === i
             ? 'border-blue-500 text-blue-600 focus:outline-none focus:text-blue-800 focus:border-blue-700'
             : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-400'
         "
@@ -91,11 +88,11 @@ const pageShortcuts = computed((): number[] => {
         href="#"
         class="-mt-px border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm leading-5 font-medium focus:outline-none focus:text-gray-700 focus:border-gray-400"
         :class="
-          modelValue.page >= modelValue.totalPages
+          pagination.page >= pagination.totalPages
             ? 'text-gray-500 cursor-not-allowed pointer-events-none'
             : 'text-gray-700 hover:text-gray-900 hover:border-gray-300'
         "
-        @click.prevent="changePage(modelValue.page + 1)"
+        @click.prevent="changePage(pagination.page + 1)"
       >
         Next
         <svg class="ml-3 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">

@@ -7,12 +7,12 @@ import {
   TransitionRoot,
 } from "@headlessui/vue"
 import { XIcon } from "@heroicons/vue/outline"
+import { watch } from "vue"
 
 withDefaults(
   defineProps<{
     destructive?: boolean
     disabled?: boolean
-    modelValue: boolean
     wide?: boolean
     submitText?: string
     title?: string
@@ -26,27 +26,31 @@ withDefaults(
   }
 )
 
+const open = defineModel<boolean>({ required: true })
+
 const emit = defineEmits<{
+  (e: "close"): void
   (e: "submit"): void
-  (e: "update:modelValue", val: boolean): void
 }>()
 
 const submit = () => {
   emit("submit")
 }
 
-const updateModelValue = (value: boolean) => {
-  emit("update:modelValue", value)
-}
+watch(open, (isOpen) => {
+  if (!isOpen) {
+    emit("close")
+  }
+})
 </script>
 <template>
-  <TransitionRoot as="template" :show="modelValue">
+  <TransitionRoot as="template" :show="open">
     <Dialog
       as="div"
       static
       class="fixed z-30 inset-0 overflow-y-auto"
-      :open="modelValue"
-      @close="updateModelValue(false)"
+      :open="open"
+      @close="open = false"
     >
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -88,7 +92,7 @@ const updateModelValue = (value: boolean) => {
               <button
                 type="button"
                 class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                @click="updateModelValue(false)"
+                @click="open = false"
               >
                 <span class="sr-only">Close</span>
                 <XIcon class="h-6 w-6" aria-hidden="true" />
@@ -119,10 +123,9 @@ const updateModelValue = (value: boolean) => {
                 v-text="submitText"
               ></button>
               <button
-                ref="cancelButtonRef"
                 type="button"
                 class="xy-btn-neutral mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                @click="updateModelValue(false)"
+                @click="open = false"
               >
                 Cancel
               </button>

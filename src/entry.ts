@@ -22,7 +22,6 @@ import {
   textInputTypes,
   useInputField,
 } from "@/composables/forms"
-import { useModel } from "@/composables/setupHelpers"
 import { debounce as debounceFn, debounceLeading } from "@/helpers/Debounce"
 import { throttle as throttleFn } from "@/helpers/Throttle"
 
@@ -34,7 +33,15 @@ const install: Exclude<Plugin["install"], undefined> = function installTrees(
   app: App
 ) {
   Object.entries(components).forEach(([componentName, component]) => {
-    app.component(componentName, component)
+    // NOTE(spk): appears to be a type issue with generics and defineModel emitters
+    // currently triggered by RadioCards
+    //
+    // https://github.com/vuejs/language-tools/issues/4822
+    // https://github.com/vuejs/language-tools/pull/4823
+    //
+    // This is only used by the dev docs to have all components installed globally
+    // so mark as any for now.
+    app.component(componentName, component as any)
   })
 }
 
@@ -71,9 +78,6 @@ export {
   textInputTypes,
   useInputField,
 }
-
-// Setup helpers
-export { useModel }
 
 // Utilities exports
 export { debounceFn, debounceLeading, throttleFn }
