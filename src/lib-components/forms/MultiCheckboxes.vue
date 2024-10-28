@@ -22,13 +22,13 @@ const props = withDefaults(
 
 const modelState = defineModel<MultiChoiceInput["modelValue"]>({
   ...defaultModelOpts,
-  // NOTE(spk): Vue handling of explicit null props values vs undefined props values
+  // NOTE(spk): The Vue.js specific handling of initial prop values null vs undefined
   // means we can't rely on the the "default" param of defineModel here.  Ensuring the
   // getter returns an array type allows for a consistent checkbox v-model binding similar to
-  // the example in the official Vue docs.
+  // the example in the official Vue.js docs.
   //
-  // When a parent component passes a null v-model the parent ref stays null until a mutation occurs
-  // this is consistent with current input components.
+  // When a parent component passes a null v-model the parent ref stays null until
+  // a mutation occurs which is consistent with other input components.
   get: (v) => {
     if (!Array.isArray(v)) {
       return []

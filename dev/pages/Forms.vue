@@ -361,13 +361,12 @@ const toggleProps = [
             :max-range="365"
             required
             @update:model-value="
-              $log(`v-model update event for DateRangePicker: ${$event}`)
+              $log(`v-model update event for DateRangePicker:`, $event)
             "
           />
 
           <div class="mt-4">
-            <b>Value:</b> {{ inputVals["dateRangePicker"] }} -
-            {{ typeof inputVals["dateRangePicker"] }}
+            <b>Value:</b> {{ inputVals["dateRangePicker"] }}
           </div>
 
           <div class="mt-4">

@@ -5,9 +5,9 @@ import { computed } from "vue"
 const pagination = defineModel<Pagination>({ required: true })
 
 const changePage = (page: number): void => {
-  // NOTE(spk): reminder that defineModel does not change the one-way data flow philosphy of Vue.js
-  // replace the entire object to ensure the event is emitted.  Directly mutating a single prop will
-  // simply be a
+  // NOTE(spk): reminder that defineModel does not change the
+  // one-way data flow philosphy of Vue.js replace the entire
+  // object to ensure the event is emitted.
   pagination.value = {
     ...pagination.value,
     page: page,
