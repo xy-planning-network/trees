@@ -9,7 +9,7 @@ import {
   watch,
 } from "vue"
 
-export interface Item {
+export interface NavItem {
   icon?: Component | RenderFunction
   name: string
   openInTab?: boolean

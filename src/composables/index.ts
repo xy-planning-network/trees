@@ -22,10 +22,7 @@ import type {
   TableRowsData,
 } from "./table"
 
-import type {
-  DetailListAPI,
-  SortDir,
-} from "./list"
+import type { DetailListAPI, SortDir } from "./list"
 
 export type {
   UseBaseAPIOptions,
@@ -59,8 +56,24 @@ export type { FlashMessage, FlashType, FlashStore, Flasher }
 export { useFlashes, useAppFlashes, useAppFlasher }
 
 // navigation
-import type { URLParams, URLParamValue, UseTabHistoryOpts } from "./nav"
-export type { URLParams, URLParamValue, UseTabHistoryOpts }
+import type {
+  ActionItem,
+  NavItem,
+  Pagination,
+  URLParams,
+  URLParamValue,
+  UseTabHistoryOpts,
+} from "./nav"
+
+export type {
+  ActionItem,
+  NavItem,
+  Pagination,
+  URLParams,
+  URLParamValue,
+  UseTabHistoryOpts,
+}
+
 import { useUrlSearchParams, useTabHistory } from "./nav"
 export { useUrlSearchParams, useTabHistory }
 
