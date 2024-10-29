@@ -32,6 +32,7 @@ const pagination = ref({
   totalItems: 100,
   totalPages: 10,
 })
+
 const paginatorCopy = `<Paginator v-model="pagination" />`
 const paginatorProps = [
   {
@@ -97,7 +98,12 @@ const tabsProps = [
           <p class="text-center font-bold mt-2 mb-8">
             Current Page: {{ pagination.page }}
           </p>
-          <Paginator v-model="pagination" />
+          <Paginator
+            v-model="pagination"
+            @update:model-value="
+              $log(`Pagination update event, on page: (${$event.page})`)
+            "
+          />
           <PropsTable :props="paginatorProps" />
         </div>
       </div>
@@ -122,6 +128,9 @@ const tabsProps = [
             v-model="activeTab"
             :pill-design="tabsPillDesign"
             :tabs="tabs"
+            @update:model-value="
+              $log(`v-model update event for Tabs: ${$event}`)
+            "
           />
           <div class="bg-white shadow rounded-lg px-4 py-5 sm:px-6">
             <span v-if="isActiveTab('tab1')" class="xy-badge-yellow">

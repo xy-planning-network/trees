@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, defineModel } from "vue"
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string
     pillDesign?: boolean
     tabs: Array<{
       label: string
@@ -15,13 +14,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits<{
-  (e: "update:modelValue", val: string): void
-}>()
-
-const updateModelValue = (modelValue: string): void => {
-  emit("update:modelValue", modelValue)
-}
+const activeTab = defineModel<string>({ required: true })
 
 const classes = (currentTab: string, pastFirstTab: boolean): string => {
   let c = ""
@@ -30,7 +23,7 @@ const classes = (currentTab: string, pastFirstTab: boolean): string => {
     c =
       "px-12 py-2 font-semibold text-md leading-5 rounded-t-md focus:outline-none "
 
-    if (props.modelValue === currentTab) {
+    if (activeTab.value === currentTab) {
       c = c + "focus:bg-white text-gray-700 bg-white border-b-2 border-blue-500"
     } else {
       c =
@@ -43,7 +36,7 @@ const classes = (currentTab: string, pastFirstTab: boolean): string => {
 
   c =
     "px-1 py-4 text-sm font-semibold border-b-2 whitespace-nowrap leading-5 focus:outline-none "
-  if (props.modelValue === currentTab) {
+  if (activeTab.value === currentTab) {
     c =
       c +
       "border-blue-500 text-xy-blue focus:text-blue-800 focus:border-blue-700"
@@ -66,12 +59,7 @@ const notPillDesign = computed((): boolean => {
   <div>
     <div class="sm:hidden" :class="{ 'mb-4': pillDesign }">
       <label for="tabs" class="sr-only">Select a tab</label>
-      <Select
-        name="tabs"
-        :model-value="modelValue"
-        :options="tabs"
-        @update:model-value="updateModelValue($event)"
-      />
+      <Select v-model="activeTab" name="tabs" :options="tabs" />
     </div>
     <div class="hidden sm:block">
       <div :class="{ 'border-b border-gray-200': notPillDesign }">
@@ -81,7 +69,7 @@ const notPillDesign = computed((): boolean => {
             :key="idx"
             href="#"
             :class="classes(tab.value, idx > 0)"
-            @click.prevent="updateModelValue(tab.value)"
+            @click.prevent="activeTab = tab.value"
             v-text="tab.label"
           >
           </a>

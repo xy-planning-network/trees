@@ -11,7 +11,7 @@ import {
   MenuItems,
 } from "@headlessui/vue"
 import { MenuIcon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
-import * as NavTypes from "@/composables/nav"
+import type { NavItem } from "@/composables/nav"
 import User from "@/composables/user"
 
 const props = withDefaults(
@@ -19,8 +19,8 @@ const props = withDefaults(
     activeUrl?: string
     currentUser: User
     iconUrl: string
-    navigation: NavTypes.Item[]
-    userNavigation: NavTypes.Item[]
+    navigation: NavItem[]
+    userNavigation: NavItem[]
   }>(),
   {
     activeUrl: "",

@@ -6,10 +6,10 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue"
+import { watch } from "vue"
 
 withDefaults(
   defineProps<{
-    modelValue: boolean
     btnText?: string
     title?: string
   }>(),
@@ -19,22 +19,26 @@ withDefaults(
   }
 )
 
+const open = defineModel<boolean>({ required: true })
+
 const emit = defineEmits<{
-  (e: "update:modelValue", val: boolean): void
+  (e: "close"): void
 }>()
 
-const updateModelValue = (value: boolean) => {
-  emit("update:modelValue", value)
-}
+watch(open, (isOpen) => {
+  if (!isOpen) {
+    emit("close")
+  }
+})
 </script>
 <template>
-  <TransitionRoot as="template" :show="modelValue">
+  <TransitionRoot as="template" :show="open">
     <Dialog
       as="div"
       static
       class="fixed z-30 inset-0 overflow-y-auto"
-      :open="modelValue"
-      @close="updateModelValue(false)"
+      :open="open"
+      @close="open = false"
     >
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -84,7 +88,7 @@ const updateModelValue = (value: boolean) => {
               <button
                 type="button"
                 class="inline-flex justify-center w-full xy-btn"
-                @click="updateModelValue(false)"
+                @click="open = false"
               >
                 {{ btnText }}
               </button>

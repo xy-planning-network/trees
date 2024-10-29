@@ -4,7 +4,7 @@ import {
   PopoverButton as HeadlessPopoverButton,
   PopoverPanel as HeadlessPopoverPanel,
 } from "@headlessui/vue"
-import { computed, ref } from "vue"
+import { computed, useTemplateRef } from "vue"
 import {
   useFloating,
   offset,
@@ -25,8 +25,11 @@ const props = withDefaults(
   }
 )
 
-const trigger = ref<HTMLElement | null>(null)
-const wrapper = ref<HTMLElement | null>(null)
+// NOTE(spk): explicitly typing as useTemplateRef is unable to infer the template type.
+// https://vuejs.org/guide/typescript/composition-api.html#typing-template-refs
+type TriggerRef = InstanceType<typeof HeadlessPopoverButton>
+const triggerRef = useTemplateRef<TriggerRef>("trigger")
+const wrapperRef = useTemplateRef<HTMLElement>("wrapper")
 const middleware = computed(() => {
   const middleware = [offset(5), shift()]
   if (props.position === "auto") {
@@ -48,7 +51,7 @@ const placement = computed(() => {
   return props.position
 })
 
-const { floatingStyles } = useFloating(trigger, wrapper, {
+const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
   middleware: middleware,
   placement: placement,
   strategy: "fixed",

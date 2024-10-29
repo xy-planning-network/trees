@@ -7,7 +7,7 @@ import {
 } from "@headlessui/vue"
 import InputLabel from "@/lib-components/forms/InputLabel.vue"
 import InputHelp from "@/lib-components/forms/InputHelp.vue"
-import { hasAttribute } from "@/composables/forms"
+import { defaultModelOpts, hasAttribute } from "@/composables/forms"
 import { computed, useAttrs } from "vue"
 
 defineOptions({
@@ -16,7 +16,6 @@ defineOptions({
 
 withDefaults(
   defineProps<{
-    modelValue?: boolean
     label?: string
     help?: string
   }>(),
@@ -26,7 +25,8 @@ withDefaults(
   }
 )
 
-const emits = defineEmits(["update:modelValue"])
+const switchState = defineModel<boolean>(defaultModelOpts)
+
 const attrs = useAttrs()
 const isDisabled = computed(() => {
   return hasAttribute(attrs, "disabled")
@@ -35,20 +35,19 @@ const isDisabled = computed(() => {
 <template>
   <SwitchGroup as="div" class="flex items-start">
     <Switch
+      v-model="switchState"
       :class="[
-        modelValue ? 'bg-xy-blue' : 'bg-gray-200',
+        switchState ? 'bg-xy-blue' : 'bg-gray-200',
         isDisabled ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer',
         'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500',
       ]"
       :disabled="isDisabled"
-      :model-value="modelValue"
-      @update:model-value="emits('update:modelValue', $event)"
     >
       <span v-if="!label" class="sr-only">Use</span>
       <span
         aria-hidden="true"
         :class="[
-          modelValue ? 'translate-x-5' : 'translate-x-0',
+          switchState ? 'translate-x-5' : 'translate-x-0',
           'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
         ]"
       />

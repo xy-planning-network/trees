@@ -13,15 +13,15 @@ import {
 } from "@headlessui/vue"
 import { MenuAlt2Icon, XIcon } from "@heroicons/vue/outline"
 import { CogIcon } from "@heroicons/vue/solid"
-import * as NavTypes from "@/composables/nav"
+import type { NavItem } from "@/composables/nav"
 import { ref } from "vue"
 
 const props = withDefaults(
   defineProps<{
     activeUrl?: string
     iconUrl: string
-    navigation: NavTypes.Item[]
-    userNavigation: NavTypes.Item[]
+    navigation: NavItem[]
+    userNavigation: NavItem[]
   }>(),
   {
     activeUrl: "",

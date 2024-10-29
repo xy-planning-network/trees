@@ -10,7 +10,11 @@ import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import FieldsetLegend from "./FieldsetLegend.vue"
-import { defaultInputProps, useInputField } from "@/composables/forms"
+import {
+  defaultInputProps,
+  defaultModelOpts,
+  useInputField,
+} from "@/composables/forms"
 import type {
   ColumnedInput,
   InputOption,
@@ -26,7 +30,6 @@ defineOptions({
  * to use the modelValue inside of forms.  It does not however resolve the issue of
  * supporting HTML5 form validation, so we'll add our own hidden radio buttons to support both.
  */
-
 interface RadioCards extends OptionsInput {
   options: T[]
 }
@@ -35,17 +38,10 @@ const props = withDefaults(
   defineProps<RadioCards & ColumnedInput>(),
   defaultInputProps
 )
+const modelState = defineModel<RadioCards["modelValue"]>(defaultModelOpts)
 
-defineEmits(["update:modelValue", "update:error"])
-const {
-  aria,
-  isDisabled,
-  isRequired,
-  nameAttr,
-  modelState,
-  errorState,
-  onInvalid,
-} = useInputField(props)
+const { aria, isDisabled, isRequired, nameAttr, errorState, onInvalid } =
+  useInputField(props)
 
 const onUpdate = (val: unknown) => {
   if (val) {

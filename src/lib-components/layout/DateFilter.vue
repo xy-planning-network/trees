@@ -21,12 +21,16 @@ const emits = defineEmits<{
   (e: "date-range-changed", val: DateRange): void
 }>()
 
-const sortDirChanged = (sortDir: SortDir) => {
-  emits("sort-dir-changed", sortDir)
+const sortDirChanged = (sortDir: unknown) => {
+  if (sortDir === "asc" || sortDir === "desc") {
+    emits("sort-dir-changed", sortDir)
+  }
 }
 
-const dateRangeChanged = (dateRange: DateRange) => {
-  emits("date-range-changed", dateRange)
+const dateRangeChanged = (dateRange: DateRange | undefined) => {
+  if (dateRange) {
+    emits("date-range-changed", dateRange)
+  }
 }
 </script>
 <template>

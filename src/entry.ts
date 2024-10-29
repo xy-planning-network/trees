@@ -22,7 +22,6 @@ import {
   textInputTypes,
   useInputField,
 } from "@/composables/forms"
-import { useModel } from "@/composables/setupHelpers"
 import { debounce as debounceFn, debounceLeading } from "@/helpers/Debounce"
 import { throttle as throttleFn } from "@/helpers/Throttle"
 
@@ -71,9 +70,6 @@ export {
   textInputTypes,
   useInputField,
 }
-
-// Setup helpers
-export { useModel }
 
 // Utilities exports
 export { debounceFn, debounceLeading, throttleFn }

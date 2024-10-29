@@ -49,6 +49,7 @@ const inputTypes: InputOption[] = textInputTypes.map((type) => {
 const inputTypeSelected = ref<TextInputType>("text")
 const inputVals = ref<Record<string, any>>({})
 const toggleValue = ref(undefined)
+const dateRangeInput = ref({ minDate: 1725148800, maxDate: 1727740799 })
 const dateTimeInput = ref<string>("2015-08-01T15:30:00.000Z")
 /**
  * Copy Help
@@ -240,6 +241,11 @@ const toggleProps = [
             :type="inputTypeSelected"
             :label="`Here's an example of an <input type='${inputTypeSelected}'>`"
             :placeholder="`A placeholder for a ${inputTypeSelected}`"
+            @update:model-value="
+              $log(
+                `v-model update event for BaseInput type='${inputTypeSelected}': ${$event}`
+              )
+            "
           />
 
           <div class="mt-4">
@@ -274,6 +280,9 @@ const toggleProps = [
             label="How about it?"
             help="In your own words."
             placeholder="Don't be shy now..."
+            @update:model-value="
+              $log(`v-model update event for TextArea: ${$event}`)
+            "
           />
 
           <div class="mt-4">
@@ -306,6 +315,9 @@ const toggleProps = [
             v-model="inputVals['checkbox']"
             label="I'm here to party!"
             help="Get notified when the party starts."
+            @update:model-value="
+              $log(`v-model update event for Checkbox: ${$event}`)
+            "
           />
 
           <Checkbox
@@ -348,10 +360,22 @@ const toggleProps = [
             v-model="inputVals['dateRangePicker']"
             :max-range="365"
             required
+            @update:model-value="
+              $log(`v-model update event for DateRangePicker:`, $event)
+            "
           />
 
           <div class="mt-4">
             <b>Value:</b> {{ inputVals["dateRangePicker"] }}
+          </div>
+
+          <div class="mt-4">
+            <DateRangePicker
+              v-model="dateRangeInput"
+              disabled
+              label="Hydrated Range"
+              help="Initialized with { minDate: 1725148800, maxDate: 1727740799 }"
+            />
           </div>
           <PropsTable :props="dateRangeInputProps" />
         </div>
@@ -371,7 +395,13 @@ const toggleProps = [
           <ClickToCopy :value="dateTimeCopy" />
         </label>
         <div class="mt-1">
-          <DateTime v-model="inputVals['dateTimeLocal']" required />
+          <DateTime
+            v-model="inputVals['dateTimeLocal']"
+            required
+            @update:model-value="
+              $log(`v-model update event for DateTime: ${$event}`)
+            "
+          />
 
           <div class="mt-4"><b>Value:</b> {{ inputVals["dateTimeLocal"] }}</div>
 
@@ -409,6 +439,9 @@ const toggleProps = [
               }))
             "
             required
+            @update:model-value="
+              $log(`v-model update event for MultiCheckboxes: ${$event}`)
+            "
           />
 
           <MultiCheckboxes
@@ -432,6 +465,7 @@ const toggleProps = [
           <div class="mt-2">
             <b>Value:</b> {{ inputVals["multiCheckboxes"] }}
           </div>
+
           <PropsTable :props="multichoiceInputProps" />
         </div>
       </div>
@@ -457,6 +491,9 @@ const toggleProps = [
                 label: option.label,
                 value: option.value,
               }))
+            "
+            @update:model-value="
+              $log(`v-model update event for Radio: ${$event}`)
             "
           />
 
@@ -500,6 +537,9 @@ const toggleProps = [
               help="The sublabel display is supported by both options.sublabel and a named slot #sublabel."
               :options="radioCardOptions"
               :columns="2"
+              @update:model-value="
+                $log(`v-model update event for RadioCards: ${$event}`)
+              "
             >
               <template #sublabel="{ option }">
                 {{ option.sublabel }}
@@ -529,7 +569,10 @@ const toggleProps = [
             </ul>
           </div>
 
-          <div class="mt-4"><b>Value:</b> {{ inputVals["radio"] }}</div>
+          <div class="mt-4">
+            <b>Value:</b> {{ inputVals["radio"] }} -
+            {{ typeof inputVals["radio"] }}
+          </div>
           <PropsTable :props="optionsInputProps" />
         </div>
       </div>
@@ -555,6 +598,9 @@ const toggleProps = [
             v-model="inputVals['select']"
             :options="options"
             label="Lets make a selection"
+            @update:model-value="
+              $log(`v-model update event for Select: ${$event}`)
+            "
           />
 
           <Select
@@ -566,7 +612,10 @@ const toggleProps = [
           />
         </div>
 
-        <div class="mt-4"><b>Value:</b> {{ inputVals["select"] }}</div>
+        <div class="mt-4">
+          <b>Value:</b> {{ inputVals["select"] }} -
+          {{ typeof inputVals["select"] }}
+        </div>
         <PropsTable :props="optionsInputProps" />
       </div>
     </ComponentLayout>
@@ -586,6 +635,9 @@ const toggleProps = [
             v-model="inputVals['yesOrNoRadio']"
             label="Is this thing on?"
             help="Only one way to find out."
+            @update:model-value="
+              $log(`v-model update event for YesOrNoRadio: ${$event}`)
+            "
           ></YesOrNoRadio>
           <div class="mt-2">
             <YesOrNoRadio
@@ -594,7 +646,10 @@ const toggleProps = [
               disabled
             ></YesOrNoRadio>
           </div>
-          <div class="mt-4"><b>Value:</b> {{ inputVals["yesOrNoRadio"] }}</div>
+          <div class="mt-4">
+            <b>Value:</b> {{ inputVals["yesOrNoRadio"] }} -
+            {{ typeof inputVals["yesOrNoRadio"] }}
+          </div>
           <PropsTable :props="optionsInputProps" />
         </div>
       </div>
@@ -619,6 +674,9 @@ const toggleProps = [
               label="Go on, flip the switch"
               help="Is your refridgerator running?"
               required
+              @update:model-value="
+                $log(`v-model update event for Toggle: ${$event}`)
+              "
             />
 
             <Toggle

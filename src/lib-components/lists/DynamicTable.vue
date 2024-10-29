@@ -12,7 +12,7 @@ import type {
 } from "@/composables/table"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
-import { DateRangeProps } from "@/composables/date"
+import { DateRange, DateRangeProps } from "@/composables/date"
 import { useTable } from "@/composables/useTable"
 import TableActionButtons from "./TableActionButtons.vue"
 
@@ -116,13 +116,12 @@ const pagination = ref({
 })
 const query = ref("")
 
-const dateRangeChanged = (newDateRange: {
-  minDate: number
-  maxDate: number
-}): void => {
-  pagination.value.page = 1
-  dateRange.value = newDateRange
-  loadAndRender()
+const dateRangeChanged = (newDateRange: DateRange | undefined): void => {
+  if (newDateRange) {
+    pagination.value.page = 1
+    dateRange.value = newDateRange
+    loadAndRender()
+  }
 }
 const handleSort = (selectedSort: string): void => {
   if (currentSort.value == selectedSort) {

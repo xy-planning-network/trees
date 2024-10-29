@@ -2,7 +2,11 @@
 import InputLabel from "./InputLabel.vue"
 import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
-import { useInputField, defaultInputProps } from "@/composables/forms"
+import {
+  useInputField,
+  defaultInputProps,
+  defaultModelOpts,
+} from "@/composables/forms"
 import type { TextareaInput } from "@/composables/forms"
 
 defineOptions({
@@ -10,21 +14,11 @@ defineOptions({
 })
 
 const props = withDefaults(defineProps<TextareaInput>(), defaultInputProps)
-defineEmits(["update:modelValue", "update:error"])
-const {
-  aria,
-  inputID,
-  isRequired,
-  modelState,
-  errorState,
-  onInvalid,
-  inputValidation,
-} = useInputField(props)
 
-const onInput = (e: Event) => {
-  modelState.value = (e.target as HTMLInputElement).value.trim()
-  inputValidation(e)
-}
+const modelState = defineModel<TextareaInput["modelValue"]>(defaultModelOpts)
+
+const { aria, inputID, isRequired, errorState, onInvalid, inputValidation } =
+  useInputField(props)
 </script>
 
 <template>
@@ -38,6 +32,7 @@ const onInput = (e: Event) => {
     />
     <textarea
       :id="inputID"
+      v-model="modelState"
       :aria-labelledby="aria.labelledby"
       :aria-describedby="aria.describedby"
       :aria-errormessage="aria.errormessage"
@@ -49,9 +44,8 @@ const onInput = (e: Event) => {
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
       :placeholder="placeholder"
-      :value="modelState || undefined"
       v-bind="$attrs"
-      @input="onInput"
+      @input="inputValidation"
       @invalid="onInvalid"
     />
     <InputHelp :id="aria.describedby" class="mt-1" :text="help" />

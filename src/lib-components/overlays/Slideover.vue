@@ -7,35 +7,33 @@ import {
   TransitionRoot,
 } from "@headlessui/vue"
 import { XIcon } from "@heroicons/vue/outline"
-import { ref } from "vue"
+import { watch } from "vue"
 
-const props = defineProps<{
+defineProps<{
   header: string
   description: string
-  modelValue: boolean
 }>()
 
-const open = ref(props.modelValue)
+const open = defineModel<boolean>({ required: true })
 
 const emit = defineEmits<{
-  (e: "close", val: boolean): void
-  (e: "update:modelValue", val: boolean): void
+  (e: "close"): void
 }>()
 
-const close = () => {
-  open.value = false
-  emit("close", open.value)
-  emit("update:modelValue", open.value)
-}
+watch(open, (isOpen) => {
+  if (!isOpen) {
+    emit("close")
+  }
+})
 </script>
 <template>
-  <TransitionRoot as="template" :show="modelValue">
+  <TransitionRoot as="template" :show="open">
     <Dialog
       as="div"
       static
       class="fixed inset-0 z-20 overflow-hidden bg-black bg-opacity-50"
-      :open="modelValue"
-      @close="close()"
+      :open="open"
+      @close="open = false"
     >
       <div class="absolute inset-0 overflow-hidden">
         <DialogOverlay class="absolute inset-0" />
@@ -62,7 +60,7 @@ const close = () => {
                     <div class="ml-3 h-7 flex items-center">
                       <button
                         class="bg-xy-blue-600 rounded-md text-gray-50 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        @click="close()"
+                        @click="open = false"
                       >
                         <span class="sr-only">Close panel</span>
                         <XIcon class="h-6 w-6" aria-hidden="true" />
