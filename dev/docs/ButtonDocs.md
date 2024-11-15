@@ -118,6 +118,8 @@ Utility buttons are useful for indicating purpose. `danger` for situations when 
 
 ### Neutral
 
+Neutral comes in two flavors meant to support light vs dark colored backgrounds. Use the `inverse` style when the background is dark.
+
 <DocsDemo>
     <div class="btn-layout">
         <button class="xy-btn-neutral-sm">Button Text</button>
@@ -128,6 +130,16 @@ Utility buttons are useful for indicating purpose. `danger` for situations when 
         <button class="xy-btn-neutral-sm" disabled>Button Text</button>
         <button class="xy-btn-neutral" disabled>Button Text</button>
         <button class="xy-btn-neutral-lg" disabled>Button Text</button>
+    </div>
+    <div class="btn-layout bg-neutral-700 rounded-xl p-4 mt-8">
+        <button class="xy-btn-neutral-inverse-sm">Button Text</button>
+        <button class="xy-btn-neutral-inverse">Button Text</button>
+        <button class="xy-btn-neutral-inverse-lg">Button Text</button>
+    </div>
+    <div class="btn-layout bg-neutral-700 rounded-xl p-4 mt-8">
+        <button class="xy-btn-neutral-inverse-sm" disabled>Button Text</button>
+        <button class="xy-btn-neutral-inverse" disabled>Button Text</button>
+        <button class="xy-btn-neutral-inverse-lg" disabled>Button Text</button>
     </div>
 </DocsDemo>
 
@@ -140,6 +152,16 @@ Utility buttons are useful for indicating purpose. `danger` for situations when 
 <button class="xy-btn-neutral-sm" disabled>Button Text</button>
 <button class="xy-btn-neutral" disabled>Button Text</button>
 <button class="xy-btn-neutral-lg" disabled>Button Text</button>
+
+<!-- inverse -->
+<button class="xy-btn-neutral-inverse-sm">Button Text</button>
+<button class="xy-btn-neutral-inverse">Button Text</button>
+<button class="xy-btn-neutral-inverse-lg">Button Text</button>
+
+<!--inverse disabled-->
+<button class="xy-btn-neutral-inverse-sm" disabled>Button Text</button>
+<button class="xy-btn-neutral-inverse" disabled>Button Text</button>
+<button class="xy-btn-neutral-inverse-lg" disabled>Button Text</button>
 ```
 
 ## Specialty Buttons
@@ -192,20 +214,28 @@ These specialty buttons should be used sparingly and are generally reserved for 
 <button class="xy-btn-accent-inverse-lg" disabled>Button Text</button>
 ```
 
-## Deprecated
-
-The following buttons are deprecated and their usage should be replaced.
-
-### White
-
-Most of the existing use cases can be replaced with either `xy-btn-secondary` or `xy-btn-neutral`.
+### Brand Alternative
 
 <DocsDemo>
     <div class="btn-layout">
-        <button class="xy-btn-white">Button Text</button>
+        <button class="xy-btn-alt-sm">Button Text</button>
+        <button class="xy-btn-alt">Button Text</button>
+        <button class="xy-btn-alt-lg">Button Text</button>
+    </div>
+    <div class="btn-layout">
+        <button class="xy-btn-alt-sm" disabled>Button Text</button>
+        <button class="xy-btn-alt" disabled>Button Text</button>
+        <button class="xy-btn-alt-lg" disabled>Button Text</button>
     </div>
 </DocsDemo>
 
 ```html
-<button class="xy-btn-white">Button Text</button>
+<button class="xy-btn-alt-sm">Button Text</button>
+<button class="xy-btn-alt">Button Text</button>
+<button class="xy-btn-alt-lg">Button Text</button>
+
+<!-- disabled -->
+<button class="xy-btn-alt-sm" disabled>Button Text</button>
+<button class="xy-btn-alt" disabled>Button Text</button>
+<button class="xy-btn-alt-lg" disabled>Button Text</button>
 ```
