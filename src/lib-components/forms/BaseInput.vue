@@ -9,6 +9,7 @@ import {
   emailPattern,
   looseToNumber,
   phonePattern,
+  urlPattern,
 } from "@/composables/forms"
 import type { TextLikeInput } from "@/composables/forms"
 import { computed, useTemplateRef } from "vue"
@@ -60,6 +61,10 @@ const typeAttributes = computed(() => {
     case "tel":
       return {
         pattern: phonePattern,
+      }
+    case "url":
+      return {
+        pattern: urlPattern,
       }
     default:
       return {}

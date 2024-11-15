@@ -253,6 +253,20 @@ export const emailPattern = String.raw`^\w+([\-+.']\w+)*@\w+([\-.]\w+)*\.\w+([\-
 export const phonePattern = String.raw`[0-9]{10}|[0-9]{3}-[0-9]{3}-[0-9]{4}`
 
 /**
+ * url validation regex pattern
+ * used with input type="url" in the pattern attribute for html5
+ *
+ * The pattern is conservative and focuses on ensuring the protocol is valid
+ * and the remainder of the url does not include empty spaces.  If additional protocols
+ * need to be supported, they can be added to the first group (?:https|http|ftp).
+ *
+ * Reference: https://regex101.com/r/P5dlas/3
+ *
+ * NOTE(spk): not all JavaScript regular expression characters are not supported in input patterns.
+ */
+export const urlPattern = String.raw`^(?:https|http):\/\/[^ ]+$`
+
+/**
  * This is used for the .number modifier in v-model
  */
 export const looseToNumber = (val: any): any => {

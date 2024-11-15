@@ -77,6 +77,18 @@
     @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-sm text-white bg-xy-blue-600 hover:bg-xy-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-xy-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
   }
 
+  .xy-btn-alt-sm {
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-sm text-xy-black bg-xy-green-200 hover:bg-xy-green-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-green-100 disabled:bg-xy-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-alt {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-sm text-xy-black bg-xy-green-200 hover:bg-xy-green-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-green-100 disabled:bg-xy-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-alt-lg {
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-sm text-xy-black bg-xy-green-200 hover:bg-xy-green-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-green-100 disabled:bg-xy-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
   /* NOTE(spk): including .xy-btn-red alias for backwards compatibility */
   .xy-btn-danger-sm,
   .xy-btn-red-sm {
@@ -103,6 +115,18 @@
 
   .xy-btn-neutral-lg {
     @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-transparent hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-transparent disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-neutral-inverse-sm {
+    @apply inline-flex justify-center items-center px-2.5 py-1.5 border border-transparent text-xs font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-white/90 disabled:text-neutral-700 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-neutral-inverse {
+    @apply inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-white/90 disabled:disabled:text-neutral-700 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
+  }
+
+  .xy-btn-neutral-inverse-lg {
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-base font-display font-semibold rounded-3xl shadow-none text-neutral-800 bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:bg-white/90 disabled:disabled:text-neutral-700 disabled:cursor-not-allowed transition-colors ease-linear duration-300;
   }
 
   /* NOTE(spk): always consider the relative box-sizing between buttons with solid backgrounds and full borders vs secondary styles as they will commonly be laid out next to each other */
@@ -153,11 +177,6 @@
 
   .xy-btn-secondary-danger-lg {
     @apply inline-flex justify-center items-center py-2.5 border-b-2 border-b-red-700 text-base font-display font-semibold shadow-none text-neutral-800 hover:text-red-700 hover:border-b-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:text-neutral-800 disabled:border-b-red-700 disabled:opacity-70 disabled:cursor-not-allowed transition-colors ease-linear duration-150;
-  }
-
-  /* Deprecated */
-  .xy-btn-white {
-    @apply inline-flex justify-center items-center px-4 py-2 border border-xy-blue shadow-sm text-sm font-semibold rounded-3xl text-xy-blue bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-xy-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Header classes */

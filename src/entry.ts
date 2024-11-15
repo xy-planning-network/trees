@@ -19,6 +19,7 @@ import {
   emailPattern,
   looseToNumber,
   phonePattern,
+  urlPattern,
   textInputTypes,
   useInputField,
 } from "@/composables/forms"
@@ -67,6 +68,7 @@ export {
   emailPattern,
   looseToNumber,
   phonePattern,
+  urlPattern,
   textInputTypes,
   useInputField,
 }
