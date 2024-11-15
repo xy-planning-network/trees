@@ -759,10 +759,25 @@ const toggleProps = [
       <form id="test-form" @submit.prevent>
         <div class="space-y-8">
           <BaseInput type="text" label="Name" required />
+
           <BaseInput
             type="email"
             label="Email"
             help="Try using a gmail address!"
+            required
+          />
+
+          <BaseInput
+            type="tel"
+            label="Phone"
+            help="10 digits please, bonus points for dashes."
+            required
+          />
+
+          <BaseInput
+            type="url"
+            label="Website URL"
+            help="Don't mangle that protocol."
             required
           />
 
