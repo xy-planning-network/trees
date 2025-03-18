@@ -25,6 +25,7 @@ export interface DateRangeInput extends Input {
     minDate: number
     maxDate: number
   }
+  maxDateOpt?: Date | string | number | undefined  
   maxRange?: number
   startDate?: number
 }
