@@ -20,13 +20,22 @@ export interface BooleanInput extends Input {
   modelValue?: boolean | null
 }
 
+/**
+ * DateRangeInput allows a max range to be applied to the datepicker
+ * such that selecting the first date will then apply a max/min of +/- maxRange.
+ * This does not play nicely with maxDate and startDate.
+ * 
+ * ex: when submitting a startDate of Jan 1 and maxRange of 10, the date picker will allow
+ * dates prior to Jan 1 given the handling of maxRange being adjusted on the fly.
+ */
 export interface DateRangeInput extends Input {
   modelValue?: {
     minDate: number
     maxDate: number
   }
+  maxDate?: Date | string | number
   maxRange?: number
-  startDate?: number
+  startDate?: Date | string | number
 }
 
 export interface DateTimeInput extends Input {

@@ -16,8 +16,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
+// maxDate/startDate should be used or maxRange.
+// The props combination of maxDate/startDate and maxRange 
+// will have unexpected results.
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
+  maxDate: () => new Date(),
   maxRange: 0,
   placeholder: "mm-dd-yyyy range",
   startDate: 0,
@@ -39,7 +43,7 @@ onMounted(() => {
     allowInput: true,
     dateFormat: "m-d-Y",
     mode: "range",
-    maxDate: new Date(), // So far, we cannot have options past today for ranges
+    maxDate: props.maxDate,
     minDate: props.startDate,
     onClose: (selectedDates) => {
       if (selectedDates.length === 2) {
