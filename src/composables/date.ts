@@ -6,7 +6,7 @@ export interface DateRange {
 export interface DateRangeProps {
   help?: string
   label?: string
-  maxDateOpt?: Date | string | number | undefined 
+  maxDate?: Date | string | number
   maxRange?: number
   startDate?: number
 }

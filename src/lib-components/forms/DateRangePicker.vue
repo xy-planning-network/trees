@@ -18,7 +18,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
-  maxDateOpt: () => new Date(),
+  maxDate: () => new Date(),
   maxRange: 0,
   placeholder: "mm-dd-yyyy range",
   startDate: 0,
@@ -40,7 +40,7 @@ onMounted(() => {
     allowInput: true,
     dateFormat: "m-d-Y",
     mode: "range",
-    maxDate: props.maxDateOpt,
+    maxDate: props.maxDate,
     minDate: props.startDate,
     onClose: (selectedDates) => {
       if (selectedDates.length === 2) {
