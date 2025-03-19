@@ -16,6 +16,9 @@ defineOptions({
   inheritAttrs: false,
 })
 
+// maxDate/startDate should be used or maxRange.
+// The props combination of maxDate/startDate and maxRange 
+// will have unexpected results.
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
   maxDate: () => new Date(),

@@ -8,5 +8,5 @@ export interface DateRangeProps {
   label?: string
   maxDate?: Date | string | number
   maxRange?: number
-  startDate?: number
+  startDate?: Date | string | number
 }
