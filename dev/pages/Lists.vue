@@ -60,6 +60,7 @@ const tableColumns: TableColumns<Conifer> = [
   {
     title: "Hidden Column",
     render: () => "-",
+    show: false,
   },
 ]
 
