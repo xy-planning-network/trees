@@ -57,6 +57,10 @@ const tableColumns: TableColumns<Conifer> = [
       return h(NeedleTag, { tree: tree, onClickLeaf: announceTree })
     },
   },
+  {
+    title: "Hidden Column",
+    render: () => "-",
+  },
 ]
 
 const announceTree = (t: Conifer) => {

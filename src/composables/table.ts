@@ -85,6 +85,11 @@ export interface TableColumn<T = TableRowData> {
     | keyof T
     | ((rowData: T, rowIndex: number) => string | number | boolean | VNodeChild)
   /**
+   * A show condition for determining whether the column should be shown in the table.
+   * Use this condition for supporting dynamic column visibility.
+   */
+  show?: boolean
+  /**
    * A sorting identifier
    * Only used on DynamicTable
    */
@@ -94,4 +99,5 @@ export interface TableColumn<T = TableRowData> {
 export type TableCellAlignment = "left" | "center" | "right"
 export type TableRowData = Record<string, any>
 export type TableColumns<T = TableRowData> = TableColumn<T>[]
+
 export type TableRowsData = TableRowData[]
