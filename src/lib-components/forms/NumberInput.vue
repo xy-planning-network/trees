@@ -86,8 +86,14 @@ const masked = computed({
       return
     }
 
+    // NOTE(spk): There's no Integer type in JavaScript all numbers are stored as floating point values
+    // to avoid approximations from decimal values avoid calling parseFloat and use parseInt on only the dollar
+    // portion when converting from string to number.
     if (props.type === "money") {
-      number = number * 100
+      let parts = number.toString().split(".")
+      let dollars = parseInt(parts[0], 10)
+      let cents = parts.length > 1 ? parseInt(parts[1].padEnd(2, "0"), 10) : 0
+      number = dollars * 100 + cents
     }
 
     modelState.value = number
