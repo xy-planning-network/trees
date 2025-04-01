@@ -1,10 +1,5 @@
 import { computed, ref, useAttrs, useId } from "vue"
 import { debounce } from "@/helpers/Debounce"
-import {
-  maskitoNumberOptionsGenerator,
-  type MaskitoNumberParams,
-} from "@maskito/kit"
-import type { MaskitoOptions } from "@maskito/core"
 
 export interface Input {
   modelValue?: any
