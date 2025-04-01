@@ -38,6 +38,7 @@ import { default as InputHelp } from "./forms/InputHelp.vue"
 import { default as InputLabel } from "./forms/InputLabel.vue"
 import { default as FieldsetLegend } from "./forms/FieldsetLegend.vue"
 import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
+import { default as NumberInput } from "./forms/NumberInput.vue"
 import { default as Radio } from "./forms/Radio.vue"
 import { default as RadioCards } from "./forms/RadioCards.vue"
 import { default as Select } from "./forms/Select.vue"
@@ -77,6 +78,7 @@ export {
   InputLabel,
   FieldsetLegend,
   MultiCheckboxes,
+  NumberInput,
   Radio,
   RadioCards,
   Select,
@@ -121,6 +123,7 @@ export interface TreesComponents {
   InputLabel: typeof InputLabel
   FieldsetLegend: typeof FieldsetLegend
   MultiCheckboxes: typeof MultiCheckboxes
+  NumberInput: typeof NumberInput
   Radio: typeof Radio
   RadioCards: typeof RadioCards
   Select: typeof Select

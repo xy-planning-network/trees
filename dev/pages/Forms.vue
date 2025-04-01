@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import { InputOption, TextInputType, textInputTypes } from "@/composables/forms"
+import {
+  InputOption,
+  NumericInputType,
+  TextInputType,
+  numericInputTypes,
+  textInputTypes,
+} from "@/composables/forms"
 
 const options: InputOption[] = [
   {
@@ -43,10 +49,18 @@ const inputTypes: InputOption[] = textInputTypes.map((type) => {
   }
 })
 
+const numericInputOpts: InputOption[] = numericInputTypes.map((type) => {
+  return {
+    label: type,
+    value: type,
+  }
+})
+
 /**
  * v-models
  */
 const inputTypeSelected = ref<TextInputType>("text")
+const numericTypeSelected = ref<NumericInputType>("number")
 const inputVals = ref<Record<string, any>>({})
 const toggleValue = ref(undefined)
 const dateRangeInput = ref({ minDate: 1725148800, maxDate: 1727740799 })
@@ -59,6 +73,7 @@ const dateRangePickerCopy = `<DateRangePicker v-model="dateRange" />`
 const dateTimeCopy = `<DateTime v-model="dateTime" label="Select a date and time" help="Use your local timezone!" />`
 const inputCopy = `<BaseInput type="text" label="What's your lide moto?" help="No wrong ansswers here." placeholder="It's good to be alive" />`
 const multiCheckboxCopy = `<MultiCheckboxes v-model="selected" label="Make Some Selections" help="Select all that apply." :options="options" />`
+const numberCopy = `<NumberInput label="Give me a number" help="I'll format it for you." />`
 const radioCopy = `<Radio :options="options" v-model="selected" />`
 const selectCopy = `<Select :options="options" placeholder="Select an option that you fancy" />`
 const yesOrNoRadioCopy = `<YesOrNoRadio v-model="selected" />`
@@ -126,6 +141,12 @@ const dateTimeInputProps = [
   ...inputCommonProps,
 ]
 
+const numericInputProps = [
+  { name: "type", required: false, type: numericInputTypes.join(" | ") },
+  { name: "modelValue", required: false, type: "number | null" },
+  ...inputCommonProps,
+]
+
 const textLikeInputProps = [
   { name: "type", required: true, type: textInputTypes.join(" | ") },
   { name: "modelValue", required: false, type: "string | number | null" },
@@ -182,10 +203,11 @@ const toggleProps = [
           class="xy-link"
           target="_blank"
           >input variations</a
-        >. When the type attibute is set to 'number' the value returned will be
-        a number making v-model.number modifiers unnecessary. Likewise, the
-        `trim()` method is applies to all string values making the v-model.trim
-        modifier unnecessary.
+        >. When the type attribute is set to 'number' the value returned will be
+        a number making v-model.number modifiers unnecessary - (type 'number' is
+        Deprecated, use 'NumberInput' instead). Likewise, the `trim()` method is
+        applies to all string values making the v-model.trim modifier
+        unnecessary.
       </template>
 
       <div>
@@ -259,6 +281,56 @@ const toggleProps = [
           </div>
 
           <PropsTable :props="textLikeInputProps" />
+        </div>
+      </div>
+    </ComponentLayout>
+
+    <ComponentLayout title="Number Input">
+      <template #description
+        >The HTML input type="number" doesn't format numbers and can be
+        difficult to read. Grab this number input to provide a well formatted
+        input or capture monetary inputs as U.S. cents with the money
+        type.</template
+      >
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="numberCopy" />
+        </label>
+        <div class="mt-1">
+          <Select
+            v-model="numericTypeSelected"
+            :options="numericInputOpts"
+            label="Try out the numeric types"
+            placeholder="Select a numeric type"
+            class="mb-8"
+          />
+          <NumberInput
+            v-model="inputVals[`numericInput-${numericTypeSelected}`]"
+            :help="`Some help text for a ${numericTypeSelected}`"
+            :type="numericTypeSelected"
+            :label="`Here's an example of an <input type='${numericTypeSelected}'>`"
+            :placeholder="`A placeholder for a ${numericTypeSelected}`"
+            :precision="1"
+            @update:model-value="
+              $log(
+                `v-model update event for NumberInput type='${numericTypeSelected}': ${$event}`
+              )
+            "
+          />
+
+          <div class="mt-4">
+            <p>
+              <b>Value:</b>
+              {{ inputVals[`numericInput-${numericTypeSelected}`] }}
+            </p>
+            <p>
+              <b>Type:</b>
+              {{ typeof inputVals[`numericInput-${numericTypeSelected}`] }}
+            </p>
+          </div>
+
+          <PropsTable :props="numericInputProps" />
         </div>
       </div>
     </ComponentLayout>
@@ -779,6 +851,13 @@ const toggleProps = [
             label="Website URL"
             help="Don't mangle that protocol."
             required
+          />
+
+          <NumberInput
+            label="Number"
+            name="my-number-input"
+            required
+            :precision="1"
           />
 
           <Select :options="options" required label="Select an option" />
