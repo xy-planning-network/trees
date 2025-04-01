@@ -11,10 +11,12 @@ import type {
   TableColumns,
   TableActions,
   DynamicTableOptions,
+  TableBulkActions,
 } from "@/composables/table"
 import NeedleTag from "../components/NeedleTags.vue"
 import { conifers } from "../../db.json"
 import { Conifer } from "../domain/tree"
+import { useAppFlasher, useAppSpinner } from "@/composables"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -117,6 +119,61 @@ const dynamicTableActions: TableActions<Conifer> = {
     },
   ],
   type: "dropdown",
+}
+
+const dynamicTableBulkActions: TableBulkActions<Conifer> = {
+  actions: [
+    {
+      label: "Nuke em",
+      onClick: (ids, _, table) => {
+        const doit = confirm(`Nuke em? [${ids.join(",")}]`)
+
+        if (doit) {
+          table.refresh()
+        }
+
+        table.deselectAll()
+      },
+      show: true,
+    },
+    {
+      label: "Alert em",
+      onClick: (_, data, table) => {
+        useAppSpinner.show()
+
+        const promises: Promise<void>[] = []
+        data.forEach((tree, index) => {
+          promises.push(
+            new Promise((resolve) => {
+              setTimeout(() => {
+                useAppFlasher.info(`Selected a ${tree.name}!`)
+                resolve()
+              }, index * 1000)
+            })
+          )
+        })
+
+        Promise.all(promises).then(() => {
+          useAppSpinner.hide()
+          table.deselectAll()
+          table.refresh()
+        })
+      },
+    },
+    {
+      label: "Disabled",
+      disabled: true,
+      onClick: () => {},
+    },
+    {
+      label: "Hidden",
+      onClick: () => {},
+      show: false,
+    },
+  ],
+  isSelectable: (d) => {
+    return d.leaf.type !== "Scale-leaf"
+  },
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
@@ -264,6 +321,25 @@ const tableProps = [
             :table-columns="tableColumns"
             :table-options="dynamicTableOptions"
             :table-actions="dynamicTableActions"
+          />
+          <PropsTable :props="tableProps" />
+        </div>
+      </div>
+    </ComponentLayout>
+
+    <ComponentLayout title="Table with Bulk Actions">
+      <template #description> TODO </template>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="tableCopy" />
+        </label>
+        <div class="mt-1">
+          <DynamicTable
+            :table-columns="tableColumns"
+            :table-options="dynamicTableOptions"
+            :table-actions="dynamicTableActions"
+            :table-bulk-actions="dynamicTableBulkActions"
           />
           <PropsTable :props="tableProps" />
         </div>

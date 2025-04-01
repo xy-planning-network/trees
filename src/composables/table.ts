@@ -13,6 +13,7 @@ export interface DynamicTableOptions {
 }
 
 export interface DynamicTableAPI {
+  deselectAll: () => void
   /**
    * Force refresh the table data with the current api params state
    * @returns void
@@ -52,6 +53,16 @@ export interface TableActionItem<T = TableRowData> extends ActionItem {
   show?: boolean | ((rowData: T, rowIndex: number) => boolean)
 }
 
+export interface TableBulkActionItem<T = TableRowData> extends ActionItem {
+  disabled?: boolean
+  onClick: (
+    selected: number[],
+    selectedRows: T[],
+    tableAPI: DynamicTableAPI
+  ) => void
+  show?: boolean
+}
+
 export interface TableActions<T = TableRowData> {
   /**
    * an array of TableActionItem definitions
@@ -61,6 +72,14 @@ export interface TableActions<T = TableRowData> {
    * type determines what component will render the actions
    */
   type: "dropdown" | "buttons"
+}
+
+export interface TableBulkActions<T extends TableRowData = TableRowData> {
+  /**
+   * an array of TableActionItem definitions
+   */
+  actions: TableBulkActionItem<T>[]
+  isSelectable?: (data: T) => boolean
 }
 
 export interface TableColumn<T = TableRowData> {
@@ -97,7 +116,16 @@ export interface TableColumn<T = TableRowData> {
 }
 
 export type TableCellAlignment = "left" | "center" | "right"
-export type TableRowData = Record<string, any>
+export type TableRowData<
+  // NOTE(spk): enforced that TableRowData has an "id" key
+  T extends {
+    [key: string]: any
+    id: number
+  } = {
+    [key: string]: any
+    id: number
+  },
+> = T
 export type TableColumns<T = TableRowData> = TableColumn<T>[]
 
 export type TableRowsData = TableRowData[]
