@@ -24,7 +24,7 @@ export interface BooleanInput extends Input {
  * DateRangeInput allows a max range to be applied to the datepicker
  * such that selecting the first date will then apply a max/min of +/- maxRange.
  * This does not play nicely with maxDate and startDate.
- * 
+ *
  * ex: when submitting a startDate of Jan 1 and maxRange of 10, the date picker will allow
  * dates prior to Jan 1 given the handling of maxRange being adjusted on the fly.
  */
@@ -45,6 +45,14 @@ export interface DateTimeInput extends Input {
 export interface TextLikeInput extends Input {
   modelValue?: string | number | null
   type: TextInputType
+}
+
+export interface NumericInput extends Input {
+  max?: number
+  min?: number
+  modelValue?: number | null
+  precision?: number
+  type?: NumericInputType
 }
 
 export interface TextareaInput extends Input {
@@ -94,7 +102,7 @@ export const textInputTypes = [
   "date",
   "email",
   "month",
-  "number",
+  "number", // DEPRECATED
   "password",
   "search",
   "tel",
@@ -105,6 +113,10 @@ export const textInputTypes = [
 ] as const
 
 export type TextInputType = (typeof textInputTypes)[number]
+
+export const numericInputTypes = ["money", "number"] as const
+
+export type NumericInputType = (typeof numericInputTypes)[number]
 
 /**
  * useInputField provides a number of computed values, refs, and methods to support

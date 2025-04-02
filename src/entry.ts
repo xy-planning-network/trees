@@ -18,6 +18,7 @@ import type {
 import {
   emailPattern,
   looseToNumber,
+  numericInputTypes,
   phonePattern,
   urlPattern,
   textInputTypes,
@@ -69,6 +70,7 @@ export {
   looseToNumber,
   phonePattern,
   urlPattern,
+  numericInputTypes,
   textInputTypes,
   useInputField,
 }

@@ -38,24 +38,26 @@ export const useTable = (
   })
 
   const columns = computed(() => {
-    return tableColumn.value.map((col) => {
-      let alignmentClass = ""
-      switch (col?.alignment || "left") {
-        case "left":
-          alignmentClass = "text-left"
-          break
-        case "right":
-          alignmentClass = "text-right"
-          break
-        case "center":
-          alignmentClass = "text-center"
-          break
-      }
-      return {
-        ...col,
-        alignment: alignmentClass,
-      }
-    })
+    return tableColumn.value
+      .filter((col) => col.show ?? true)
+      .map((col) => {
+        let alignmentClass = ""
+        switch (col?.alignment || "left") {
+          case "left":
+            alignmentClass = "text-left"
+            break
+          case "right":
+            alignmentClass = "text-right"
+            break
+          case "center":
+            alignmentClass = "text-center"
+            break
+        }
+        return {
+          ...col,
+          alignment: alignmentClass,
+        }
+      })
   })
 
   const rows = computed(() => {
