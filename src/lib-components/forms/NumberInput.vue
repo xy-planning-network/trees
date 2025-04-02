@@ -14,6 +14,7 @@ import { maskitoTransform } from "@maskito/core"
 import {
   MaskitoNumberParams,
   maskitoNumberOptionsGenerator,
+  maskitoParseNumber,
 } from "@maskito/kit"
 
 defineOptions({
@@ -80,7 +81,7 @@ const masked = computed({
       return
     }
 
-    let number = parseFloat(v.toString().replace(/[^\d.-]/g, ""))
+    let number = maskitoParseNumber(v)
     if (isNaN(number)) {
       modelState.value = null
       return
