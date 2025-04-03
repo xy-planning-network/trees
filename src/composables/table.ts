@@ -13,7 +13,7 @@ export interface DynamicTableOptions {
 }
 
 export interface DynamicTableAPI {
-  deselectAll: () => void
+  clearSelection: () => void
   /**
    * Force refresh the table data with the current api params state
    * @returns void
@@ -79,6 +79,8 @@ export interface TableBulkActions<T extends TableRowData = TableRowData> {
    * an array of TableActionItem definitions
    */
   actions: TableBulkActionItem<T>[]
+  persistent?: boolean // whether to persist the selections across pagination, searching, sorting, and filtering
+  // max?: number // TODO(spk): restrain users from creating server bombing selections?
   isSelectable?: (data: T) => boolean
 }
 

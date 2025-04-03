@@ -46,6 +46,10 @@ const loadAndRender = (): void => {
     q: query.value,
   }
 
+  if (!selectionsPersisted.value) {
+    clearSelections()
+  }
+
   BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableOptions.url,
     { skipLoader: false },
@@ -137,7 +141,11 @@ const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
 })
 
-const deselectAll = () => {
+const selectionsPersisted = computed(() => {
+  return props.tableBulkActions.persistent ?? false
+})
+
+const clearSelections = () => {
   selected.value = []
 }
 
@@ -150,6 +158,12 @@ const selectedData = computed<TableRowData[]>(() => {
   return tableData.value.filter((data) => {
     return selected.value.includes(data.id)
   })
+})
+
+const selectedOnPage = computed(() => {
+  return selected.value.filter((id) => {
+    return selectableIds.value.includes(id)
+  }).length
 })
 
 const bulkActions = computed(() => {
@@ -189,8 +203,47 @@ const selectableIds = computed(() => {
     .map((d) => d["id"])
 })
 
+const bulkSelectChecked = computed(
+  () =>
+    selected.value.length > 0 &&
+    selected.value.length === selectableIds.value.length
+)
+
+const bulkSelectIndeterminate = computed(
+  () =>
+    selected.value.length > 0 &&
+    selected.value.length < selectableIds.value.length
+)
+
+const bulkSelectOnChange = (e: Event) => {
+  const isChecked = (e.target as HTMLInputElement).checked
+
+  // append all records on current page to existing selection
+  if (selectionsPersisted.value && isChecked) {
+    selected.value = [...selected.value, ...selectableIds.value.map((id) => id)]
+    return
+  }
+
+  // remove all records on current page from existing selection
+  if (selectionsPersisted.value && !isChecked) {
+    selected.value = selected.value.filter((id) => {
+      return !selectableIds.value.includes(id)
+    })
+
+    return
+  }
+
+  // set all records on current page to selection
+  if (isChecked) {
+    selected.value = selectableIds.value.map((id) => id)
+    return
+  }
+
+  clearSelections()
+}
+
 const publicMethods: DynamicTableAPI = {
-  deselectAll: deselectAll,
+  clearSelection: clearSelections,
   refresh: loadAndRender,
   reset: reloadTable,
 }
@@ -302,16 +355,10 @@ loadAndRender()
                   'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
                   'border-gray-300 focus:ring-xy-blue-500',
                 ]"
-                :checked="selected.length === selectableIds.length"
-                :indeterminate="
-                  selected.length > 0 && selected.length < selectableIds.length
-                "
+                :checked="bulkSelectChecked"
+                :indeterminate="bulkSelectIndeterminate"
                 type="checkbox"
-                @change="
-                  selected = ($event.target as HTMLInputElement).checked
-                    ? selectableIds.map((id) => id)
-                    : []
-                "
+                @change="bulkSelectOnChange"
               />
             </th>
 
@@ -382,10 +429,14 @@ loadAndRender()
             />
           </tr>
 
-          <tr v-if="selected.length > 0">
+          <tr v-if="hasBulkActions && selected.length > 0">
             <td colspan="100%" class="px-6 py-3 border-t bg-neutral-50">
               <div class="flex items-center space-x-3">
-                <div class="text-sm font-semibold">
+                <div v-if="selectionsPersisted" class="text-sm font-semibold">
+                  Selected: {{ selectedOnPage }} ({{ selected.length }} total)
+                </div>
+
+                <div v-else class="text-sm font-semibold">
                   {{ selected.length }}
                   selected
                 </div>

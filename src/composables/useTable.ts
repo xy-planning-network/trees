@@ -11,7 +11,7 @@ const isEmptyCellValue = (v: unknown): boolean => {
 }
 
 const tableAPIStub: DynamicTableAPI = {
-  deselectAll() {
+  clearSelection() {
     console.warn(
       "deselectAll() was called on a static table, did you mean to use DynamicTable?"
     )

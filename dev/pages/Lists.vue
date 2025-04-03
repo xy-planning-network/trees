@@ -132,7 +132,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
           table.refresh()
         }
 
-        table.deselectAll()
+        table.clearSelection()
       },
       show: true,
     },
@@ -155,7 +155,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
 
         Promise.all(promises).then(() => {
           useAppSpinner.hide()
-          table.deselectAll()
+          table.clearSelection()
           table.refresh()
         })
       },
@@ -174,6 +174,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
   isSelectable: (d) => {
     return d.leaf.type !== "Scale-leaf"
   },
+  persistent: true,
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
