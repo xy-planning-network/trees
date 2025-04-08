@@ -174,7 +174,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
   isSelectable: (d) => {
     return d.leaf.type !== "Scale-leaf"
   },
-  persistent: true,
+  persistent: false,
 }
 
 const dynamicTableOptions: DynamicTableOptions = {

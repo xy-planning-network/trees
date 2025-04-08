@@ -85,12 +85,15 @@ const range = computed(() => {
     class="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-y-0 sm:gap-x-3 sm:justify-center"
   >
     <!--Range details-->
-    <div
-      class="text-center text-sm font-medium text-neutral-600 sm:text-left sm:mr-auto"
-    >
-      Showing {{ range.start }}-{{ range.end }} of
-      {{ pagination.totalItems }} results
-    </div>
+    <p class="text-center text-sm text-neutral-700 sm:text-left sm:mr-auto">
+      Showing
+      <span class="font-medium">{{ range.start }}</span>
+      to
+      <span class="font-medium">{{ range.end }}</span>
+      of
+      <span class="font-medium">{{ pagination.totalItems }}</span>
+      results
+    </p>
 
     <!--Pager-->
     <div class="flex gap-3 items-center justify-center shrink-0">
@@ -115,7 +118,9 @@ const range = computed(() => {
         />
       </div>
 
-      <div class="text-sm font-semibold">of {{ pagination.totalPages }}</div>
+      <div class="text-sm">
+        of <span class="font-medium">{{ pagination.totalPages }}</span>
+      </div>
 
       <button
         class="xy-btn-neutral"

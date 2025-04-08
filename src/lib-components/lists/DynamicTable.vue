@@ -424,19 +424,21 @@ loadAndRender()
           </tr>
 
           <tr v-if="hasBulkActions && selected.length > 0">
-            <td colspan="100%" class="px-6 py-3 border-t bg-neutral-50">
-              <div class="flex items-center space-x-3">
+            <td colspan="100%" class="px-6 py-2.5 border-t bg-neutral-50">
+              <div class="flex items-center gap-x-3">
+                <div class="text-sm shrink-0">
+                  Selected
+                  <span class="font-medium">{{ selectedOnPage.length }}</span>
+                  of
+                  <span class="font-medium">{{ selectable.length }}</span>
+                  <span v-if="selectionsPersisted">
+                    /
+                    <span class="font-medium">{{ selected.length }}</span>
+                    total
+                  </span>
+                </div>
+
                 <TableActionButtons :actions="bulkActions" />
-
-                <div v-if="selectionsPersisted" class="text-sm font-semibold">
-                  You've selected {{ selectedOnPage.length }} on this page and
-                  {{ selected.length }} across all pages.
-                </div>
-
-                <div v-else class="text-sm font-semibold">
-                  {{ selected.length }}
-                  selected
-                </div>
               </div>
             </td>
           </tr>

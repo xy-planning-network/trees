@@ -53,9 +53,23 @@ export interface TableActionItem<T = TableRowData> extends ActionItem {
   show?: boolean | ((rowData: T, rowIndex: number) => boolean)
 }
 
-export interface TableBulkActionItem<T = TableRowData> extends ActionItem {
+export interface TableBulkActionItem extends ActionItem {
+  /**
+   * Whether or not the bulk action item is enabled.  Disabled actions are
+   * visible in the UI, but do not trigger click events.
+   */
   disabled?: boolean
+  /**
+   * The callback method triggered by the action item buttons click event.
+   * @param selected the array of selected rows by the primary key `id`
+   * @param tableAPI DynamicTableAPI
+   * @returns void
+   */
   onClick: (selected: number[], tableAPI: DynamicTableAPI) => void
+  /**
+   * Whether or not to visible show the action item in the UI.  When all action items
+   * on a table a hidden with show: false, bulk selections are disabled for the table.
+   */
   show?: boolean
 }
 
@@ -74,9 +88,14 @@ export interface TableBulkActions<T = TableRowData> {
   /**
    * an array of TableActionItem definitions
    */
-  actions: TableBulkActionItem<T>[]
-  persistent?: boolean // whether to persist the selections across pagination, searching, sorting, and filtering
-  // max?: number // TODO(spk): restrain users from creating server bombing selections?
+  actions: TableBulkActionItem[]
+  /**
+   * whether to persist the selections across pagination, searching, sorting, and filtering
+   */
+  persistent?: boolean
+  /**
+   * a function that determines if the row can be selected for bulk actions
+   */
   isSelectable?: (data: T) => boolean
 }
 
