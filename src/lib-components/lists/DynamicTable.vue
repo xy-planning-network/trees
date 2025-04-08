@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from "vue"
-import { ActionsDropdown } from "@/lib-components"
+import { ActionsDropdown, TablePaginator } from "@/lib-components"
 import DateRangePicker from "../forms/DateRangePicker.vue"
-import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
 import type {
   DynamicTableAPI,
@@ -508,10 +507,11 @@ loadAndRender()
       </table>
     </div>
 
-    <Paginator
-      v-if="hasContent"
-      v-model="pagination"
-      @update:model-value="loadAndRender()"
-    />
+    <div v-if="hasContent" class="mt-4">
+      <TablePaginator
+        v-model="pagination"
+        @update:model-value="loadAndRender()"
+      />
+    </div>
   </div>
 </template>

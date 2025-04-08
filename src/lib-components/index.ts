@@ -22,6 +22,7 @@ import { default as Spinner } from "./overlays/Spinner.vue"
 import { default as DataTable } from "./lists/DataTable.vue"
 import { default as Steps } from "./navigation/Steps.vue"
 import { default as DynamicTable } from "./lists/DynamicTable.vue"
+import { default as TablePaginator } from "./navigation/TablePaginator.vue"
 import { default as Tabs } from "./navigation/Tabs.vue"
 import { default as Toggle } from "./forms/Toggle.vue"
 import { default as XYSpinner } from "./indicators/XYSpinner.vue"
@@ -67,6 +68,7 @@ export {
   Steps,
   DynamicTable,
   Tabs,
+  TablePaginator,
   Toggle,
   Tooltip,
   BaseInput,
@@ -112,6 +114,7 @@ export interface TreesComponents {
   DynamicTable: typeof DynamicTable
   Steps: typeof Steps
   Tabs: typeof Tabs
+  TablePaginator: typeof TablePaginator
   Toggle: typeof Toggle
   Tooltip: typeof Tooltip
   BaseInput: typeof BaseInput
