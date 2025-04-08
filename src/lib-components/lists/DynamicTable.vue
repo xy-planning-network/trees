@@ -154,16 +154,10 @@ const selected = defineModel<number[]>("selected", {
   default: [],
 })
 
-const selectedData = computed<TableRowData[]>(() => {
-  return tableData.value.filter((data) => {
-    return selected.value.includes(data.id)
-  })
-})
-
 const selectedOnPage = computed(() => {
   return selected.value.filter((id) => {
-    return selectableIds.value.includes(id)
-  }).length
+    return selectable.value.includes(id)
+  })
 })
 
 const bulkActions = computed(() => {
@@ -176,20 +170,21 @@ const bulkActions = computed(() => {
         ...action,
         disabled: selected.value.length === 0 || action.disabled,
         onClick: () =>
-          action.onClick.apply(undefined, [
-            selected.value,
-            selectedData.value,
-            publicMethods,
-          ]),
+          action.onClick.apply(undefined, [selected.value, publicMethods]),
       }
     })
 })
 
 const hasBulkActions = computed(() => bulkActions.value.length > 0)
 
-const selectableIds = computed(() => {
+const selectable = computed(() => {
   return tableData.value
     .filter((row) => {
+      // NOTE(spk): table data must have an "id" key for bulk actions.
+      if (row.id === undefined) {
+        return false
+      }
+
       if (props.tableBulkActions.isSelectable === undefined) {
         return true
       }
@@ -205,14 +200,14 @@ const selectableIds = computed(() => {
 
 const bulkSelectChecked = computed(
   () =>
-    selected.value.length > 0 &&
-    selected.value.length === selectableIds.value.length
+    selectedOnPage.value.length > 0 &&
+    selectedOnPage.value.length === selectable.value.length
 )
 
 const bulkSelectIndeterminate = computed(
   () =>
-    selected.value.length > 0 &&
-    selected.value.length < selectableIds.value.length
+    selectedOnPage.value.length > 0 &&
+    selectedOnPage.value.length < selectable.value.length
 )
 
 const bulkSelectOnChange = (e: Event) => {
@@ -220,14 +215,14 @@ const bulkSelectOnChange = (e: Event) => {
 
   // append all records on current page to existing selection
   if (selectionsPersisted.value && isChecked) {
-    selected.value = [...selected.value, ...selectableIds.value.map((id) => id)]
+    selected.value = [...selected.value, ...selectable.value.map((id) => id)]
     return
   }
 
   // remove all records on current page from existing selection
   if (selectionsPersisted.value && !isChecked) {
     selected.value = selected.value.filter((id) => {
-      return !selectableIds.value.includes(id)
+      return !selectable.value.includes(id)
     })
 
     return
@@ -235,7 +230,7 @@ const bulkSelectOnChange = (e: Event) => {
 
   // set all records on current page to selection
   if (isChecked) {
-    selected.value = selectableIds.value.map((id) => id)
+    selected.value = selectable.value.map((id) => id)
     return
   }
 
@@ -432,16 +427,17 @@ loadAndRender()
           <tr v-if="hasBulkActions && selected.length > 0">
             <td colspan="100%" class="px-6 py-3 border-t bg-neutral-50">
               <div class="flex items-center space-x-3">
+                <TableActionButtons :actions="bulkActions" />
+
                 <div v-if="selectionsPersisted" class="text-sm font-semibold">
-                  Selected: {{ selectedOnPage }} ({{ selected.length }} total)
+                  You've selected {{ selectedOnPage.length }} on this page and
+                  {{ selected.length }} across all pages.
                 </div>
 
                 <div v-else class="text-sm font-semibold">
                   {{ selected.length }}
                   selected
                 </div>
-
-                <TableActionButtons :actions="bulkActions" />
               </div>
             </td>
           </tr>
@@ -463,9 +459,9 @@ loadAndRender()
                   'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
                   'border-gray-300 focus:ring-xy-blue-500',
                 ]"
-                :disabled="!selectableIds.includes(row.rowData.id)"
+                :disabled="!selectable.includes(row.rowData?.id)"
                 type="checkbox"
-                :value="row.rowData.id"
+                :value="row.rowData?.id"
               />
             </td>
 

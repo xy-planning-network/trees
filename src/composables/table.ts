@@ -55,11 +55,7 @@ export interface TableActionItem<T = TableRowData> extends ActionItem {
 
 export interface TableBulkActionItem<T = TableRowData> extends ActionItem {
   disabled?: boolean
-  onClick: (
-    selected: number[],
-    selectedRows: T[],
-    tableAPI: DynamicTableAPI
-  ) => void
+  onClick: (selected: number[], tableAPI: DynamicTableAPI) => void
   show?: boolean
 }
 
@@ -74,7 +70,7 @@ export interface TableActions<T = TableRowData> {
   type: "dropdown" | "buttons"
 }
 
-export interface TableBulkActions<T extends TableRowData = TableRowData> {
+export interface TableBulkActions<T = TableRowData> {
   /**
    * an array of TableActionItem definitions
    */
@@ -118,16 +114,6 @@ export interface TableColumn<T = TableRowData> {
 }
 
 export type TableCellAlignment = "left" | "center" | "right"
-export type TableRowData<
-  // NOTE(spk): enforced that TableRowData has an "id" key
-  T extends {
-    [key: string]: any
-    id: number
-  } = {
-    [key: string]: any
-    id: number
-  },
-> = T
+export type TableRowData = Record<string, any>
 export type TableColumns<T = TableRowData> = TableColumn<T>[]
-
 export type TableRowsData = TableRowData[]

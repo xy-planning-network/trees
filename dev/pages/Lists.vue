@@ -125,7 +125,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
   actions: [
     {
       label: "Nuke em",
-      onClick: (ids, _, table) => {
+      onClick: (ids, table) => {
         const doit = confirm(`Nuke em? [${ids.join(",")}]`)
 
         if (doit) {
@@ -138,15 +138,15 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
     },
     {
       label: "Alert em",
-      onClick: (_, data, table) => {
+      onClick: (ids, table) => {
         useAppSpinner.show()
 
         const promises: Promise<void>[] = []
-        data.forEach((tree, index) => {
+        ids.forEach((id, index) => {
           promises.push(
             new Promise((resolve) => {
               setTimeout(() => {
-                useAppFlasher.info(`Selected a ${tree.name}!`)
+                useAppFlasher.info(`Updating ${id}!`)
                 resolve()
               }, index * 1000)
             })
