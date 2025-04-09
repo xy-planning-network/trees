@@ -136,4 +136,5 @@ export interface TableColumn<T = TableRowData> {
 export type TableCellAlignment = "left" | "center" | "right"
 export type TableRowData = Record<string, any>
 export type TableColumns<T = TableRowData> = TableColumn<T>[]
+
 export type TableRowsData = TableRowData[]

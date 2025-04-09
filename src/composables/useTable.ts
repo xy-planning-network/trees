@@ -13,7 +13,7 @@ const isEmptyCellValue = (v: unknown): boolean => {
 const tableAPIStub: DynamicTableAPI = {
   clearSelection() {
     console.warn(
-      "deselectAll() was called on a static table, did you mean to use DynamicTable?"
+      "clearSelection() was called on a static table, did you mean to use DynamicTable?"
     )
   },
   refresh() {
