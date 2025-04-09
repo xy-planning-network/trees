@@ -11,6 +11,11 @@ const isEmptyCellValue = (v: unknown): boolean => {
 }
 
 const tableAPIStub: DynamicTableAPI = {
+  clearSelection() {
+    console.warn(
+      "clearSelection() was called on a static table, did you mean to use DynamicTable?"
+    )
+  },
   refresh() {
     console.warn(
       "refresh() was called on a static table, did you mean to use DynamicTable?"
@@ -21,6 +26,7 @@ const tableAPIStub: DynamicTableAPI = {
       "reset() was called on a static table, did you mean to use DynamicTable?"
     )
   },
+  selectedData: computed(() => []),
 }
 
 export const useTable = (
@@ -80,9 +86,9 @@ export const useTable = (
         rowData: rowData,
         cells: columns.value.map((col) => {
           const val =
-            typeof col.render === "string"
-              ? rowData[col.render]
-              : col.render(rowData, rowIdx)
+            typeof col.render === "function"
+              ? col.render.apply(undefined, [rowData, rowIdx])
+              : rowData[col.render]
 
           const classNames = col?.classNames || ""
 

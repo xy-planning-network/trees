@@ -5,13 +5,16 @@ import type { ActionItem } from "@/composables/nav"
 import { useActionItems } from "@/composables/useActionItems"
 import { toRef, useTemplateRef } from "vue"
 import { useFloating, autoUpdate } from "@floating-ui/vue"
+import type { Placement } from "@floating-ui/vue"
 
 const props = withDefaults(
   defineProps<{
     actions?: ActionItem[]
+    placement?: Placement
   }>(),
   {
     actions: () => [],
+    placement: "bottom-end",
   }
 )
 
@@ -22,7 +25,7 @@ const { actions, hasActions } = useActionItems(toRef(props, "actions"))
 const triggerRef = useTemplateRef<InstanceType<typeof MenuButton>>("trigger")
 const wrapperRef = useTemplateRef<HTMLElement | null>("wrapper")
 const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
-  placement: "bottom-end",
+  placement: props.placement,
   strategy: "fixed",
   whileElementsMounted: autoUpdate,
 })
