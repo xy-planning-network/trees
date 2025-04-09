@@ -26,6 +26,7 @@ const tableAPIStub: DynamicTableAPI = {
       "reset() was called on a static table, did you mean to use DynamicTable?"
     )
   },
+  selectedData: computed(() => []),
 }
 
 export const useTable = (

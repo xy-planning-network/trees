@@ -45,9 +45,7 @@ const loadAndRender = (): void => {
     q: query.value,
   }
 
-  if (!selectionsPersisted.value) {
-    clearSelections()
-  }
+  clearSelections()
 
   BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableOptions.url,
@@ -140,10 +138,6 @@ const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
 })
 
-const selectionsPersisted = computed(() => {
-  return props.tableBulkActions.persistent ?? false
-})
-
 const clearSelections = () => {
   selected.value = []
 }
@@ -151,6 +145,12 @@ const clearSelections = () => {
 const selected = defineModel<number[]>("selected", {
   required: false,
   default: [],
+})
+
+const selectedData = computed((): TableRowData[] => {
+  return tableData.value.filter((data) => {
+    return selected.value.includes(data?.id)
+  })
 })
 
 const selectedOnPage = computed(() => {
@@ -171,7 +171,7 @@ const bulkActions = computed(() => {
         onClick: () =>
           action.onClick.apply(undefined, [
             selected.value,
-            undefined,
+            selectedData.value,
             publicMethods,
           ]),
       }
@@ -216,21 +216,6 @@ const bulkSelectIndeterminate = computed(
 const bulkSelectOnChange = (e: Event) => {
   const isChecked = (e.target as HTMLInputElement).checked
 
-  // append all records on current page to existing selection
-  if (selectionsPersisted.value && isChecked) {
-    selected.value = [...selected.value, ...selectable.value.map((id) => id)]
-    return
-  }
-
-  // remove all records on current page from existing selection
-  if (selectionsPersisted.value && !isChecked) {
-    selected.value = selected.value.filter((id) => {
-      return !selectable.value.includes(id)
-    })
-
-    return
-  }
-
   // set all records on current page to selection
   if (isChecked) {
     selected.value = selectable.value.map((id) => id)
@@ -242,6 +227,7 @@ const bulkSelectOnChange = (e: Event) => {
 
 const publicMethods: DynamicTableAPI = {
   clearSelection: clearSelections,
+  selectedData: selectedData,
   refresh: loadAndRender,
   reset: reloadTable,
 }
@@ -435,11 +421,6 @@ loadAndRender()
                   <span class="font-medium">{{ selectedOnPage.length }}</span>
                   of
                   <span class="font-medium">{{ selectable.length }}</span>
-                  <span v-if="selectionsPersisted">
-                    /
-                    <span class="font-medium">{{ selected.length }}</span>
-                    total
-                  </span>
                 </div>
 
                 <TableActionButtons :actions="bulkActions" />

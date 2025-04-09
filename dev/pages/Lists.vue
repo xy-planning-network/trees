@@ -138,15 +138,15 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
     },
     {
       label: "Update",
-      onClick: (ids, _, table) => {
+      onClick: (_, data, table) => {
         useAppSpinner.show()
 
         const promises: Promise<void>[] = []
-        ids.forEach((id, index) => {
+        data.forEach((data, index) => {
           promises.push(
             new Promise((resolve) => {
               setTimeout(() => {
-                useAppFlasher.info(`Updating ${id}!`)
+                useAppFlasher.info(`Updating ${data.name}!`)
                 resolve()
               }, index * 1000)
             })
@@ -174,7 +174,6 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
   isSelectable: (d) => {
     return d.leaf.type !== "Scale-leaf"
   },
-  persistent: false,
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
