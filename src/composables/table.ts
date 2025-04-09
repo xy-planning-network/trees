@@ -62,10 +62,11 @@ export interface TableBulkActionItem extends ActionItem {
   /**
    * The callback method triggered by the action item buttons click event.
    * @param selected the array of selected rows by the primary key `id`
+   * @param _ NOTE(spk): Holding for T[]
    * @param tableAPI DynamicTableAPI
    * @returns void
    */
-  onClick: (selected: number[], tableAPI: DynamicTableAPI) => void
+  onClick: (selected: number[], _: undefined, tableAPI: DynamicTableAPI) => void
   /**
    * Whether or not to visible show the action item in the UI.  When all action items
    * on a table a hidden with show: false, bulk selections are disabled for the table.

@@ -85,7 +85,9 @@ const range = computed(() => {
     class="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-y-0 sm:gap-x-3 sm:justify-center"
   >
     <!--Range details-->
-    <p class="text-center text-sm text-neutral-700 sm:text-left sm:mr-auto">
+    <p
+      class="text-center text-sm text-neutral-700 sm:text-left sm:mr-auto sm:w-1/3"
+    >
       Showing
       <span class="font-medium">{{ range.start }}</span>
       to
@@ -95,46 +97,50 @@ const range = computed(() => {
       results
     </p>
 
-    <!--Pager-->
-    <div class="flex gap-3 items-center justify-center shrink-0">
-      <button
-        class="xy-btn-neutral"
-        :disabled="page <= 1"
-        type="button"
-        @click.prevent="page--"
-      >
-        &larr; <span class="sr-only">Previous</span>
-      </button>
+    <div
+      class="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-y-0 sm:gap-x-3 sm:flex-1"
+    >
+      <!--Pager-->
+      <div class="flex gap-3 items-center justify-center shrink-0 md:w-1/2">
+        <button
+          class="xy-btn-neutral"
+          :disabled="page <= 1"
+          type="button"
+          @click.prevent="page--"
+        >
+          &larr; <span class="sr-only">Previous</span>
+        </button>
 
-      <div class="max-w-[50px]">
-        <NumberInput
-          :model-value="page"
-          :min="1"
-          :max="pagination.totalPages"
-          type="number"
-          @update:model-value="debouncePageInput"
-          @keydown.down="onDown"
-          @keydown.up="onUp"
-        />
+        <div class="max-w-[50px]">
+          <NumberInput
+            :model-value="page"
+            :min="1"
+            :max="pagination.totalPages"
+            type="number"
+            @update:model-value="debouncePageInput"
+            @keydown.down.prevent="onDown"
+            @keydown.up.prevent="onUp"
+          />
+        </div>
+
+        <div class="text-sm">
+          of <span class="font-medium">{{ pagination.totalPages }}</span>
+        </div>
+
+        <button
+          class="xy-btn-neutral"
+          :disabled="page >= pagination.totalPages"
+          type="button"
+          @click.prevent="page++"
+        >
+          <span class="sr-only">Next</span> &rarr;
+        </button>
       </div>
 
-      <div class="text-sm">
-        of <span class="font-medium">{{ pagination.totalPages }}</span>
+      <!--Per Page Selector-->
+      <div class="max-w-[150px] sm:ml-auto">
+        <Select v-model="perPage" :options="pageSelectOpts" />
       </div>
-
-      <button
-        class="xy-btn-neutral"
-        :disabled="page >= pagination.totalPages"
-        type="button"
-        @click.prevent="page++"
-      >
-        <span class="sr-only">Next</span> &rarr;
-      </button>
-    </div>
-
-    <!--Per Page Selector-->
-    <div class="max-w-[150px] sm:ml-auto">
-      <Select v-model="perPage" :options="pageSelectOpts" />
     </div>
   </div>
 </template>

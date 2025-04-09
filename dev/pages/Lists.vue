@@ -124,9 +124,9 @@ const dynamicTableActions: TableActions<Conifer> = {
 const dynamicTableBulkActions: TableBulkActions<Conifer> = {
   actions: [
     {
-      label: "Nuke em",
-      onClick: (ids, table) => {
-        const doit = confirm(`Nuke em? [${ids.join(",")}]`)
+      label: "Remove",
+      onClick: (ids, _, table) => {
+        const doit = confirm(`Remove these items? [${ids.join(",")}]`)
 
         if (doit) {
           table.refresh()
@@ -137,8 +137,8 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
       show: true,
     },
     {
-      label: "Alert em",
-      onClick: (ids, table) => {
+      label: "Update",
+      onClick: (ids, _, table) => {
         useAppSpinner.show()
 
         const promises: Promise<void>[] = []
@@ -186,12 +186,14 @@ const dynamicTableOptions: DynamicTableOptions = {
 
 const tableCopy = `<DynamicTable :table-columns="tableColumns" :table-options="tableOptions" />`
 const tableProps = [
-  { name: "clickable", required: false, type: "boolean" },
-  { name: "loader", required: false, type: "boolean" },
   { name: "tableActions", required: false, type: "TableActions<T>" },
-  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
   { name: "tableColumns", required: true, type: "TableColumns<T>" },
   { name: "tableOptions", required: true, type: "DynamicTableOptions" },
+]
+
+const dynamictableProps = [
+  ...tableProps,
+  { name: "tableBulkActions", required: false, type: "TableBulkActions<T>" },
 ]
 </script>
 <template>
@@ -323,13 +325,16 @@ const tableProps = [
             :table-options="dynamicTableOptions"
             :table-actions="dynamicTableActions"
           />
-          <PropsTable :props="tableProps" />
+          <PropsTable :props="dynamictableProps" />
         </div>
       </div>
     </ComponentLayout>
 
     <ComponentLayout title="Table with Bulk Actions">
-      <template #description> TODO </template>
+      <template #description
+        >Individual row ActionsDropdown's can also be combined with bulk actions
+        applied against multiple row selections.</template
+      >
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
@@ -342,7 +347,7 @@ const tableProps = [
             :table-actions="dynamicTableActions"
             :table-bulk-actions="dynamicTableBulkActions"
           />
-          <PropsTable :props="tableProps" />
+          <PropsTable :props="dynamictableProps" />
         </div>
       </div>
     </ComponentLayout>

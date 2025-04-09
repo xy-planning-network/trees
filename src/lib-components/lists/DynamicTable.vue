@@ -169,7 +169,11 @@ const bulkActions = computed(() => {
         ...action,
         disabled: selected.value.length === 0 || action.disabled,
         onClick: () =>
-          action.onClick.apply(undefined, [selected.value, publicMethods]),
+          action.onClick.apply(undefined, [
+            selected.value,
+            undefined,
+            publicMethods,
+          ]),
       }
     })
 })
