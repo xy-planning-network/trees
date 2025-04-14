@@ -6,6 +6,8 @@ export interface DynamicTableOptions {
   dateSearch?: boolean | DateRangeProps
   defaultSort?: string
   defaultSortDirection?: string
+  pageOptions?: { label: string; value: number }[]
+  perPage?: number
   refreshTrigger: number
   reloadTrigger?: number
   search?: boolean

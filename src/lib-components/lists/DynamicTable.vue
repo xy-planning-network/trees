@@ -103,7 +103,7 @@ const dateRange = ref({
 
 const pagination = ref({
   page: 1,
-  perPage: 10,
+  perPage: props.tableOptions?.perPage || 10,
   totalItems: 0,
   totalPages: 0,
 })
@@ -497,6 +497,7 @@ loadAndRender()
     <div v-if="hasContent" class="mt-4">
       <TablePaginator
         v-model="pagination"
+        :page-options="tableOptions?.pageOptions"
         @update:model-value="loadAndRender()"
       />
     </div>
