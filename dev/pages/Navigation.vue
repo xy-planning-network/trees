@@ -30,7 +30,7 @@ const pagination = ref({
   page: 1,
   perPage: 10,
   totalItems: 100,
-  totalPages: 10,
+  totalPages: 100,
 })
 
 const paginatorCopy = `<Paginator v-model="pagination" />`
@@ -99,6 +99,31 @@ const tabsProps = [
             Current Page: {{ pagination.page }}
           </p>
           <Paginator
+            v-model="pagination"
+            @update:model-value="
+              $log(`Pagination update event, on page: (${$event.page})`)
+            "
+          />
+          <PropsTable :props="paginatorProps" />
+        </div>
+      </div>
+    </ComponentLayout>
+
+    <ComponentLayout title="Table Paginator">
+      <template #description>
+        This is used to create page numbers based on our server side paging
+        implementation underneath a list of data.
+      </template>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="paginatorCopy" />
+        </label>
+        <div class="mt-1">
+          <p class="text-center font-bold mt-2 mb-8">
+            Current Page: {{ pagination.page }}
+          </p>
+          <TablePaginator
             v-model="pagination"
             @update:model-value="
               $log(`Pagination update event, on page: (${$event.page})`)

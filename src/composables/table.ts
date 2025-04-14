@@ -1,4 +1,4 @@
-import { VNodeChild } from "vue"
+import { VNodeChild, type ComputedRef } from "vue"
 import { ActionItem } from "@/composables/nav"
 import { DateRangeProps } from "./date"
 
@@ -6,13 +6,21 @@ export interface DynamicTableOptions {
   dateSearch?: boolean | DateRangeProps
   defaultSort?: string
   defaultSortDirection?: string
+  pageOptions?: { label: string; value: number }[]
+  perPage?: number
   refreshTrigger: number
   reloadTrigger?: number
   search?: boolean
   url: string
 }
 
-export interface DynamicTableAPI {
+export interface DynamicTableAPI<T = TableRowData> {
+  /**
+   * Clear the currently selected rows when bulk selections are enabled
+   * This method is called when refresh and reset methods are called.
+   * @returns void
+   */
+  clearSelection: () => void
   /**
    * Force refresh the table data with the current api params state
    * @returns void
@@ -23,6 +31,10 @@ export interface DynamicTableAPI {
    * @returns void
    */
   reset: () => void
+  /**
+   * The selected data records when bulk actions are enabled on the table
+   */
+  selectedData: ComputedRef<T[]>
 }
 
 export interface TableActionItem<T = TableRowData> extends ActionItem {
@@ -52,6 +64,31 @@ export interface TableActionItem<T = TableRowData> extends ActionItem {
   show?: boolean | ((rowData: T, rowIndex: number) => boolean)
 }
 
+export interface TableBulkActionItem<T = TableRowData> extends ActionItem {
+  /**
+   * Whether or not the bulk action item is enabled.  Disabled actions are
+   * visible in the UI, but do not trigger click events.
+   */
+  disabled?: boolean
+  /**
+   * The callback method triggered by the action item buttons click event.
+   * @param selected the array of selected rows by the primary key `id`
+   * @param selectedData the array of selected rows as the underlying data type T
+   * @param tableAPI DynamicTableAPI
+   * @returns void
+   */
+  onClick: (
+    selected: number[],
+    selectedData: T[],
+    tableAPI: DynamicTableAPI
+  ) => void
+  /**
+   * Whether or not to visible show the action item in the UI.  When all action items
+   * on a table a hidden with show: false, bulk selections are disabled for the table.
+   */
+  show?: boolean
+}
+
 export interface TableActions<T = TableRowData> {
   /**
    * an array of TableActionItem definitions
@@ -61,6 +98,17 @@ export interface TableActions<T = TableRowData> {
    * type determines what component will render the actions
    */
   type: "dropdown" | "buttons"
+}
+
+export interface TableBulkActions<T = TableRowData> {
+  /**
+   * an array of TableActionItem definitions
+   */
+  actions: TableBulkActionItem<T>[]
+  /**
+   * a function that determines if the row can be selected for bulk actions
+   */
+  isSelectable?: (data: T) => boolean
 }
 
 export interface TableColumn<T = TableRowData> {

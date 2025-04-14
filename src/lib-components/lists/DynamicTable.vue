@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from "vue"
-import { ActionsDropdown } from "@/lib-components"
+import { ActionsDropdown, TablePaginator } from "@/lib-components"
 import DateRangePicker from "../forms/DateRangePicker.vue"
-import Paginator from "../navigation/Paginator.vue"
 import BaseAPI from "../../api/base"
 import type {
   DynamicTableAPI,
   DynamicTableOptions,
   TableActions,
+  TableBulkActions,
   TableColumns,
+  TableRowData,
 } from "@/composables/table"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
@@ -19,11 +20,13 @@ import TableActionButtons from "./TableActionButtons.vue"
 const props = withDefaults(
   defineProps<{
     tableActions?: TableActions<any>
+    tableBulkActions?: TableBulkActions<any>
     tableColumns: TableColumns<any>
     tableOptions: DynamicTableOptions
   }>(),
   {
     tableActions: () => ({ type: "dropdown", actions: [] }),
+    tableBulkActions: () => ({ actions: [] }),
   }
 )
 
@@ -42,6 +45,8 @@ const loadAndRender = (): void => {
     q: query.value,
   }
 
+  clearSelections()
+
   BaseAPI.get<TrailsRespPaged<unknown>>(
     props.tableOptions.url,
     { skipLoader: false },
@@ -54,7 +59,7 @@ const loadAndRender = (): void => {
         totalItems: success.data.totalItems,
         totalPages: success.data.totalPages,
       }
-      tableData.value = success.data.items as Record<string, any>[]
+      tableData.value = success.data.items as TableRowData[]
     },
     () => {
       useAppFlasher.genericError()
@@ -81,19 +86,7 @@ const setDateRange = (): void => {
   }
 }
 
-const tableData = ref<Record<string, any>[]>([])
-
-const publicMethods: DynamicTableAPI = {
-  refresh: loadAndRender,
-  reset: reloadTable,
-}
-
-const { columns, hasActions, isEmptyCellValue, rows } = useTable(
-  tableData,
-  toRef(props, "tableColumns"),
-  toRef(props, "tableActions"),
-  publicMethods
-)
+const tableData = ref<TableRowData[]>([])
 
 const currentSort = ref(
   props.tableOptions.defaultSort ? props.tableOptions.defaultSort : ""
@@ -110,7 +103,7 @@ const dateRange = ref({
 
 const pagination = ref({
   page: 1,
-  perPage: 10,
+  perPage: props.tableOptions?.perPage || 10,
   totalItems: 0,
   totalPages: 0,
 })
@@ -144,6 +137,107 @@ const dateSearchProps = computed((): DateRangeProps => {
 const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
 })
+
+const clearSelections = () => {
+  selected.value = []
+}
+
+const selected = defineModel<number[]>("selected", {
+  required: false,
+  default: [],
+})
+
+const selectedData = computed((): TableRowData[] => {
+  return tableData.value.filter((data) => {
+    return selected.value.includes(data?.id)
+  })
+})
+
+const selectedOnPage = computed(() => {
+  return selected.value.filter((id) => {
+    return selectable.value.includes(id)
+  })
+})
+
+const bulkActions = computed(() => {
+  return props.tableBulkActions.actions
+    .filter((action) => {
+      return action.show ?? true
+    })
+    .map((action) => {
+      return {
+        ...action,
+        disabled: selected.value.length === 0 || action.disabled,
+        onClick: () =>
+          action.onClick.apply(undefined, [
+            selected.value,
+            selectedData.value,
+            publicMethods,
+          ]),
+      }
+    })
+})
+
+const hasBulkActions = computed(() => bulkActions.value.length > 0)
+
+const selectable = computed(() => {
+  return tableData.value
+    .filter((row) => {
+      // NOTE(spk): table data must have an "id" key for bulk actions.
+      if (row.id === undefined) {
+        return false
+      }
+
+      if (props.tableBulkActions.isSelectable === undefined) {
+        return true
+      }
+
+      if (props.tableBulkActions.isSelectable(row)) {
+        return true
+      }
+
+      return false
+    })
+    .map((d) => d["id"])
+})
+
+const bulkSelectChecked = computed(
+  () =>
+    selectedOnPage.value.length > 0 &&
+    selectedOnPage.value.length === selectable.value.length
+)
+
+const bulkSelectIndeterminate = computed(
+  () =>
+    selectedOnPage.value.length > 0 &&
+    selectedOnPage.value.length < selectable.value.length
+)
+
+const bulkSelectOnChange = (e: Event) => {
+  const isChecked = (e.target as HTMLInputElement).checked
+
+  // set all records on current page to selection
+  if (isChecked) {
+    selected.value = selectable.value.map((id) => id)
+    return
+  }
+
+  clearSelections()
+}
+
+const publicMethods: DynamicTableAPI = {
+  clearSelection: clearSelections,
+  selectedData: selectedData,
+  refresh: loadAndRender,
+  reset: reloadTable,
+}
+
+const { columns, hasActions, isEmptyCellValue, rows } = useTable(
+  tableData,
+  toRef(props, "tableColumns"),
+  toRef(props, "tableActions"),
+  publicMethods
+)
 
 watch(
   () => props.tableOptions.refreshTrigger,
@@ -237,6 +331,21 @@ loadAndRender()
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100">
           <tr>
+            <th v-if="hasBulkActions" scope="col" class="pl-6 w-4 leading-none">
+              <input
+                :class="[
+                  'h-4 w-4 rounded cursor-pointer',
+                  'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+                  'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                  'border-gray-300 focus:ring-xy-blue-500',
+                ]"
+                :checked="bulkSelectChecked"
+                :indeterminate="bulkSelectIndeterminate"
+                type="checkbox"
+                @change="bulkSelectOnChange"
+              />
+            </th>
+
             <th
               v-for="(col, idx) in columns"
               :key="idx"
@@ -303,6 +412,21 @@ loadAndRender()
               class="px-6 py-3 text-xs font-medium tracking-wider text-gray-900 uppercase leading-4"
             />
           </tr>
+
+          <tr v-if="hasBulkActions && selected.length > 0">
+            <td colspan="100%" class="px-6 py-2.5 border-t bg-neutral-50">
+              <div class="flex items-center gap-x-3">
+                <div class="text-sm shrink-0">
+                  Selected
+                  <span class="font-medium">{{ selectedOnPage.length }}</span>
+                  of
+                  <span class="font-medium">{{ selectable.length }}</span>
+                </div>
+
+                <TableActionButtons :actions="bulkActions" />
+              </div>
+            </td>
+          </tr>
         </thead>
 
         <tbody class="bg-white">
@@ -312,6 +436,21 @@ loadAndRender()
             class="even:bg-gray-50"
             @click="$emit('click:row', row.rowData)"
           >
+            <td v-if="hasBulkActions" class="pl-6 w-4 leading-none">
+              <input
+                v-model="selected"
+                :class="[
+                  'h-4 w-4 rounded cursor-pointer',
+                  'disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-not-allowed disabled:opacity-100',
+                  'checked:disabled:bg-xy-blue checked:disabled:border-xy-blue checked:disabled:opacity-50',
+                  'border-gray-300 focus:ring-xy-blue-500',
+                ]"
+                :disabled="!selectable.includes(row.rowData?.id)"
+                type="checkbox"
+                :value="row.rowData?.id"
+              />
+            </td>
+
             <template v-for="(cell, cellIdx) in row.cells" :key="cellIdx">
               <component
                 :is="'td'"
@@ -355,10 +494,12 @@ loadAndRender()
       </table>
     </div>
 
-    <Paginator
-      v-if="hasContent"
-      v-model="pagination"
-      @update:model-value="loadAndRender()"
-    />
+    <div v-if="hasContent" class="mt-4">
+      <TablePaginator
+        v-model="pagination"
+        :page-options="tableOptions?.pageOptions"
+        @update:model-value="loadAndRender()"
+      />
+    </div>
   </div>
 </template>

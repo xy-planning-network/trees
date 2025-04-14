@@ -11,10 +11,12 @@ import type {
   TableColumns,
   TableActions,
   DynamicTableOptions,
+  TableBulkActions,
 } from "@/composables/table"
 import NeedleTag from "../components/NeedleTags.vue"
 import { conifers } from "../../db.json"
 import { Conifer } from "../domain/tree"
+import { useAppFlasher, useAppSpinner } from "@/composables"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -119,6 +121,61 @@ const dynamicTableActions: TableActions<Conifer> = {
   type: "dropdown",
 }
 
+const dynamicTableBulkActions: TableBulkActions<Conifer> = {
+  actions: [
+    {
+      label: "Remove",
+      onClick: (ids, _, table) => {
+        const doit = confirm(`Remove these items? [${ids.join(",")}]`)
+
+        if (doit) {
+          table.refresh()
+        }
+
+        table.clearSelection()
+      },
+      show: true,
+    },
+    {
+      label: "Update",
+      onClick: (_, data, table) => {
+        useAppSpinner.show()
+
+        const promises: Promise<void>[] = []
+        data.forEach((data, index) => {
+          promises.push(
+            new Promise((resolve) => {
+              setTimeout(() => {
+                useAppFlasher.info(`Updating ${data.name}!`)
+                resolve()
+              }, index * 1000)
+            })
+          )
+        })
+
+        Promise.all(promises).then(() => {
+          useAppSpinner.hide()
+          table.clearSelection()
+          table.refresh()
+        })
+      },
+    },
+    {
+      label: "Disabled",
+      disabled: true,
+      onClick: () => {},
+    },
+    {
+      label: "Hidden",
+      onClick: () => {},
+      show: false,
+    },
+  ],
+  isSelectable: (d) => {
+    return d.leaf.type !== "Scale-leaf"
+  },
+}
+
 const dynamicTableOptions: DynamicTableOptions = {
   dateSearch: true,
   refreshTrigger: 0,
@@ -128,12 +185,14 @@ const dynamicTableOptions: DynamicTableOptions = {
 
 const tableCopy = `<DynamicTable :table-columns="tableColumns" :table-options="tableOptions" />`
 const tableProps = [
-  { name: "clickable", required: false, type: "boolean" },
-  { name: "loader", required: false, type: "boolean" },
   { name: "tableActions", required: false, type: "TableActions<T>" },
-  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
   { name: "tableColumns", required: true, type: "TableColumns<T>" },
   { name: "tableOptions", required: true, type: "DynamicTableOptions" },
+]
+
+const dynamictableProps = [
+  ...tableProps,
+  { name: "tableBulkActions", required: false, type: "TableBulkActions<T>" },
 ]
 </script>
 <template>
@@ -265,7 +324,29 @@ const tableProps = [
             :table-options="dynamicTableOptions"
             :table-actions="dynamicTableActions"
           />
-          <PropsTable :props="tableProps" />
+          <PropsTable :props="dynamictableProps" />
+        </div>
+      </div>
+    </ComponentLayout>
+
+    <ComponentLayout title="Table with Bulk Actions">
+      <template #description
+        >Individual row ActionsDropdown's can also be combined with bulk actions
+        applied against multiple row selections.</template
+      >
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="tableCopy" />
+        </label>
+        <div class="mt-1">
+          <DynamicTable
+            :table-columns="tableColumns"
+            :table-options="dynamicTableOptions"
+            :table-actions="dynamicTableActions"
+            :table-bulk-actions="dynamicTableBulkActions"
+          />
+          <PropsTable :props="dynamictableProps" />
         </div>
       </div>
     </ComponentLayout>
