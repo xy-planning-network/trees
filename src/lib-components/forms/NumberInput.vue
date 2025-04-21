@@ -45,6 +45,9 @@ const opts = computed(() => {
       params.precision = 2
       params.prefix = "$"
       break
+    case "raw-number":
+      params.thousandSeparator = ""
+      break
 
     default:
       break
