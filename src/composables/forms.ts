@@ -114,7 +114,7 @@ export const textInputTypes = [
 
 export type TextInputType = (typeof textInputTypes)[number]
 
-export const numericInputTypes = ["money", "number"] as const
+export const numericInputTypes = ["money", "number", "raw-number"] as const
 
 export type NumericInputType = (typeof numericInputTypes)[number]
 
