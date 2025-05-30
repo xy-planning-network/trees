@@ -25,6 +25,7 @@ const perPage = computed({
   set: (v: number) => {
     pagination.value = {
       ...pagination.value,
+      page: 1,
       perPage: v,
     }
   },

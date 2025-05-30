@@ -8,6 +8,7 @@ import { InputOption } from "@/composables/forms"
 const badgePrimary = ref<HTMLElement>()
 const badgeInfo = ref<HTMLElement>()
 const badgeSuccess = ref<HTMLElement>()
+const badgeWarn = ref<HTMLElement>()
 const badgeAlert = ref<HTMLElement>()
 const links = ref<HTMLElement>()
 const extraFlairCopy = `<h1 class="xy-h1-extra-flair">Header1 Bold</h1>`
@@ -184,10 +185,19 @@ const alertProps = [
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
+          <ClickToCopy :value="badgeWarn?.outerHTML" />
+        </label>
+        <div class="mt-1">
+          <span ref="badgeWarn" class="xy-badge-yellow">Warn</span>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
           <ClickToCopy :value="badgeAlert?.outerHTML" />
         </label>
         <div class="mt-1">
-          <span ref="badgeAlert" class="xy-badge-yellow">Alert</span>
+          <span ref="badgeAlert" class="xy-badge-red">Alert</span>
         </div>
       </div>
     </ComponentLayout>
