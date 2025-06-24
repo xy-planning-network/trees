@@ -37,7 +37,7 @@ const labelDisplay = computed((): string => {
     class="block text-sm leading-6 font-semibold text-gray-800"
     v-bind="$attrs"
   >
-    {{ labelDisplay }}
-    <span v-if="props.required" class="text-red-700/80">*</span>
+    {{ labelDisplay
+    }}<span v-if="props.required" class="text-red-700/80">*</span>
   </component>
 </template>
