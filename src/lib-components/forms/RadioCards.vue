@@ -53,23 +53,26 @@ const onUpdate = (val: unknown) => {
 <template>
   <RadioGroup
     v-model="modelState"
+    class="space-y-6"
     :disabled="isDisabled"
     :aria-invalid="errorState ? 'true' : null"
     :aria-errormessage="aria.errormessage"
     @update:model-value="onUpdate"
   >
-    <RadioGroupLabel v-if="label" class="block">
-      <FieldsetLegend tag="div" :label="label" :required="isRequired" />
-    </RadioGroupLabel>
+    <div v-if="label || help || errorState">
+      <RadioGroupLabel v-if="label" class="block">
+        <FieldsetLegend tag="div" :label="label" :required="isRequired" />
+      </RadioGroupLabel>
 
-    <RadioGroupDescription v-if="help" class="mt-1">
-      <InputHelp :text="help" />
-    </RadioGroupDescription>
+      <RadioGroupDescription v-if="help" class="mt-1">
+        <InputHelp :text="help" />
+      </RadioGroupDescription>
 
-    <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
+      <InputError :id="aria.errormessage" class="mt-1" :text="errorState" />
+    </div>
 
     <div
-      class="mt-6 grid grid-cols-1 gap-y-5 gap-x-4 relative"
+      class="grid grid-cols-1 gap-y-5 gap-x-4 relative"
       :class="{
         'sm:grid-cols-2': columns === 2,
         'sm:grid-cols-3': columns === 3,
