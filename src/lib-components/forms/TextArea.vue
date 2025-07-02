@@ -32,7 +32,7 @@ const { aria, inputID, isRequired, errorState, onInvalid, inputValidation } =
     />
     <textarea
       :id="inputID"
-      v-model="modelState"
+      v-model.trim="modelState"
       :aria-labelledby="aria.labelledby"
       :aria-describedby="aria.describedby"
       :aria-errormessage="aria.errormessage"
