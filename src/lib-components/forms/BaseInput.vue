@@ -98,6 +98,7 @@ const typeAttributes = computed(() => {
       :placeholder="placeholder"
       :type="type"
       v-bind="{ ...typeAttributes, ...$attrs }"
+      @click="inputRef?.showPicker()"
       @input="inputValidation"
       @invalid="onInvalid"
     />

@@ -9,6 +9,7 @@ import {
   defaultModelOpts,
 } from "@/composables/forms"
 import type { DateTimeInput } from "@/composables/forms"
+import { useTemplateRef } from "vue"
 
 defineOptions({
   inheritAttrs: false,
@@ -25,6 +26,7 @@ const modelState = defineModel<DateTimeInput["modelValue"]>({
   },
 })
 
+const inputRef = useTemplateRef("input")
 const { errorState, inputID, isRequired, onInvalid, inputValidation } =
   useInputField(props)
 </script>
@@ -40,6 +42,7 @@ const { errorState, inputID, isRequired, onInvalid, inputValidation } =
     />
     <input
       :id="inputID"
+      ref="input"
       v-model="modelState"
       :aria-labelledby="label ? `${inputID}-label` : undefined"
       :aria-describedby="help ? `${inputID}-help` : undefined"
@@ -54,6 +57,7 @@ const { errorState, inputID, isRequired, onInvalid, inputValidation } =
       :placeholder="placeholder"
       type="datetime-local"
       v-bind="$attrs"
+      @click="inputRef?.showPicker()"
       @input="inputValidation"
       @invalid="onInvalid"
     />
