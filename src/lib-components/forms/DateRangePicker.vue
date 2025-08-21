@@ -4,7 +4,7 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
-import { onMounted } from "vue"
+import { onMounted, useTemplateRef } from "vue"
 import {
   defaultInputProps,
   defaultModelOpts,
@@ -17,7 +17,7 @@ defineOptions({
 })
 
 // maxDate/startDate should be used or maxRange.
-// The props combination of maxDate/startDate and maxRange 
+// The props combination of maxDate/startDate and maxRange
 // will have unexpected results.
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
@@ -38,9 +38,12 @@ const updateModelState = (value: { minDate: number; maxDate: number }) => {
   modelState.value = value
 }
 
+const wrapper = useTemplateRef("wrapper")
+
 onMounted(() => {
   const opts: flatpickr.Options.Options = {
     allowInput: true,
+    appendTo: wrapper.value || undefined,
     dateFormat: "m-d-Y",
     mode: "range",
     maxDate: props.maxDate,
@@ -60,6 +63,7 @@ onMounted(() => {
         })
       }
     },
+    static: true,
   }
 
   // Handle initial values if set
@@ -100,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div ref="wrapper">
     <InputLabel
       :id="aria.labelledby"
       class="mb-2"
@@ -130,3 +134,9 @@ onMounted(() => {
     <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
   </div>
 </template>
+
+<style lang="postcss">
+.flatpickr-wrapper {
+  display: block;
+}
+</style>

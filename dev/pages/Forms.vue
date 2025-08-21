@@ -7,6 +7,7 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
+import Slideover from "@/lib-components/overlays/Slideover.vue"
 
 const options: InputOption[] = [
   {
@@ -175,6 +176,8 @@ const toggleProps = [
   { name: "label", required: false, type: "string" },
   { name: "help", required: false, type: "string" },
 ]
+
+const slideoverOpen = ref(false)
 </script>
 
 <template>
@@ -448,6 +451,23 @@ const toggleProps = [
               label="Hydrated Range"
               help="Initialized with { minDate: 1725148800, maxDate: 1727740799 }"
             />
+          </div>
+
+          <div class="mt-4">
+            <h5 class="mb-2">Date Range Picker Inside A Dialog</h5>
+            <button class="xy-btn-sm" @click="slideoverOpen = !slideoverOpen">
+              Open Slideover
+            </button>
+            <Slideover
+              v-model="slideoverOpen"
+              header="Forms"
+              description="Ensure this element is accessible inside a slideover."
+            >
+              <DateRangePicker
+                v-model="inputVals['dateRangePicker']"
+                label="Select a Date Range"
+              />
+            </Slideover>
           </div>
           <PropsTable :props="dateRangeInputProps" />
         </div>
