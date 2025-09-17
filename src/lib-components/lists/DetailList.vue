@@ -75,8 +75,8 @@ const sortDir = ref(props.defaultSortDir)
 
 const loadAndRender = (): void => {
   const params: Record<string, unknown> = {
-    maxDate: dateRange.value.maxDate,
-    minDate: dateRange.value.minDate,
+    maxDate: dateRange.value.maxDate || null,
+    minDate: dateRange.value.minDate || null,
     page: pagination.value.page,
     perPage: pagination.value.perPage,
     q: "",
