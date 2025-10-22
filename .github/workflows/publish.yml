@@ -11,7 +11,8 @@ jobs:
     name: Build and publish
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # REQUIRED for the version-bump tag push
+      id-token: write # REQUIRED for OIDC / Trusted Publishing
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
@@ -40,10 +41,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to npm
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}
-          npm publish --access public
+      - name: Publish to npm (OIDC / Trusted Publishing)
+        run: npm publish --access public
 
       - name: Build for GitHub Pages
         run: npm run build:docs
