@@ -24,6 +24,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: ./package-lock.json
 
+      - name: Ensure modern npm (trusted publishing support)
+        run: npm install -g npm@^11.5.1
+
       - name: Node version
         run: node --version && npm --version
 
