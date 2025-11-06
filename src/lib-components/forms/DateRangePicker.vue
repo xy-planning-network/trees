@@ -104,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="wrapper">
+  <div class="xy-date-range-picker" ref="wrapper">
     <InputLabel
       :id="aria.labelledby"
       class="mb-2"
@@ -134,9 +134,3 @@ onMounted(() => {
     <InputError :id="aria.errormessage" class="mt-0.5" :text="errorState" />
   </div>
 </template>
-
-<style lang="postcss">
-.flatpickr-wrapper {
-  display: block;
-}
-</style>
