@@ -104,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="xy-date-range-picker" ref="wrapper">
+  <div ref="wrapper" class="xy-date-range-picker">
     <InputLabel
       :id="aria.labelledby"
       class="mb-2"
