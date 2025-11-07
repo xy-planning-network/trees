@@ -228,6 +228,11 @@
   .xy-link {
     @apply font-medium border-b-2 border-b-xy-blue hover:border-b-transparent hover:text-xy-blue;
   }
+
+  /* Flatpickr DateRangePicker */
+  .xy-date-range-picker .flatpickr-wrapper {
+    display: block;
+  }
 }
 
 @layer utilities {
