@@ -7,9 +7,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue"
 import { XIcon } from "@heroicons/vue/outline"
-import { watch } from "vue"
+import { computed, useSlots, watch } from "vue"
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     destructive?: boolean
     disabled?: boolean
@@ -36,6 +36,12 @@ const emit = defineEmits<{
 const submit = () => {
   emit("submit")
 }
+
+const slots = useSlots()
+
+const hasButtons = computed(() => {
+  return props.submitText || slots.buttons
+})
 
 watch(open, (isOpen) => {
   if (!isOpen) {
@@ -91,7 +97,7 @@ watch(open, (isOpen) => {
             <div
               class="bg-white rounded-t-xy sm:rounded-t-xy-lg"
               :class="
-                !submitText && 'rounded-b-xy sm:rounded-b-xy-lg shadow-xl'
+                !hasButtons && 'rounded-b-xy sm:rounded-b-xy-lg shadow-xl'
               "
             >
               <!--Close Button-->
@@ -125,7 +131,7 @@ watch(open, (isOpen) => {
 
             <!--Button-->
             <div
-              v-if="submitText || $slots['buttons']"
+              v-if="hasButtons"
               class="bg-gray-50 flex flex-col gap-3 px-4 py-3 rounded-b-xy shadow-xl sm:py-4 sm:px-8 sm:flex sm:flex-row-reverse sm:rounded-b-xy-lg"
             >
               <template v-if="submitText">
