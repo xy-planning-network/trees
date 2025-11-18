@@ -183,6 +183,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           <button type="button" class="xy-btn" @click="open = true">
             Show Me
           </button>
+
           <Modal
             v-model="open"
             :destructive="true"
@@ -197,6 +198,14 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             <div class="mt-6">
               <p>If you move forward, things are gonna get gone!</p>
             </div>
+
+            <div class="mt-6">
+              <DateRangePicker />
+            </div>
+
+            <template #buttons>
+              <button class="xy-btn">My Slot Button</button>
+            </template>
           </Modal>
           <PropsTable :props="modalProps" />
         </div>

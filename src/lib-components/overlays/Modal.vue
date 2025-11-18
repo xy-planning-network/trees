@@ -7,9 +7,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue"
 import { XIcon } from "@heroicons/vue/outline"
-import { watch } from "vue"
+import { computed, useSlots, watch } from "vue"
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     destructive?: boolean
     disabled?: boolean
@@ -36,6 +36,12 @@ const emit = defineEmits<{
 const submit = () => {
   emit("submit")
 }
+
+const slots = useSlots()
+
+const hasButtons = computed(() => {
+  return props.submitText || slots.buttons
+})
 
 watch(open, (isOpen) => {
   if (!isOpen) {
@@ -85,52 +91,69 @@ watch(open, (isOpen) => {
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block align-bottom bg-white rounded-xy text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:rounded-xy-lg w-full"
+            class="inline-block align-bottom text-left overflow-y-visible transform transition-all w-full sm:my-8 sm:align-middle"
             :class="wide ? 'sm:max-w-6xl' : 'sm:max-w-2xl'"
           >
-            <div class="block absolute top-0 right-0 pt-4 pr-4 sm:pt-6 sm:pr-8">
-              <button
-                type="button"
-                class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                @click="open = false"
+            <div
+              class="bg-white rounded-t-xy sm:rounded-t-xy-lg"
+              :class="
+                !hasButtons && 'rounded-b-xy sm:rounded-b-xy-lg shadow-xl'
+              "
+            >
+              <!--Close Button-->
+              <div
+                class="block absolute top-0 right-0 pt-4 pr-4 sm:pt-6 sm:pr-8"
               >
-                <span class="sr-only">Close</span>
-                <XIcon class="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-8 sm:pb-6">
-              <div class="mt-3 sm:mt-0 sm:text-left">
-                <DialogTitle
-                  as="h3"
-                  class="text-center text-lg leading-6 font-medium text-gray-900"
-                  >{{ title }}</DialogTitle
+                <button
+                  type="button"
+                  class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  @click="open = false"
                 >
-                <div class="mt-2">
-                  <slot></slot>
+                  <span class="sr-only">Close</span>
+                  <XIcon class="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+
+              <!--Content-->
+              <div class="px-4 pt-5 pb-4 sm:p-8 sm:pb-6">
+                <div class="mt-3 sm:mt-0 sm:text-left">
+                  <DialogTitle
+                    as="h3"
+                    class="text-center text-lg leading-6 font-medium text-gray-900"
+                    >{{ title }}</DialogTitle
+                  >
+                  <div class="mt-2">
+                    <slot></slot>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <!--Button-->
             <div
-              v-if="submitText"
-              class="bg-gray-50 px-4 py-3 sm:py-4 sm:px-8 sm:flex sm:flex-row-reverse"
+              v-if="hasButtons"
+              class="bg-gray-50 flex flex-col gap-3 px-4 py-3 rounded-b-xy shadow-xl sm:py-4 sm:px-8 sm:flex sm:flex-row-reverse sm:rounded-b-xy-lg"
             >
-              <button
-                type="button"
-                class="xy-btn w-full sm:ml-3 sm:w-auto sm:text-sm"
-                :class="[destructive ? 'xy-btn-red' : 'xy-btn']"
-                :disabled="disabled"
-                @click="submit()"
-                v-text="submitText"
-              ></button>
-              <button
-                type="button"
-                class="xy-btn-neutral mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                @click="open = false"
-              >
-                Cancel
-              </button>
+              <template v-if="submitText">
+                <button
+                  type="button"
+                  :class="[destructive ? 'xy-btn-red' : 'xy-btn']"
+                  :disabled="disabled"
+                  @click="submit()"
+                >
+                  {{ submitText }}
+                </button>
+                <button
+                  type="button"
+                  class="xy-btn-neutral"
+                  @click="open = false"
+                >
+                  Cancel
+                </button>
+              </template>
+
+              <slot name="buttons" />
             </div>
-            <slot name="buttons"></slot>
           </div>
         </TransitionChild>
       </div>

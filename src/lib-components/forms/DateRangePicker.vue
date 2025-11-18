@@ -38,12 +38,12 @@ const updateModelState = (value: { minDate: number; maxDate: number }) => {
   modelState.value = value
 }
 
-const wrapper = useTemplateRef("wrapper")
+const wrapperRef = useTemplateRef("wrapper")
 
 onMounted(() => {
   const opts: flatpickr.Options.Options = {
     allowInput: true,
-    appendTo: wrapper.value || undefined,
+    appendTo: wrapperRef.value || undefined,
     dateFormat: "m-d-Y",
     mode: "range",
     maxDate: props.maxDate,
