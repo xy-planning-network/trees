@@ -43,7 +43,7 @@ function isValidPickerRange(val: any): val is DateRange {
   )
 }
 
-// NOTE(spk): use watcher.stop() and watcher.resume() when mutating
+// NOTE(spk): use watcher.pause() and watcher.resume() when mutating
 // state inside this component to avoid setting the picker value
 // after the state was mutated by the picker itself
 //
@@ -65,7 +65,7 @@ const { aria, errorState, inputID, isRequired, onInvalid, validate } =
   useInputField(props)
 
 const updateModelState = (value: { minDate: number; maxDate: number }) => {
-  watcher.stop()
+  watcher.pause()
   modelState.value = value
   watcher.resume()
 }
