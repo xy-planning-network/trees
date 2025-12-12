@@ -4,13 +4,15 @@ import InputHelp from "./InputHelp.vue"
 import InputError from "./InputError.vue"
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"
-import { onMounted, useTemplateRef } from "vue"
+import { onMounted, useTemplateRef, watch } from "vue"
 import {
   defaultInputProps,
   defaultModelOpts,
   useInputField,
 } from "@/composables/forms"
 import type { DateRangeInput } from "@/composables/forms"
+import { Instance } from "flatpickr/dist/types/instance"
+import { DateRange } from "@/composables/date"
 
 defineOptions({
   inheritAttrs: false,
@@ -26,23 +28,55 @@ const props = withDefaults(defineProps<DateRangeInput>(), {
   placeholder: "mm-dd-yyyy range",
   startDate: 0,
 })
+
 const modelState = defineModel<DateRangeInput["modelValue"]>({
   ...defaultModelOpts,
   default: { maxDate: 0, minDate: 0 },
+})
+
+function isValidPickerRange(val: any): val is DateRange {
+  return (
+    val?.maxDate !== undefined &&
+    val?.minDate !== undefined &&
+    val?.minDate != 0 &&
+    val?.maxDate != 0
+  )
+}
+
+// NOTE(spk): use watcher.pause() and watcher.resume() when mutating
+// state inside this component to avoid setting the picker value
+// after the state was mutated by the picker itself
+//
+// This keeps the change handling scoped to a change triggered by
+// the parent component on v-model.
+const watcher = watch(modelState, () => {
+  if (isValidPickerRange(modelState.value)) {
+    picker?.setDate(
+      [modelState.value.minDate * 1000, modelState.value.maxDate * 1000],
+      false
+    )
+    return
+  }
+
+  picker?.clear()
 })
 
 const { aria, errorState, inputID, isRequired, onInvalid, validate } =
   useInputField(props)
 
 const updateModelState = (value: { minDate: number; maxDate: number }) => {
+  watcher.pause()
   modelState.value = value
+  watcher.resume()
 }
 
 const wrapperRef = useTemplateRef("wrapper")
 
+let picker: Instance | null = null
+
 onMounted(() => {
   const opts: flatpickr.Options.Options = {
-    allowInput: true,
+    allowInput: !props.maxRange,
     appendTo: wrapperRef.value || undefined,
     dateFormat: "m-d-Y",
     mode: "range",
@@ -67,11 +101,7 @@ onMounted(() => {
   }
 
   // Handle initial values if set
-  if (
-    modelState.value && // NOTE(spk): even with a "default" value this may be a literal null
-    modelState.value.minDate != 0 &&
-    modelState.value.maxDate != 0
-  ) {
+  if (isValidPickerRange(modelState.value)) {
     opts.defaultDate = [
       modelState.value.minDate * 1000,
       modelState.value.maxDate * 1000,
@@ -99,7 +129,7 @@ onMounted(() => {
     }
   }
 
-  flatpickr(`#${inputID.value}`, opts)
+  picker = flatpickr(`#${inputID.value}`, opts) as Instance
 })
 </script>
 
