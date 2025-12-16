@@ -11,7 +11,7 @@ import {
   useInputField,
 } from "@/composables/forms"
 import type { DateRangeInput } from "@/composables/forms"
-import { Instance } from "flatpickr/dist/types/instance"
+import type { Instance } from "flatpickr/dist/types/instance"
 import { DateRange } from "@/composables/date"
 
 defineOptions({

@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@floating-ui/vue": "^1.0.1",
-    "@headlessui/vue": "^1.4.2",
+    "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^1.0.5",
     "@maskito/core": "^3.5.0",
     "@maskito/kit": "^3.5.0",

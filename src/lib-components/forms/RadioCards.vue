@@ -38,7 +38,21 @@ const props = withDefaults(
   defineProps<RadioCards & ColumnedInput>(),
   defaultInputProps
 )
-const modelState = defineModel<RadioCards["modelValue"]>(defaultModelOpts)
+const modelState = defineModel<
+  RadioCards["modelValue"],
+  "modelValue",
+  string | number | undefined
+>({
+  ...defaultModelOpts,
+  get: (v) => {
+    // NOTE(spk): HeadlessUI RadioGroup does not support "null" values
+    if (v === null) {
+      return undefined
+    }
+
+    return v
+  },
+})
 
 const { aria, isDisabled, isRequired, nameAttr, errorState, onInvalid } =
   useInputField(props)

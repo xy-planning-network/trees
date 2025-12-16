@@ -4,7 +4,7 @@ import {
   PopoverButton as HeadlessPopoverButton,
   PopoverPanel as HeadlessPopoverPanel,
 } from "@headlessui/vue"
-import { computed, useTemplateRef } from "vue"
+import { computed, onMounted, ref, useTemplateRef } from "vue"
 import {
   useFloating,
   offset,
@@ -12,7 +12,7 @@ import {
   autoUpdate,
   shift,
 } from "@floating-ui/vue"
-import type { Placement } from "@floating-ui/vue"
+import type { Placement, UseFloatingReturn } from "@floating-ui/vue"
 
 const props = withDefaults(
   defineProps<{
@@ -51,11 +51,14 @@ const placement = computed(() => {
   return props.position
 })
 
-const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
-  middleware: middleware,
-  placement: placement,
-  strategy: "fixed",
-  whileElementsMounted: autoUpdate,
+const floating = ref<UseFloatingReturn | null>(null)
+onMounted(() => {
+  floating.value = useFloating(triggerRef, wrapperRef, {
+    middleware: middleware,
+    placement: placement,
+    strategy: "fixed",
+    whileElementsMounted: autoUpdate,
+  })
 })
 </script>
 
@@ -65,7 +68,11 @@ const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
       <slot name="button" :open="open" :close="close"></slot>
     </HeadlessPopoverButton>
 
-    <div ref="wrapper" class="z-[5]" :style="floatingStyles">
+    <div
+      ref="wrapper"
+      class="z-[5]"
+      :style="floating ? floating.floatingStyles : undefined"
+    >
       <HeadlessPopoverPanel>
         <slot :open="open" :close="close"></slot>
       </HeadlessPopoverPanel>
