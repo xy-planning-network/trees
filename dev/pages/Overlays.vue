@@ -255,7 +255,6 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             v-model="slideoverOpen"
             header="Slideover Header"
             description="A very helpful slideover description"
-            span="md"
             @close="$log('Slideover close event triggered!')"
             @update:model-value="
               $log(`v-model update event for Slideover: ${$event}`)

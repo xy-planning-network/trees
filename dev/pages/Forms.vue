@@ -355,6 +355,7 @@ const slideoverOpen = ref(false)
             label="How about it?"
             help="In your own words."
             placeholder="Don't be shy now..."
+            :rows="8"
             @update:model-value="
               $log(`v-model update event for TextArea: ${$event}`)
             "

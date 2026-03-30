@@ -34,7 +34,7 @@ const layout = computed(() => {
       }
     default: // span="sm"
       return {
-        maxWdith: "max-w-md",
+        maxWidth: "max-w-md",
         padding: "py-6 px-4 sm:px-6 sm:py-4",
       }
   }

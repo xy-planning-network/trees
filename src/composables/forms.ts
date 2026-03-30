@@ -57,6 +57,7 @@ export interface NumericInput extends Input {
 
 export interface TextareaInput extends Input {
   modelValue?: string | number | null
+  rows?: number
 }
 
 export interface OptionsInput extends Input {
