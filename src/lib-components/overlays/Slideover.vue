@@ -7,12 +7,38 @@ import {
   TransitionRoot,
 } from "@headlessui/vue"
 import { XIcon } from "@heroicons/vue/outline"
-import { watch } from "vue"
+import { computed, watch } from "vue"
 
-defineProps<{
-  header: string
-  description: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    header: string
+    description: string
+    size?: "sm" | "md" | "lg"
+  }>(),
+  {
+    size: "sm",
+  }
+)
+
+const layout = computed(() => {
+  switch (props.size) {
+    case "lg":
+      return {
+        maxWidth: "max-w-6xl",
+        padding: "py-6 px-4 sm:px-20 sm:py-14",
+      }
+    case "md":
+      return {
+        maxWidth: "max-w-4xl",
+        padding: "py-6 px-4 sm:px-16 sm:py-12",
+      }
+    default: // span="sm"
+      return {
+        maxWidth: "max-w-md",
+        padding: "py-6 px-4 sm:px-6 sm:py-4",
+      }
+  }
+})
 
 const open = defineModel<boolean>({ required: true })
 
@@ -48,11 +74,11 @@ watch(open, (isOpen) => {
             leave-from="translate-x-0"
             leave-to="translate-x-full"
           >
-            <div class="w-screen max-w-md">
+            <div :class="['w-screen', layout.maxWidth]">
               <div
                 class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll"
               >
-                <div class="py-6 px-4 bg-xy-blue-700 sm:px-6">
+                <div :class="['bg-xy-blue-700', layout.padding]">
                   <div class="flex items-center justify-between">
                     <DialogTitle as="h3" class="text-white">
                       {{ header }}
@@ -74,7 +100,7 @@ watch(open, (isOpen) => {
                     ></p>
                   </div>
                 </div>
-                <div class="relative flex-1 py-6 px-4 sm:px-6">
+                <div :class="['relative flex-1', layout.padding]">
                   <slot></slot>
                 </div>
 

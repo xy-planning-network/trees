@@ -44,6 +44,7 @@ const { aria, inputID, isRequired, errorState, onInvalid, inputValidation } =
           : 'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-xy-blue-500',
       ]"
       :placeholder="placeholder"
+      :rows="rows"
       v-bind="$attrs"
       @input="inputValidation"
       @invalid="onInvalid"

@@ -30,7 +30,8 @@ const slideoverCopy = `<Slideover v-model="slideoverOpen" header="Slideover Head
 const slideoverProps = [
   { name: "v-model", required: true, type: "boolean" },
   { name: "header", required: false, type: "string" },
-  { name: "description", required: false, type: "description" },
+  { name: "description", required: false, type: "string" },
+  { name: "size", required: false, type: "'sm' | 'md' | 'lg'" },
   { name: "@close", required: false, type: "function(modelValue)" },
 ]
 const spinner = function (): void {
@@ -259,7 +260,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
               $log(`v-model update event for Slideover: ${$event}`)
             "
           >
-            <div class="prose">
+            <div class="prose max-w-full">
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
                 id nibh consequat, semper odio et, porta ex. Sed dapibus eu
