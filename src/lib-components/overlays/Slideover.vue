@@ -6,7 +6,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue"
-import { XIcon } from "@heroicons/vue/outline"
+import { XMarkIcon as XIcon } from "@heroicons/vue/outline"
 import { computed, watch } from "vue"
 
 const props = withDefaults(

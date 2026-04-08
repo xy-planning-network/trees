@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { CheckIcon } from "@heroicons/vue/outline"
-import { ExclamationIcon } from "@heroicons/vue/outline"
+import { ExclamationTriangleIcon as ExclamationIcon } from "@heroicons/vue/outline"
 import { useAppSpinner } from "@/composables"
 import type { Placement } from "@floating-ui/vue"
 
