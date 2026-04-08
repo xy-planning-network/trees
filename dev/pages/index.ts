@@ -1,13 +1,13 @@
 import {
-  CollectionIcon,
-  ColorSwatchIcon,
+  RectangleStackIcon as CollectionIcon,
+  SwatchIcon as ColorSwatchIcon,
   DocumentTextIcon,
-  LocationMarkerIcon,
-  PencilAltIcon,
-  TableIcon,
+  MapPinIcon as LocationMarkerIcon,
+  PencilSquareIcon as PencilAltIcon,
+  TableCellsIcon as TableIcon,
   UserGroupIcon,
   HomeIcon,
-  StatusOnlineIcon,
+  SignalIcon as StatusOnlineIcon,
 } from "@heroicons/vue/outline"
 
 import Elements from "./Elements.vue"

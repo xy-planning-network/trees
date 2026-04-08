@@ -8,7 +8,9 @@
       ],
       "@/*": [
         "../src/*"
-      ]
+      ],
+      "@heroicons/vue/outline": ["node_modules/@heroicons/vue/24/outline"],
+      "@heroicons/vue/solid": ["node_modules/@heroicons/vue/24/solid"]
     }
   },
   "include": [

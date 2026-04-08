@@ -10,7 +10,11 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue"
-import { MenuIcon, UserCircleIcon, XIcon } from "@heroicons/vue/outline"
+import {
+  Bars3Icon as MenuIcon,
+  UserCircleIcon,
+  XMarkIcon as XIcon,
+} from "@heroicons/vue/outline"
 import type { NavItem } from "@/composables/nav"
 import User from "@/composables/user"
 

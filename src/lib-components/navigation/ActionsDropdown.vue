@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import { DotsVerticalIcon } from "@heroicons/vue/solid"
+import { EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/vue/solid"
 import type { ActionItem } from "@/composables/nav"
 import { useActionItems } from "@/composables/useActionItems"
 import { toRef, useTemplateRef } from "vue"

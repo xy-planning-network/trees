@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, useId } from "vue"
-import { ClipboardCopyIcon } from "@heroicons/vue/outline"
+import { ClipboardDocumentCheckIcon as ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 const props = withDefaults(defineProps<{ value?: string }>(), {
   value: "",
