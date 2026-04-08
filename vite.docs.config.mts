@@ -30,6 +30,9 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
+        // Intercept v1-style imports and route them to the v2 24px files.
+        "@heroicons/vue/outline": "@heroicons/vue/24/outline",
+        "@heroicons/vue/solid": "@heroicons/vue/24/solid",
       },
     },
   }

@@ -4,11 +4,11 @@ import { computed, ref } from "vue"
 import {
   CheckCircleIcon,
   InformationCircleIcon,
-  ExclamationIcon,
+  ExclamationTriangleIcon as ExclamationIcon,
   XCircleIcon,
 } from "@heroicons/vue/solid"
 
-import { XIcon } from "@heroicons/vue/outline"
+import { XMarkIcon as XIcon } from "@heroicons/vue/outline"
 
 const props = withDefaults(
   defineProps<{

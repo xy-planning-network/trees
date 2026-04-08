@@ -11,8 +11,11 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue"
-import { MenuAlt2Icon, XIcon } from "@heroicons/vue/outline"
-import { CogIcon } from "@heroicons/vue/solid"
+import {
+  Bars3BottomLeftIcon as MenuAlt2Icon,
+  XMarkIcon as XIcon,
+} from "@heroicons/vue/outline"
+import { Cog6ToothIcon as CogIcon } from "@heroicons/vue/solid"
 import type { NavItem } from "@/composables/nav"
 import { ref } from "vue"
 

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import { ChevronDownIcon, DotsVerticalIcon } from "@heroicons/vue/solid"
+import {
+  ChevronDownIcon,
+  EllipsisVerticalIcon as DotsVerticalIcon,
+} from "@heroicons/vue/solid"
 import { isActionItemButton, type ActionItems } from "@/composables/nav"
 import { computed, useTemplateRef } from "vue"
 import { useFloating, autoUpdate, autoPlacement } from "@floating-ui/vue"

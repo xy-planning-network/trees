@@ -15,7 +15,7 @@ export default defineConfig(({ command }) => {
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
         // into your library
-        external: ["vue"],
+        external: ["vue", /^@heroicons\/vue/],
         output: {
           exports: "named",
           // Provide global variables to use in the UMD build
@@ -30,6 +30,9 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
+        // Intercept v1-style imports and route them to the v2 24px files.
+        "@heroicons/vue/outline": "@heroicons/vue/24/outline",
+        "@heroicons/vue/solid": "@heroicons/vue/24/solid",
       },
     },
   }

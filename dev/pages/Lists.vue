@@ -2,9 +2,9 @@
 import { computed, h, ref } from "vue"
 import {
   CalendarIcon,
-  LocationMarkerIcon,
+  MapPinIcon as LocationMarkerIcon,
   UsersIcon,
-  SpeakerphoneIcon,
+  MegaphoneIcon as SpeakerphoneIcon,
   TrashIcon,
 } from "@heroicons/vue/solid"
 import type {
