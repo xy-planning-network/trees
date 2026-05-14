@@ -13,12 +13,15 @@ import type { UseBaseAPIOptions, UseBaseAPI } from "./useBaseAPI"
 import type {
   DynamicTableOptions,
   DynamicTableAPI,
+  TableActionButton,
   TableActionItem,
-  TableColumn,
+  TableActionLink,
   TableActions,
+  TableBulkActionItem,
+  TableColumn,
+  TableColumns,
   TableCellAlignment,
   TableRowData,
-  TableColumns,
   TableRowsData,
 } from "./table"
 
@@ -31,12 +34,15 @@ export type {
   DynamicTableOptions,
   DynamicTableAPI,
   SortDir,
+  TableActionButton,
   TableActionItem,
-  TableColumn,
+  TableActionLink,
   TableActions,
+  TableBulkActionItem,
+  TableColumn,
+  TableColumns,
   TableCellAlignment,
   TableRowData,
-  TableColumns,
   TableRowsData,
 }
 
@@ -58,6 +64,8 @@ export { useFlashes, useAppFlashes, useAppFlasher }
 // navigation
 import type {
   ActionItem,
+  ActionItemButton,
+  ActionItemLink,
   NavItem,
   Pagination,
   URLParams,
@@ -67,6 +75,8 @@ import type {
 
 export type {
   ActionItem,
+  ActionItemButton,
+  ActionItemLink,
   NavItem,
   Pagination,
   URLParams,
@@ -74,8 +84,19 @@ export type {
   UseTabHistoryOpts,
 }
 
-import { useUrlSearchParams, useTabHistory } from "./nav"
-export { useUrlSearchParams, useTabHistory }
+import {
+  isActionItemButton,
+  isActionItemLink,
+  useUrlSearchParams,
+  useTabHistory,
+} from "./nav"
+
+export {
+  isActionItemButton,
+  isActionItemLink,
+  useUrlSearchParams,
+  useTabHistory,
+}
 
 // spinner
 import { useSpinnerDisplay, useAppSpinner } from "./useSpinner"
