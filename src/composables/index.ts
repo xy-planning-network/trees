@@ -17,6 +17,7 @@ import type {
   TableActionItem,
   TableActionLink,
   TableActions,
+  TableBulkActions,
   TableBulkActionItem,
   TableColumn,
   TableColumns,
@@ -38,6 +39,7 @@ export type {
   TableActionItem,
   TableActionLink,
   TableActions,
+  TableBulkActions,
   TableBulkActionItem,
   TableColumn,
   TableColumns,
@@ -64,6 +66,7 @@ export { useFlashes, useAppFlashes, useAppFlasher }
 // navigation
 import type {
   ActionItem,
+  ActionItems,
   ActionItemButton,
   ActionItemLink,
   NavItem,
@@ -75,6 +78,7 @@ import type {
 
 export type {
   ActionItem,
+  ActionItems,
   ActionItemButton,
   ActionItemLink,
   NavItem,
