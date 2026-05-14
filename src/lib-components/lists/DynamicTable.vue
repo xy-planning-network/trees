@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from "vue"
-import { ActionsDropdown, TablePaginator } from "@/lib-components"
+import {
+  ActionsButtonGroup,
+  ActionsDropdown,
+  TablePaginator,
+} from "@/lib-components"
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import BaseAPI from "../../api/base"
 import type {
@@ -15,7 +19,6 @@ import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
 import { DateRange, DateRangeProps } from "@/composables/date"
 import { useTable } from "@/composables/useTable"
-import TableActionButtons from "./TableActionButtons.vue"
 
 const props = withDefaults(
   defineProps<{
@@ -168,11 +171,12 @@ const bulkActions = computed(() => {
       return {
         ...action,
         disabled: selected.value.length === 0 || action.disabled,
-        onClick: () =>
+        onClick: (e?: Event) =>
           action.onClick.apply(undefined, [
             selected.value,
             selectedData.value,
             publicMethods,
+            e,
           ]),
       }
     })
@@ -423,7 +427,7 @@ loadAndRender()
                   <span class="font-medium">{{ selectable.length }}</span>
                 </div>
 
-                <TableActionButtons :actions="bulkActions" />
+                <ActionsButtonGroup :actions="bulkActions" />
               </div>
             </td>
           </tr>
@@ -470,15 +474,14 @@ loadAndRender()
             <!--Table Actions Cell-->
             <td
               v-if="hasActions"
-              class="px-6 py-2 text-sm text-gray-700 whitespace-nowrap leading-5"
+              class="px-6 py-2 text-sm text-gray-700 whitespace-nowrap leading-5 w-0"
             >
               <ActionsDropdown
                 v-if="tableActions.type === 'dropdown'"
                 :actions="row.actions"
               />
-              <template v-else>
-                <TableActionButtons :actions="row.actions" />
-              </template>
+
+              <ActionsButtonGroup v-else :actions="row.actions" />
             </td>
           </tr>
 

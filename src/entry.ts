@@ -24,6 +24,12 @@ import {
   textInputTypes,
   useInputField,
 } from "@/composables/forms"
+import {
+  isActionItemButton,
+  isActionItemLink,
+  useTabHistory,
+  useUrlSearchParams,
+} from "@/composables/nav"
 import { debounce as debounceFn, debounceLeading } from "@/helpers/Debounce"
 import { throttle as throttleFn } from "@/helpers/Throttle"
 
@@ -73,6 +79,15 @@ export {
   numericInputTypes,
   textInputTypes,
   useInputField,
+}
+
+// Nav exports
+export type * from "@/composables/nav"
+export {
+  isActionItemButton,
+  isActionItemLink,
+  useTabHistory,
+  useUrlSearchParams,
 }
 
 // Utilities exports

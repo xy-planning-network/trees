@@ -23,12 +23,39 @@ export interface Pagination {
   totalPages: number
 }
 
-export interface ActionItem {
-  disabled?: boolean | ((...args: any[]) => boolean)
-  onClick: (...args: any[]) => void
-  icon?: FunctionalComponent | RenderFunction
+export type ActionItem = ActionItemButton | ActionItemLink
+export type ActionItems = ActionItem[]
+
+export interface ActionItemButton {
   label: string
-  show?: boolean | ((...args: any[]) => boolean)
+  attrs?: never
+  disabled?: boolean
+  icon?: FunctionalComponent | RenderFunction
+  openInTab?: never
+  show?: boolean
+  url?: never
+  onClick: (e: Event) => void
+}
+
+export const isActionItemButton = (
+  item: ActionItem
+): item is ActionItemButton => {
+  return !("url" in item) || typeof item.url !== "string"
+}
+
+export interface ActionItemLink {
+  label: string
+  url: string
+  attrs?: Record<string, string | number | boolean>
+  disabled?: boolean
+  icon?: FunctionalComponent | RenderFunction
+  openInTab?: boolean
+  show?: boolean
+  onClick?: (e: Event) => void
+}
+
+export const isActionItemLink = (item: ActionItem): item is ActionItemLink => {
+  return "url" in item && typeof item.url === "string"
 }
 
 export interface UseTabHistoryOpts {

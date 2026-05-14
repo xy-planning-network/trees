@@ -1,6 +1,7 @@
 // TODO: rearrange so that these are default installed by app.use(Trees);
 
 // Layout components
+import { default as ActionsButtonGroup } from "./navigation/ActionsButtonGroup.vue"
 import { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue"
 import { default as Cards } from "./lists/Cards.vue"
 import { default as ContentModal } from "./overlays/ContentModal.vue"
@@ -47,6 +48,7 @@ import { default as TextArea } from "./forms/TextArea.vue"
 import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
 
 export {
+  ActionsButtonGroup,
   ActionsDropdown,
   Cards,
   ContentModal,
@@ -95,6 +97,7 @@ export {
  * declare global component types for App.use(Trees)
  */
 export interface TreesComponents {
+  ActionsButtonGroup: typeof ActionsButtonGroup
   ActionsDropdown: typeof ActionsDropdown
   Cards: typeof Cards
   ContentModal: typeof ContentModal

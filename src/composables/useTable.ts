@@ -76,7 +76,8 @@ export const useTable = (
               typeof action.disabled === "function"
                 ? action.disabled.apply(undefined, [rowData, rowIdx])
                 : action.disabled,
-            onClick: () => action.onClick(rowData, rowIdx, exposedAPI),
+            onClick: (e?: Event) =>
+              action.onClick(rowData, rowIdx, exposedAPI, e),
             show:
               typeof action.show === "function"
                 ? action.show.apply(undefined, [rowData, rowIdx])

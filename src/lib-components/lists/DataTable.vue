@@ -5,8 +5,7 @@ import type {
   TableColumns,
   TableRowsData,
 } from "@/composables/table"
-import { ActionsDropdown } from "@/lib-components"
-import TableActionButtons from "./TableActionButtons.vue"
+import { ActionsButtonGroup, ActionsDropdown } from "@/lib-components"
 import { toRef } from "vue"
 
 const props = withDefaults(
@@ -77,15 +76,14 @@ const { columns, hasActions, isEmptyCellValue, rows } = useTable(
                 <!--Table Actions Cell-->
                 <td
                   v-if="hasActions"
-                  class="px-6 py-2 text-sm text-gray-700 whitespace-nowrap leading-5"
+                  class="px-6 py-2 text-sm text-gray-700 whitespace-nowrap leading-5 w-0"
                 >
                   <ActionsDropdown
                     v-if="tableActions.type === 'dropdown'"
                     :actions="row.actions"
                   />
-                  <template v-else>
-                    <TableActionButtons :actions="row.actions" />
-                  </template>
+
+                  <ActionsButtonGroup v-else :actions="row.actions" />
                 </td>
               </tr>
 

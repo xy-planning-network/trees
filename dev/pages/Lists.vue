@@ -94,6 +94,17 @@ const staticTableActions = computed((): TableActions<Conifer> => {
         label: "",
         disabled: coniferList.value.length <= 1,
       },
+      {
+        label: "Navigate",
+        url: "https://xkcd.com/1425/",
+        openInTab: true,
+        attrs: { rel: "no-follow" },
+        onClick: (t, i, table, e) =>
+          console.log(
+            "The Event is available if it needs to be read or handled.",
+            e
+          ),
+      },
     ],
     type: "buttons",
   }
@@ -116,6 +127,18 @@ const dynamicTableActions: TableActions<Conifer> = {
       label: "Reset",
       onClick: (t, i, table) => table.reset(),
       disabled: (t) => t.type === "Scale-leaf",
+    },
+    {
+      icon: TrashIcon,
+      label: "Navigate",
+      url: "https://xkcd.com/1425/",
+      openInTab: true,
+      attrs: { rel: "no-follow" },
+      onClick: (t, i, table, e) =>
+        console.log(
+          "The Event is available if it needs to be read or handled.",
+          e
+        ),
     },
   ],
   type: "dropdown",
