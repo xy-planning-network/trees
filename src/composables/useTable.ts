@@ -82,6 +82,10 @@ export const useTable = (
               typeof action.show === "function"
                 ? action.show.apply(undefined, [rowData, rowIdx])
                 : action.show,
+            url:
+              typeof action.url === "function"
+                ? action.url.apply(undefined, [rowData, rowIdx])
+                : action.url ?? "",
           }
         }),
         rowData: rowData,

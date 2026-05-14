@@ -87,7 +87,7 @@ export interface TableActionButton<T = TableRowData> {
  */
 export interface TableActionLink<T = TableRowData> {
   label: string
-  url: string
+  url: string | ((rowData: T, rowIndex: number) => string)
   attrs?: Record<string, string | number | boolean>
   disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
   icon?: FunctionalComponent | RenderFunction

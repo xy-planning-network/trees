@@ -129,9 +129,8 @@ const dynamicTableActions: TableActions<Conifer> = {
       disabled: (t) => t.type === "Scale-leaf",
     },
     {
-      icon: TrashIcon,
       label: "Navigate",
-      url: "https://xkcd.com/1425/",
+      url: (t) => `https://xkcd.com/1425?type=${t.type}`,
       openInTab: true,
       attrs: { rel: "no-follow" },
       onClick: (t, i, table, e) =>
