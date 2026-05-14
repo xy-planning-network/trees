@@ -101,7 +101,7 @@ export interface TableActionLink<T = TableRowData> {
    * @param e Event | undefined
    * @returns void
    */
-  onClick: (
+  onClick?: (
     rowData: T,
     rowIndex: number,
     tableAPI: DynamicTableAPI,

@@ -139,6 +139,11 @@ const dynamicTableActions: TableActions<Conifer> = {
           e
         ),
     },
+    {
+      label: "Can't Navigate",
+      url: "https://xkcd.com/1425/",
+      disabled: true,
+    },
   ],
   type: "dropdown",
 }
