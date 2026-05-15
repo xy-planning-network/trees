@@ -11,8 +11,11 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue"
-import { MenuAlt2Icon, XIcon } from "@heroicons/vue/outline"
-import { CogIcon } from "@heroicons/vue/solid"
+import {
+  Bars3BottomLeftIcon,
+  XMarkIcon,
+} from "@heroicons/vue/outline"
+import { Cog6ToothIcon } from "@heroicons/vue/solid"
 import type { NavItem } from "@/composables/nav"
 import { ref } from "vue"
 
@@ -82,7 +85,7 @@ const isActive = (url: string): boolean => {
                   @click="sidebarOpen = false"
                 >
                   <span class="sr-only">Close sidebar</span>
-                  <XIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                  <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
                 </button>
               </div>
             </TransitionChild>
@@ -192,7 +195,7 @@ const isActive = (url: string): boolean => {
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
-          <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+          <Bars3BottomLeftIcon class="h-6 w-6" aria-hidden="true" />
         </button>
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
@@ -210,7 +213,7 @@ const isActive = (url: string): boolean => {
                   class="max-w-xs flex items-center text-sm text-white rounded-full hover:bg-blue-900 hover:text-gray-50 focus:outline-none focus:ring focus:text-white"
                 >
                   <span class="sr-only">Open user menu</span>
-                  <CogIcon class="h-8 w-8" fill="currentColor" />
+                  <Cog6ToothIcon class="h-8 w-8" fill="currentColor" />
                 </MenuButton>
               </div>
               <transition

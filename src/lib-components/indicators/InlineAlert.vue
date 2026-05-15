@@ -4,11 +4,11 @@ import { computed, ref } from "vue"
 import {
   CheckCircleIcon,
   InformationCircleIcon,
-  ExclamationIcon,
+  ExclamationTriangleIcon,
   XCircleIcon,
 } from "@heroicons/vue/solid"
 
-import { XIcon } from "@heroicons/vue/outline"
+import { XMarkIcon } from "@heroicons/vue/outline"
 
 const props = withDefaults(
   defineProps<{
@@ -107,7 +107,7 @@ const icon = computed(() => {
       icon = CheckCircleIcon
       break
     case "warn":
-      icon = ExclamationIcon
+      icon = ExclamationTriangleIcon
       break
   }
 
@@ -185,7 +185,7 @@ const icon = computed(() => {
             @click="close"
           >
             <span class="sr-only">close</span>
-            <XIcon class="h-4 w-4" />
+            <XMarkIcon class="h-4 w-4" />
           </button>
         </div>
       </div>

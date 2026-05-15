@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import { ChevronDownIcon, DotsVerticalIcon } from "@heroicons/vue/solid"
+import {
+  ChevronDownIcon,
+  EllipsisVerticalIcon,
+} from "@heroicons/vue/solid"
 import { isActionItemButton, type ActionItems } from "@/composables/nav"
 import { computed, useTemplateRef } from "vue"
 import { useFloating, autoUpdate, autoPlacement } from "@floating-ui/vue"
@@ -71,7 +74,7 @@ const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
     >
       <span :class="!label && 'sr-only'">{{ label || "Open options" }}</span>
       <component
-        :is="label ? ChevronDownIcon : DotsVerticalIcon"
+        :is="label ? ChevronDownIcon : EllipsisVerticalIcon"
         :class="[label && '-mr-1 ml-2', 'w-5 h-5']"
         aria-hidden="true"
       />
