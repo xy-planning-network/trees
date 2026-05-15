@@ -11,9 +11,9 @@ import {
   MenuItems,
 } from "@headlessui/vue"
 import {
-  Bars3Icon as MenuIcon,
+  Bars3Icon,
   UserCircleIcon,
-  XMarkIcon as XIcon,
+  XMarkIcon,
 } from "@heroicons/vue/outline"
 import type { NavItem } from "@/composables/nav"
 import User from "@/composables/user"
@@ -105,8 +105,12 @@ const isActive = (url: string): boolean => {
               class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <span class="sr-only">Open main menu</span>
-              <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-              <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
+              <Bars3Icon
+                v-if="!open"
+                class="block h-6 w-6"
+                aria-hidden="true"
+              />
+              <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
             </DisclosureButton>
           </div>
         </div>

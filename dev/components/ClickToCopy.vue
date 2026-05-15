@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, useId } from "vue"
-import { ClipboardDocumentCheckIcon as ClipboardCopyIcon } from "@heroicons/vue/outline"
+import { ClipboardDocumentCheckIcon } from "@heroicons/vue/outline"
 
 const props = withDefaults(defineProps<{ value?: string }>(), {
   value: "",
@@ -25,7 +25,7 @@ const copy = function () {
 }
 </script>
 <template>
-  <ClipboardCopyIcon
+  <ClipboardDocumentCheckIcon
     class="w-5 h-5 inline cursor-pointer text-gray-600 hover:text-gray-900 active:text-gray-600"
     @click="copy"
   />

@@ -6,7 +6,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue"
-import { XMarkIcon as XIcon } from "@heroicons/vue/outline"
+import { XMarkIcon } from "@heroicons/vue/outline"
 import { computed, useSlots, watch } from "vue"
 
 const props = withDefaults(
@@ -110,7 +110,7 @@ watch(open, (isOpen) => {
                   @click="open = false"
                 >
                   <span class="sr-only">Close</span>
-                  <XIcon class="h-6 w-6" aria-hidden="true" />
+                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
 

@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { useAppFlasher } from "@/composables/useFlashes"
 import { CheckIcon } from "@heroicons/vue/outline"
-import { ExclamationTriangleIcon as ExclamationIcon } from "@heroicons/vue/outline"
+import { ExclamationTriangleIcon } from "@heroicons/vue/outline"
 import { useAppSpinner } from "@/composables"
 import type { Placement } from "@floating-ui/vue"
 
@@ -305,7 +305,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           <Popover>
             <template #button>
               <div class="xy-badge">
-                Badge <ExclamationIcon class="w-4 h-4 ml-1" />
+                Badge <ExclamationTriangleIcon class="w-4 h-4 ml-1" />
               </div>
             </template>
             <div
@@ -316,7 +316,9 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
                 :key="n"
                 class="flex items-center p-4 border-b"
               >
-                <ExclamationIcon class="w-7 h-7 mr-2 text-yellow-500" />
+                <ExclamationTriangleIcon
+                  class="w-7 h-7 mr-2 text-yellow-500"
+                />
                 <div>
                   You see that post on
                   <a

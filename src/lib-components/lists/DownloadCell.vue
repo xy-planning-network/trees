@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowDownTrayIcon as DownloadIcon } from "@heroicons/vue/solid"
+import { ArrowDownTrayIcon } from "@heroicons/vue/solid"
 defineProps<{
   propsData: Record<string, unknown>
   attribute: string
@@ -7,6 +7,6 @@ defineProps<{
 </script>
 <template>
   <a :href="propsData[attribute] as string">
-    <DownloadIcon class="h-6 w-6 group-hover:text-gray-500 transition" />
+    <ArrowDownTrayIcon class="h-6 w-6 group-hover:text-gray-500 transition" />
   </a>
 </template>

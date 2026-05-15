@@ -2,9 +2,9 @@
 import { computed, h, ref } from "vue"
 import {
   CalendarIcon,
-  MapPinIcon as LocationMarkerIcon,
+  MapPinIcon,
   UsersIcon,
-  MegaphoneIcon as SpeakerphoneIcon,
+  MegaphoneIcon,
   TrashIcon,
 } from "@heroicons/vue/solid"
 import type {
@@ -79,7 +79,7 @@ const staticTableActions = computed((): TableActions<Conifer> => {
     actions: [
       {
         onClick: announceTree,
-        icon: SpeakerphoneIcon,
+        icon: MegaphoneIcon,
         label: "Speak",
       },
       {
@@ -282,7 +282,7 @@ const dynamictableProps = [
                       <p
                         class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6"
                       >
-                        <LocationMarkerIcon
+                        <MapPinIcon
                           class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />
