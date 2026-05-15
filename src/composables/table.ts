@@ -1,5 +1,9 @@
-import { VNodeChild, type ComputedRef } from "vue"
-import { ActionItem } from "@/composables/nav"
+import {
+  FunctionalComponent,
+  RenderFunction,
+  VNodeChild,
+  type ComputedRef,
+} from "vue"
 import { DateRangeProps } from "./date"
 
 export interface DynamicTableOptions {
@@ -37,56 +41,102 @@ export interface DynamicTableAPI<T = TableRowData> {
   selectedData: ComputedRef<T[]>
 }
 
-export interface TableActionItem<T = TableRowData> extends ActionItem {
-  /**
-   * The disabled property determines the value of the disabled attribute on the button
-   * attached to the action.  Allowing the action to stay visible to the user, but keeping the action
-   * disabled from use.
-   *
-   * disabled accepts a boolean value or a function with the table row data as
-   * the first argument and the row index as the second.
-   */
+export type TableActionItem<T = TableRowData> =
+  | TableActionButton<T>
+  | TableActionLink<T>
+
+/**
+ * TableActionButton determines the configuration for a action button within a table row.
+ * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans
+ * or dynamic methods based on the specific row's state and index.
+ *
+ * The use of (`never`) on properties that exist in TableActionLink ensures the compiler
+ * can infer between the to interfaces when used in the type union TableActionItem.
+ *
+ * @template T The shape of the underlying row data.
+ */
+export interface TableActionButton<T = TableRowData> {
+  label: string
+  attrs?: never
   disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
+  icon?: FunctionalComponent | RenderFunction
+  openInTab?: never
+  show?: boolean | ((rowData: T, rowIndex: number) => boolean)
+  url?: never
   /**
    * onClick is the callback function triggered by the button rendered in the table actions.
    * @param rowData T
    * @param rowIndex number
    * @param tableAPI DynamicTableAPI
+   * @param e Event | undefined
    * @returns void
    */
-  onClick: (rowData: T, rowIndex: number, tableAPI: DynamicTableAPI) => void
-  /**
-   * The show property determines whether the action is visible.
-   *
-   * show accepts a boolean value or a function with the table row data as
-   * the first argument and the row index as the second.
-   */
-  show?: boolean | ((rowData: T, rowIndex: number) => boolean)
+  onClick: (
+    rowData: T,
+    rowIndex: number,
+    tableAPI: DynamicTableAPI,
+    e?: Event
+  ) => void
 }
 
-export interface TableBulkActionItem<T = TableRowData> extends ActionItem {
+/**
+ * TableActionLink determines the configuration for a link button within a table row.
+ * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans
+ * or dynamic methods based on the specific row's state and index.
+ * HTML Attributes can be defined on (`attrs`) for additional HTML anchor tag attributes
+ * that are not explicitly defined in the interface.
+ *
+ * @template T The shape of the underlying row data.
+ */
+export interface TableActionLink<T = TableRowData> {
+  label: string
+  url: string | ((rowData: T, rowIndex: number) => string)
+  attrs?: Record<string, string | number | boolean>
+  disabled?: boolean | ((rowData: T, rowIndex: number) => boolean)
+  icon?: FunctionalComponent | RenderFunction
+  openInTab?: boolean
+  show?: boolean | ((rowData: T, rowIndex: number) => boolean)
   /**
-   * Whether or not the bulk action item is enabled.  Disabled actions are
-   * visible in the UI, but do not trigger click events.
+   * onClick is the callback function triggered by the button rendered in the table actions.
+   * @param rowData T
+   * @param rowIndex number
+   * @param tableAPI DynamicTableAPI
+   * @param e Event | undefined
+   * @returns void
    */
+  onClick?: (
+    rowData: T,
+    rowIndex: number,
+    tableAPI: DynamicTableAPI,
+    e?: Event
+  ) => void
+}
+
+/**
+ * TableBulkActionItem determines the configuration for a bulk action button on a table.
+ * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans.
+ *
+ * @template T The shape of the underlying row data.
+ */
+export interface TableBulkActionItem<T = TableRowData> {
+  label: string
   disabled?: boolean
+  icon?: FunctionalComponent | RenderFunction
+  show?: boolean
   /**
    * The callback method triggered by the action item buttons click event.
    * @param selected the array of selected rows by the primary key `id`
    * @param selectedData the array of selected rows as the underlying data type T
    * @param tableAPI DynamicTableAPI
+   * @param e Event | undefined
    * @returns void
    */
   onClick: (
     selected: number[],
     selectedData: T[],
-    tableAPI: DynamicTableAPI
+    tableAPI: DynamicTableAPI,
+    e?: Event
   ) => void
-  /**
-   * Whether or not to visible show the action item in the UI.  When all action items
-   * on a table a hidden with show: false, bulk selections are disabled for the table.
-   */
-  show?: boolean
 }
 
 export interface TableActions<T = TableRowData> {

@@ -7,9 +7,16 @@ defineProps<{
   user: User
 }>()
 
-const actionsDropdownCopy = `<ActionsDropdown :items="items" />`
+const actionsDropdownCopy = `<ActionsDropdown :actions="actions" />`
 const actionsDropdownProps = [
-  { name: "items", required: true, type: "ActionMenuItem[]" },
+  { name: "actions", required: false, type: "ActionItems" },
+  { name: "hideOnEmpty", required: false, type: "boolean" },
+  { name: "label", required: false, type: "string" },
+  { name: "placement", required: false, type: "Placement" },
+]
+const actionsButtonGroupCopy = `<ActionsButtonGroup :actions="actions" />`
+const actionsButtonGroupProps = [
+  { name: "actions", required: false, type: "ActionItems" },
 ]
 const showMenuItem = ref(false)
 const menuItems = computed((): ActionItem[] => {
@@ -19,11 +26,36 @@ const menuItems = computed((): ActionItem[] => {
     {
       label: "No! Do this.",
       onClick: () => alert("No! Do this."),
-      show: () => {
-        return showMenuItem.value
-      },
+      show: showMenuItem.value,
     },
-  ]
+    {
+      label: "Navigate",
+      url: "https://xkcd.com/1425/",
+      // openInTab: true,
+      attrs: { rel: "no-follow" },
+      onClick: (e: Event) =>
+        console.log(
+          "The Event is available if it needs to be read or handled.",
+          e
+        ),
+    },
+    {
+      label: "Can't Navigate",
+      url: "https://xkcd.com/1425/",
+      disabled: true,
+    },
+    {
+      label: "Hidden Navigation",
+      url: "https://xkcd.com/1425/",
+      show: false,
+    },
+  ].map((a) => {
+    return {
+      ...a,
+      // disabled: true,
+      // show: false,
+    }
+  })
 })
 
 const pagination = ref({
@@ -67,19 +99,45 @@ const tabsProps = [
     <ComponentLayout title="Actions Dropdown">
       <template #description>
         This is an accessible component that handles a dropdown menu to take
-        further actions. It emits an event to the bus so that they can be
-        handled by a parent or sibling component.
+        further actions.
       </template>
 
       <div>
         <label
-          class="relative flex justify-end items-center mr-1 text-sm font-medium text-gray-700"
+          class="relative flex items-center mr-1 text-sm font-medium text-gray-700"
         >
           <ClickToCopy :value="actionsDropdownCopy" />
         </label>
-        <div class="mt-1">
-          <ActionsDropdown :actions="menuItems" />
+        <div class="space-y-3">
+          <div class="flex flex-col items-center space-y-5">
+            <ActionsDropdown :actions="menuItems" />
+            <ActionsDropdown
+              :actions="menuItems"
+              label="Options"
+              hide-on-empty
+            />
+          </div>
           <PropsTable :props="actionsDropdownProps" />
+        </div>
+      </div>
+    </ComponentLayout>
+
+    <ComponentLayout title="Actions Button Group">
+      <template #description>
+        This is an accessible component that handles a button group layout.
+      </template>
+
+      <div>
+        <label
+          class="relative flex items-center mr-1 text-sm font-medium text-gray-700"
+        >
+          <ClickToCopy :value="actionsButtonGroupCopy" />
+        </label>
+        <div class="space-y-3">
+          <div class="flex justify-center">
+            <ActionsButtonGroup :actions="menuItems" />
+          </div>
+          <PropsTable :props="actionsButtonGroupProps" />
         </div>
       </div>
     </ComponentLayout>
