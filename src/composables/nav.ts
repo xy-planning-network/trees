@@ -26,6 +26,13 @@ export interface Pagination {
 export type ActionItem = ActionItemButton | ActionItemLink
 export type ActionItems = ActionItem[]
 
+/**
+ * ActionItemButton determines the configuration for a button action in a component.
+ * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans.
+ *
+ * The use of (`never`) on properties that exist in ActionItemLink ensures the compiler
+ * can infer between the to interfaces when used in the type union ActionItem.
+ */
 export interface ActionItemButton {
   label: string
   attrs?: never
@@ -43,6 +50,13 @@ export const isActionItemButton = (
   return !("url" in item) || typeof item.url !== "string"
 }
 
+/**
+ * ActionItemLink determines the configuration for a link action in a component.
+ * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans.
+ *
+ * HTML Attributes can be defined on (`attrs`) for additional HTML anchor tag attributes
+ * that are not explicitly defined in the interface.
+ */
 export interface ActionItemLink {
   label: string
   url: string

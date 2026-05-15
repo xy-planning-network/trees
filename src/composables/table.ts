@@ -50,6 +50,9 @@ export type TableActionItem<T = TableRowData> =
  * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans
  * or dynamic methods based on the specific row's state and index.
  *
+ * The use of (`never`) on properties that exist in TableActionLink ensures the compiler
+ * can infer between the to interfaces when used in the type union TableActionItem.
+ *
  * @template T The shape of the underlying row data.
  */
 export interface TableActionButton<T = TableRowData> {
