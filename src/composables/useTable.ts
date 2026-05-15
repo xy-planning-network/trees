@@ -4,7 +4,9 @@ import {
   TableRowsData,
   TableActions,
   DynamicTableAPI,
+  isTableActionLink,
 } from "./table"
+import { ActionItemButton, ActionItemLink } from "@/entry"
 
 const isEmptyCellValue = (v: unknown): boolean => {
   return v === null || v === undefined
@@ -70,25 +72,45 @@ export const useTable = (
     return tableData.value.map((rowData, rowIdx) => {
       return {
         actions: tableActions.value.actions.map((action) => {
-          return {
+          if (isTableActionLink(action)) {
+            const actionItemLink: ActionItemLink = {
+              ...action,
+              disabled:
+                typeof action.disabled === "function"
+                  ? action.disabled.apply(undefined, [rowData, rowIdx])
+                  : action.disabled,
+              onClick: (e?: Event) =>
+                action.onClick
+                  ? action.onClick(rowData, rowIdx, exposedAPI, e)
+                  : undefined,
+              show:
+                typeof action.show === "function"
+                  ? action.show.apply(undefined, [rowData, rowIdx])
+                  : action.show,
+              url:
+                typeof action.url === "function"
+                  ? action.url.apply(undefined, [rowData, rowIdx])
+                  : action.url,
+            }
+
+            return actionItemLink
+          }
+
+          const actionItemButton: ActionItemButton = {
             ...action,
             disabled:
               typeof action.disabled === "function"
                 ? action.disabled.apply(undefined, [rowData, rowIdx])
                 : action.disabled,
             onClick: (e?: Event) =>
-              action.onClick
-                ? action.onClick(rowData, rowIdx, exposedAPI, e)
-                : () => {},
+              action.onClick(rowData, rowIdx, exposedAPI, e),
             show:
               typeof action.show === "function"
                 ? action.show.apply(undefined, [rowData, rowIdx])
                 : action.show,
-            url:
-              typeof action.url === "function"
-                ? action.url.apply(undefined, [rowData, rowIdx])
-                : action.url ?? "",
           }
+
+          return actionItemButton
         }),
         rowData: rowData,
         cells: columns.value.map((col) => {

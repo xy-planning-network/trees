@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import {
-  ChevronDownIcon,
-  EllipsisVerticalIcon,
-} from "@heroicons/vue/solid"
-import { isActionItemButton, type ActionItems } from "@/composables/nav"
+import { ChevronDownIcon, EllipsisVerticalIcon } from "@heroicons/vue/solid"
+import { isActionItemLink, type ActionItems } from "@/composables/nav"
 import { computed, useTemplateRef } from "vue"
 import { useFloating, autoUpdate, autoPlacement } from "@floating-ui/vue"
 
@@ -28,7 +25,7 @@ const actionItems = computed(() => {
       return {
         ...a,
         disabled: a.disabled ?? false,
-        kind: isActionItemButton(a) ? "button" : "link",
+        kind: isActionItemLink(a) ? "link" : "button",
         show: true,
         onClick: a.onClick ? a.onClick : () => {},
       }

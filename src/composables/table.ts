@@ -79,6 +79,12 @@ export interface TableActionButton<T = TableRowData> {
   ) => void
 }
 
+export const isTableActionButton = (
+  item: TableActionItem
+): item is TableActionButton => {
+  return !("url" in item) || typeof item.url !== "string"
+}
+
 /**
  * TableActionLink determines the configuration for a link button within a table row.
  * Visibility (`show`) and interactivity (`disabled`) can be toggled via static booleans
@@ -110,6 +116,12 @@ export interface TableActionLink<T = TableRowData> {
     tableAPI: DynamicTableAPI,
     e?: Event
   ) => void
+}
+
+export const isTableActionLink = (
+  item: TableActionItem
+): item is TableActionLink => {
+  return "url" in item && ["string", "function"].includes(typeof item.url)
 }
 
 /**

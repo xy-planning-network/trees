@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ActionItems, isActionItemButton } from "@/composables/nav"
+import { ActionItems, isActionItemLink } from "@/composables/nav"
 import { computed } from "vue"
 
 const props = withDefaults(
@@ -18,7 +18,7 @@ const actionItems = computed(() => {
       return {
         ...a,
         disabled: a.disabled ?? false,
-        kind: isActionItemButton(a) ? "button" : "link",
+        kind: isActionItemLink(a) ? "link" : "button",
         show: true,
         onClick: a.onClick ? a.onClick : () => {},
       }
