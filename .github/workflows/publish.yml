@@ -15,17 +15,14 @@ jobs:
       id-token: write # REQUIRED for OIDC / Trusted Publishing
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version-file: ".node-version"
           cache: "npm"
           cache-dependency-path: ./package-lock.json
-
-      - name: Ensure modern npm (trusted publishing support)
-        run: npm install -g npm@^11.5.1
+          node-version-file: ".node-version"
 
       - name: Node version
         run: node --version && npm --version
