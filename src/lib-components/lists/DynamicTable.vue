@@ -45,7 +45,7 @@ const loadAndRender = (): void => {
     perPage: pagination.value.perPage,
     sort: currentSort.value,
     sortDir: currentSortDirection.value,
-    q: query.value,
+    q: props.tableOptions.search ? query.value : undefined,
   }
 
   clearSelections()
