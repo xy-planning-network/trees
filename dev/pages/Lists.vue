@@ -17,6 +17,7 @@ import NeedleTag from "../components/NeedleTags.vue"
 import { conifers } from "../../db.json"
 import { Conifer } from "../domain/tree"
 import { useAppFlasher, useAppSpinner } from "@/composables"
+import { dateRangeActions } from "@/composables/dateRange"
 
 const cards = [
   { primary: "Get Some", secondary: "You are gonna do well." },
@@ -204,7 +205,7 @@ const dynamicTableBulkActions: TableBulkActions<Conifer> = {
 }
 
 const dynamicTableOptions: DynamicTableOptions = {
-  dateSearch: true,
+  dateSearch: { actions: dateRangeActions },
   refreshTrigger: 0,
   search: true,
   url: "https://my-json-server.typicode.com/xy-planning-network/trees/conifers",

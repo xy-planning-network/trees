@@ -80,8 +80,8 @@ onMounted(() => {
     appendTo: wrapperRef.value || undefined,
     dateFormat: "m-d-Y",
     mode: "range",
-    maxDate: props.maxDate,
-    minDate: props.startDate,
+    maxDate: props.maxValue,
+    minDate: props.minValue,
     onClose: (selectedDates) => {
       if (selectedDates.length === 2) {
         updateModelState({

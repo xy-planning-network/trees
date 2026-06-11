@@ -1,5 +1,7 @@
 import { computed, ref, useAttrs, useId } from "vue"
 import { debounce } from "@/helpers/Debounce"
+import type { DateRange as RekaDateRange } from "reka-ui"
+import { DateRange } from "@/composables/date"
 
 export interface Input {
   modelValue?: any
@@ -20,6 +22,11 @@ export interface BooleanInput extends Input {
   modelValue?: boolean | null
 }
 
+export interface DateRangeAction {
+  label: string
+  action: () => DateRange
+}
+
 /**
  * DateRangeInput allows a max range to be applied to the datepicker
  * such that selecting the first date will then apply a max/min of +/- maxRange.
@@ -29,13 +36,15 @@ export interface BooleanInput extends Input {
  * dates prior to Jan 1 given the handling of maxRange being adjusted on the fly.
  */
 export interface DateRangeInput extends Input {
+  actions?: DateRangeAction[]
   modelValue?: {
     minDate: number
     maxDate: number
   }
-  maxDate?: Date | string | number
   maxRange?: number
-  startDate?: Date | string | number
+  maxValue?: Date | null
+  minValue?: Date
+  position?: "bottom" | "bottom-start" | "bottom-end"
 }
 
 export interface DateTimeInput extends Input {
