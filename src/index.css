@@ -229,11 +229,6 @@
     @apply font-medium border-b-2 border-b-xy-blue hover:border-b-transparent hover:text-xy-blue;
   }
 
-  /* Flatpickr DateRangePicker */
-  .xy-date-range-picker .flatpickr-wrapper {
-    display: block;
-  }
-
   /* RangeCalendar */
   .xy-range-calendar-nav[data-disabled] {
     @apply cursor-not-allowed opacity-40 hover:bg-transparent;

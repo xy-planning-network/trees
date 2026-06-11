@@ -1,6 +1,5 @@
 import { computed, ref, useAttrs, useId } from "vue"
 import { debounce } from "@/helpers/Debounce"
-import type { DateRange as RekaDateRange } from "reka-ui"
 import { DateRange } from "@/composables/date"
 
 export interface Input {

@@ -5,7 +5,7 @@ import {
   ActionsDropdown,
   TablePaginator,
 } from "@/lib-components"
-import DateRangePickerV2 from "../forms/DateRangePickerV2.vue"
+import DateRangePicker from "../forms/DateRangePicker.vue"
 import BaseAPI from "../../api/base"
 import type {
   DynamicTableAPI,
@@ -319,7 +319,7 @@ loadAndRender()
             </svg>
           </div>
           <div class="flex-1">
-            <DateRangePickerV2
+            <DateRangePicker
               id="table-date-range"
               v-model="dateRange"
               position="bottom-end"

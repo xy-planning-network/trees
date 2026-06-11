@@ -125,12 +125,23 @@ const booleanInputProps = [
 
 const dateRangeInputProps = [
   {
+    name: "actions",
+    required: false,
+    type: `DateRangeAction[]`,
+  },
+  {
     name: "modelValue",
     required: false,
     type: `{minDate: number, maxDate: number}`,
   },
   { name: "maxRange", required: false, type: "number" },
-  { name: "startDate", required: false, type: "number" },
+  { name: "maxValue", required: false, type: "Date | null" },
+  { name: "minValue", required: false, type: "Date" },
+  {
+    name: "position",
+    required: false,
+    type: "'bottom' | 'bottom-start' | 'bottom-end'",
+  },
   ...inputCommonProps,
 ]
 
@@ -419,38 +430,22 @@ const slideoverOpen = ref(false)
       <template #description>
         We are using
         <a
-          href="https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types"
+          href="https://www.reka-ui.com/examples/date-picker-selection"
           class="xy-link"
           target="_blank"
-          >flatpickr</a
+          >Reka-UI</a
         >
-        to select date ranges. They package up some css to make it all look
-        fresh.
+        to select date ranges.
       </template>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">
           <ClickToCopy :value="dateRangePickerCopy" />
         </label>
-        <div class="mb-8">
-          <DateRangePickerV2
-            :actions="dateRangeActions"
-            :max-range="10"
-            :min-value="new Date('06-01-2026')"
-            @update:model-value="($event) => $log('update', $event)"
-          />
-        </div>
-
-        <div class="mb-8">
-          <RangeCalendar
-            v-model="dateRangeInput"
-            @update:model-value="($event) => $log('update', $event)"
-          />
-        </div>
-
         <div class="mt-1">
           <DateRangePicker
             v-model="inputVals['dateRangePicker']"
+            :actions="dateRangeActions"
             :max-range="365"
             required
             @update:model-value="
@@ -485,13 +480,6 @@ const slideoverOpen = ref(false)
               <DateRangePicker
                 v-model="inputVals['dateRangePicker']"
                 label="Select a Date Range"
-              />
-
-              <DateRangePickerV2
-                v-model="dateRangeInput"
-                :actions="dateRangeActions"
-                label="Select a Date Range"
-                position="bottom-start"
               />
             </Slideover>
           </div>
@@ -913,13 +901,6 @@ const slideoverOpen = ref(false)
           <Radio :options="options" required label="Select an option" />
 
           <DateRangePicker label="Pick a date range!" required />
-
-          <DateRangePickerV2
-            label="Pick a date range!"
-            :max-range="10"
-            :min-value="new Date('06-01-2026')"
-            required
-          />
 
           <DateTime label="Pick a date and time local to you!" required />
 
