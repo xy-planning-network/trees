@@ -7,6 +7,7 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
+import { dateRangeActions } from "@/composables/dateRange"
 import Slideover from "@/lib-components/overlays/Slideover.vue"
 
 const options: InputOption[] = [
@@ -414,7 +415,7 @@ const slideoverOpen = ref(false)
       </div>
     </ComponentLayout>
 
-    <ComponentLayout title="Date Range Picker">
+    <ComponentLayout id="date-picker" title="Date Range Picker">
       <template #description>
         We are using
         <a
@@ -431,6 +432,21 @@ const slideoverOpen = ref(false)
         <label class="block text-sm font-medium text-gray-700">
           <ClickToCopy :value="dateRangePickerCopy" />
         </label>
+        <div class="mb-8">
+          <DateRangePickerV2
+            :actions="dateRangeActions"
+            :max-range="10"
+            :min-value="new Date('06-01-2026')"
+          />
+        </div>
+
+        <div class="mb-8 hidden">
+          <RangeCalendar
+            v-model="dateRangeInput"
+            @update:model-value="($event) => $log('update', $event)"
+          />
+        </div>
+
         <div class="mt-1">
           <DateRangePicker
             v-model="inputVals['dateRangePicker']"
@@ -467,6 +483,12 @@ const slideoverOpen = ref(false)
               <DateRangePicker
                 v-model="inputVals['dateRangePicker']"
                 label="Select a Date Range"
+              />
+
+              <DateRangePickerV2
+                v-model="dateRangeInput"
+                label="Select a Date Range"
+                position="bottom-start"
               />
             </Slideover>
           </div>
@@ -888,6 +910,13 @@ const slideoverOpen = ref(false)
           <Radio :options="options" required label="Select an option" />
 
           <DateRangePicker label="Pick a date range!" required />
+
+          <DateRangePickerV2
+            label="Pick a date range!"
+            :max-range="10"
+            :min-value="new Date('06-01-2026')"
+            required
+          />
 
           <DateTime label="Pick a date and time local to you!" required />
 

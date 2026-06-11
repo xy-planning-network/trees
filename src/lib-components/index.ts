@@ -34,6 +34,7 @@ import { default as ProgressCirclesLabeled } from "./indicators/ProgressCirclesL
 import { default as BaseInput } from "./forms/BaseInput.vue"
 import { default as Checkbox } from "./forms/Checkbox.vue"
 import { default as DateRangePicker } from "./forms/DateRangePicker.vue"
+import { default as DateRangePickerV2 } from "./forms/DateRangePickerV2.vue"
 import { default as DateTime } from "./forms/DateTimeInput.vue"
 import { default as InputError } from "./forms/InputError.vue"
 import { default as InputHelp } from "./forms/InputHelp.vue"
@@ -43,6 +44,7 @@ import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
 import { default as NumberInput } from "./forms/NumberInput.vue"
 import { default as Radio } from "./forms/Radio.vue"
 import { default as RadioCards } from "./forms/RadioCards.vue"
+import { default as RangeCalendar } from "./forms/RangeCalendar.vue"
 import { default as Select } from "./forms/Select.vue"
 import { default as TextArea } from "./forms/TextArea.vue"
 import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
@@ -76,6 +78,7 @@ export {
   BaseInput,
   Checkbox,
   DateRangePicker,
+  DateRangePickerV2,
   DateTime,
   InputError,
   InputHelp,
@@ -85,6 +88,7 @@ export {
   NumberInput,
   Radio,
   RadioCards,
+  RangeCalendar,
   Select,
   TextArea,
   YesOrNoRadio,
@@ -123,6 +127,7 @@ export interface TreesComponents {
   BaseInput: typeof BaseInput
   Checkbox: typeof Checkbox
   DateRangePicker: typeof DateRangePicker
+  DateRangePickerV2: typeof DateRangePickerV2
   DateTime: typeof DateTime
   InputError: typeof InputError
   InputHelp: typeof InputHelp
@@ -132,6 +137,7 @@ export interface TreesComponents {
   NumberInput: typeof NumberInput
   Radio: typeof Radio
   RadioCards: typeof RadioCards
+  RangeCalendar: typeof RangeCalendar
   Select: typeof Select
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio

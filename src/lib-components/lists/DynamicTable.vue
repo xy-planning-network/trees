@@ -5,7 +5,7 @@ import {
   ActionsDropdown,
   TablePaginator,
 } from "@/lib-components"
-import DateRangePicker from "../forms/DateRangePicker.vue"
+import DateRangePickerV2 from "../forms/DateRangePickerV2.vue"
 import BaseAPI from "../../api/base"
 import type {
   DynamicTableAPI,
@@ -113,9 +113,9 @@ const pagination = ref({
 const query = ref("")
 
 const dateRangeChanged = (newDateRange: DateRange | undefined): void => {
-  if (newDateRange) {
+  console.log(newDateRange)
+  if (!newDateRange?.maxDate === !newDateRange?.minDate) {
     pagination.value.page = 1
-    dateRange.value = newDateRange
     loadAndRender()
   }
 }
@@ -319,9 +319,10 @@ loadAndRender()
             </svg>
           </div>
           <div class="flex-1">
-            <DateRangePicker
+            <DateRangePickerV2
               id="table-date-range"
               v-model="dateRange"
+              position="bottom-end"
               v-bind="{ ...dateSearchProps }"
               @update:model-value="dateRangeChanged"
             />
