@@ -16,8 +16,8 @@ import {
 } from "reka-ui"
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid"
 import { computed } from "vue"
-import { defaultInputProps, defaultModelOpts } from "@/composables/forms"
-import type { DateRangeInput } from "@/composables/forms"
+import { defaultModelOpts } from "@/composables/forms"
+import type { DateRangeAction, DateRangeInput } from "@/composables/forms"
 import { calendarDateToUnix } from "@/composables/dateRange"
 
 const formatter = useDateFormatter("en-US")
@@ -29,13 +29,19 @@ defineOptions({
 const props = withDefaults(
   defineProps<
     DateRangeInput & {
+      actions?: DateRangeAction[]
       borderless?: boolean
+      maxRange?: number
+      maxValue?: Date | null
+      minValue?: Date
     }
   >(),
   {
-    ...defaultInputProps,
     actions: () => [],
     borderless: false,
+    maxRange: undefined,
+    maxValue: undefined,
+    minValue: undefined,
   }
 )
 

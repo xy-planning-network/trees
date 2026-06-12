@@ -36,8 +36,15 @@ const modelState = defineModel<DateRangeInput["modelValue"]>({
   default: { maxDate: undefined, minDate: undefined },
 })
 
-const { aria, inputID, errorState, isRequired, nameAttr, onInvalid } =
-  useInputField(props)
+const {
+  aria,
+  errorState,
+  inputID,
+  isDisabled,
+  isRequired,
+  nameAttr,
+  onInvalid,
+} = useInputField(props)
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -136,11 +143,11 @@ const alignment = computed(() => {
         />
 
         <div class="absolute right-0 top-1/2 -translate-y-1/2 text-neutral-400">
-          <button v-if="isValid" class="p-2" @click="reset">
+          <button v-if="isValid && !isDisabled" class="p-2" @click="reset">
             <XMarkIcon class="w-5 h-5" />
           </button>
 
-          <PopoverTrigger class="p-2" tabindex="-1">
+          <PopoverTrigger class="p-2" :disabled="isDisabled" tabindex="-1">
             <CalendarDateRangeIcon class="w-5 h-5" />
           </PopoverTrigger>
         </div>
