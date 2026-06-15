@@ -22,6 +22,7 @@ withDefaults(
 const open = defineModel<boolean>({ required: true })
 
 const emit = defineEmits<{
+  (e: "afterLeave"): void
   (e: "close"): void
 }>()
 
@@ -71,6 +72,7 @@ watch(open, (isOpen) => {
           leave="ease-in duration-200"
           leave-from="opacity-100 translate-y-0 sm:scale-100"
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          @after-leave="emit('afterLeave')"
         >
           <div
             class="inline-block align-bottom bg-white rounded-xy px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-8 sm:rounded-xy-lg"

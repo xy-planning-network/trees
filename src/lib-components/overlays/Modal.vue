@@ -29,6 +29,7 @@ const props = withDefaults(
 const open = defineModel<boolean>({ required: true })
 
 const emit = defineEmits<{
+  (e: "afterLeave"): void
   (e: "close"): void
   (e: "submit"): void
 }>()
@@ -89,6 +90,7 @@ watch(open, (isOpen) => {
           leave="ease-in duration-200"
           leave-from="opacity-100 translate-y-0 sm:scale-100"
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          @after-leave="emit('afterLeave')"
         >
           <div
             class="inline-block align-bottom text-left overflow-y-visible transform transition-all w-full sm:my-8 sm:align-middle"
