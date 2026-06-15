@@ -26,6 +26,11 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * FIXME(spk): An oddity of Reka-UI RangeCalendar is that is applies
+ * [data-highlighted] attributes to all cells inside the range applicable
+ * to the maximum-days range, even those that are outside of min-value/max-value.
+ */
 const props = withDefaults(
   defineProps<
     DateRangeInput & {
@@ -128,7 +133,7 @@ const quickActions = computed(() => {
     return {
       label: action.label,
       action: () => {
-        setModelState(action.action())
+        setModelState(action.action(props))
       },
     }
   })
@@ -139,14 +144,14 @@ const quickActions = computed(() => {
   <div class="w-full flex items-start justify-start">
     <div
       :class="[
-        'bg-white overflow-hidden flex flex-col-reverse lg:flex-row',
+        'bg-white overflow-hidden flex flex-col-reverse sm:flex-row',
         !borderless && 'border border-neutral-100 shadow rounded-xy-lg',
       ]"
     >
       <!--Quick Actions-->
       <div
         v-if="quickActions.length > 0"
-        class="lg:max-w-[160px] bg-neutral-50 p-4"
+        class="bg-neutral-50 p-4 grid grid-cols-2 sm:grid-cols-1 lg:max-w-[160px]"
       >
         <button
           v-for="option in quickActions"
@@ -163,10 +168,7 @@ const quickActions = computed(() => {
         <RangeCalendarRoot
           v-slot="{ weekDays, grid }"
           v-model="selectedRange"
-          :class="[
-            'xy-range-calendar flex space-y-4 flex-col lg:flex-row lg:space-y-0 p-4',
-            maxRange && 'xy-range-calendar--maximum-days',
-          ]"
+          class="flex space-y-4 flex-col lg:flex-row lg:space-y-0 p-4"
           :number-of-months="1"
           locale="en-US"
           :maximum-days="maxRange"
@@ -179,9 +181,7 @@ const quickActions = computed(() => {
             :class="{ 'mr-4': index === 0 }"
           >
             <div v-if="index === 0" class="flex items-center">
-              <RangeCalendarPrev
-                class="xy-btn-neutral-sm xy-range-calendar-nav"
-              >
+              <RangeCalendarPrev class="xy-btn-neutral-sm xy-range-cal-nav">
                 <ChevronLeftIcon class="w-4 h-4" />
               </RangeCalendarPrev>
 
@@ -196,9 +196,7 @@ const quickActions = computed(() => {
                 }}</span
               >
 
-              <RangeCalendarNext
-                class="xy-btn-neutral-sm xy-range-calendar-nav"
-              >
+              <RangeCalendarNext class="xy-btn-neutral-sm xy-range-cal-nav">
                 <ChevronRightIcon class="w-4 h-4" />
               </RangeCalendarNext>
             </div>
@@ -232,7 +230,7 @@ const quickActions = computed(() => {
                       <RangeCalendarCellTrigger
                         :day="weekDate"
                         :month="month.value"
-                        class="xy-range-calendar-day"
+                        class="xy-range-cal-trigger"
                       />
                     </RangeCalendarCell>
                   </RangeCalendarGridRow>

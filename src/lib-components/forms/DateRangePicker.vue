@@ -21,6 +21,13 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/**
+ * NOTE(spk): Default actions made available by Trees do not
+ * account for minValue, maxValue, and maxRange boundary restrictions.
+ *
+ * Likewise a pre-hydrated v-model that is outside those bounds also does
+ * not apply boundaries to that initial value.
+ */
 const props = withDefaults(defineProps<DateRangeInput>(), {
   ...defaultInputProps,
   actions: () => [],

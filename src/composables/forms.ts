@@ -23,7 +23,7 @@ export interface BooleanInput extends Input {
 
 export interface DateRangeAction {
   label: string
-  action: () => DateRange
+  action: (props: DateRangeInput) => DateRange
 }
 
 /**

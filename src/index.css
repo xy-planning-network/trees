@@ -230,105 +230,65 @@
   }
 
   /* RangeCalendar */
-  .xy-range-calendar-nav[data-disabled] {
+
+  /* Calendar Prev/Next navigation */
+  .xy-range-cal-nav[data-disabled] {
     @apply cursor-not-allowed opacity-40 hover:bg-transparent;
   }
 
-  .xy-range-calendar-cell {
-    @apply aspect-square my-0.5 p-0 lg:w-[34px];
+  /* Calendar Day Trigger */
+  .xy-range-cal-trigger {
+    @apply relative flex items-center justify-center rounded-full whitespace-nowrap text-sm font-normal text-black w-8 h-8 outline-none;
   }
 
-  .xy-range-calendar-cell:has([data-selected]),
-  .xy-range-calendar-cell:has([data-highlighted]) {
-    @apply bg-xy-blue-50;
+  .xy-range-cal-trigger:focus-visible {
+    @apply shadow-[0_0_0_2px] shadow-xy-blue-500;
   }
 
-  .xy-range-calendar--maximum-days
-    .xy-range-calendar-cell:has([data-highlighted]) {
-    @apply bg-transparent;
+  .xy-range-cal-trigger[data-highlighted] {
+    @apply bg-neutral-100;
   }
 
-  .xy-range-calendar-cell:has([data-disabled]),
-  .xy-range-calendar-cell:has([data-unavailable]) {
-    @apply bg-transparent;
+  .xy-range-cal-trigger[data-outside-view] {
+    @apply text-black/50;
   }
 
-  .xy-range-calendar-cell:first-child:has([data-selected]),
-  .xy-range-calendar-cell:first-child:has([data-highlighted]),
-  .xy-range-calendar-cell:has([data-highlighted-start]),
-  .xy-range-calendar-cell:not(:has([data-highlighted])):has(
-      [data-selected][data-selection-start]
-    ) {
-    @apply rounded-l-full;
+  .xy-range-cal-trigger[data-unavailable] {
+    @apply pointer-events-none text-black/50 line-through;
   }
 
-  .xy-range-calendar-cell:last-child:has([data-selected]),
-  .xy-range-calendar-cell:last-child:has([data-highlighted]),
-  .xy-range-calendar-cell:has([data-highlighted-end]),
-  .xy-range-calendar-cell:has([data-selected][data-selection-end]) {
-    @apply rounded-r-full;
+  .xy-range-cal-trigger[data-disabled] {
+    @apply cursor-not-allowed text-black/50;
   }
 
-  .xy-range-calendar-day {
-    @apply relative flex h-full w-full cursor-pointer items-center justify-center rounded-full whitespace-nowrap text-sm font-normal text-neutral-900 outline-none transition duration-100;
+  .xy-range-cal-trigger[data-selected] {
+    @apply !bg-xy-blue-700 text-white;
   }
 
-  .xy-range-calendar-day:hover {
+  .xy-range-cal-trigger:hover {
     @apply bg-xy-blue-700 text-white;
   }
 
-  .xy-range-calendar--maximum-days .xy-range-calendar-day[data-highlighted] {
-    @apply bg-xy-blue-50 text-neutral-900;
+  .xy-range-cal-trigger[data-disabled]:hover,
+  .xy-range-cal-trigger[data-unavailable]:hover {
+    @apply bg-transparent text-black/50;
   }
 
-  .xy-range-calendar--maximum-days
-    .xy-range-calendar-day[data-highlighted]:hover {
-    @apply bg-xy-blue-700 text-white;
-  }
-
-  .xy-range-calendar-day:focus-visible {
-    box-shadow: 0 0 0 2px rgb(0 0 0);
-  }
-
-  .xy-range-calendar-day[data-selection-start],
-  .xy-range-calendar-day[data-selection-end],
-  .xy-range-calendar-day[data-highlighted-start],
-  .xy-range-calendar-day[data-highlighted-end] {
-    @apply bg-xy-blue-700 text-white;
-  }
-
-  .xy-range-calendar-day[data-disabled],
-  .xy-range-calendar-day[data-unavailable] {
-    @apply cursor-not-allowed bg-transparent text-neutral-300 line-through;
-  }
-
-  .xy-range-calendar-day[data-disabled]:hover,
-  .xy-range-calendar-day[data-unavailable]:hover {
-    @apply bg-transparent text-neutral-300;
-  }
-
-  .xy-range-calendar-day[data-outside-view] {
-    @apply text-neutral-400 opacity-40;
-  }
-
-  .xy-range-calendar-day[data-outside-visible-view] {
-    @apply invisible;
-  }
-
-  .xy-range-calendar-day::before {
+  /* Today Indicator Dot */
+  .xy-range-cal-trigger::before {
     @apply absolute bottom-[3px] hidden h-1 w-1 rounded-full bg-white;
     content: "";
   }
 
-  .xy-range-calendar-day[data-today]::before {
+  .xy-range-cal-trigger[data-today]::before {
     @apply block bg-xy-blue-600;
   }
 
-  .xy-range-calendar-day[data-today][data-selected]::before,
-  .xy-range-calendar-day[data-today][data-selection-start]::before,
-  .xy-range-calendar-day[data-today][data-selection-end]::before,
-  .xy-range-calendar-day[data-today][data-highlighted-start]::before,
-  .xy-range-calendar-day[data-today][data-highlighted-end]::before {
+  .xy-range-cal-trigger[data-today][data-selected]::before,
+  .xy-range-cal-trigger[data-today][data-selection-start]::before,
+  .xy-range-cal-trigger[data-today][data-selection-end]::before,
+  .xy-range-cal-trigger[data-today][data-highlighted-start]::before,
+  .xy-range-cal-trigger[data-today][data-highlighted-end]::before {
     @apply bg-white;
   }
 }
