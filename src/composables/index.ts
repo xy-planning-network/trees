@@ -60,6 +60,7 @@ export {
 // dateRange
 import {
   calendarDateToUnix,
+  dateRangeActions,
   dateRangeLast7Days,
   dateRangeLast30Days,
   dateRangeThisMonth,
@@ -71,6 +72,7 @@ import {
 
 export {
   calendarDateToUnix,
+  dateRangeActions,
   dateRangeLast7Days,
   dateRangeLast30Days,
   dateRangeThisMonth,
