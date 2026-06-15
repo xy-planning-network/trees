@@ -16,6 +16,9 @@ import {
   PopoverRoot,
   PopoverTrigger,
 } from "reka-ui"
+import InputHelp from "@/lib-components/forms/InputHelp.vue"
+import InputError from "@/lib-components/forms/InputError.vue"
+import InputLabel from "@/lib-components/forms/InputLabel.vue"
 
 defineOptions({
   inheritAttrs: false,
