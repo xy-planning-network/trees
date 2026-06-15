@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef } from "vue"
+import { computed, nextTick, ref, useTemplateRef } from "vue"
 import {
   defaultInputProps,
   defaultModelOpts,
@@ -84,9 +84,12 @@ const isValid = computed(() => {
 })
 
 const onUpdate = () => {
-  if (isValid.value) {
-    errorState.value = ""
-  }
+  nextTick(() => {
+    if (isValid.value) {
+      errorState.value = ""
+      isOpen.value = false
+    }
+  })
 }
 
 const isOpen = ref(false)
