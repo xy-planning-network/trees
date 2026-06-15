@@ -109,6 +109,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
           <ContentModal
             v-model="contentModalOpen"
             title="Good Job!"
+            @after-leave="$log('bye bye!')"
             @close="$log('ContentModal close event triggered!')"
             @update:model-value="
               $log(`v-model update event for ContentModal: ${$event}`)
@@ -190,6 +191,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             :destructive="true"
             submit-text="Remove"
             title="Remove Thing"
+            @after-leave="$log('bye bye!')"
             @close="$log('Modal close event triggered!')"
             @submit="open = false"
             @update:model-value="
@@ -255,6 +257,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
             v-model="slideoverOpen"
             header="Slideover Header"
             description="A very helpful slideover description"
+            @after-leave="$log('bye bye!')"
             @close="$log('Slideover close event triggered!')"
             @update:model-value="
               $log(`v-model update event for Slideover: ${$event}`)
@@ -316,9 +319,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
                 :key="n"
                 class="flex items-center p-4 border-b"
               >
-                <ExclamationTriangleIcon
-                  class="w-7 h-7 mr-2 text-yellow-500"
-                />
+                <ExclamationTriangleIcon class="w-7 h-7 mr-2 text-yellow-500" />
                 <div>
                   You see that post on
                   <a

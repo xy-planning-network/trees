@@ -43,6 +43,7 @@ const layout = computed(() => {
 const open = defineModel<boolean>({ required: true })
 
 const emit = defineEmits<{
+  (e: "afterLeave"): void
   (e: "close"): void
 }>()
 
@@ -73,6 +74,7 @@ watch(open, (isOpen) => {
             leave="transform transition ease-in-out duration-500 sm:duration-700"
             leave-from="translate-x-0"
             leave-to="translate-x-full"
+            @after-leave="emit('afterLeave')"
           >
             <div :class="['w-screen', layout.maxWidth]">
               <div
