@@ -61,7 +61,7 @@ const { floatingStyles } = useFloating(triggerRef, wrapperRef, {
 
 <template>
   <HeadlessPopover v-slot="{ open, close }" :as="as" class="relative">
-    <HeadlessPopoverButton ref="trigger" as="div">
+    <HeadlessPopoverButton ref="trigger">
       <slot name="button" :open="open" :close="close"></slot>
     </HeadlessPopoverButton>
 
