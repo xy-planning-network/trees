@@ -7,6 +7,7 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
+import { dateRangeActions } from "@/composables/dateRange"
 import Slideover from "@/lib-components/overlays/Slideover.vue"
 
 const options: InputOption[] = [
@@ -124,12 +125,23 @@ const booleanInputProps = [
 
 const dateRangeInputProps = [
   {
+    name: "actions",
+    required: false,
+    type: `DateRangeAction[]`,
+  },
+  {
     name: "modelValue",
     required: false,
     type: `{minDate: number, maxDate: number}`,
   },
   { name: "maxRange", required: false, type: "number" },
-  { name: "startDate", required: false, type: "number" },
+  { name: "maxValue", required: false, type: "Date | null" },
+  { name: "minValue", required: false, type: "Date" },
+  {
+    name: "position",
+    required: false,
+    type: "'bottom' | 'bottom-start' | 'bottom-end'",
+  },
   ...inputCommonProps,
 ]
 
@@ -414,17 +426,16 @@ const slideoverOpen = ref(false)
       </div>
     </ComponentLayout>
 
-    <ComponentLayout title="Date Range Picker">
+    <ComponentLayout id="date-picker" title="Date Range Picker">
       <template #description>
         We are using
         <a
-          href="https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types"
+          href="https://www.reka-ui.com/examples/date-picker-selection"
           class="xy-link"
           target="_blank"
-          >flatpickr</a
+          >Reka-UI</a
         >
-        to select date ranges. They package up some css to make it all look
-        fresh.
+        to select date ranges.
       </template>
 
       <div>
@@ -434,6 +445,7 @@ const slideoverOpen = ref(false)
         <div class="mt-1">
           <DateRangePicker
             v-model="inputVals['dateRangePicker']"
+            :actions="dateRangeActions"
             :max-range="365"
             required
             @update:model-value="
@@ -459,6 +471,7 @@ const slideoverOpen = ref(false)
             <button class="xy-btn-sm" @click="slideoverOpen = !slideoverOpen">
               Open Slideover
             </button>
+
             <Slideover
               v-model="slideoverOpen"
               header="Forms"

@@ -57,6 +57,31 @@ export {
   useBaseAPIDelete,
 }
 
+// dateRange
+import {
+  calendarDateToUnix,
+  dateRangeActions,
+  dateRangeLast7Days,
+  dateRangeLast30Days,
+  dateRangeThisMonth,
+  dateRangeLastMonth,
+  dateRangeThisYear,
+  dateRangeLastYear,
+  dateRangeClear,
+} from "./dateRange"
+
+export {
+  calendarDateToUnix,
+  dateRangeActions,
+  dateRangeLast7Days,
+  dateRangeLast30Days,
+  dateRangeThisMonth,
+  dateRangeLastMonth,
+  dateRangeThisYear,
+  dateRangeLastYear,
+  dateRangeClear,
+}
+
 // flashes: Only expose the useFlashes composable for custom flashing and useAppFlasher.
 import { useFlashes, useAppFlashes, useAppFlasher } from "./useFlashes"
 import type { FlashMessage, FlashType, FlashStore, Flasher } from "./useFlashes"

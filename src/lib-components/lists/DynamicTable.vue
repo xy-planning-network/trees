@@ -113,9 +113,9 @@ const pagination = ref({
 const query = ref("")
 
 const dateRangeChanged = (newDateRange: DateRange | undefined): void => {
-  if (newDateRange) {
+  // NOTE(spk): DateRangePicker emits update:model-value events on both minDate and maxDate mutations.
+  if (!newDateRange?.maxDate === !newDateRange?.minDate) {
     pagination.value.page = 1
-    dateRange.value = newDateRange
     loadAndRender()
   }
 }
@@ -322,6 +322,7 @@ loadAndRender()
             <DateRangePicker
               id="table-date-range"
               v-model="dateRange"
+              position="bottom-end"
               v-bind="{ ...dateSearchProps }"
               @update:model-value="dateRangeChanged"
             />

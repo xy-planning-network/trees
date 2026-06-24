@@ -43,6 +43,7 @@ import { default as MultiCheckboxes } from "./forms/MultiCheckboxes.vue"
 import { default as NumberInput } from "./forms/NumberInput.vue"
 import { default as Radio } from "./forms/Radio.vue"
 import { default as RadioCards } from "./forms/RadioCards.vue"
+import { default as RangeCalendar } from "./forms/RangeCalendar.vue"
 import { default as Select } from "./forms/Select.vue"
 import { default as TextArea } from "./forms/TextArea.vue"
 import { default as YesOrNoRadio } from "./forms/YesOrNoRadio.vue"
@@ -85,6 +86,7 @@ export {
   NumberInput,
   Radio,
   RadioCards,
+  RangeCalendar,
   Select,
   TextArea,
   YesOrNoRadio,
@@ -132,6 +134,7 @@ export interface TreesComponents {
   NumberInput: typeof NumberInput
   Radio: typeof Radio
   RadioCards: typeof RadioCards
+  RangeCalendar: typeof RangeCalendar
   Select: typeof Select
   TextArea: typeof TextArea
   YesOrNoRadio: typeof YesOrNoRadio
