@@ -131,7 +131,7 @@ loadAndRender()
 </script>
 <template>
   <div :class="{ 'mt-4 space-y-2': filtersAreConfigured }">
-    <div v-if="!disableDate" class="flex">
+    <div v-if="!disableDate">
       <DateFilter
         :date-range="dateRange"
         :sort-dir="sortDir"

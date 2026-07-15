@@ -140,7 +140,7 @@ const alignment = computed(() => {
           :aria-describedby="aria.describedby"
           :aria-errormessage="aria.errormessage"
           :class="[
-            'block w-full rounded-md border-0 py-2 pr-9 shadow-sm ring-1 ring-inset focus:ring-2 data-[state=open]:ring-2 sm:text-sm sm:leading-6',
+            'block w-full rounded-md border-0 py-2 pr-20 shadow-sm ring-1 ring-inset focus:ring-2 data-[state=open]:ring-2 sm:text-sm sm:leading-6',
             'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-700 disabled:ring-gray-200',
             errorState
               ? 'text-red-900 ring-red-700 placeholder:text-red-300 focus:ring-red-700 data-[state=open]:ring-red-700'
