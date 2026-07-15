@@ -34,14 +34,19 @@ const dateRangeChanged = (dateRange: DateRange | undefined) => {
 }
 </script>
 <template>
-  <Select
-    v-model="sortDir"
-    :options="sortOptions"
-    @update:model-value="sortDirChanged"
-  ></Select>
-  <DateRangePicker
-    v-model="dateRange"
-    class="ml-3"
-    @update:model-value="dateRangeChanged"
-  />
+  <div class="flex space-x-3">
+    <div>
+      <Select
+        v-model="sortDir"
+        :options="sortOptions"
+        @update:model-value="sortDirChanged"
+      />
+    </div>
+    <div class="shrink-0 sm:min-w-[17rem]">
+      <DateRangePicker
+        v-model="dateRange"
+        @update:model-value="dateRangeChanged"
+      />
+    </div>
+  </div>
 </template>
