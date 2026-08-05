@@ -1,4 +1,4 @@
-import { resolve } from "path"
+import { resolve } from "node:path"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 
@@ -8,20 +8,18 @@ export default defineConfig(({ command }) => {
     base: command === "serve" ? "/trees/" : "/",
     build: {
       lib: {
-        entry: resolve(__dirname, "src/entry.ts"),
+        entry: resolve(import.meta.dirname, "src/entry.ts"),
         name: "Trees",
         fileName: (format) => `trees.${format}.js`,
       },
-      rollupOptions: {
-        // make sure to externalize deps that shouldn't be bundled
-        // into your library
+      rolldownOptions: {
         external: ["vue", /^@heroicons\/vue/],
         output: {
           exports: "named",
-          // Provide global variables to use in the UMD build
-          // for externalized deps
           globals: {
             vue: "Vue",
+            "@heroicons/vue/solid": "solid",
+            "@heroicons/vue/outline": "outline",
           },
         },
       },
@@ -29,7 +27,7 @@ export default defineConfig(({ command }) => {
     plugins: [vue()],
     resolve: {
       alias: {
-        "@": resolve(__dirname, "src"),
+        "@": resolve(import.meta.dirname, "src"),
         // Intercept v1-style imports and route them to the v2 24px files.
         "@heroicons/vue/outline": "@heroicons/vue/24/outline",
         "@heroicons/vue/solid": "@heroicons/vue/24/solid",

@@ -17,7 +17,7 @@ withDefaults(
 
 // data
 let popoverHover = false
-let popoverTimeout: null | NodeJS.Timeout = null
+let popoverTimeout: ReturnType<typeof setTimeout> | null = null
 
 // functions
 const closePopover = (close: () => void): void => {
