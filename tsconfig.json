@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
@@ -11,24 +11,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "paths": {
       "@/*": ["src/*"],
       "@heroicons/vue/outline": ["node_modules/@heroicons/vue/24/outline"],
       "@heroicons/vue/solid": ["node_modules/@heroicons/vue/24/solid"]
     },
-    "types": [
-      "node",
-      "vue",
-      "vite/client"
-    ],
+    "types": ["node", "vue", "vite/client"]
   },
-  "exclude": [
-    "dist",
-    "types",
-    "node_modules"
-  ],
+  "exclude": ["dist", "types", "node_modules"]
 }
