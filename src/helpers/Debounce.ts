@@ -1,5 +1,5 @@
 export function debounce(fn: (...args: any[]) => void, wait = 500) {
-  let timer: NodeJS.Timer | null = null
+  let timer: ReturnType<typeof setTimeout> | null = null
   return function (...args: any[]) {
     if (timer) {
       clearTimeout(timer)
@@ -12,8 +12,7 @@ export function debounce(fn: (...args: any[]) => void, wait = 500) {
 }
 
 export function debounceLeading(func: () => void, timeout = 500) {
-  let timer: NodeJS.Timer | null = null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let timer: ReturnType<typeof setTimeout> | null = null
   return (...args: any[]) => {
     if (!timer) {
       func.apply(args)

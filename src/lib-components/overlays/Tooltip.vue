@@ -16,8 +16,8 @@ withDefaults(
 )
 
 // data
-var popoverHover = false
-var popoverTimeout: null | NodeJS.Timeout = null
+let popoverHover = false
+let popoverTimeout: ReturnType<typeof setTimeout> | null = null
 
 // functions
 const closePopover = (close: () => void): void => {
@@ -31,6 +31,10 @@ const closePopover = (close: () => void): void => {
 const hoverPopover = (e: MouseEvent, open: boolean): void => {
   popoverHover = true
   if (!open && e.target) (e.target as HTMLElement).click()
+}
+
+const onMouseOver = (): void => {
+  popoverHover = true
 }
 </script>
 
@@ -52,7 +56,7 @@ const hoverPopover = (e: MouseEvent, open: boolean): void => {
     <template #default="{ close }: { close: () => void }">
       <div
         class="sm:min-w-max bg-white rounded-xy px-3.5 py-2.5 border border-gray-100 drop-shadow-md text-xs text-gray-900 leading-snug font-medium"
-        @mouseover.prevent="popoverHover = true"
+        @mouseover.prevent="onMouseOver"
         @mouseleave.prevent="closePopover(close)"
       >
         <div class="max-w-xs">

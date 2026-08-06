@@ -94,9 +94,9 @@ const masked = computed({
     // to avoid approximations from decimal values avoid calling parseFloat and use parseInt on only the dollar
     // portion when converting from string to number.
     if (props.type === "money") {
-      let parts = number.toString().split(".")
-      let dollars = parseInt(parts[0], 10)
-      let cents = parts.length > 1 ? parseInt(parts[1].padEnd(2, "0"), 10) : 0
+      const parts = number.toString().split(".")
+      const dollars = parseInt(parts[0], 10)
+      const cents = parts.length > 1 ? parseInt(parts[1].padEnd(2, "0"), 10) : 0
       number = dollars * 100 + cents
     }
 

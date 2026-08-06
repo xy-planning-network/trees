@@ -7,6 +7,5 @@ import { TreesComponents } from "@/lib-components"
  * in the project.
  */
 declare module "vue" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface GlobalComponents extends TreesComponents {}
 }

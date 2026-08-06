@@ -59,13 +59,19 @@ Additional peer dependecies will be installed by NPM. If you are using NPM < 7 y
 
 ### ESLint
 
-**Initialize ESLint rules in .eslintrc.js**
+**Initialize ESLint rules in eslint.config.mjs**
 
 ```js
-/* eslint-env node */
-module.exports = {
-  extends: "./node_modules/@xy-planning-network/trees/config/eslint.js",
-}
+import { defineConfig, globalIgnores } from "eslint/config"
+import config from "@xy-planning-network/trees/config/eslint.mjs"
+
+export default defineConfig([
+  globalIgnores(["dist/**"]),
+  {
+    files: ["src/**/*.{js,ts,vue}"],
+    extends: config,
+  },
+])
 ```
 
 ### Prettier
