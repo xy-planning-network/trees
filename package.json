@@ -3,7 +3,10 @@
   "version": "0.15.0",
   "description": "",
   "license": "MIT",
-  "repository": "github:xy-planning-network/trees",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xy-planning-network/trees.git"
+  },
   "files": [
     "config/*",
     "dist/*",
