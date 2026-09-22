@@ -57,26 +57,6 @@ const alertProps = [
   { name: "secondaryBtnText", required: false, type: "string" },
   { name: "title", required: false, type: "string" },
 ]
-
-const markdown = ref(`
-Plain text
-
-**\\*\\*Bold text\\*\\***
-__\\_\\_Bold text\\_\\___
-
-*\\*Italic text\\**
-_\\_Italic text\\__
-
-~~\\~\\~Strikethrough text\\~\\~~~
-
-\`\` \`Code Text\` \`\`
-
-Does this have  \na line break?
-
-<a href="javascript:alert('XSS')">Click me!</a>
-
-[Homepage](https://example.com)
-`)
 </script>
 
 <template>
@@ -438,14 +418,6 @@ Does this have  \na line break?
         the brand design language.
       </template>
       <Rounded />
-    </ComponentLayout>
-
-    <ComponentLayout title="FormattedText">
-      <template #description>
-        An experimental markdown utility component that renders common simple
-        markdown formatting for inline text strings.
-      </template>
-      <FormattedText :text="markdown" />
     </ComponentLayout>
   </div>
 </template>

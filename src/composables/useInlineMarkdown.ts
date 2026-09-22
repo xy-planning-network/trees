@@ -3,23 +3,72 @@ import {
   computed,
   type VNode,
   type VNodeArrayChildren,
-  type MaybeRef,
   toValue,
+  type MaybeRefOrGetter,
+  type ComputedRef,
 } from "vue"
 import { marked, type Token, type Tokens } from "marked"
 
-type RenderableNode = VNode | string | VNodeArrayChildren
+type MarkdownNode = VNode | string | VNodeArrayChildren
 
-export function useInlineMarkdown(markdown: MaybeRef<string>) {
+export interface InlineMarkdownConfig {
+  graphs: boolean
+}
+
+export type UseInlineMarkdown = ComputedRef<
+  (() => null) | (() => MarkdownNode | MarkdownNode[])
+>
+
+/**
+ * Creates a Vue render function for a subset of Markdown.
+ *
+ * `marked` is used only to tokenize the source. We parse those
+ * tokens and map supported syntax to VNodes instead of rendering and
+ * injecting HTML - this allows Vue to continue to do the sanitizing.
+ *
+ * Unsupported tokens, including raw HTML, remain plain text and
+ * are escaped by Vue.
+ *
+ * Enable `graphs` to preserve paragraph wrappers; otherwise
+ * all contents are rendered inline.
+ */
+export function useInlineMarkdown(
+  markdown: MaybeRefOrGetter<string>,
+  conf?: InlineMarkdownConfig
+): UseInlineMarkdown {
+  const config: InlineMarkdownConfig = {
+    ...{
+      graphs: false,
+    },
+    ...(conf || {}),
+  }
+
+  const isExternalLink = (link: string) => {
+    if (link.charAt(0) === "/") {
+      return false
+    }
+
+    try {
+      const url = new URL(link)
+
+      if (url.origin === window.location.origin) {
+        return false
+      }
+
+      return true
+    } catch {
+      return false
+    }
+  }
+
   const getNestedTokens = (token: Token): Token[] => {
     return "tokens" in token && Array.isArray(token.tokens) ? token.tokens : []
   }
 
-  const renderTokens = (tokens: Token[]): RenderableNode | RenderableNode[] => {
+  const render = (tokens: Token[]): MarkdownNode | MarkdownNode[] => {
     if (!tokens || tokens.length === 0) return []
 
-    // NOTE(spk): a flat map guarantees no paragraphs.  Is that what we want?
-    return tokens.flatMap((token): RenderableNode | RenderableNode[] => {
+    return tokens.flatMap((token): MarkdownNode | MarkdownNode[] => {
       switch (token.type) {
         // Plain text including escaped characters
         case "text":
@@ -28,63 +77,59 @@ export function useInlineMarkdown(markdown: MaybeRef<string>) {
 
         // Bold **text** or __text__
         case "strong":
-          return h("strong", renderTokens(getNestedTokens(token)))
+          return h("strong", render(getNestedTokens(token)))
 
         // Italic *text* or _text_
         case "em":
-          return h("em", renderTokens(getNestedTokens(token)))
+          return h("em", render(getNestedTokens(token)))
 
         // Strikethrough ~~text~~
         case "del":
-          return h("del", renderTokens(getNestedTokens(token)))
+          return h("del", render(getNestedTokens(token)))
 
         // Inline Code `text`
         case "codespan":
           return h("code", token.text)
 
         // Hyperlinks [text](url)
-        // TODO(spk): no origin is internal, different origin is external
-        // rel='noopener noreferrer' and target='_blank'
+        // NOTE(spk): (experimental): external links are opened in a new window always
         case "link": {
           const linkToken = token as Tokens.Link
+          const isExternal = isExternalLink(linkToken.href)
           return h(
             "a",
             {
               class: "xy-link",
               href: linkToken.href,
+              rel: isExternal ? "noopener" : undefined,
+              target: isExternal ? "_blank" : undefined,
             },
-            renderTokens(getNestedTokens(linkToken))
+            render(getNestedTokens(linkToken))
           )
         }
 
-        // Line Breaks \n
-        case "br":
-          return h("br")
+        // graphs created by markdown line breaks
+        case "paragraph": {
+          const children = render(getNestedTokens(token))
+          return config.graphs ? h("p", children) : children
+        }
 
-        // --- Structural Tokens ---
-        // 'marked' wraps root text in paragraphs. We convert them to <span> to remain inline.
-        case "paragraph":
-          return renderTokens(getNestedTokens(token))
-
-        case "space":
-          return " "
-
-        // Fallback: Safely render raw characters for unsupported elements (tables, lists, etc.)
+        // NOTE(spk): all other tokens and html are render as raw characters which will be escaped by Vue.
         default:
           return token.raw || ""
       }
     })
   }
 
-  // The composable returns a computed property containing the Render Function.
-  // This allows it to reactively update if the underlying textRef changes.
   return computed(() => {
     const unformatted = toValue(markdown)
 
-    if (!unformatted) return () => null
+    if (!unformatted) {
+      return () => null
+    }
 
     const tokens = marked.lexer(unformatted)
 
-    return () => renderTokens(tokens)
+    return () => render(tokens)
   })
 }
