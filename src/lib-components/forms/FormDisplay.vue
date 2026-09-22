@@ -81,7 +81,7 @@ const submit = () => {
   >
     <template v-for="(section, sectionIdx) in fieldSections" :key="sectionIdx">
       <FormSection :title="section.title" :description="section.description">
-        <template v-for="(input, idx) in section.fields" :key="idx">
+        <template v-for="input in section.fields" :key="input.name">
           <FormCell
             v-if="input.show"
             :span="input.span || 'full'"
