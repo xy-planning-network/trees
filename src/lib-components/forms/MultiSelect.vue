@@ -12,6 +12,7 @@ import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from "@heroicons/vue/solid"
 import {
   looseToNumber,
   useInputField,
+  type InputOption,
   type MultiChoiceInput,
 } from "@/composables/forms"
 import DismissableBadge from "@/lib-components/indicators/DismissableBadge.vue"
@@ -40,8 +41,9 @@ const props = withDefaults(
   }
 )
 
-// TODO(spk): getter/setting to resolve type issues
-const modelState = defineModel<MultiChoiceInput["modelValue"]>({
+// NOTE(spk): Our getter method ensures the modelState is always an Array type.
+type Getter = Exclude<MultiChoiceInput["modelValue"], null | undefined>
+const modelState = defineModel<MultiChoiceInput["modelValue"], never, Getter>({
   default: undefined,
   required: false,
 
@@ -77,14 +79,14 @@ const { aria, inputID, isDisabled, errorState, nameAttr } = useInputField(props)
 
 const query = ref("")
 
-const selectedOptions = computed(() => {
+const selectedOptions = computed((): InputOption[] => {
   // NOTE(spk): custom values in the the modelState can lead to
   // undefined results here, filter them out.
   const opts = modelState.value
     .map((value) => {
       return props.options.find((opt) => opt.value === value)
     })
-    .filter((value) => !!value)
+    .filter((value): value is InputOption => value !== undefined)
 
   if (props.customValues) {
     const customOpts = modelState.value
@@ -99,10 +101,10 @@ const selectedOptions = computed(() => {
         }
       })
 
-    return [...(customOpts || []), ...(opts || [])]
+    return [...customOpts, ...opts]
   }
 
-  return opts || []
+  return opts
 })
 
 const minCount = computed(() => {
@@ -167,6 +169,10 @@ const onDeleteKeydown = () => {
   }
 
   const last = selectedOptions.value.findLast((opt) => opt)
+  if (!last) {
+    return
+  }
+
   modelState.value = modelState.value.filter((val) => {
     return val !== last.value
   })
