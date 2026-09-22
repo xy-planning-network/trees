@@ -293,23 +293,23 @@ export const useFieldsSchema = (
   model: Ref<Record<string, any>>,
   schema: MaybeRefOrGetter<FieldsSchema>
 ): { fieldSections: ComputedRef<FieldSection[]> } => {
-  // hydrate the model with any input.modelValue's
-  // NOTE(spk): mutating the model ref by individual property avoids
-  // triggering onUpdate:model-value during initial render.
+  // Hydrate the model with any input.modelValue's and emit a single update.
   onBeforeMount(() => {
-    extractInputs(toValue(schema)).forEach((input) => {
+    let hydrated = model.value
+
+    for (const input of extractInputs(toValue(schema))) {
       if (input.modelValue !== undefined) {
-        setProperty(model.value, input.name, input.modelValue)
+        hydrated = setProperty(hydrated, input.name, input.modelValue)
       }
-    })
+    }
+
+    if (hydrated !== model.value) {
+      model.value = hydrated
+    }
   })
 
   const updateModel = (name: string, $val: any) => {
-    // NOTE(spk): lodash.set appears to mutate the object directly
-    // mutate a copy of the model and assign it back to avoid unexpected
-    // reactive side effects
-    const modelValue = { ...model.value }
-    model.value = setProperty(modelValue, name, $val)
+    model.value = setProperty(model.value, name, $val)
   }
 
   const fieldSections = computed((): FieldSection[] => {
