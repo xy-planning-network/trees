@@ -244,8 +244,11 @@ export const extractInputs = (
 /**
  * inputComponentMap contains the component reference for each input by type
  * where type is the key and the component is the value.
+ *
+ * NOTE(spk): A public api for adding to the component map could enable
+ * BYOI - Bring Your Own Input
  */
-export const inputComponentMap: Record<InputFieldType, Component> = {
+const inputComponentMap: Record<InputFieldType, Component> = {
   // textLikeInputs
   date: BaseInput,
   email: BaseInput,
