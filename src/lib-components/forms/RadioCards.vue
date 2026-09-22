@@ -38,6 +38,8 @@ const props = withDefaults(
   defineProps<RadioCards & ColumnedInput>(),
   defaultInputProps
 )
+
+// TODO(spk): getter/setting to resolve type issues
 const modelState = defineModel<RadioCards["modelValue"]>(defaultModelOpts)
 
 const { aria, isDisabled, isRequired, nameAttr, errorState, onInvalid } =
