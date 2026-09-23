@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { useInlineMarkdown } from "@/composables/useInlineMarkdown"
 import { computed, getCurrentInstance } from "vue"
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     description?: string
     title?: string
@@ -26,6 +27,10 @@ const layout = computed(() => {
 
   return 1
 })
+
+const descriptionNodes = useInlineMarkdown(() => props.description, {
+  graphs: true,
+})
 </script>
 
 <template>
@@ -37,9 +42,9 @@ const layout = computed(() => {
       <h3 v-if="title" class="text-base font-semibold leading-8 text-gray-800">
         {{ title }}
       </h3>
-      <p v-if="description" class="mt-1 text-sm leading-6 text-gray-600">
-        {{ description }}
-      </p>
+      <div v-if="description" class="mt-1 text-sm leading-6 text-gray-600">
+        <component :is="descriptionNodes" />
+      </div>
     </div>
 
     <div
