@@ -136,3 +136,6 @@ export * from "./badge"
 
 // useFieldSchema
 export * from "./useFieldsSchema"
+
+// useInlineMarkdown
+export * from "./useInlineMarkdown"

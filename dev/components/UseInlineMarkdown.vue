@@ -24,6 +24,10 @@ const tableData = [
     markdown: "[XYPN Homepage](https://www.xyplanningnetwork.com/)",
   },
   {
+    option: "Hyperlink Unsafe Rejected",
+    markdown: `[Click Me](javascript:alert('XSS'))`,
+  },
+  {
     option: "HTML (rendered as text)",
     markdown: `<a href="javascript:alert('XSS')">Click me!</a>`,
   },

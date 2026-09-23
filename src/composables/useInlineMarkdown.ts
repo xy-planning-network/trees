@@ -9,7 +9,7 @@ import {
 } from "vue"
 import { marked, type Token, type Tokens } from "marked"
 
-type MarkdownNode = VNode | string | VNodeArrayChildren
+export type MarkdownNode = VNode | string | VNodeArrayChildren
 
 export interface InlineMarkdownConfig {
   graphs: boolean
@@ -43,21 +43,23 @@ export function useInlineMarkdown(
     ...(conf || {}),
   }
 
-  const isExternalLink = (link: string) => {
-    if (link.charAt(0) === "/") {
-      return false
-    }
-
+  const getLinkAttributes = (href: string) => {
     try {
-      const url = new URL(link)
+      const url = new URL(href, window.location.href)
 
-      if (url.origin === window.location.origin) {
-        return false
+      if (!["http:", "https:", "mailto:", "tel:"].includes(url.protocol)) {
+        return {}
       }
 
-      return true
+      const isExternal = url.origin !== window.location.origin
+
+      return {
+        href,
+        rel: isExternal ? "noopener" : undefined,
+        target: isExternal ? "_blank" : undefined,
+      }
     } catch {
-      return false
+      return {}
     }
   }
 
@@ -95,14 +97,11 @@ export function useInlineMarkdown(
         // NOTE(spk): (experimental): external links are opened in a new window always
         case "link": {
           const linkToken = token as Tokens.Link
-          const isExternal = isExternalLink(linkToken.href)
           return h(
             "a",
             {
               class: "xy-link",
-              href: linkToken.href,
-              rel: isExternal ? "noopener" : undefined,
-              target: isExternal ? "_blank" : undefined,
+              ...getLinkAttributes(linkToken.href),
             },
             render(getNestedTokens(linkToken))
           )

@@ -28,7 +28,7 @@ const layout = computed(() => {
   return 1
 })
 
-const descriptionNodes = useInlineMarkdown(props.description, {
+const descriptionNodes = useInlineMarkdown(() => props.description, {
   graphs: true,
 })
 </script>
