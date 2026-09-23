@@ -42,7 +42,11 @@ const detailListProps = [
   { name: "disableNavigation", required: false, type: "boolean" },
   { name: "perPage", required: false, type: "number" },
 ]
-const staticTableCopy = `<DataTable :table-columns="tableColumns" />`
+const staticTableCopy = `<DataTable
+  :table-columns="tableColumns"
+  :table-data="tableData"
+  :table-bulk-actions="tableBulkActions"
+/>`
 
 const coniferList = ref(conifers.data.items)
 const tableColumns: TableColumns<Conifer> = [
@@ -111,9 +115,31 @@ const staticTableActions = computed((): TableActions<Conifer> => {
   }
 })
 
+const staticTableBulkActions: TableBulkActions<Conifer> = {
+  actions: [
+    {
+      label: "Announce",
+      onClick: (_, data, table) => {
+        alert(data.map((tree) => tree.name).join(", "))
+        table.clearSelection()
+      },
+    },
+    {
+      label: "Remove",
+      onClick: (ids, _, table) => {
+        coniferList.value = coniferList.value.filter(
+          (tree) => !ids.includes(tree.id)
+        )
+        table.clearSelection()
+      },
+    },
+  ],
+  isSelectable: (tree) => tree.leaf.type !== "Scale-leaf",
+}
+
 const staticTableProps = [
   { name: "tableActions", required: false, type: "TableActions<T>" },
-  { name: "tableActionsType", required: false, type: "dropdown | buttons" },
+  { name: "tableBulkActions", required: false, type: "TableBulkActions<T>" },
   { name: "tableColumns", required: true, type: "TableColumns<T>" },
   { name: "tableData", required: true, type: "Record<string, any>" },
 ]
@@ -330,6 +356,7 @@ const dynamictableProps = [
             :table-columns="tableColumns"
             :table-data="coniferList"
             :table-actions="staticTableActions"
+            :table-bulk-actions="staticTableBulkActions"
           />
           <PropsTable :props="staticTableProps" />
         </div>
