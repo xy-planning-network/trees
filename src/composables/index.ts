@@ -57,8 +57,6 @@ export {
   useBaseAPIDelete,
 }
 
-export { useBulkActions } from "./useBulkActions"
-
 // dateRange
 import {
   calendarDateToUnix,
