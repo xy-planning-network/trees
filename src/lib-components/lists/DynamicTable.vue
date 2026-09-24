@@ -8,7 +8,6 @@ import {
 import DateRangePicker from "../forms/DateRangePicker.vue"
 import BaseAPI from "../../api/base"
 import type {
-  DynamicTableAPI,
   DynamicTableOptions,
   TableActions,
   TableBulkActions,
@@ -19,6 +18,7 @@ import { useAppFlasher } from "@/composables/useFlashes"
 import { TrailsRespPaged } from "@/api/client"
 import { DateRange, DateRangeProps } from "@/composables/date"
 import { useTable } from "@/composables/useTable"
+import { useBulkActions } from "@/composables/useBulkActions"
 
 const props = withDefaults(
   defineProps<{
@@ -141,100 +141,25 @@ const hasContent = computed((): boolean => {
   return rows.value.length ? true : false
 })
 
-const clearSelections = () => {
-  selected.value = []
-}
-
 const selected = defineModel<number[]>("selected", {
   required: false,
   default: [],
 })
 
-const selectedData = computed((): TableRowData[] => {
-  return tableData.value.filter((data) => {
-    return selected.value.includes(data?.id)
-  })
-})
-
-const selectedOnPage = computed(() => {
-  return selected.value.filter((id) => {
-    return selectable.value.includes(id)
-  })
-})
-
-const bulkActions = computed(() => {
-  return props.tableBulkActions.actions
-    .filter((action) => {
-      return action.show ?? true
-    })
-    .map((action) => {
-      return {
-        ...action,
-        disabled: selected.value.length === 0 || action.disabled,
-        onClick: (e?: Event) =>
-          action.onClick.apply(undefined, [
-            selected.value,
-            selectedData.value,
-            publicMethods,
-            e,
-          ]),
-      }
-    })
-})
-
-const hasBulkActions = computed(() => bulkActions.value.length > 0)
-
-const selectable = computed(() => {
-  return tableData.value
-    .filter((row) => {
-      // NOTE(spk): table data must have an "id" key for bulk actions.
-      if (row.id === undefined) {
-        return false
-      }
-
-      if (props.tableBulkActions.isSelectable === undefined) {
-        return true
-      }
-
-      if (props.tableBulkActions.isSelectable(row)) {
-        return true
-      }
-
-      return false
-    })
-    .map((d) => d["id"])
-})
-
-const bulkSelectChecked = computed(
-  () =>
-    selectedOnPage.value.length > 0 &&
-    selectedOnPage.value.length === selectable.value.length
-)
-
-const bulkSelectIndeterminate = computed(
-  () =>
-    selectedOnPage.value.length > 0 &&
-    selectedOnPage.value.length < selectable.value.length
-)
-
-const bulkSelectOnChange = (e: Event) => {
-  const isChecked = (e.target as HTMLInputElement).checked
-
-  // set all records on current page to selection
-  if (isChecked) {
-    selected.value = selectable.value.map((id) => id)
-    return
-  }
-
-  clearSelections()
-}
-
-const publicMethods: DynamicTableAPI = {
-  clearSelection: clearSelections,
-  selectedData: selectedData,
+const {
+  bulkActions,
+  bulkSelectChecked,
+  bulkSelectIndeterminate,
+  bulkSelectOnChange,
+  clearSelections,
+  hasBulkActions,
+  publicMethods,
+  selectable,
+  selectedOnPage,
+} = useBulkActions(tableData, toRef(props, "tableBulkActions"), selected, {
   refresh: loadAndRender,
   reset: reloadTable,
-}
+})
 
 const { columns, hasActions, isEmptyCellValue, rows } = useTable(
   tableData,
@@ -489,7 +414,9 @@ loadAndRender()
 
           <tr v-if="!hasContent">
             <td
-              :colspan="columns.length + (hasActions ? 1 : 0)"
+              :colspan="
+                columns.length + (hasActions ? 1 : 0) + (hasBulkActions ? 1 : 0)
+              "
               class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap leading-5"
             >
               No items were found!
