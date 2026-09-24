@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import {
   InputOption,
   NumericInputType,
@@ -8,6 +8,10 @@ import {
   textInputTypes,
 } from "@/composables/forms"
 import { dateRangeActions } from "@/composables/dateRange"
+import {
+  useFieldsSchema,
+  type FieldsSchema,
+} from "@/composables/useFieldsSchema"
 import Slideover from "@/lib-components/overlays/Slideover.vue"
 
 const options: InputOption[] = [
@@ -34,6 +38,151 @@ const options: InputOption[] = [
     value: 4,
   },
 ]
+
+const validationForm = ref<Record<string, any>>({})
+const validationFormSchema: FieldsSchema = [
+  {
+    name: "hiddenValue",
+    type: "hidden",
+    modelValue: "Included without being rendered",
+  },
+  {
+    name: "name",
+    type: "text",
+    label: "Name",
+    required: true,
+  },
+  {
+    name: "email",
+    type: "email",
+    label: "Email",
+    help: "Try using a gmail address!",
+    required: true,
+  },
+  {
+    name: "phone",
+    type: "tel",
+    label: "Phone",
+    help: "10 digits please, bonus points for dashes.",
+    required: true,
+  },
+  {
+    name: "website",
+    type: "url",
+    label: "Website URL",
+    help: "Don't mangle that protocol.",
+    required: true,
+  },
+  {
+    name: "number",
+    type: "number",
+    label: "Number",
+    precision: 1,
+    required: true,
+  },
+  {
+    name: "select",
+    type: "select",
+    label: "Select an option",
+    options,
+    required: true,
+  },
+  {
+    name: "textarea",
+    type: "textarea",
+    label: "Fill me out!",
+    required: true,
+  },
+  {
+    name: "radio",
+    type: "radio",
+    label: "Select an option",
+    options,
+    required: true,
+  },
+  {
+    name: "dateRange",
+    type: "date-range",
+    label: "Pick a date range!",
+    required: true,
+  },
+  {
+    name: "dateTime",
+    type: "datetime",
+    label: "Pick a date and time local to you!",
+    required: true,
+  },
+  {
+    name: "radioCards",
+    type: "radio-cards",
+    label: "Cards can be required",
+    columns: 2,
+    options,
+    required: true,
+  },
+  {
+    name: "yesOrNo",
+    type: "yes-no-radio",
+    label: "Please confim this field",
+    required: true,
+  },
+  {
+    name: "minimumSelections",
+    type: "multi-checkbox",
+    label: "Minimum selection of 1",
+    columns: 2,
+    options,
+    min: 1,
+  },
+  {
+    name: "maximumSelections",
+    type: "multi-checkbox",
+    label: "Maximum selection of 2",
+    columns: 2,
+    options,
+    max: 2,
+  },
+  {
+    name: "selectionRange",
+    type: "multi-checkbox",
+    label: "Somewhere in between",
+    help: "Pick at least 1, but no more than 2!",
+    columns: 2,
+    options,
+    min: 1,
+    max: 2,
+  },
+  {
+    name: "confirmation",
+    type: "checkbox",
+    label: "You must tick this box",
+    required: true,
+  },
+]
+
+const conditionalForm = ref<Record<string, any>>({})
+const conditionalFormSchema = computed<FieldsSchema>(() => [
+  {
+    name: "hasWebsite",
+    type: "yes-no-radio",
+    label: "Do you have a website?",
+    help: "Select yes to reveal the website field.",
+    required: true,
+  },
+  {
+    name: "website",
+    type: "url",
+    label: "Website URL",
+    help: "This value is omitted from the payload when the field is hidden.",
+    required: true,
+    show: conditionalForm.value.hasWebsite === true,
+  },
+])
+
+const { fieldSections: conditionalFieldSections, payload: conditionalPayload } =
+  useFieldsSchema(conditionalForm, conditionalFormSchema, {
+    filterShow: true,
+  })
 
 // test generic options and sublabel slot availability
 const radioCardOptions = options.map((opt) => {
@@ -864,85 +1013,57 @@ const slideoverOpen = ref(false)
         it's reported something is wrong. Once an error is present though, we
         clear it or persist it as input and change events fire.
       </template>
-      <form id="test-form" @submit.prevent>
-        <div class="space-y-8">
-          <BaseInput type="text" label="Name" required />
 
-          <BaseInput
-            type="email"
-            label="Email"
-            help="Try using a gmail address!"
-            required
-          />
+      <FormDisplay
+        v-model="validationForm"
+        action="/"
+        :columns="1"
+        :flash-error="false"
+        :flash-success="false"
+        method="GET"
+        :schema="validationFormSchema"
+      />
+    </ComponentLayout>
 
-          <BaseInput
-            type="tel"
-            label="Phone"
-            help="10 digits please, bonus points for dashes."
-            required
-          />
+    <ComponentLayout
+      class="mt-8"
+      title="Conditional Fields with Filtered Payloads"
+      :show-badge="false"
+    >
+      <template #description>
+        This example uses <code>useFieldsSchema</code> directly. The website
+        field remains in the v-model when hidden, while
+        <code>filterShow</code> removes it from the computed payload.
+      </template>
 
-          <BaseInput
-            type="url"
-            label="Website URL"
-            help="Don't mangle that protocol."
-            required
-          />
+      <FormGrid as="div" :columns="1">
+        <template
+          v-for="(section, sectionIdx) in conditionalFieldSections"
+          :key="sectionIdx"
+        >
+          <FormSection
+            :title="section.title"
+            :description="section.description"
+          >
+            <template v-for="input in section.fields" :key="input.name">
+              <FormCell
+                v-if="input.show"
+                :span="input.span || 'full'"
+                :start="input.start"
+              >
+                <component :is="input.$component" v-bind="input.$props" />
+              </FormCell>
+            </template>
+          </FormSection>
+        </template>
+      </FormGrid>
 
-          <NumberInput
-            label="Number"
-            name="my-number-input"
-            required
-            :precision="1"
-          />
-
-          <Select :options="options" required label="Select an option" />
-
-          <TextArea label="Fill me out!" required />
-
-          <Radio :options="options" required label="Select an option" />
-
-          <DateRangePicker label="Pick a date range!" required />
-
-          <DateTime label="Pick a date and time local to you!" required />
-
-          <RadioCards
-            label="Cards can be required"
-            :columns="2"
-            :options="options"
-            required
-          />
-
-          <YesOrNoRadio label="Please confim this field" required />
-
-          <MultiCheckboxes
-            label="Minimum selection of 1"
-            :columns="2"
-            :options="options"
-            :min="1"
-          />
-
-          <MultiCheckboxes
-            label="Maximum selection of 2"
-            :columns="2"
-            :options="options"
-            :max="2"
-          />
-
-          <MultiCheckboxes
-            label="Somewhere in between"
-            help="Pick at least 1, but no more than 2!"
-            :columns="2"
-            :options="options"
-            :min="1"
-            :max="2"
-          />
-
-          <Checkbox label="You must tick this box" required />
-
-          <button type="submit" class="xy-btn">Submit</button>
+      <div>
+        <h4 class="mb-2 text-sm font-medium text-gray-700">Computed payload</h4>
+        <div class="prose max-w-full">
+          <pre><code>{{ JSON.stringify(conditionalPayload, null, 2) }}</code></pre>
         </div>
-      </form>
+      </div>
     </ComponentLayout>
   </div>
 </template>

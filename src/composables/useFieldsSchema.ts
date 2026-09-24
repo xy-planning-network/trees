@@ -4,6 +4,7 @@ import {
   MaybeRefOrGetter,
   Ref,
   computed,
+  defineComponent,
   onBeforeMount,
   toValue,
 } from "vue"
@@ -11,6 +12,7 @@ import {
   type BooleanInput,
   type DateRangeInput,
   type Input,
+  type InputHidden,
   type MultiChoiceInput,
   type OptionsInput,
   type TextInputType,
@@ -22,6 +24,7 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
+import deleteProperty from "@/helpers/DeleteProperty"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
 import BaseInput from "@/lib-components/forms/BaseInput.vue"
@@ -54,6 +57,7 @@ export type FieldsSchemaInput =
   | InputField<MultiChoiceInput & { customValues?: boolean }, "multi-select">
   | InputField<DateRangeInput, "date-range">
   | InputField<DateTimeInput, "datetime">
+  | InputField<InputHidden, "hidden">
   | InputField<NumericInput, NumericInputType>
   | InputField<OptionsInput, "combobox" | "radio" | "radio-cards" | "select">
   | InputField<TextareaInput, "textarea">
@@ -117,6 +121,22 @@ export interface FieldSection {
   fields: Array<FieldsSchemaInput>
 }
 
+export interface UseFieldsSchemaOptions {
+  /**
+   * Remove fields whose `show` value is false from `payload`.
+   *
+   * NOTE(spk): The v-model is never modified and always maintains source
+   * of truth.  This enables maintaining the last state of field that becomes show: false
+   * keeping user inputs intact as toggling occurs.
+   */
+  filterShow?: boolean
+}
+
+export interface UseFieldsSchema {
+  fieldSections: ComputedRef<FieldSection[]>
+  payload: ComputedRef<Record<string, any>>
+}
+
 // All currently supported input types in the FieldsSchema
 // used in the "type" property of a FieldsSchemaInput
 export type InputFieldType = (typeof inputFieldTypes)[number]
@@ -127,6 +147,7 @@ export const inputFieldTypes = [
   "combobox",
   "date-range",
   "datetime",
+  "hidden",
   "multi-checkbox",
   "multi-select",
   "radio",
@@ -165,7 +186,8 @@ export type InputField<I extends Input, T extends InputFieldType> = I & {
   minlength?: number
   maxlength?: number
   pattern?: string
-  required?: boolean
+  // NOTE(spk): avoid an blocking a form with a required hidden field
+  required?: T extends "hidden" ? never : boolean
 
   // NOTE(spk): only used when rendering component, will be overwritten by render components.
   // FIXME (spk): Ideally, these is not part of the interface.
@@ -279,6 +301,12 @@ const inputComponentMap: Record<InputFieldType, Component> = {
   textarea: TextArea,
   "yes-no-radio": YesOrNoRadio,
   toggle: Toggle,
+
+  // hidden - NOTE(spk): never rendered
+  hidden: defineComponent({
+    name: "HiddenInput",
+    render: () => null,
+  }),
 }
 
 /**
@@ -287,12 +315,20 @@ const inputComponentMap: Record<InputFieldType, Component> = {
  * the necessary logic for maintaining input reactivity for use in form
  * @param model Ref<Record<string, any>
  * @param schema MaybeRefOrGetter<FieldsSchema>
- * @returns { fieldSections: ComputedRef<FieldSection[]> }
+ * @param options UseFieldsSchemaOptions
+ * @returns UseFieldsSchema
  */
 export const useFieldsSchema = (
   model: Ref<Record<string, any>>,
-  schema: MaybeRefOrGetter<FieldsSchema>
-): { fieldSections: ComputedRef<FieldSection[]> } => {
+  schema: MaybeRefOrGetter<FieldsSchema>,
+  options: UseFieldsSchemaOptions = {}
+): UseFieldsSchema => {
+  // Default options set
+  const opts: UseFieldsSchemaOptions = {
+    filterShow: false,
+    ...options,
+  }
+
   // Hydrate the model with any input.modelValue's and emit a single update.
   onBeforeMount(() => {
     let hydrated = model.value
@@ -326,51 +362,70 @@ export const useFieldsSchema = (
     return outputSchema.map((section) => {
       return {
         ...section,
-        fields: section.fields.map((input) => {
-          // NOTE: (spk) keep the template tidy by using v-bind="$props"
-          // where $props are the "safe" html attributes and expected props
-          // for an input component.  Passing all properties will cause noise from vue
-          // and potentially lead to a unexpected runtime error.
+        fields: section.fields
+          .filter((input) => input.type !== "hidden")
+          .map((input) => {
+            // NOTE: (spk) keep the template tidy by using v-bind="$props"
+            // where $props are the "safe" html attributes and expected props
+            // for an input component.  Passing all properties will cause noise from vue
+            // and potentially lead to a unexpected runtime error.
 
-          const {
-            /* eslint-disable @typescript-eslint/no-unused-vars */
-            modelValue,
-            show,
-            span,
-            start,
-            type,
-            ...props
-          } = input
+            const {
+              /* eslint-disable @typescript-eslint/no-unused-vars */
+              modelValue,
+              show,
+              span,
+              start,
+              type,
+              ...props
+            } = input
 
-          /**
-           * NOTE: (spk) text and number inputs require the type property,
-           * non-text input types already have an explicit type attribute
-           * which should never be overwritten or nullified.
-           */
-          const hasTypeAttribute =
-            isTextInputType(type) || isNumericInputType(type)
+            /**
+             * NOTE: (spk) text and number inputs require the type property,
+             * non-text input types already have an explicit type attribute
+             * which should never be overwritten or nullified.
+             */
+            const hasTypeAttribute =
+              isTextInputType(type) || isNumericInputType(type)
 
-          const inputProps = {
-            ...props,
-            ...(hasTypeAttribute ? { type: input.type } : {}),
-            modelValue: getProperty(
-              toValue(model.value),
-              input.name,
-              undefined
-            ),
-            "onUpdate:model-value": (val: any) => updateModel(input.name, val),
-          }
+            const inputProps = {
+              ...props,
+              ...(hasTypeAttribute ? { type: input.type } : {}),
+              modelValue: getProperty(
+                toValue(model.value),
+                input.name,
+                undefined
+              ),
+              "onUpdate:model-value": (val: any) =>
+                updateModel(input.name, val),
+            }
 
-          return {
-            ...input,
-            $component: inputComponentMap[type],
-            $props: inputProps,
-            show: typeof show === "boolean" ? show : true,
-          }
-        }),
+            return {
+              ...input,
+              $component: inputComponentMap[type],
+              $props: inputProps,
+              show: typeof show === "boolean" ? show : true,
+            }
+          }),
       }
     })
   })
 
-  return { fieldSections }
+  const payload = computed(() => {
+    if (opts.filterShow !== true) {
+      return model.value
+    }
+
+    let output = model.value
+
+    for (const input of extractInputs(toValue(schema))) {
+      if (input.show === false) {
+        output = deleteProperty(output, input.name)
+      }
+    }
+
+    return output
+  })
+
+  return { fieldSections, payload }
 }
