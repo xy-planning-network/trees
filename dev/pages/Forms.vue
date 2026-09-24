@@ -829,7 +829,9 @@ const slideoverOpen = ref(false)
           <ClickToCopy :value="inputHelpCopy" />
         </label>
         <div class="mt-1">
-          <InputHelp text="I'm just here to hint" />
+          <InputHelp
+            text="I'm just here to hint and I also _support_ a little __markdown!__"
+          />
           <PropsTable :props="inputHelpProps" />
         </div>
       </div>

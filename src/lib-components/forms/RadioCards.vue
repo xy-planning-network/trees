@@ -38,7 +38,20 @@ const props = withDefaults(
   defineProps<RadioCards & ColumnedInput>(),
   defaultInputProps
 )
-const modelState = defineModel<RadioCards["modelValue"]>(defaultModelOpts)
+
+// NOTE(spk): RadioGroup does not support a null v-model value
+// use a getter to return undefined instead, which has the same UI result.
+type Getter = Exclude<RadioCards["modelValue"], null>
+const modelState = defineModel<RadioCards["modelValue"], never, Getter>({
+  ...defaultModelOpts,
+  get(v) {
+    if (v === null) {
+      return undefined
+    }
+
+    return v
+  },
+})
 
 const { aria, isDisabled, isRequired, nameAttr, errorState, onInvalid } =
   useInputField(props)
