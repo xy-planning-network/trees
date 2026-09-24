@@ -1,15 +1,10 @@
 import { computed, type Ref } from "vue"
 import type { DynamicTableAPI, TableBulkActions, TableRowData } from "./table"
+import { tableAPIStub } from "./useTable"
 
 interface UseBulkActionsOptions {
   refresh?: () => void
   reset?: () => void
-}
-
-const staticTableMethod = (method: "refresh" | "reset") => () => {
-  console.warn(
-    `${method}() was called on a static table, did you mean to use DynamicTable?`
-  )
 }
 
 export const useBulkActions = <T extends TableRowData>(
@@ -48,10 +43,10 @@ export const useBulkActions = <T extends TableRowData>(
   })
 
   const publicMethods: DynamicTableAPI<T> = {
+    ...tableAPIStub,
     clearSelection: clearSelections,
     selectedData,
-    refresh: options.refresh ?? staticTableMethod("refresh"),
-    reset: options.reset ?? staticTableMethod("reset"),
+    ...options,
   }
 
   const bulkActions = computed(() => {

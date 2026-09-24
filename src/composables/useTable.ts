@@ -12,7 +12,7 @@ const isEmptyCellValue = (v: unknown): boolean => {
   return v === null || v === undefined
 }
 
-const tableAPIStub: DynamicTableAPI = {
+export const tableAPIStub: DynamicTableAPI = {
   clearSelection() {
     console.warn(
       "clearSelection() was called on a static table, did you mean to use DynamicTable?"
