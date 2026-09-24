@@ -17,16 +17,18 @@ const props = withDefaults(
     btnText?: string
     btnDisabled?: boolean
     columns: 1 | 2
+    filterShow?: boolean
     flashError?: boolean
     flashSuccess?: boolean
     method: ReqMethod
     schema: FieldsSchema
   }>(),
   {
-    flashError: true,
-    flashSuccess: true,
     btnText: "Submit",
     btnDisabled: false,
+    filterShow: false,
+    flashError: true,
+    flashSuccess: true,
   }
 )
 
@@ -40,14 +42,16 @@ const model = defineModel<Record<string, any>>({
   required: false,
 })
 
-const { fieldSections } = useFieldsSchema(model, () => props.schema)
+const { fieldSections, payload } = useFieldsSchema(model, () => props.schema, {
+  filterShow: props.filterShow,
+})
 
 const { execute, isLoading } = useBaseAPI(props.action, props.method, {
   withDelay: 500,
 })
 
 const submit = () => {
-  execute(model.value)
+  execute(payload.value)
     .then((d) => {
       if (props.flashSuccess !== false) {
         useAppFlasher.success("Success!")

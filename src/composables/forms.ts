@@ -9,6 +9,15 @@ export interface Input {
   placeholder?: string
 }
 
+export interface InputHidden extends Input {
+  modelValue?:
+    | string
+    | number
+    | boolean
+    | null
+    | Array<string | number | boolean | null>
+}
+
 export interface InputOption {
   disabled?: boolean
   help?: string
