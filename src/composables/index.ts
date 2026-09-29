@@ -136,16 +136,9 @@ export * from "./badge"
 
 // useFieldsSchema
 export * from "./useFieldsSchema"
-export { isCollectionRepeater, isFieldRepeater } from "./useRepeater"
-export type {
-  CollectionRepeater,
-  FieldRepeater,
-  IndexPosition,
-  Repeater,
-  RepeaterBase,
-  RepeaterCollectionInput,
-  RepeaterInput,
-} from "./useRepeater"
+
+// useRepeater
+export * from "./useRepeater"
 
 // useInlineMarkdown
 export * from "./useInlineMarkdown"
