@@ -21,7 +21,7 @@ type RepeaterSchemaInput<T, K extends PropertyKey> = T extends unknown
  */
 export type RepeaterInput = RepeaterSchemaInput<
   FieldsSchemaInput,
-  "name" | "modelValue" | "$component" | "$props"
+  "name" | "modelValue"
 >
 
 /**
@@ -30,7 +30,7 @@ export type RepeaterInput = RepeaterSchemaInput<
  */
 export type RepeaterCollectionInput = RepeaterSchemaInput<
   FieldsSchemaInput,
-  "modelValue" | "$component" | "$props"
+  "modelValue"
 >
 
 export type IndexPosition = "prefix" | "suffix"
@@ -57,10 +57,6 @@ export interface RepeaterBase<T> {
   span?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full"
   start?: boolean
   show?: boolean
-
-  // Added when the repeater is prepared for display.
-  $component?: Component
-  $props?: Record<string, any>
 }
 
 /**

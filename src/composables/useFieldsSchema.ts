@@ -26,6 +26,7 @@ import {
   isCollectionRepeater,
   isFieldRepeater,
   useRepeater,
+  type DisplayRepeater,
   type Repeater,
 } from "@/composables/useRepeater"
 import getProperty from "@/helpers/GetProperty"
@@ -131,6 +132,11 @@ export interface FieldSection {
   fields: Array<SchemaField>
 }
 
+export type DisplayField = DisplayInput | DisplayRepeater
+export type DisplaySection = Omit<FieldSection, "fields"> & {
+  fields: DisplayField[]
+}
+
 // All currently supported input types in the FieldsSchema
 // used in the "type" property of a FieldsSchemaInput
 export type InputFieldType = (typeof inputFieldTypes)[number]
@@ -180,11 +186,6 @@ export type InputField<I extends Input, T extends InputFieldType> = I & {
   maxlength?: number
   pattern?: string
   required?: boolean
-
-  // NOTE(spk): only used when rendering component, will be overwritten by render components.
-  // FIXME (spk): Ideally, these is not part of the interface.
-  $component?: Component
-  $props?: Record<string, any>
 }
 
 /**
@@ -331,7 +332,7 @@ const inputComponentMap: Record<InputFieldType, Component> = {
 export const useFieldsSchema = (
   model: Ref<Record<string, any>>,
   schema: MaybeRefOrGetter<FieldsSchema>
-): { fieldSections: ComputedRef<FieldSection[]> } => {
+): { fieldSections: ComputedRef<DisplaySection[]> } => {
   const updateModel = (name: string, $val: any) => {
     model.value = setProperty(model.value, name, $val)
   }
@@ -388,7 +389,7 @@ export const useFieldsSchema = (
     }
   })
 
-  const fieldSections = computed((): FieldSection[] => {
+  const fieldSections = computed((): DisplaySection[] => {
     const fieldSchema = toValue(schema)
 
     if (fieldSchema.length == 0) {
