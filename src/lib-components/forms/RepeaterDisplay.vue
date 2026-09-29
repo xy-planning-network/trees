@@ -71,6 +71,11 @@ const isFullWidthField = (row: RepeaterRow) => {
   return row.type === "field" && (!span || span === "full")
 }
 
+const isRemoveDisabled = (index: number) => {
+  const isModelRow = index < props.count
+  return props.removeDisabled || (isModelRow && props.count <= (props.min ?? 0))
+}
+
 watch(countError, (error) => {
   if (!error) {
     errorInputRef.value?.setCustomValidity("")
@@ -124,7 +129,7 @@ watch(countError, (error) => {
         <button
           type="button"
           class="xy-btn-neutral-sm ml-auto shrink-0 gap-x-1.5"
-          :disabled="removeDisabled"
+          :disabled="isRemoveDisabled(rowIndex)"
           :aria-label="`Remove item ${rowIndex + 1}`"
           @click="emit('remove', rowIndex)"
         >
@@ -158,7 +163,7 @@ watch(countError, (error) => {
         <button
           type="button"
           class="xy-btn-neutral-sm shrink-0 justify-self-start"
-          :disabled="removeDisabled"
+          :disabled="isRemoveDisabled(rowIndex)"
           :aria-label="`Remove item ${rowIndex + 1}`"
           @click="emit('remove', rowIndex)"
         >

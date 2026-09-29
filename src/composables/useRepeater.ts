@@ -41,6 +41,10 @@ export interface RepeaterBase<T> {
   modelValue?: T[]
   title?: string
   help?: string
+  /**
+   * Adds an visible index to labels at the specified position
+   * e.g. Email 1, Email 2 | 1. Contact, 2. Contact
+   */
   indexPosition?: IndexPosition
   /**
    * Limits Add/Remove actions and validates the number of items. Existing model
@@ -168,8 +172,8 @@ export const useRepeater = (
   let nextRowKey = 0
   // Keep row keys stable as items are added and removed.
   const rowKeys = new Map<string, string[]>()
-  // Add/Remove can change the empty UI row without changing the model, so this
-  // state must be reactive.
+
+  // Add/Remove can change the empty UI row without changing the model.
   const rowState = ref(new Map<string, "added" | "removed">())
 
   // Reuse existing keys and add or trim them to match the rendered rows.
@@ -216,8 +220,7 @@ export const useRepeater = (
     model.value = setProperty(model.value, name, $val)
 
     if (isEmptyRow) {
-      // The row is now represented in the model, so it no longer needs separate
-      // display state.
+      // The row is in the model, so remove from display state.
       rowState.value.delete(repeater.name)
     }
   }
@@ -235,49 +238,44 @@ export const useRepeater = (
     rowState.value.set(repeater.name, "added")
   }
 
-  const removeItem = (
-    repeater: Repeater,
-    rowCount: number,
-    min: number,
-    index: number,
-    value: unknown[] | undefined,
-    hasEmptyRow: boolean
-  ) => {
-    if (
-      repeater.disabled ||
-      rowCount <= min ||
-      index < 0 ||
-      index >= rowCount
-    ) {
+  const removeRowKey = (name: string, index: number) => {
+    rowKeys.get(name)?.splice(index, 1)
+  }
+
+  const removeItem = (repeater: Repeater, index: number) => {
+    if (repeater.disabled) {
       return
     }
 
-    if (hasEmptyRow && index === (value?.length ?? 0)) {
-      // Removing the model-less row only updates its display state.
-      if (value === undefined) {
-        rowState.value.set(repeater.name, "removed")
-      } else {
-        rowState.value.delete(repeater.name)
-      }
-
-      getRowKeys(repeater.name, rowCount).splice(index, 1)
-      return
-    }
+    const value = getValue(repeater)
 
     if (value === undefined) {
+      rowState.value.set(repeater.name, "removed")
+      removeRowKey(repeater.name, index)
+      return
+    }
+
+    if (index === value.length) {
+      rowState.value.delete(repeater.name)
+      removeRowKey(repeater.name, index)
+      return
+    }
+
+    const min = repeater.min ?? 0
+
+    if (value.length <= min) {
       return
     }
 
     const updated = [...value]
 
     updated.splice(index, 1)
-    getRowKeys(repeater.name, rowCount).splice(index, 1)
+    removeRowKey(repeater.name, index)
     model.value = setProperty(model.value, repeater.name, updated)
   }
 
   const toDisplayRepeater = (repeater: Repeater): DisplayRepeater => {
     const value = getValue(repeater)
-    const min = repeater.min || 0
     const max = repeater.max || Number.POSITIVE_INFINITY
     const valueCount = value?.length || 0
 
@@ -357,10 +355,9 @@ export const useRepeater = (
         addText: repeater.addText ?? "Add",
         addDisabled:
           Boolean(repeater.disabled) || hasEmptyRow || rowCount >= max,
-        removeDisabled: Boolean(repeater.disabled) || rowCount <= min,
+        removeDisabled: Boolean(repeater.disabled),
         onAdd: () => addItem(repeater, rowCount, hasEmptyRow, max),
-        onRemove: (index: number) =>
-          removeItem(repeater, rowCount, min, index, value, hasEmptyRow),
+        onRemove: (index: number) => removeItem(repeater, index),
       },
       show: typeof repeater.show === "boolean" ? repeater.show : true,
     }
