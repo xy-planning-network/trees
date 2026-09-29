@@ -272,7 +272,7 @@ export const useRepeater = (
 
   const toDisplayRepeater = (repeater: Repeater): DisplayRepeater => {
     const value = getValue(repeater)
-    const max = repeater.max || Number.POSITIVE_INFINITY
+    const max = repeater.max ?? Number.POSITIVE_INFINITY
     const valueCount = value?.length || 0
 
     // Show one empty row before the repeater has a model value. Add can also
