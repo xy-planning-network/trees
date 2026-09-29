@@ -22,6 +22,13 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
+import {
+  isCollectionRepeater,
+  isFieldRepeater,
+  useRepeater,
+  type DisplayRepeater,
+  type Repeater,
+} from "@/composables/useRepeater"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
 import BaseInput from "@/lib-components/forms/BaseInput.vue"
@@ -41,9 +48,9 @@ import YesOrNoRadio from "@/lib-components/forms/YesOrNoRadio.vue"
 
 /**
  * FieldsSchema supports an Array of FieldSection(s)
- * or simply an Array of FieldsSchemaInput(s)
+ * or simply an Array of SchemaField(s)
  */
-export type FieldsSchema = Array<FieldSection> | Array<FieldsSchemaInput>
+export type FieldsSchema = Array<FieldSection> | Array<SchemaField>
 
 /**
  * FieldsSchemaInput type declares the supported input components in a FieldsSchema
@@ -58,6 +65,14 @@ export type FieldsSchemaInput =
   | InputField<OptionsInput, "combobox" | "radio" | "radio-cards" | "select">
   | InputField<TextareaInput, "textarea">
   | InputField<TextLikeInput, Exclude<TextInputType, "number">>
+
+/** An input with the component properties needed for display. */
+export type DisplayInput = FieldsSchemaInput & {
+  $component: Component
+  $props: Record<string, any>
+  show: boolean
+}
+export type SchemaField = FieldsSchemaInput | Repeater
 
 /**
  * isTextInputType is a user defined type guard for
@@ -114,7 +129,12 @@ export const isInputsOnlySchema = (
 export interface FieldSection {
   title?: string
   description?: string
-  fields: Array<FieldsSchemaInput>
+  fields: Array<SchemaField>
+}
+
+export type DisplayField = DisplayInput | DisplayRepeater
+export type DisplaySection = Omit<FieldSection, "fields"> & {
+  fields: DisplayField[]
 }
 
 // All currently supported input types in the FieldsSchema
@@ -166,11 +186,6 @@ export type InputField<I extends Input, T extends InputFieldType> = I & {
   maxlength?: number
   pattern?: string
   required?: boolean
-
-  // NOTE(spk): only used when rendering component, will be overwritten by render components.
-  // FIXME (spk): Ideally, these is not part of the interface.
-  $component?: Component
-  $props?: Record<string, any>
 }
 
 /**
@@ -180,14 +195,56 @@ export type InputField<I extends Input, T extends InputFieldType> = I & {
  * @param field any
  * @returns boolean
  */
-const isInputField = (
-  field: any
-): field is InputField<Input, InputFieldType> => {
+const isInputField = (field: any): field is FieldsSchemaInput => {
   return (
     typeof field === "object" &&
+    field !== null &&
     Object.prototype.hasOwnProperty.call(field, "type") &&
     inputFieldTypes.includes(field.type)
   )
+}
+
+const isSchemaField = (field: any): field is SchemaField => {
+  return (
+    isInputField(field) || isFieldRepeater(field) || isCollectionRepeater(field)
+  )
+}
+
+/**
+ * Narrows an unsectioned schema containing ordinary inputs and/or repeaters.
+ */
+export const isFieldsOnlySchema = (
+  schema: FieldsSchema
+): schema is SchemaField[] => {
+  return schema.length === 0 || schema.every(isSchemaField)
+}
+
+const schemaFields = (schema: FieldsSchema): SchemaField[] => {
+  if (isFieldsOnlySchema(schema)) {
+    return schema
+  }
+
+  return schema.flatMap((section) => section.fields)
+}
+
+const disableSchemaField = (field: SchemaField): SchemaField => {
+  if (isInputField(field)) {
+    return { ...field, disabled: true }
+  }
+
+  if (isFieldRepeater(field)) {
+    return {
+      ...field,
+      disabled: true,
+      field: { ...field.field, disabled: true },
+    }
+  }
+
+  return {
+    ...field,
+    disabled: true,
+    fields: field.fields.map((input) => ({ ...input, disabled: true })),
+  }
 }
 
 /**
@@ -198,28 +255,22 @@ const isInputField = (
  * @returns FieldsSchema
  */
 export const disableSchemaFields = (schema: FieldsSchema): FieldsSchema => {
-  if (isInputsOnlySchema(schema)) {
-    return schema.map((input) => {
-      return {
-        ...input,
-        disabled: true,
-      }
-    })
+  if (isFieldsOnlySchema(schema)) {
+    return schema.map(disableSchemaField)
   }
 
   return schema.map((section) => {
     return {
       ...section,
-      fields: section.fields.map((input) => {
-        return { ...input, disabled: true }
-      }),
+      fields: section.fields.map(disableSchemaField),
     }
   })
 }
 
 /**
- * extractInputs is a utility function for extracting all of the FieldsSchemaInput
- * entries (nested or not) out of a FieldSchema.
+ * extractInputs is a utility function for extracting all directly bound
+ * FieldsSchemaInput entries out of a FieldSchema. Repeater templates are
+ * skipped because their names are incomplete or relative until rendered.
  *
  * @param schema FieldsSchema
  * @returns Array<FieldsSchemaInput>
@@ -227,18 +278,7 @@ export const disableSchemaFields = (schema: FieldsSchema): FieldsSchema => {
 export const extractInputs = (
   schema: FieldsSchema
 ): Array<FieldsSchemaInput> => {
-  if (isInputsOnlySchema(schema)) {
-    return schema
-  }
-
-  const inputs: Array<FieldsSchemaInput> = []
-  schema.forEach((section) => {
-    section.fields.forEach((input) => {
-      inputs.push(input)
-    })
-  })
-
-  return inputs
+  return schemaFields(schema).filter(isInputField)
 }
 
 /**
@@ -292,14 +332,55 @@ const inputComponentMap: Record<InputFieldType, Component> = {
 export const useFieldsSchema = (
   model: Ref<Record<string, any>>,
   schema: MaybeRefOrGetter<FieldsSchema>
-): { fieldSections: ComputedRef<FieldSection[]> } => {
-  // Hydrate the model with any input.modelValue's and emit a single update.
+): { fieldSections: ComputedRef<DisplaySection[]> } => {
+  const updateModel = (name: string, $val: any) => {
+    model.value = setProperty(model.value, name, $val)
+  }
+
+  const toDisplayInput = (
+    input: FieldsSchemaInput,
+    onUpdate: ($val: any) => void = ($val) => updateModel(input.name, $val)
+  ): DisplayInput => {
+    // Pass only component props and supported HTML attributes through v-bind.
+    const {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      modelValue,
+      show,
+      span,
+      start,
+      type,
+      ...props
+    } = input
+
+    // Text and number components still need their native input type. Other
+    // components provide their own type.
+    const hasTypeAttribute = isTextInputType(type) || isNumericInputType(type)
+
+    const inputProps = {
+      ...props,
+      ...(hasTypeAttribute ? { type: input.type } : {}),
+      modelValue: getProperty(model.value, input.name, undefined),
+      "onUpdate:model-value": onUpdate,
+    }
+
+    return {
+      ...input,
+      $component: inputComponentMap[type],
+      $props: inputProps,
+      show: typeof show === "boolean" ? show : true,
+    }
+  }
+
+  const { toDisplayRepeater } = useRepeater(model, toDisplayInput)
+
+  // Apply schema defaults once before display. Repeater input templates do not
+  // own values; the repeater model owns the full array.
   onBeforeMount(() => {
     let hydrated = model.value
 
-    for (const input of extractInputs(toValue(schema))) {
-      if (input.modelValue !== undefined) {
-        hydrated = setProperty(hydrated, input.name, input.modelValue)
+    for (const field of schemaFields(toValue(schema))) {
+      if (field.modelValue !== undefined) {
+        hydrated = setProperty(hydrated, field.name, field.modelValue)
       }
     }
 
@@ -308,65 +389,24 @@ export const useFieldsSchema = (
     }
   })
 
-  const updateModel = (name: string, $val: any) => {
-    model.value = setProperty(model.value, name, $val)
-  }
-
-  const fieldSections = computed((): FieldSection[] => {
+  const fieldSections = computed((): DisplaySection[] => {
     const fieldSchema = toValue(schema)
 
     if (fieldSchema.length == 0) {
       return []
     }
 
-    const outputSchema = isInputsOnlySchema(fieldSchema)
+    const outputSchema = isFieldsOnlySchema(fieldSchema)
       ? [{ fields: fieldSchema }]
       : fieldSchema
 
     return outputSchema.map((section) => {
       return {
         ...section,
-        fields: section.fields.map((input) => {
-          // NOTE: (spk) keep the template tidy by using v-bind="$props"
-          // where $props are the "safe" html attributes and expected props
-          // for an input component.  Passing all properties will cause noise from vue
-          // and potentially lead to a unexpected runtime error.
-
-          const {
-            /* eslint-disable @typescript-eslint/no-unused-vars */
-            modelValue,
-            show,
-            span,
-            start,
-            type,
-            ...props
-          } = input
-
-          /**
-           * NOTE: (spk) text and number inputs require the type property,
-           * non-text input types already have an explicit type attribute
-           * which should never be overwritten or nullified.
-           */
-          const hasTypeAttribute =
-            isTextInputType(type) || isNumericInputType(type)
-
-          const inputProps = {
-            ...props,
-            ...(hasTypeAttribute ? { type: input.type } : {}),
-            modelValue: getProperty(
-              toValue(model.value),
-              input.name,
-              undefined
-            ),
-            "onUpdate:model-value": (val: any) => updateModel(input.name, val),
-          }
-
-          return {
-            ...input,
-            $component: inputComponentMap[type],
-            $props: inputProps,
-            show: typeof show === "boolean" ? show : true,
-          }
+        fields: section.fields.map((field) => {
+          return isInputField(field)
+            ? toDisplayInput(field)
+            : toDisplayRepeater(field)
         }),
       }
     })

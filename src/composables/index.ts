@@ -134,8 +134,11 @@ export { useSpinnerDisplay, useAppSpinner }
 // badge
 export * from "./badge"
 
-// useFieldSchema
+// useFieldsSchema
 export * from "./useFieldsSchema"
+
+// useRepeater
+export * from "./useRepeater"
 
 // useInlineMarkdown
 export * from "./useInlineMarkdown"

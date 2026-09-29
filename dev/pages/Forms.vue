@@ -8,6 +8,7 @@ import {
   textInputTypes,
 } from "@/composables/forms"
 import { dateRangeActions } from "@/composables/dateRange"
+import type { FieldsSchema } from "@/composables/useFieldsSchema"
 import Slideover from "@/lib-components/overlays/Slideover.vue"
 
 const options: InputOption[] = [
@@ -190,6 +191,121 @@ const toggleProps = [
 ]
 
 const slideoverOpen = ref(false)
+
+const contactRoleOptions: InputOption[] = [
+  { label: "Account owner", value: "Account owner" },
+  { label: "Billing", value: "Billing" },
+  { label: "Operations", value: "Operations" },
+]
+
+const contactServiceOptions: InputOption[] = [
+  { label: "Financial planning", value: "planning" },
+  { label: "Tax planning", value: "tax" },
+  { label: "Investment management", value: "investments" },
+]
+
+const repeaterValues = ref<Record<string, any>>({
+  notification_emails: ["operations@example.com", "billing@example.com"],
+  contacts: [
+    {
+      name: "Jamie Example",
+      role: "Account owner",
+      email: "jamie@example.com",
+      primary: true,
+      services: ["planning", "investments"],
+    },
+    {
+      name: "Taylor Sample",
+      role: "Billing",
+      email: "taylor@example.com",
+      primary: false,
+      services: ["tax"],
+    },
+  ],
+})
+const repeaterSchema: FieldsSchema = [
+  {
+    title: "Contact information",
+    description: "Manage notification emails and team contacts.",
+    fields: [
+      {
+        type: "repeater",
+        name: "notification_emails",
+        title: "Notification emails",
+        help: "Send updates to these addresses.",
+        addText: "Add email address",
+        max: 3,
+        field: {
+          type: "email",
+          required: true,
+        },
+      },
+      {
+        type: "repeater",
+        name: "phone_numbers",
+        title: "Phone numbers",
+        help: "Add any phone numbers associated with this team.",
+        indexPosition: "suffix",
+        addText: "Add phone number",
+        min: 1,
+        max: 3,
+        field: {
+          type: "tel",
+          label: "Phone number",
+          placeholder: "(555) 555-5555",
+          required: true,
+        },
+      },
+      {
+        type: "repeater",
+        name: "contacts",
+        title: "Team contacts",
+        itemTitle: "Contact",
+        help: "Add contact details and assign the services they support.",
+        indexPosition: "prefix",
+        addText: "Add contact",
+        min: 1,
+        max: 2,
+        fields: [
+          {
+            type: "text",
+            name: "name",
+            label: "Full name",
+            span: "xl",
+          },
+          {
+            type: "select",
+            name: "role",
+            label: "Role",
+            options: contactRoleOptions,
+            span: "xl",
+          },
+          {
+            type: "email",
+            name: "email",
+            label: "Email address",
+            span: "2xl",
+            start: true,
+          },
+          {
+            type: "yes-no-radio",
+            name: "primary",
+            label: "Primary contact",
+            span: "md",
+          },
+          {
+            type: "multi-select",
+            name: "services",
+            label: "Services",
+            help: "Select all that apply.",
+            options: contactServiceOptions,
+            span: "full",
+          },
+        ],
+      },
+    ],
+  },
+]
 </script>
 
 <template>
@@ -943,6 +1059,30 @@ const slideoverOpen = ref(false)
           <button type="submit" class="xy-btn">Submit</button>
         </div>
       </form>
+    </ComponentLayout>
+
+    <ComponentLayout title="FieldsSchema Repeaters" :show-badge="false">
+      <template #description>
+        A contact information section with field repeaters for notification
+        emails and phone numbers, plus a collection repeater for team contacts.
+      </template>
+
+      <form class="space-y-8" @submit.prevent>
+        <InputDisplay
+          v-model="repeaterValues"
+          :schema="repeaterSchema"
+          :columns="1"
+        />
+
+        <div class="flex justify-end">
+          <button type="submit" class="xy-btn">Validate repeaters</button>
+        </div>
+      </form>
+
+      <div class="prose max-w-full">
+        <h5>Model value</h5>
+        <pre><code>{{ repeaterValues }}</code></pre>
+      </div>
     </ComponentLayout>
   </div>
 </template>
