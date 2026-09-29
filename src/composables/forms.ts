@@ -50,6 +50,31 @@ export interface DateTimeInput extends Input {
   modelValue?: string | null
 }
 
+/**
+ * UploadedFile is the durable value stored in a form model after a file is
+ * uploaded.
+ *
+ * NOTE(spk): Add display metadata like file size, content type, or timestamps
+ * here as upload APIs need it. The ID is the authoritative value.
+ */
+export interface UploadedFile {
+  id: number
+  name: string
+  url?: string
+}
+
+export type FileUploadValue = UploadedFile | UploadedFile[] | null
+
+export interface FileUploadInput extends Input {
+  action: string
+  accept?: string[]
+  multiple?: boolean
+  fileField?: string
+  maxFileBytes?: number
+  maxFiles?: number
+  modelValue?: FileUploadValue
+}
+
 export interface TextLikeInput extends Input {
   modelValue?: string | number | null
   type: TextInputType
