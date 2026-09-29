@@ -233,11 +233,11 @@ const repeaterSchema: FieldsSchema = [
         name: "notification_emails",
         title: "Notification emails",
         help: "Send updates to these addresses.",
-        addButtonText: "Add email address",
-        max: 1,
+        addText: "Add email address",
+        max: 3,
         field: {
           type: "email",
-          label: "",
+          required: true,
         },
       },
       {
@@ -246,7 +246,7 @@ const repeaterSchema: FieldsSchema = [
         title: "Phone numbers",
         help: "Add any phone numbers associated with this team.",
         indexPosition: "suffix",
-        addButtonText: "Add phone number",
+        addText: "Add phone number",
         min: 1,
         max: 3,
         field: {
@@ -263,7 +263,7 @@ const repeaterSchema: FieldsSchema = [
         itemTitle: "Contact",
         help: "Add contact details and assign the services they support.",
         indexPosition: "prefix",
-        addButtonText: "Add contact",
+        addText: "Add contact",
         min: 1,
         max: 2,
         fields: [

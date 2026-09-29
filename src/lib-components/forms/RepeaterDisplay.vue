@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useId, useTemplateRef, watch } from "vue"
 import { PlusIcon, TrashIcon } from "@heroicons/vue/solid"
-import type {
-  ResolvedRepeaterRow,
-  ResolvedRepeaterType,
-} from "@/composables/useRepeater"
+import type { RepeaterRow } from "@/composables/useRepeater"
 import FormCell from "@/lib-components/forms/FormCell.vue"
 import InputError from "@/lib-components/forms/InputError.vue"
 import InputHelp from "@/lib-components/forms/InputHelp.vue"
@@ -12,14 +9,14 @@ import InputLabel from "@/lib-components/forms/InputLabel.vue"
 
 const props = withDefaults(
   defineProps<{
-    type: ResolvedRepeaterType
+    type: RepeaterRow["type"]
     title?: string
     help?: string
     count: number
     min?: number
     max?: number
-    rows: ResolvedRepeaterRow[]
-    addButtonText?: string
+    rows: RepeaterRow[]
+    addText?: string
     addDisabled?: boolean
     removeDisabled?: boolean
   }>(),
@@ -28,7 +25,7 @@ const props = withDefaults(
     help: "",
     min: undefined,
     max: undefined,
-    addButtonText: "Add",
+    addText: "Add",
     addDisabled: false,
     removeDisabled: false,
   }
@@ -69,6 +66,11 @@ const setValidationError = () => {
   errorInputRef.value?.setCustomValidity(countError.value)
 }
 
+const isFullWidthField = (row: RepeaterRow) => {
+  const span = row.fields[0]?.input.span
+  return row.type === "field" && (!span || span === "full")
+}
+
 watch(countError, (error) => {
   if (!error) {
     errorInputRef.value?.setCustomValidity("")
@@ -86,7 +88,6 @@ watch(countError, (error) => {
 <template>
   <div
     class="relative space-y-6"
-    :class="type === 'field' ? 'border-b border-gray-900/10 pb-10' : ''"
     role="group"
     :aria-labelledby="title ? `${validationID}-label` : undefined"
     :aria-describedby="help ? `${validationID}-help` : undefined"
@@ -110,11 +111,9 @@ watch(countError, (error) => {
       v-for="(row, rowIndex) in rows"
       :key="row.key"
       class="relative"
-      :class="
-        row.type === 'collection'
-          ? 'rounded-xy border border-neutral-200 p-6'
-          : 'flex items-center gap-x-3'
-      "
+      :class="{
+        'rounded-xy border border-neutral-200 p-6': row.type === 'collection',
+      }"
     >
       <div
         v-if="row.type === 'collection'"
@@ -134,7 +133,40 @@ watch(countError, (error) => {
         </button>
       </div>
 
-      <div :class="row.type === 'field' ? 'flex-1' : ''">
+      <div
+        v-if="row.type === 'field'"
+        :class="
+          isFullWidthField(row)
+            ? 'flex items-center gap-x-3'
+            : 'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 sm:grid-cols-12'
+        "
+      >
+        <template v-for="field in row.fields" :key="field.key">
+          <FormCell
+            v-if="field.input.show"
+            :class="{ 'min-w-0 flex-1': isFullWidthField(row) }"
+            :span="field.input.span || 'full'"
+            :start="field.input.start"
+          >
+            <component
+              :is="field.input.$component"
+              v-bind="field.input.$props"
+            />
+          </FormCell>
+        </template>
+
+        <button
+          type="button"
+          class="xy-btn-neutral-sm shrink-0 justify-self-start"
+          :disabled="removeDisabled"
+          :aria-label="`Remove item ${rowIndex + 1}`"
+          @click="emit('remove', rowIndex)"
+        >
+          <TrashIcon class="h-5 w-5" aria-hidden="true" />
+        </button>
+      </div>
+
+      <div v-else>
         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
           <template v-for="field in row.fields" :key="field.key">
             <FormCell
@@ -150,17 +182,6 @@ watch(countError, (error) => {
           </template>
         </div>
       </div>
-
-      <button
-        v-if="row.type === 'field'"
-        type="button"
-        class="xy-btn-neutral-sm shrink-0"
-        :disabled="removeDisabled"
-        :aria-label="`Remove item ${rowIndex + 1}`"
-        @click="emit('remove', rowIndex)"
-      >
-        <TrashIcon class="h-5 w-5" aria-hidden="true" />
-      </button>
     </div>
 
     <button
@@ -170,10 +191,10 @@ watch(countError, (error) => {
       @click="emit('add')"
     >
       <PlusIcon class="mr-1.5 h-4 w-4" aria-hidden="true" />
-      {{ addButtonText }}
+      {{ addText }}
     </button>
 
-    <!-- Screen-reader-only input for native count validation. -->
+    <!-- Participates in native form validation when the repeater is outside its limits. -->
     <input
       v-if="countError"
       ref="errorInput"

@@ -1,47 +1,179 @@
-import { reactive, type Ref } from "vue"
+import { ref, type Component, type Ref } from "vue"
 import type {
+  DisplayInput,
   FieldsSchemaInput,
-  FieldsSchemaRepeater,
 } from "@/composables/useFieldsSchema"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
 import RepeaterDisplay from "@/lib-components/forms/RepeaterDisplay.vue"
 
-export interface ResolvedRepeaterField {
-  key: string
-  input: FieldsSchemaInput
-}
-
-export type ResolvedRepeaterType = "field" | "collection"
-
-export interface ResolvedRepeaterRow {
-  key: string
-  type: ResolvedRepeaterType
-  title?: string
-  fields: ResolvedRepeaterField[]
-}
-
-type ResolveInput = (
-  input: FieldsSchemaInput,
-  onUpdate?: ($val: any) => void
-) => FieldsSchemaInput
+/**
+ * Removes repeater-owned properties from every supported input type while
+ * keeping required properties such as `options`.
+ */
+type RepeaterSchemaInput<T, K extends PropertyKey> = T extends unknown
+  ? Omit<T, Extract<keyof T, K>>
+  : never
 
 /**
- * useRepeater resolves FieldSchema repeaters and owns their model mutations
- * and stable row identifiers. It is an internal implementation detail of
- * useFieldsSchema rather than a public composable.
+ * The input repeated by a field repeater. Its name and value come from the
+ * repeater definition.
+ */
+export type RepeaterInput = RepeaterSchemaInput<
+  FieldsSchemaInput,
+  "name" | "modelValue" | "$component" | "$props"
+>
+
+/**
+ * An input inside a collection row. Names are relative to the row, and initial
+ * values come from the repeater model.
+ */
+export type RepeaterCollectionInput = RepeaterSchemaInput<
+  FieldsSchemaInput,
+  "modelValue" | "$component" | "$props"
+>
+
+export type IndexPosition = "prefix" | "suffix"
+
+export interface RepeaterBase<T> {
+  type: "repeater"
+  name: string
+  modelValue?: T[]
+  title?: string
+  help?: string
+  indexPosition?: IndexPosition
+  /**
+   * Limits Add/Remove actions and validates the number of items. Existing model
+   * values are shown as-is, even when they fall outside these limits.
+   */
+  min?: number
+  max?: number
+  addText?: string
+  disabled?: boolean
+  span?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full"
+  start?: boolean
+  show?: boolean
+
+  // Added when the repeater is prepared for display.
+  $component?: Component
+  $props?: Record<string, any>
+}
+
+/**
+ * Repeats one input and stores each input's value in the resulting array.
+ *
+ * @example
+ * {
+ *   type: "repeater",
+ *   name: "phone_numbers",
+ *   title: "Phone numbers",
+ *   help: "Add each number where you can be reached.",
+ *   indexPosition: "suffix",
+ *   addText: "Add phone number",
+ *   field: { type: "tel", label: "Phone number" }
+ * }
+ */
+export interface FieldRepeater extends RepeaterBase<unknown> {
+  field: RepeaterInput
+  fields?: never
+}
+
+/**
+ * Repeats a set of named inputs and stores each row as an object. Nested
+ * repeaters are not supported.
+ *
+ * @example
+ * {
+ *   type: "repeater",
+ *   name: "household_members",
+ *   title: "Household members",
+ *   itemTitle: "Household member",
+ *   help: "Include everyone who lives in your household.",
+ *   indexPosition: "prefix",
+ *   min: 1,
+ *   fields: [
+ *     { type: "text", name: "name", label: "Name" },
+ *     { type: "number", name: "age", label: "Age" }
+ *   ]
+ * }
+ */
+export interface CollectionRepeater extends RepeaterBase<Record<string, any>> {
+  field?: never
+  itemTitle?: string
+  fields: RepeaterCollectionInput[]
+}
+
+export type Repeater = FieldRepeater | CollectionRepeater
+
+/** A repeater with the component properties needed for display. */
+export type DisplayRepeater = Repeater & {
+  $component: Component
+  $props: Record<string, any>
+  show: boolean
+}
+
+/**
+ * Returns true when a schema field repeats one input.
+ */
+export const isFieldRepeater = (field: any): field is FieldRepeater => {
+  return (
+    typeof field === "object" &&
+    field !== null &&
+    field.type === "repeater" &&
+    Object.prototype.hasOwnProperty.call(field, "field") &&
+    !Object.prototype.hasOwnProperty.call(field, "fields")
+  )
+}
+
+/**
+ * Returns true when a schema field repeats a collection of inputs.
+ */
+export const isCollectionRepeater = (
+  field: any
+): field is CollectionRepeater => {
+  return (
+    typeof field === "object" &&
+    field !== null &&
+    field.type === "repeater" &&
+    Object.prototype.hasOwnProperty.call(field, "fields") &&
+    !Object.prototype.hasOwnProperty.call(field, "field")
+  )
+}
+
+export interface RowField {
+  key: string
+  input: DisplayInput
+}
+
+export interface RepeaterRow {
+  key: string
+  type: "field" | "collection"
+  title?: string
+  fields: RowField[]
+}
+
+/**
+ * Builds repeater rows for display and handles adding, updating, and removing
+ * their values. Used by useFieldsSchema.
  */
 export const useRepeater = (
   model: Ref<Record<string, any>>,
-  resolveInput: ResolveInput
+  toDisplayInput: (
+    input: FieldsSchemaInput,
+    onUpdate?: ($val: any) => void
+  ) => DisplayInput
 ): {
-  resolveRepeater: (repeater: FieldsSchemaRepeater) => FieldsSchemaRepeater
+  toDisplayRepeater: (repeater: Repeater) => DisplayRepeater
 } => {
   let nextRowKey = 0
+  // Keep row keys stable as items are added and removed.
   const rowKeys = new Map<string, string[]>()
-  const emptyRowState = reactive(new Map<string, "added" | "removed">())
+  // Add/Remove can change the empty UI row without changing the model, so this
+  // state must be reactive.
+  const rowState = ref(new Map<string, "added" | "removed">())
 
-  const syncRowKeys = (name: string, count: number): string[] => {
+  // Reuse existing keys and add or trim them to match the rendered rows.
+  const getRowKeys = (name: string, count: number): string[] => {
     const keys = rowKeys.get(name) || []
 
     while (keys.length < count) {
@@ -57,7 +189,7 @@ export const useRepeater = (
     return keys
   }
 
-  const getValue = (repeater: FieldsSchemaRepeater): any[] | undefined => {
+  const getValue = (repeater: Repeater): any[] | undefined => {
     const value = getProperty(model.value, repeater.name, undefined)
     return Array.isArray(value) ? value : undefined
   }
@@ -65,7 +197,7 @@ export const useRepeater = (
   const addIndex = (
     text: string | undefined,
     index: number,
-    position: FieldsSchemaRepeater["indexPosition"]
+    position: Repeater["indexPosition"]
   ): string | undefined => {
     if (!text || !position) {
       return text
@@ -76,7 +208,7 @@ export const useRepeater = (
   }
 
   const updateValue = (
-    repeater: FieldsSchemaRepeater,
+    repeater: Repeater,
     isEmptyRow: boolean,
     name: string,
     $val: any
@@ -84,12 +216,14 @@ export const useRepeater = (
     model.value = setProperty(model.value, name, $val)
 
     if (isEmptyRow) {
-      emptyRowState.delete(repeater.name)
+      // The row is now represented in the model, so it no longer needs separate
+      // display state.
+      rowState.value.delete(repeater.name)
     }
   }
 
   const addItem = (
-    repeater: FieldsSchemaRepeater,
+    repeater: Repeater,
     rowCount: number,
     hasEmptyRow: boolean,
     max: number
@@ -98,11 +232,11 @@ export const useRepeater = (
       return
     }
 
-    emptyRowState.set(repeater.name, "added")
+    rowState.value.set(repeater.name, "added")
   }
 
   const removeItem = (
-    repeater: FieldsSchemaRepeater,
+    repeater: Repeater,
     rowCount: number,
     min: number,
     index: number,
@@ -119,13 +253,14 @@ export const useRepeater = (
     }
 
     if (hasEmptyRow && index === (value?.length ?? 0)) {
+      // Removing the model-less row only updates its display state.
       if (value === undefined) {
-        emptyRowState.set(repeater.name, "removed")
+        rowState.value.set(repeater.name, "removed")
       } else {
-        emptyRowState.delete(repeater.name)
+        rowState.value.delete(repeater.name)
       }
 
-      syncRowKeys(repeater.name, rowCount).splice(index, 1)
+      getRowKeys(repeater.name, rowCount).splice(index, 1)
       return
     }
 
@@ -136,38 +271,37 @@ export const useRepeater = (
     const updated = [...value]
 
     updated.splice(index, 1)
-    syncRowKeys(repeater.name, rowCount).splice(index, 1)
+    getRowKeys(repeater.name, rowCount).splice(index, 1)
     model.value = setProperty(model.value, repeater.name, updated)
   }
 
-  const resolveRepeater = (
-    repeater: FieldsSchemaRepeater
-  ): FieldsSchemaRepeater => {
+  const toDisplayRepeater = (repeater: Repeater): DisplayRepeater => {
     const value = getValue(repeater)
-    const min = repeater.min ?? 0
-    const max = repeater.max ?? Number.POSITIVE_INFINITY
-    const valueCount = value?.length ?? 0
+    const min = repeater.min || 0
+    const max = repeater.max || Number.POSITIVE_INFINITY
+    const valueCount = value?.length || 0
 
-    // An absent repeater begins with one empty UI row. Add can create one empty
-    // row after existing values. Neither enters the model until first update.
-    const hasEmptyRow =
-      valueCount < max &&
-      (emptyRowState.get(repeater.name) === "added" ||
-        (value === undefined && emptyRowState.get(repeater.name) !== "removed"))
+    // Show one empty row before the repeater has a model value. Add can also
+    // show an empty row without updating the model until the user enters a value.
+    const state = rowState.value.get(repeater.name)
+    const hasRoom = valueCount < max
+    const rowWasAdded = state === "added"
+    const showInitialRow = value === undefined && state !== "removed"
+    const hasEmptyRow = hasRoom && (rowWasAdded || showInitialRow)
     const rowCount = valueCount + (hasEmptyRow ? 1 : 0)
-    const keys = syncRowKeys(repeater.name, rowCount)
+    const keys = getRowKeys(repeater.name, rowCount)
 
-    const rows: ResolvedRepeaterRow[] = keys.map((key, index) => {
+    const rows: RepeaterRow[] = keys.map((key, index) => {
       const isEmptyRow = hasEmptyRow && index === valueCount
 
-      if (repeater.field !== undefined) {
+      if (isFieldRepeater(repeater)) {
         const name = `${repeater.name}.${index}`
-        const input = {
+        const input: FieldsSchemaInput = {
           ...repeater.field,
           name,
           label: addIndex(repeater.field.label, index, repeater.indexPosition),
           ...(repeater.disabled ? { disabled: true } : {}),
-        } as FieldsSchemaInput
+        }
 
         return {
           key,
@@ -175,7 +309,7 @@ export const useRepeater = (
           fields: [
             {
               key: "field",
-              input: resolveInput(input, ($val) => {
+              input: toDisplayInput(input, ($val) => {
                 updateValue(repeater, isEmptyRow, name, $val)
               }),
             },
@@ -193,15 +327,15 @@ export const useRepeater = (
           : undefined,
         fields: repeater.fields.map((field) => {
           const name = `${repeater.name}.${index}.${field.name}`
-          const input = {
+          const input: FieldsSchemaInput = {
             ...field,
             name,
             ...(repeater.disabled ? { disabled: true } : {}),
-          } as FieldsSchemaInput
+          }
 
           return {
             key: field.name,
-            input: resolveInput(input, ($val) => {
+            input: toDisplayInput(input, ($val) => {
               updateValue(repeater, isEmptyRow, name, $val)
             }),
           }
@@ -213,14 +347,14 @@ export const useRepeater = (
       ...repeater,
       $component: RepeaterDisplay,
       $props: {
-        type: repeater.field !== undefined ? "field" : "collection",
+        type: isFieldRepeater(repeater) ? "field" : "collection",
         title: repeater.title,
         help: repeater.help,
         count: valueCount,
         min: repeater.min,
         max: repeater.max,
         rows,
-        addButtonText: repeater.addButtonText ?? "Add",
+        addText: repeater.addText ?? "Add",
         addDisabled:
           Boolean(repeater.disabled) || hasEmptyRow || rowCount >= max,
         removeDisabled: Boolean(repeater.disabled) || rowCount <= min,
@@ -232,5 +366,5 @@ export const useRepeater = (
     }
   }
 
-  return { resolveRepeater }
+  return { toDisplayRepeater }
 }

@@ -22,7 +22,12 @@ import {
   numericInputTypes,
   textInputTypes,
 } from "@/composables/forms"
-import { useRepeater } from "@/composables/useRepeater"
+import {
+  isCollectionRepeater,
+  isFieldRepeater,
+  useRepeater,
+  type Repeater,
+} from "@/composables/useRepeater"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
 import BaseInput from "@/lib-components/forms/BaseInput.vue"
@@ -42,9 +47,9 @@ import YesOrNoRadio from "@/lib-components/forms/YesOrNoRadio.vue"
 
 /**
  * FieldsSchema supports an Array of FieldSection(s)
- * or simply an Array of FieldsSchemaField(s)
+ * or simply an Array of SchemaField(s)
  */
-export type FieldsSchema = Array<FieldSection> | Array<FieldsSchemaField>
+export type FieldsSchema = Array<FieldSection> | Array<SchemaField>
 
 /**
  * FieldsSchemaInput type declares the supported input components in a FieldsSchema
@@ -60,109 +65,13 @@ export type FieldsSchemaInput =
   | InputField<TextareaInput, "textarea">
   | InputField<TextLikeInput, Exclude<TextInputType, "number">>
 
-/**
- * Omits repeater-managed properties from each FieldsSchemaInput variant
- * individually, preserving type-specific requirements such as `options`.
- * Using Omit directly on the union would weaken that type checking.
- */
-type RepeaterSchemaInput<T, K extends PropertyKey> = T extends unknown
-  ? Omit<T, Extract<keyof T, K>>
-  : never
-
-/**
- * A scalar repeater input is an ordinary input declaration whose name and
- * model value are owned by the containing repeater.
- */
-export type RepeaterFieldInput = RepeaterSchemaInput<
-  FieldsSchemaInput,
-  "name" | "modelValue" | "$component" | "$props"
->
-
-/**
- * Collection field names are relative to their containing repeater item.
- * Initial collection data belongs on the repeater's modelValue rather than on
- * individual field templates.
- */
-export type RepeaterCollectionInput = RepeaterSchemaInput<
-  FieldsSchemaInput,
-  "modelValue" | "$component" | "$props"
->
-
-export type RepeaterIndexPosition = "prefix" | "suffix"
-
-export interface RepeaterFieldBase<T> {
-  type: "repeater"
-  name: string
-  modelValue?: T[]
-  title?: string
-  help?: string
-  indexPosition?: RepeaterIndexPosition
-  /**
-   * Bounds control rendered rows, Add/Remove actions, and native array-length
-   * validation. Existing model arrays are always rendered as supplied and are
-   * never normalized to these bounds.
-   */
-  min?: number
-  max?: number
-  addButtonText?: string
-  disabled?: boolean
-  span?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full"
-  start?: boolean
-  show?: boolean
-
-  // These properties are added when the schema is resolved for rendering.
-  $component?: Component
-  $props?: Record<string, any>
+/** An input with the component properties needed for display. */
+export type DisplayInput = FieldsSchemaInput & {
+  $component: Component
+  $props: Record<string, any>
+  show: boolean
 }
-
-/**
- * Repeats one input and maps its values to a primitive array.
- *
- * @example
- * {
- *   type: "repeater",
- *   name: "phone_numbers",
- *   title: "Phone numbers",
- *   help: "Add each number where you can be reached.",
- *   indexPosition: "suffix",
- *   addButtonText: "Add phone number",
- *   field: { type: "tel", label: "Phone number" }
- * }
- */
-export interface RepeaterField extends RepeaterFieldBase<unknown> {
-  field: RepeaterFieldInput
-  fields?: never
-}
-
-/**
- * Repeats a collection of relatively named inputs and maps each collection to
- * an object in the resulting array. Nested repeaters are intentionally not
- * supported in this initial interface.
- *
- * @example
- * {
- *   type: "repeater",
- *   name: "household_members",
- *   title: "Household members",
- *   itemTitle: "Household member",
- *   help: "Include everyone who lives in your household.",
- *   indexPosition: "prefix",
- *   min: 1,
- *   fields: [
- *     { type: "text", name: "name", label: "Name" },
- *     { type: "number", name: "age", label: "Age" }
- *   ]
- * }
- */
-export interface RepeaterFieldCollection
-  extends RepeaterFieldBase<Record<string, any>> {
-  field?: never
-  itemTitle?: string
-  fields: RepeaterCollectionInput[]
-}
-
-export type FieldsSchemaRepeater = RepeaterField | RepeaterFieldCollection
-export type FieldsSchemaField = FieldsSchemaInput | FieldsSchemaRepeater
+export type SchemaField = FieldsSchemaInput | Repeater
 
 /**
  * isTextInputType is a user defined type guard for
@@ -219,7 +128,7 @@ export const isInputsOnlySchema = (
 export interface FieldSection {
   title?: string
   description?: string
-  fields: Array<FieldsSchemaField>
+  fields: Array<SchemaField>
 }
 
 // All currently supported input types in the FieldsSchema
@@ -294,39 +203,9 @@ const isInputField = (field: any): field is FieldsSchemaInput => {
   )
 }
 
-/**
- * Determines whether a schema field is a scalar repeater.
- */
-export const isRepeaterField = (field: any): field is RepeaterField => {
+const isSchemaField = (field: any): field is SchemaField => {
   return (
-    typeof field === "object" &&
-    field !== null &&
-    field.type === "repeater" &&
-    Object.prototype.hasOwnProperty.call(field, "field") &&
-    !Object.prototype.hasOwnProperty.call(field, "fields")
-  )
-}
-
-/**
- * Determines whether a schema field is a repeater collection.
- */
-export const isRepeaterFieldCollection = (
-  field: any
-): field is RepeaterFieldCollection => {
-  return (
-    typeof field === "object" &&
-    field !== null &&
-    field.type === "repeater" &&
-    Object.prototype.hasOwnProperty.call(field, "fields") &&
-    !Object.prototype.hasOwnProperty.call(field, "field")
-  )
-}
-
-const isSchemaField = (field: any): field is FieldsSchemaField => {
-  return (
-    isInputField(field) ||
-    isRepeaterField(field) ||
-    isRepeaterFieldCollection(field)
+    isInputField(field) || isFieldRepeater(field) || isCollectionRepeater(field)
   )
 }
 
@@ -335,11 +214,11 @@ const isSchemaField = (field: any): field is FieldsSchemaField => {
  */
 export const isFieldsOnlySchema = (
   schema: FieldsSchema
-): schema is FieldsSchemaField[] => {
+): schema is SchemaField[] => {
   return schema.length === 0 || schema.every(isSchemaField)
 }
 
-const schemaFields = (schema: FieldsSchema): FieldsSchemaField[] => {
+const schemaFields = (schema: FieldsSchema): SchemaField[] => {
   if (isFieldsOnlySchema(schema)) {
     return schema
   }
@@ -347,12 +226,12 @@ const schemaFields = (schema: FieldsSchema): FieldsSchemaField[] => {
   return schema.flatMap((section) => section.fields)
 }
 
-const disableSchemaField = (field: FieldsSchemaField): FieldsSchemaField => {
+const disableSchemaField = (field: SchemaField): SchemaField => {
   if (isInputField(field)) {
     return { ...field, disabled: true }
   }
 
-  if (isRepeaterField(field)) {
+  if (isFieldRepeater(field)) {
     return {
       ...field,
       disabled: true,
@@ -457,12 +336,11 @@ export const useFieldsSchema = (
     model.value = setProperty(model.value, name, $val)
   }
 
-  const resolveInput = (
+  const toDisplayInput = (
     input: FieldsSchemaInput,
     onUpdate: ($val: any) => void = ($val) => updateModel(input.name, $val)
-  ): FieldsSchemaInput => {
-    // Keep the template tidy by passing only safe HTML attributes and expected
-    // component props through $props.
+  ): DisplayInput => {
+    // Pass only component props and supported HTML attributes through v-bind.
     const {
       /* eslint-disable @typescript-eslint/no-unused-vars */
       modelValue,
@@ -473,10 +351,8 @@ export const useFieldsSchema = (
       ...props
     } = input
 
-    /**
-     * Text and number inputs require the type property. Non-text input types
-     * have an explicit type attribute which should not be overwritten.
-     */
+    // Text and number components still need their native input type. Other
+    // components provide their own type.
     const hasTypeAttribute = isTextInputType(type) || isNumericInputType(type)
 
     const inputProps = {
@@ -494,11 +370,10 @@ export const useFieldsSchema = (
     }
   }
 
-  const { resolveRepeater } = useRepeater(model, resolveInput)
+  const { toDisplayRepeater } = useRepeater(model, toDisplayInput)
 
-  // Hydrate the model with declared modelValue defaults and emit one update.
-  // Repeater templates are deliberately excluded: only the repeater itself
-  // owns an initial array value.
+  // Apply schema defaults once before display. Repeater input templates do not
+  // own values; the repeater model owns the full array.
   onBeforeMount(() => {
     let hydrated = model.value
 
@@ -529,8 +404,8 @@ export const useFieldsSchema = (
         ...section,
         fields: section.fields.map((field) => {
           return isInputField(field)
-            ? resolveInput(field)
-            : resolveRepeater(field)
+            ? toDisplayInput(field)
+            : toDisplayRepeater(field)
         }),
       }
     })
