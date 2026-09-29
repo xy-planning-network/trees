@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, useTemplateRef, watch } from "vue"
-import { PlusIcon, TrashIcon } from "@heroicons/vue/solid"
+import { PlusCircleIcon, TrashIcon } from "@heroicons/vue/outline"
 import type { RepeaterRow } from "@/composables/useRepeater"
 import FormCell from "@/lib-components/forms/FormCell.vue"
 import InputError from "@/lib-components/forms/InputError.vue"
@@ -92,7 +92,7 @@ watch(countError, (error) => {
 
 <template>
   <div
-    class="relative space-y-6"
+    class="relative space-y-5"
     role="group"
     :aria-labelledby="title ? `${validationID}-label` : undefined"
     :aria-describedby="help ? `${validationID}-help` : undefined"
@@ -133,7 +133,7 @@ watch(countError, (error) => {
           :aria-label="`Remove item ${rowIndex + 1}`"
           @click="emit('remove', rowIndex)"
         >
-          <TrashIcon class="h-4 w-4" aria-hidden="true" />
+          <TrashIcon class="h-4 w-4 text-red-700" aria-hidden="true" />
           <span>Remove</span>
         </button>
       </div>
@@ -167,7 +167,7 @@ watch(countError, (error) => {
           :aria-label="`Remove item ${rowIndex + 1}`"
           @click="emit('remove', rowIndex)"
         >
-          <TrashIcon class="h-5 w-5" aria-hidden="true" />
+          <TrashIcon class="h-5 w-5 text-red-700" aria-hidden="true" />
         </button>
       </div>
 
@@ -195,7 +195,7 @@ watch(countError, (error) => {
       :disabled="addDisabled"
       @click="emit('add')"
     >
-      <PlusIcon class="mr-1.5 h-4 w-4" aria-hidden="true" />
+      <PlusCircleIcon class="mr-1 h-5 w-5 text-xy-blue" aria-hidden="true" />
       {{ addText }}
     </button>
 
