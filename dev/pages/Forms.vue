@@ -81,12 +81,12 @@ const fileUploadValues = ref<Record<string, any>>({
   documents: [
     {
       id: 456,
-      name: "compliance-review.docx",
+      filename: "compliance-review.docx",
       url: "https://example.com/compliance-review.docx",
     },
     {
       id: 789,
-      name: "supporting-data.xlsx",
+      filename: "supporting-data.xlsx",
     },
   ],
 })

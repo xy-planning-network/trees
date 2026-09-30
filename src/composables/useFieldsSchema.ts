@@ -378,10 +378,14 @@ export const useFieldsSchema = (
 
   const { toDisplayRepeater } = useRepeater(model, toDisplayInput)
 
-  // Apply schema defaults once before display. Repeater input templates do not
-  // own values; the repeater model owns the full array.
+  // Apply schema defaults once before display.
+  // NOTE(spk): Keep the existing model object reference to avoid triggering
+  // onUpdate:model-value during initial render. Replacing the ref can cause native
+  // v-model mount hooks to restore pre-hydration values after the model is updated.
+  // Repeater input templates do not own values; the repeater owns the full array.
   onBeforeMount(() => {
-    let hydrated = model.value
+    const target = model.value
+    let hydrated = target
 
     for (const field of schemaFields(toValue(schema))) {
       if (field.modelValue !== undefined) {
@@ -389,8 +393,8 @@ export const useFieldsSchema = (
       }
     }
 
-    if (hydrated !== model.value) {
-      model.value = hydrated
+    if (hydrated !== target) {
+      Object.assign(target, hydrated)
     }
   })
 
