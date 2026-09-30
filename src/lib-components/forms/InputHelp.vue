@@ -1,5 +1,7 @@
 <script setup lang="ts">
-withDefaults(
+import { useInlineMarkdown } from "@/composables/useInlineMarkdown"
+
+const props = withDefaults(
   defineProps<{
     tag?: string
     text?: string
@@ -9,7 +11,12 @@ withDefaults(
     text: "",
   }
 )
+
+const nodes = useInlineMarkdown(() => props.text, {
+  graphs: false,
+})
 </script>
+
 <template>
   <component
     :is="tag"
@@ -17,6 +24,6 @@ withDefaults(
     class="text-sm leading-6 font-normal text-gray-600"
     v-bind="$attrs"
   >
-    {{ text }}
+    <component :is="nodes" />
   </component>
 </template>

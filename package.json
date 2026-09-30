@@ -62,12 +62,13 @@
   },
   "dependencies": {
     "@floating-ui/vue": "^1.0.1",
-    "@headlessui/vue": "^1.4.2",
+    "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
     "@maskito/core": "^3.5.0",
     "@maskito/kit": "^3.5.0",
     "@maskito/vue": "^3.5.0",
     "axios": "^1.19.0",
+    "marked": "^18.0.14",
     "reka-ui": "^2.9.9"
   },
   "peerDependencies": {

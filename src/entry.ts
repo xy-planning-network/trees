@@ -26,6 +26,7 @@ import {
 } from "@/composables/forms"
 import { debounce as debounceFn, debounceLeading } from "@/helpers/Debounce"
 import { throttle as throttleFn } from "@/helpers/Throttle"
+import bytes from "@/helpers/Bytes"
 
 // Import vue components
 import * as components from "@/lib-components/index"
@@ -76,4 +77,4 @@ export {
 }
 
 // Utilities exports
-export { debounceFn, debounceLeading, throttleFn }
+export { bytes, debounceFn, debounceLeading, throttleFn }

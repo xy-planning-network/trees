@@ -13,6 +13,7 @@ declare module 'vue' {
     Rounded: typeof import('./dev/docs/Rounded.md')['default']
     StackingContextDocs: typeof import('./dev/docs/StackingContextDocs.md')['default']
     UseBaseAPIDocs: typeof import('./dev/docs/UseBaseAPIDocs.md')['default']
+    UseInlineMarkdownDocs: typeof import('./dev/docs/UseInlineMarkdownDocs.md')['default']
     UseTabHistoryDocs: typeof import('./dev/docs/UseTabHistoryDocs.md')['default']
     UseUrlSearchParamsDocs: typeof import('./dev/docs/UseUrlSearchParamsDocs.md')['default']
   }
