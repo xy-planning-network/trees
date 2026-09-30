@@ -1,4 +1,8 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+  generic="T extends Record<string, any> = Record<string, any>"
+>
 import { isHttpError } from "@/api/base"
 import type { ReqMethod } from "@/api/client"
 import { useAppFlasher, useBaseAPI } from "@/composables"
@@ -20,6 +24,7 @@ const props = withDefaults(
     flashError?: boolean
     flashSuccess?: boolean
     method: ReqMethod
+    payloadFilter?: (payload: T) => T | void
     schema: FieldsSchema
   }>(),
   {
@@ -27,6 +32,7 @@ const props = withDefaults(
     flashSuccess: true,
     btnText: "Submit",
     btnDisabled: false,
+    payloadFilter: undefined,
   }
 )
 
@@ -35,8 +41,8 @@ const emit = defineEmits<{
   success: [result: any]
 }>()
 
-const model = defineModel<Record<string, any>>({
-  default: () => ({}),
+const model = defineModel<T>({
+  default: () => ({}) as T,
   required: false,
 })
 
@@ -47,7 +53,20 @@ const { execute, isLoading } = useBaseAPI(props.action, props.method, {
 })
 
 const submit = () => {
-  execute(model.value)
+  const payload = { ...model.value } as T
+  let filteredPayload = payload
+
+  try {
+    filteredPayload = props.payloadFilter?.(payload) ?? payload
+  } catch {
+    // NOTE(spk): the caller can `throw new Error("The payload be bad!")`
+    // but is responsible for notifying the user.
+    //
+    // Or extract the error handling here and let the usual flashes fire off.
+    return
+  }
+
+  execute(filteredPayload)
     .then((d) => {
       if (props.flashSuccess !== false) {
         useAppFlasher.success("Success!")
