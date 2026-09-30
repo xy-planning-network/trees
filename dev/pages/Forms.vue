@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import { bytes } from "@/entry"
 import {
+  FileUploadValue,
   InputOption,
   NumericInputType,
   TextInputType,
@@ -10,6 +12,7 @@ import {
 import { dateRangeActions } from "@/composables/dateRange"
 import type { FieldsSchema } from "@/composables/useFieldsSchema"
 import Slideover from "@/lib-components/overlays/Slideover.vue"
+import { fileUploadMockAction } from "../mocks/fileUpload"
 
 const options: InputOption[] = [
   {
@@ -68,6 +71,25 @@ const inputVals = ref<Record<string, any>>({})
 const toggleValue = ref(undefined)
 const dateRangeInput = ref({ minDate: 1725148800, maxDate: 1727740799 })
 const dateTimeInput = ref<string>("2015-08-01T15:30:00.000Z")
+const validationUpload = ref<FileUploadValue>(null)
+const existingUpload = ref<FileUploadValue>({
+  id: 123,
+  name: "engagement-letter.pdf",
+  url: "https://example.com/engagement-letter.pdf",
+})
+const fileUploadValues = ref<Record<string, any>>({
+  documents: [
+    {
+      id: 456,
+      name: "compliance-review.docx",
+      url: "https://example.com/compliance-review.docx",
+    },
+    {
+      id: 789,
+      name: "supporting-data.xlsx",
+    },
+  ],
+})
 /**
  * Copy Help
  */
@@ -84,6 +106,24 @@ const textareaCopy = `<TextArea v-model="textarea" />`
 const inputLabelCopy = `<InputLabel label="I'm labeling something..." />`
 const toggleCopy = `<Toggle v-model="toggleValue"></Toggle>`
 const inputHelpCopy = `<InputHelp text="I'm just here to hint." />`
+const fileUploadCopy = `<FileUpload
+  v-model="documents"
+  action="raw-data-uploads?kind=document"
+  :accept="['.docx', '.pdf']"
+  :max-file-bytes="bytes.megabytes(5)"
+  multiple
+  required
+/>`
+const fileUploadRepeaterCopy = `{
+  type: "repeater",
+  name: "documents",
+  field: {
+    type: "file-upload",
+    action: "raw-data-uploads?kind=document",
+    accept: [".docx", ".pdf"],
+    required: true
+  }
+}`
 
 /**
  * Props
@@ -182,6 +222,22 @@ const multichoiceInputProps = [
   inputOptionsProp,
   { name: "modelValue", required: false, type: "(string | number)[] | null" },
   ...inputCommonProps,
+]
+
+const fileUploadInputProps = [
+  { name: "action", required: true, type: "string" },
+  { name: "accept", required: false, type: "string[]" },
+  { name: "multiple", required: false, type: "boolean" },
+  { name: "fileField", required: false, type: "string" },
+  { name: "maxFileBytes", required: false, type: "number" },
+  { name: "maxFiles", required: false, type: "number" },
+  {
+    name: "modelValue",
+    required: false,
+    type: "UploadedFile | UploadedFile[] | null",
+  },
+  { name: "label", required: false, type: "string" },
+  { name: "help", required: false, type: "string" },
 ]
 
 const toggleProps = [
@@ -304,6 +360,20 @@ const repeaterSchema: FieldsSchema = [
         ],
       },
     ],
+  },
+]
+
+const fileUploadSchema: FieldsSchema = [
+  {
+    type: "file-upload",
+    name: "documents",
+    action: fileUploadMockAction,
+    label: "Supporting documents",
+    help: 'Try an upload here. Add "error" to the filename to see it fail once, then retry it.',
+    accept: [".docx", ".pdf", ".xlsx", ".png"],
+    maxFileBytes: bytes.megabytes(5),
+    maxFiles: 4,
+    multiple: true,
   },
 ]
 </script>
@@ -1056,9 +1126,78 @@ const repeaterSchema: FieldsSchema = [
 
           <Checkbox label="You must tick this box" required />
 
+          <FileUpload
+            v-model="validationUpload"
+            :action="fileUploadMockAction"
+            label="Supporting document"
+            help="Upload a PDF before submitting this form."
+            :accept="['.pdf']"
+            required
+          />
+
           <button type="submit" class="xy-btn">Submit</button>
         </div>
       </form>
+    </ComponentLayout>
+
+    <ComponentLayout title="File Upload" :show-badge="false">
+      <template #description>
+        FileUpload sends files to the configured action as soon as they're
+        selected. It only puts the uploaded file on the model, so our JSON form
+        payloads never end up with browser <code>File</code> or
+        <code>Blob</code> values. The schema example below intercepts that
+        request in the browser and waits a second before returning a response.
+      </template>
+
+      <div class="space-y-8">
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            <ClickToCopy :value="fileUploadCopy" />
+          </label>
+
+          <FileUpload
+            v-model="existingUpload"
+            action="raw-data-uploads?kind=document"
+            label="Engagement letter"
+            help="A persisted single-file value."
+            :accept="['.pdf']"
+            disabled
+          />
+        </div>
+
+        <InputDisplay
+          v-model="fileUploadValues"
+          :schema="fileUploadSchema"
+          :columns="1"
+        />
+
+        <div class="prose max-w-full">
+          <h5>Model value</h5>
+          <pre><code>{{ fileUploadValues }}</code></pre>
+        </div>
+
+        <PropsTable :props="fileUploadInputProps" />
+
+        <div class="prose max-w-full">
+          <h5>Upload endpoint</h5>
+          <p>
+            FileUpload sends one <code>multipart/form-data</code> POST for each
+            file. The binary field defaults to <code>file</code>. Use the
+            exported <code>bytes</code> helper to set a readable per-file limit,
+            such as <code>bytes.megabytes(5)</code>. The response needs this
+            shape:
+          </p>
+          <pre><code>{ "data": { "id": 123, "name": "document.pdf", "url": "..." } }</code></pre>
+
+          <h5>Field repeater</h5>
+          <p>
+            Stick to single-file mode inside a field repeater so its model stays
+            a flat array of uploaded files. Use multi-file inputs as regular
+            fields or inside collection repeaters.
+          </p>
+          <pre><code>{{ fileUploadRepeaterCopy }}</code></pre>
+        </div>
+      </div>
     </ComponentLayout>
 
     <ComponentLayout title="FieldsSchema Repeaters" :show-badge="false">

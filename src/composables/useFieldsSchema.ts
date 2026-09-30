@@ -10,6 +10,7 @@ import {
 import {
   type BooleanInput,
   type DateRangeInput,
+  type FileUploadInput,
   type Input,
   type MultiChoiceInput,
   type OptionsInput,
@@ -36,6 +37,7 @@ import ComboBox from "@/lib-components/forms/Combobox.vue"
 import Checkbox from "@/lib-components/forms/Checkbox.vue"
 import DateRangePicker from "@/lib-components/forms/DateRangePicker.vue"
 import DateTime from "@/lib-components/forms/DateTimeInput.vue"
+import FileUpload from "@/lib-components/forms/FileUpload.vue"
 import MultiCheckboxes from "@/lib-components/forms/MultiCheckboxes.vue"
 import MultiSelect from "@/lib-components/forms/MultiSelect.vue"
 import NumberInput from "@/lib-components/forms/NumberInput.vue"
@@ -61,6 +63,7 @@ export type FieldsSchemaInput =
   | InputField<MultiChoiceInput & { customValues?: boolean }, "multi-select">
   | InputField<DateRangeInput, "date-range">
   | InputField<DateTimeInput, "datetime">
+  | InputField<FileUploadInput, "file-upload">
   | InputField<NumericInput, NumericInputType>
   | InputField<OptionsInput, "combobox" | "radio" | "radio-cards" | "select">
   | InputField<TextareaInput, "textarea">
@@ -147,6 +150,7 @@ export const inputFieldTypes = [
   "combobox",
   "date-range",
   "datetime",
+  "file-upload",
   "multi-checkbox",
   "multi-select",
   "radio",
@@ -311,6 +315,7 @@ const inputComponentMap: Record<InputFieldType, Component> = {
   combobox: ComboBox,
   "date-range": DateRangePicker,
   datetime: DateTime,
+  "file-upload": FileUpload,
   "multi-checkbox": MultiCheckboxes,
   "multi-select": MultiSelect,
   radio: Radio,
