@@ -74,7 +74,7 @@ const dateTimeInput = ref<string>("2015-08-01T15:30:00.000Z")
 const validationUpload = ref<FileUploadValue>(null)
 const existingUpload = ref<FileUploadValue>({
   id: 123,
-  name: "engagement-letter.pdf",
+  filename: "engagement-letter.pdf",
   url: "https://example.com/engagement-letter.pdf",
 })
 const fileUploadValues = ref<Record<string, any>>({

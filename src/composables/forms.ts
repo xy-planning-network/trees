@@ -59,7 +59,7 @@ export interface DateTimeInput extends Input {
  */
 export interface UploadedFile {
   id: number
-  name: string
+  filename: string
   url?: string
 }
 

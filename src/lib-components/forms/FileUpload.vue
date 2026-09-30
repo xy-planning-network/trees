@@ -435,7 +435,7 @@ onBeforeUnmount(() => {
           <div class="min-w-0 flex-1">
             <template v-if="item.kind === 'uploaded'">
               <span class="text-sm text-gray-800 [overflow-wrap:anywhere]">
-                {{ item.file.name }}
+                {{ item.file.filename }}
               </span>
               <p class="mt-0.5 text-xs text-gray-600">Uploaded</p>
             </template>
@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
             :href="item.file.url"
             target="_blank"
             rel="noopener noreferrer"
-            :aria-label="`Open ${item.file.name} in a new window`"
+            :aria-label="`Open ${item.file.filename} in a new window`"
           >
             <ArrowTopRightOnSquareIcon class="h-5 w-5" aria-hidden="true" />
           </a>
@@ -493,7 +493,9 @@ onBeforeUnmount(() => {
             (item.kind === 'pending' && item.upload.status === 'uploading')
           "
           :aria-label="`Remove ${
-            item.kind === 'uploaded' ? item.file.name : item.upload.file.name
+            item.kind === 'uploaded'
+              ? item.file.filename
+              : item.upload.file.name
           }`"
           @click="
             item.kind === 'uploaded'

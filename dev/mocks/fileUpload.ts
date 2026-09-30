@@ -36,7 +36,7 @@ const upload = async (data?: ReqPayload): Promise<TrailsResp<UploadedFile>> => {
   return {
     data: {
       id: nextID,
-      name: file.name,
+      filename: file.name,
     },
   }
 }
