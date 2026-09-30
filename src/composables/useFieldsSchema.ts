@@ -30,6 +30,7 @@ import {
   type DisplayRepeater,
   type Repeater,
 } from "@/composables/useRepeater"
+import deleteProperty from "@/helpers/DeleteProperty"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
 import BaseInput from "@/lib-components/forms/BaseInput.vue"
@@ -283,6 +284,25 @@ export const extractInputs = (
   schema: FieldsSchema
 ): Array<FieldsSchemaInput> => {
   return schemaFields(schema).filter(isInputField)
+}
+
+/**
+ * Returns a payload without values for schema inputs whose `show` property is
+ * explicitly false. The source payload is not mutated.
+ */
+export const filterPayloadByShow = <T extends Record<string, any>>(
+  payload: T,
+  schema: MaybeRefOrGetter<FieldsSchema>
+): T => {
+  let output = payload
+
+  for (const input of extractInputs(toValue(schema))) {
+    if (input.show === false) {
+      output = deleteProperty(output, input.name)
+    }
+  }
+
+  return output
 }
 
 /**
