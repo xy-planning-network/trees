@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Portal } from "@headlessui/vue"
-import XYSpinner from "../indicators/XYSpinner.vue"
+import LoadingSpinner from "../indicators/LoadingSpinner.vue"
 import { useAppSpinnerDisplay } from "@/composables/useSpinner"
 
 const { idx, loading, maxIdx, messages, msg, showMsg } = useAppSpinnerDisplay()
@@ -28,7 +28,7 @@ const fadeOut = (): void => {
       v-if="loading"
       class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full cursor-not-allowed z-40 bg-gray-50 bg-opacity-60"
     >
-      <XYSpinner class="w-32 h-32" />
+      <LoadingSpinner class="w-20 h-20" />
       <div v-show="messages" class="mt-2">
         <transition
           appear
