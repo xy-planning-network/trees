@@ -227,7 +227,7 @@ const tooltipCopy = `<Tooltip>Here's something subtly helpful.</Tooltip>`
         </label>
         <div class="space-y-5">
           <div>
-            <XYSpinner />
+            <LoadingSpinner />
           </div>
           <div class="mt-1">
             <button type="button" class="xy-btn" @click="spinner()">

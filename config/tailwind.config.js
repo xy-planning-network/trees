@@ -17,7 +17,6 @@ module.exports = {
       center: true,
     },
     extend: {
-      animation: treesTheme.animation,
       borderRadius: treesTheme.borderRadius,
       colors: treesTheme.colors,
       fontFamily: treesTheme.fontFamily,
