@@ -39,18 +39,22 @@ const props = withDefaults(
   defaultInputProps
 )
 
-// NOTE(spk): RadioGroup does not support a null v-model value
-// use a getter to return undefined instead, which has the same UI result.
-type Getter = Exclude<RadioCards["modelValue"], null>
-const modelState = defineModel<RadioCards["modelValue"], never, Getter>({
+// NOTE(spk): RadioGroup does not support a null v-model value.
+// When the v-model is set to "null" by a parent component we resolve the
+// internal value to false using a getter and resolve back to null in the setter.
+//
+// We use false instead of undefined to preserve the use of undefined as a valid value
+// on the parent.
+type RadioGroupVal = Exclude<RadioCards["modelValue"], null> | false
+const modelState = defineModel<
+  RadioCards["modelValue"],
+  never,
+  RadioGroupVal,
+  RadioGroupVal
+>({
   ...defaultModelOpts,
-  get(v) {
-    if (v === null) {
-      return undefined
-    }
-
-    return v
-  },
+  get: (value) => (value === null ? false : value),
+  set: (value) => (value === false ? null : value),
 })
 
 const { aria, isDisabled, isRequired, nameAttr, errorState, onInvalid } =
