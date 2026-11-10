@@ -1,4 +1,4 @@
-import { ref, Ref, shallowRef, ShallowRef } from "vue"
+import { ref, Ref, shallowRef, ShallowRef, toValue, type MaybeRefOrGetter } from "vue"
 import { httpRequest, isHttpCancel } from "../api/base"
 import type {
   HttpPromise,
@@ -64,14 +64,14 @@ export interface UseBaseAPI<T> {
 
 /**
  * useBaseAPI is a composable wrapper of BaseAPI
- * @param path {string} the api path or full url for the
+ * @param path the API path or full URL, resolved on each execute call
  * @param method {ReqMethod} the initial request type
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export default function useBaseAPI<T = any>(
-  path: string,
+  path: MaybeRefOrGetter<string>,
   method: ReqMethod = "GET",
   initOpts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
@@ -110,7 +110,7 @@ export default function useBaseAPI<T = any>(
       method: method,
       params: ["GET", "get"].includes(method) ? data : {},
       signal: controller.signal,
-      url: path,
+      url: toValue(path),
     }
 
     return httpRequest<T>(requestConfig, { ...initOpts, ...opts })
@@ -162,13 +162,13 @@ export default function useBaseAPI<T = any>(
 
 /**
  * useBaseAPIGet is a convenience function for useBaseAPI
- * @param path {string} the api path or full url for the
+ * @param url the API path or full URL, resolved on each execute call
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export function useBaseAPIGet<T = any>(
-  url: string,
+  url: MaybeRefOrGetter<string>,
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "GET", opts)

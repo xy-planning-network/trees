@@ -69,7 +69,7 @@ const {
   execute,
   isAborted,
   isLoading,
-} = useBaseAPIGet<TrailsRespPaged<any>>(props.url, {
+} = useBaseAPIGet<TrailsRespPaged<any>>(() => props.url, {
   skipLoader: true,
 })
 
@@ -199,7 +199,7 @@ const debouncedFetchOptions = () => {
 }
 
 const onUpdate = (val: unknown) => {
-  if (val) {
+  if (val !== null && val !== undefined) {
     selectedApiOption.value =
       availableOptions.value.find((opt) => opt.value === val) || null
     query.value = ""
