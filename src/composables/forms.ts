@@ -98,6 +98,11 @@ export interface OptionsInput extends Input {
   options: InputOption[]
 }
 
+export interface APIComboBoxInput extends Omit<OptionsInput, "options"> {
+  optionMapper: (item: any) => InputOption
+  url: string
+}
+
 export interface MultiChoiceInput extends Input {
   max?: number
   min?: number
