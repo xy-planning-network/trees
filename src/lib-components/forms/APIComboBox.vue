@@ -152,7 +152,7 @@ const statusMessage = computed(() => {
   if (
     query.value !== "" &&
     hasMinSearchLength.value &&
-    availableOptions.value.length === 0
+    apiOptions.value.length === 0
   ) {
     return "No results found."
   }
@@ -316,7 +316,7 @@ onBeforeUnmount(() => {
         </li>
 
         <ComboboxOption
-          v-for="option in availableOptions"
+          v-for="option in apiOptions"
           v-slot="{
             active,
             disabled,
