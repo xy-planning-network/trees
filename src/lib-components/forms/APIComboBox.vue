@@ -103,7 +103,14 @@ const hasFetchError = computed(() => {
 const availableOptions = computed(() => {
   const options = new Map<InputOption["value"], InputOption>()
 
-  if (selectedApiOption.value) {
+  if (props.initialOption && props.initialOption.value === modelState.value) {
+    options.set(props.initialOption.value, props.initialOption)
+  }
+
+  if (
+    selectedApiOption.value?.value === modelState.value &&
+    selectedApiOption.value
+  ) {
     options.set(selectedApiOption.value.value, selectedApiOption.value)
   }
 
