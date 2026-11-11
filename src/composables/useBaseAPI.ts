@@ -176,13 +176,13 @@ export function useBaseAPIGet<T = any>(
 
 /**
  * useBaseAPIDelete is a convenience function for useBaseAPI
- * @param path {string} the api path or full url for the
+ * @param url the API path or full URL, resolved on each execute call
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export function useBaseAPIDelete<T = any>(
-  url: string,
+  url: MaybeRefOrGetter<string>,
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "DELETE", opts)
@@ -190,13 +190,13 @@ export function useBaseAPIDelete<T = any>(
 
 /**
  * useBaseAPIPatch is a convenience function for useBaseAPI
- * @param path {string} the api path or full url for the
+ * @param url the API path or full URL, resolved on each execute call
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export function useBaseAPIPatch<T = any>(
-  url: string,
+  url: MaybeRefOrGetter<string>,
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "PATCH", opts)
@@ -204,13 +204,13 @@ export function useBaseAPIPatch<T = any>(
 
 /**
  * useBaseAPIPost is a convenience function for useBaseAPI
- * @param path {string} the api path or full url for the
+ * @param url the API path or full URL, resolved on each execute call
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export function useBaseAPIPost<T = any>(
-  url: string,
+  url: MaybeRefOrGetter<string>,
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "POST", opts)
@@ -218,13 +218,13 @@ export function useBaseAPIPost<T = any>(
 
 /**
  * useBaseAPIPut is a convenience function for useBaseAPI
- * @param path {string} the api path or full url for the
+ * @param url the API path or full URL, resolved on each execute call
  * @param initOpts {UseBaseAPIOptions}
  * @param initConfig {AxiosRequestConfig}
  * @returns {UseBaseAPI<T>}
  */
 export function useBaseAPIPut<T = any>(
-  url: string,
+  url: MaybeRefOrGetter<string>,
   opts: UseBaseAPIOptions = {}
 ): UseBaseAPI<T> {
   return useBaseAPI<T>(url, "PUT", opts)
