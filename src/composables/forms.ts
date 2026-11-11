@@ -98,6 +98,13 @@ export interface OptionsInput extends Input {
   options: InputOption[]
 }
 
+export interface APIComboBoxInput extends Omit<OptionsInput, "options"> {
+  // Display metadata for an existing modelValue; its value must match the model.
+  initialOption?: InputOption | null
+  optionMapper: (item: any) => InputOption
+  url: string
+}
+
 export interface MultiChoiceInput extends Input {
   max?: number
   min?: number

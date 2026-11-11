@@ -8,6 +8,7 @@ import {
   toValue,
 } from "vue"
 import {
+  type APIComboBoxInput,
   type BooleanInput,
   type DateRangeInput,
   type FileUploadInput,
@@ -32,6 +33,7 @@ import {
 } from "@/composables/useRepeater"
 import getProperty from "@/helpers/GetProperty"
 import setProperty from "@/helpers/SetProperty"
+import APIComboBox from "@/lib-components/forms/APIComboBox.vue"
 import BaseInput from "@/lib-components/forms/BaseInput.vue"
 import ComboBox from "@/lib-components/forms/Combobox.vue"
 import Checkbox from "@/lib-components/forms/Checkbox.vue"
@@ -58,6 +60,7 @@ export type FieldsSchema = Array<FieldSection> | Array<SchemaField>
  * FieldsSchemaInput type declares the supported input components in a FieldsSchema
  */
 export type FieldsSchemaInput =
+  | InputField<APIComboBoxInput, "api-combobox">
   | InputField<BooleanInput, "checkbox" | "toggle" | "yes-no-radio">
   | InputField<MultiChoiceInput, "multi-checkbox">
   | InputField<MultiChoiceInput & { customValues?: boolean }, "multi-select">
@@ -146,6 +149,7 @@ export type InputFieldType = (typeof inputFieldTypes)[number]
 export const inputFieldTypes = [
   ...textInputTypes,
   ...numericInputTypes,
+  "api-combobox",
   "checkbox",
   "combobox",
   "date-range",
@@ -311,6 +315,7 @@ const inputComponentMap: Record<InputFieldType, Component> = {
   "raw-number": NumberInput,
 
   // Extended Input Types
+  "api-combobox": APIComboBox,
   checkbox: Checkbox,
   combobox: ComboBox,
   "date-range": DateRangePicker,

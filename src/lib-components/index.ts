@@ -6,6 +6,7 @@ export interface TreesComponents extends LibComponents {}
 
 export { default as ActionsButtonGroup } from "./navigation/ActionsButtonGroup.vue"
 export { default as ActionsDropdown } from "./navigation/ActionsDropdown.vue"
+export { default as APIComboBox } from "./forms/APIComboBox.vue"
 export { default as BaseInput } from "./forms/BaseInput.vue"
 export { default as Cards } from "./lists/Cards.vue"
 export { default as Checkbox } from "./forms/Checkbox.vue"
